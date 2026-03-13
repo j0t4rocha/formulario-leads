@@ -69,8 +69,8 @@ let anuncioSelecionado = '';
 
 document.querySelectorAll('.radio-option').forEach(option => {
   option.addEventListener('click', function () {
-    document.querySelectorAll('.radio-option').forEach(o => o.classList.remove('selected'));
-    this.classList.add('selected');
+    document.querySelectorAll('.radio-option').forEach(o => o.classList.remove('active'));
+    this.classList.add('active');
     anuncioSelecionado = this.dataset.value;
 
     const atualField    = document.getElementById('investAtualField');
