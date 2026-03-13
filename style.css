@@ -343,3 +343,18 @@ max-width:320px;
 }
 
 }
+
+/* ===== ALINHAR TEXTO DOS CARDS ===== */
+
+.proof-box{
+text-align:left;
+}
+
+.proof-num{
+font-weight:700;
+margin-bottom:2px;
+}
+
+.proof-label{
+line-height:1.4;
+}
