@@ -27,7 +27,7 @@ padding:60px 20px;
 
 }
 
-/* WRAP PRINCIPAL (corrige alinhamento da página) */
+/* WRAP PRINCIPAL */
 
 .wrap{
 width:100%;
@@ -54,24 +54,36 @@ margin:auto;
 h1{
 
 font-size:30px;
-text-align:center;
 margin-bottom:12px;
 
 }
 
-.subtitulo{
+/* HEADLINE DO HTML */
 
-text-align:center;
+.headline{
+font-size:34px;
+font-weight:700;
+line-height:1.25;
+margin-bottom:16px;
+text-align:left;
+}
+
+/* SUBHEADLINE DO HTML */
+
+.subhead{
+font-size:16px;
+font-weight:500;
+line-height:1.6;
 color:#B8B8C8;
-margin-bottom:30px;
-
+margin-bottom:28px;
+text-align:left;
 }
 
 /* DESTAQUE DO TITULO */
 
 .destaque{
 color:#7B3CFF;
-font-weight:600;
+font-weight:700;
 }
 
 /* ===================================
@@ -81,7 +93,6 @@ CARDS DE PROVA (SLOTS)
 .proof-row{
 
 display:flex;
-justify-content:center;
 gap:18px;
 
 margin-top:24px;
@@ -108,6 +119,8 @@ box-shadow:0 12px 35px rgba(0,0,0,0.45);
 
 transition:all .25s ease;
 
+text-align:left;
+
 }
 
 .proof-box:hover{
@@ -119,17 +132,18 @@ box-shadow:0 0 20px rgba(123,60,255,0.25);
 
 .proof-num{
 
-font-size:16px;
+font-size:18px;
 font-weight:700;
 color:#FFFFFF;
+margin-bottom:2px;
 
 }
 
 .proof-label{
 
-font-size:13px;
+font-size:14px;
 color:#B8B8C8;
-margin-top:4px;
+line-height:1.4;
 
 }
 
@@ -230,45 +244,6 @@ margin-top:12px;
 .radio-group{
 display:flex;
 flex-direction:column;
-gap:10px;
-margin-top:10px;
-}
-
-.radio-option{
-display:flex;
-align-items:center;
-gap:12px;
-padding:14px;
-border-radius:10px;
-background:#1B1B2B;
-border:1px solid rgba(255,255,255,0.08);
-cursor:pointer;
-transition:all .2s;
-}
-
-.radio-option:hover{
-border-color:#7B3CFF;
-background:#1f1f35;
-}
-
-.radio-dot{
-width:16px;
-height:16px;
-border-radius:50%;
-border:2px solid #7B3CFF;
-flex-shrink:0;
-}
-
-.radio-option span{
-font-size:14px;
-color:#B8B8C8;
-}
-
-/* ===== ENQUETE DE ANÚNCIOS ===== */
-
-.radio-group{
-display:flex;
-flex-direction:column;
 gap:12px;
 margin-top:12px;
 margin-bottom:20px;
@@ -328,13 +303,12 @@ margin-bottom:14px;
 padding:30px;
 }
 
-h1{
-font-size:24px;
+.headline{
+font-size:26px;
 }
 
 .proof-row{
 flex-direction:column;
-align-items:center;
 }
 
 .proof-box{
@@ -342,19 +316,4 @@ width:100%;
 max-width:320px;
 }
 
-}
-
-/* ===== ALINHAR TEXTO DOS CARDS ===== */
-
-.proof-box{
-text-align:left;
-}
-
-.proof-num{
-font-weight:700;
-margin-bottom:2px;
-}
-
-.proof-label{
-line-height:1.4;
 }
