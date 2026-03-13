@@ -171,7 +171,7 @@ font-size:24px;
 }
 
 }
-/* ENQUETES */
+/* RADIO ENQUETE */
 
 .radio-group{
 display:flex;
@@ -183,23 +183,29 @@ margin-top:10px;
 .radio-option{
 display:flex;
 align-items:center;
-gap:10px;
-padding:12px 14px;
-border-radius:8px;
+gap:12px;
+padding:14px;
+border-radius:10px;
 background:#1B1B2B;
-border:1px solid rgba(255,255,255,0.1);
+border:1px solid rgba(255,255,255,0.08);
 cursor:pointer;
-transition:0.2s;
+transition:all .2s;
 }
 
 .radio-option:hover{
-border-color:#5B2EFF;
-box-shadow:0 0 0 1px rgba(91,46,255,0.2);
+border-color:#7B3CFF;
+background:#1f1f35;
 }
 
 .radio-dot{
-width:14px;
-height:14px;
+width:16px;
+height:16px;
 border-radius:50%;
-border:2px solid #5B2EFF;
+border:2px solid #7B3CFF;
+flex-shrink:0;
+}
+
+.radio-option span{
+font-size:14px;
+color:#B8B8C8;
 }
