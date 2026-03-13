@@ -182,7 +182,7 @@ function enviar() {
   })
   .then(() => {
     document.getElementById('loadingState').style.display  = 'none';
-    document.getElementById('successState').style.display  = 'block';
+    window.location.href = "obrigado.html";
   })
   .catch(() => {
     document.getElementById('loadingState').style.display = 'none';
