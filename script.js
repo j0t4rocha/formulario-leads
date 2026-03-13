@@ -199,3 +199,46 @@ document.addEventListener('DOMContentLoaded', () => {
   criarParticulas();
   initReveal();
 });
+// ===== ENQUETE DE ANÚNCIOS =====
+
+const radioOptions = document.querySelectorAll(".radio-option");
+let anuncioSelecionado = null;
+
+radioOptions.forEach(option => {
+
+option.addEventListener("click", () => {
+
+radioOptions.forEach(o => o.classList.remove("active"));
+
+option.classList.add("active");
+
+anuncioSelecionado = option.dataset.value;
+
+const investAtual = document.getElementById("investAtualField");
+const investDisposto = document.getElementById("investDispostoField");
+
+if(!investAtual || !investDisposto) return;
+
+if(anuncioSelecionado === "Anuncio sozinho atualmente"){
+investAtual.style.display = "block";
+investDisposto.style.display = "none";
+}
+
+else if(anuncioSelecionado === "Já anunciei mas parei"){
+investAtual.style.display = "none";
+investDisposto.style.display = "block";
+}
+
+else if(anuncioSelecionado === "Já anunciei mas não tive retorno"){
+investAtual.style.display = "none";
+investDisposto.style.display = "block";
+}
+
+else{
+investAtual.style.display = "none";
+investDisposto.style.display = "block";
+}
+
+});
+
+});
