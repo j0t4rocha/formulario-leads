@@ -180,8 +180,7 @@ function enviar() {
     method: 'GET',
     mode:   'no-cors'
   })
-  .then(() => {
-    document.getElementById('loadingState').style.display  = 'none';
+  .then(() => {;
     window.location.href = "obrigado.html";
   })
   .catch(() => {
