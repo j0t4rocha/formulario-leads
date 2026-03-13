@@ -134,6 +134,7 @@ document.getElementById('btnEnviar').addEventListener('click', enviar);
 
 function enviar() {
   const nome = document.getElementById('nome');
+  const email = document.getElementById('email');
   const fone = document.getElementById('fone');
   const seg  = document.getElementById('segmento');
   const dor  = document.getElementById('dor');
