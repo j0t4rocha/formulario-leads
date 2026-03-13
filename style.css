@@ -24,6 +24,14 @@ min-height:100vh;
 display:flex;
 justify-content:center;
 padding:60px 20px;
+
+}
+
+/* WRAP PRINCIPAL (corrige alinhamento da página) */
+
+.wrap{
+width:100%;
+max-width:620px;
 }
 
 /* CARD FORMULÁRIO */
@@ -37,6 +45,7 @@ box-shadow:0 20px 60px rgba(0,0,0,0.6);
 padding:40px;
 max-width:520px;
 width:100%;
+margin:auto;
 
 }
 
@@ -46,7 +55,7 @@ h1{
 
 font-size:30px;
 text-align:center;
-margin-bottom:10px;
+margin-bottom:12px;
 
 }
 
@@ -63,6 +72,65 @@ margin-bottom:30px;
 .destaque{
 color:#7B3CFF;
 font-weight:600;
+}
+
+/* ===================================
+CARDS DE PROVA (SLOTS)
+=================================== */
+
+.proof-row{
+
+display:flex;
+justify-content:center;
+gap:18px;
+
+margin-top:24px;
+margin-bottom:36px;
+
+flex-wrap:wrap;
+
+}
+
+.proof-box{
+
+background:#141420;
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.08);
+
+padding:16px 22px;
+
+display:flex;
+flex-direction:column;
+
+min-width:200px;
+
+box-shadow:0 12px 35px rgba(0,0,0,0.45);
+
+transition:all .25s ease;
+
+}
+
+.proof-box:hover{
+
+transform:translateY(-3px);
+box-shadow:0 0 20px rgba(123,60,255,0.25);
+
+}
+
+.proof-num{
+
+font-size:16px;
+font-weight:700;
+color:#FFFFFF;
+
+}
+
+.proof-label{
+
+font-size:13px;
+color:#B8B8C8;
+margin-top:4px;
+
 }
 
 /* FORM GROUP */
@@ -157,19 +225,6 @@ margin-top:12px;
 
 }
 
-/* RESPONSIVO */
-
-@media (max-width:600px){
-
-.form-container{
-padding:30px;
-}
-
-h1{
-font-size:24px;
-}
-
-}
 /* RADIO ENQUETE */
 
 .radio-group{
@@ -208,6 +263,7 @@ flex-shrink:0;
 font-size:14px;
 color:#B8B8C8;
 }
+
 /* ===== ENQUETE DE ANÚNCIOS ===== */
 
 .radio-group{
@@ -256,9 +312,34 @@ background:#232347;
 .radio-option.active .radio-dot{
 background:#7B3CFF;
 }
+
 /* ===== BOTÃO CTA ===== */
 
 .cta-btn{
 margin-top:18px;
 margin-bottom:14px;
+}
+
+/* RESPONSIVO */
+
+@media (max-width:600px){
+
+.form-container{
+padding:30px;
+}
+
+h1{
+font-size:24px;
+}
+
+.proof-row{
+flex-direction:column;
+align-items:center;
+}
+
+.proof-box{
+width:100%;
+max-width:320px;
+}
+
 }
