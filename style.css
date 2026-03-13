@@ -209,3 +209,57 @@ flex-shrink:0;
 font-size:14px;
 color:#B8B8C8;
 }
+/* ===== ENQUETE DE ANÚNCIOS ===== */
+
+.radio-group{
+display:flex;
+flex-direction:column;
+gap:12px;
+margin-top:12px;
+margin-bottom:20px;
+}
+
+.radio-option{
+display:flex;
+align-items:center;
+gap:12px;
+padding:14px 16px;
+border-radius:10px;
+background:#1B1B2B;
+border:1px solid rgba(255,255,255,0.08);
+cursor:pointer;
+transition:all .2s ease;
+}
+
+.radio-option:hover{
+border-color:#7B3CFF;
+background:#20203a;
+}
+
+.radio-dot{
+width:16px;
+height:16px;
+border-radius:50%;
+border:2px solid #7B3CFF;
+flex-shrink:0;
+}
+
+.radio-option span{
+font-size:14px;
+color:#B8B8C8;
+}
+
+.radio-option.active{
+border-color:#7B3CFF;
+background:#232347;
+}
+
+.radio-option.active .radio-dot{
+background:#7B3CFF;
+}
+/* ===== BOTÃO CTA ===== */
+
+.cta-btn{
+margin-top:18px;
+margin-bottom:14px;
+}
