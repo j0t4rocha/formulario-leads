@@ -1,7 +1,7 @@
 // ================================================
 // CONFIGURAÇÕES
 // ================================================
-var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwMaYbz97o6MTaKpe6RJLh9rMs19S8t42qtkcYlbLnHEL9wktFeYmeZhj41xSqdJKc66w/exec';
+var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbw6VCKspas4nmtP9_xhnFJbKVq4ZYrkvdafmn0GaPJlyws6C_8foVBtAztFk5-CaRTvgw/exec';
 var META_PIXEL_ID = '1526385979054190';
 var META_ACCESS_TOKEN = 'EAAEaDK1vzZBABRRiVfdZAJheR1jWZBEI5fo7Pf2eKv5avosqkBivPcUnK8KgiCFDvhx0WswoXgpZApuZBYZAe40Ud6y3HkuFfuhJdHp8DC4fkGTStOUHuTPV2xxWHCIkPHQZBVe17q8jmHzZBFaV48hHuZCYIehuy8lD0UuxK23MS4UNshloF2sp2VyaeZCwLjGx49sAZDZD';
 
