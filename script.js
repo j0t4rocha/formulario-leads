@@ -1,7 +1,7 @@
 // ================================================
 // CONFIGURAÇÕES
 // ================================================
-var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwOiPC59GxwXx6toY-ZeINkIi_n4r4kY643bAWbDbMaqb7mXrVQSrz3VkGculYo6juqSw/exec';
+var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbzDDeNhsoTVMyYOB-3aKdgxOXXv1KdIV-9QA3SDiyQXO0EySJnCyQ0--Bxg1kU0JmjD3A/exec';
 
 // ================================================
 // LÓGICA DO FORMULÁRIO
