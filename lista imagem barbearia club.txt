@@ -1,0 +1,592 @@
+Nome	Telefone	Origem	Data de cadastro	Funcionário responsável pelo cadastro	Observações	
+Adriana	-	Cadastrado pela barbearia	19/05/2026 18:18	Daniel Alves		
+Oliveira	-	Cadastrado pela barbearia	19/05/2026 16:25	Daniel Alves		
+Marco Antônio 	(24) 99201-4394	Cadastrou-se pelo site	19/05/2026 15:44	-		
+Geraldo Luiz 	(32) 99988-5054	Cadastrou-se pelo site	16/05/2026 13:01	-		
+Ronaldo pereira	(94) 99196-9412	Cadastrado pela barbearia	15/05/2026 19:58	Samuel Carvalho		
+Jeferson	(32) 98873-8376	Cadastrado pela barbearia	14/05/2026 18:20	Samuel Carvalho		
+Robson mendes	(32) 98418-4296	Cadastrado pela barbearia	13/05/2026 22:43	Samuel Carvalho		
+Angélica da Silva Hortalan Vitorino Coelho 	(32) 98844-7674	Cadastrou-se pelo site	11/05/2026 17:18	-		
+Eduardo Sampaio 	(32) 99108-3704	Cadastrou-se pelo site	10/05/2026 11:36	-		
+Ricardo Augusto	(32) 99155-9614	Cadastrado pela barbearia	09/05/2026 12:36	Samuel Carvalho		
+vicenti	(32) 9992-0672	Cadastrado pela barbearia	09/05/2026 11:07	Samuel Carvalho		
+Vanderlei silva	(32) 98406-6542	Cadastrado pela barbearia	09/05/2026 10:37	Samuel Carvalho		
+Luiz Otavio	(32) 99106-7857	Cadastrou-se pelo site	08/05/2026 22:59	-		
+Daniel Otávio de Oliveira 	(32) 99164-7413	Cadastrou-se pelo site	08/05/2026 17:20	-		
+taina	(32) 98841-0557	Cadastrado pela barbearia	08/05/2026 15:34	Samuel Carvalho		
+Angela	-	Cadastrado pela barbearia	08/05/2026 15:17	Daniel Alves		
+Gabriel pereira	(32) 99867-8797	Cadastrado pela barbearia	08/05/2026 12:02	Samuel Carvalho		
+Angelica	-	Cadastrado pela barbearia	08/05/2026 11:59	Daniel Alves		
+anderlan	(16) 99448-0005	Cadastrado pela barbearia	08/05/2026 10:40	Samuel Carvalho		
+amaral	(32) 98711-1529	Cadastrado pela barbearia	07/05/2026 19:55	Samuel Carvalho		
+Bruno Fernandes	(24) 99966-6830	Cadastrado pela barbearia	07/05/2026 13:30	Samuel Carvalho		
+Terezinha	-	Cadastrado pela barbearia	07/05/2026 09:17	Daniel Alves		
+Adriano alagoano	(82) 98731-8571	Cadastrado pela barbearia	06/05/2026 18:37	Samuel Carvalho		
+paulista	(24) 99841-1233	Cadastrado pela barbearia	06/05/2026 18:37	Samuel Carvalho		
+Santiago Andradr Lovisi 	(32) 99113-5433	Cadastrou-se pelo site	06/05/2026 12:54	-		
+Patrick Sidney 	(32) 99129-4522	Cadastrou-se pelo site	04/05/2026 14:10	-		
+ari	(32) 99994-4892	Cadastrado pela barbearia	02/05/2026 16:35	Samuel Carvalho		
+Junior loja	(32) 98802-9154	Cadastrado pela barbearia	02/05/2026 14:57	Samuel Carvalho		
+Daniel Francisco	(32) 99844-6236	Cadastrado pela barbearia	02/05/2026 14:56	Samuel Carvalho		
+ramon souza	(32) 99856-4242	Cadastrado pela barbearia	02/05/2026 14:30	Samuel Carvalho		
+Gabriel carioca	(21) 97408-7934	Cadastrado pela barbearia	01/05/2026 15:35	Samuel Carvalho		
+ivan	(32) 9126-0631	Cadastrado pela barbearia	01/05/2026 12:28	Samuel Carvalho		
+Evaldo c	(32) 99866-6509	Cadastrado pela barbearia	30/04/2026 20:05	Samuel Carvalho		
+Merces	-	Cadastrado pela barbearia	30/04/2026 19:12	Daniel Alves		
+gilson	(31) 99778-9087	Cadastrado pela barbearia	30/04/2026 14:53	Samuel Carvalho		
+Rafael fortal	(85) 99436-5412	Cadastrado pela barbearia	30/04/2026 12:04	Samuel Carvalho		
+Radames Cantanhede Alves 	(33) 98428-8534	Cadastrou-se pelo site	28/04/2026 18:13	-		
+Guilherme Ferreira 	(32) 99160-5596	Cadastrou-se pelo site	25/04/2026 18:14	-		
+martine	(57) 32460-2035	Cadastrado pela barbearia	25/04/2026 17:08	Samuel Carvalho		
+Gabriel carelli	(32) 9820-9883	Cadastrado pela barbearia	24/04/2026 21:16	Samuel Carvalho		
+Alexandre carioca	(55) 32993-2537	Cadastrado pela barbearia	22/04/2026 20:56	Samuel Carvalho		
+Miguel filho	-	Cadastrado pela barbearia	21/04/2026 21:51	Daniel Alves		
+Junior Oliveira	(32) 99137-5490	Cadastrado pela barbearia	18/04/2026 18:35	Samuel Carvalho		
+Junior	(32) 99198-2644	Cadastrou-se pelo site	18/04/2026 10:53	-		
+carlos haber	(32) 99921-8047	Cadastrado pela barbearia	18/04/2026 10:22	Samuel Carvalho		
+Lucas Gabriel	(32) 98831-7288	Cadastrou-se pelo site	16/04/2026 22:19	-		
+Eurislaine	(32) 98897-6657	Cadastrou-se pelo site	16/04/2026 09:12	-		
+luis Antônio lopes	(32) 32998-2286	Cadastrado pela barbearia	15/04/2026 11:11	Samuel Carvalho		
+Vitor Silva de Sousa	(71) 99738-3641	Cadastrou-se pelo site	14/04/2026 15:12	-		
+luis alvarez	(32) 99828-5542	Cadastrado pela barbearia	11/04/2026 17:44	Samuel Carvalho		
+Fabiano dje	(32) 98713-3289	Cadastrado pela barbearia	11/04/2026 10:35	Samuel Carvalho		
+Alan Rodrigo Silva Guimarães 	(33) 32988-9335	Cadastrou-se pelo site	11/04/2026 06:52	-		
+Matheus gomes	(32) 99967-3675	Cadastrado pela barbearia	10/04/2026 14:38	Samuel Carvalho		
+João Marcos 	(32) 99809-1267	Cadastrou-se pelo site	10/04/2026 14:38	-		
+Pedro do taxi	(32) 99125-1050	Cadastrado pela barbearia	07/04/2026 17:08	Samuel Carvalho		
+Gilson	(31) 9978-9087	Cadastrado pela barbearia	07/04/2026 14:32	Samuel Carvalho		
+Felipe Coutinho 	-	Cadastrado pela barbearia	04/04/2026 18:39	José Carlos		
+renê	(32) 99981-9664	Cadastrado pela barbearia	04/04/2026 17:37	Samuel Carvalho		
+jhony	(32) 98886-7806	Cadastrado pela barbearia	04/04/2026 10:29	Samuel Carvalho		
+thomaz	(21) 97758-5454	Cadastrado pela barbearia	03/04/2026 15:33	Samuel Carvalho		
+Rafael Fonseca de Souza 	(32) 99828-6933	Cadastrou-se pelo site	03/04/2026 15:28	-		
+Fábio rodrigues	(21) 98389-1432	Cadastrado pela barbearia	03/04/2026 15:20	Samuel Carvalho		
+iago Oliveira	(32) 99842-3074	Cadastrado pela barbearia	01/04/2026 16:22	Samuel Carvalho		
+Caio Miranda Santos 	(32) 99141-0237	Cadastrou-se pelo site	01/04/2026 15:36	-		
+Guilherme Augusto	(32) 98514-0809	Cadastrou-se pelo site	01/04/2026 11:35	-		
+Saymon Mendes	(32) 99806-7982	Cadastrou-se pelo site	31/03/2026 15:34	-		
+Jonathan	(32) 9817-3912	Cadastrado pela barbearia	31/03/2026 07:36	Samuel Carvalho		
+Antonio cl	-	Cadastrado pela barbearia	28/03/2026 08:07	Daniel Alves		
+irmão joao	(32) 99139-8017	Cadastrado pela barbearia	27/03/2026 10:30	Samuel Carvalho		
+Rafael B	(32) 9933-0060	Cadastrado pela barbearia	26/03/2026 16:11	Samuel Carvalho		
+Marcos douglas	-	Cadastrado pela barbearia	26/03/2026 12:52	Daniel Alves		
+Morador de rua	-	Cadastrado pela barbearia	25/03/2026 15:38	Daniel Alves		
+jomar do picole	(32) 98827-9615	Cadastrado pela barbearia	24/03/2026 11:29	Samuel Carvalho		
+Gabriel	(32) 8826-6768	Cadastrado pela barbearia	23/03/2026 15:38	Samuel Carvalho		
+Diego cardozo	(32) 99857-8567	Cadastrado pela barbearia	21/03/2026 20:45	Samuel Carvalho		
+Fabio Lopes	-	Cadastrado pela barbearia	21/03/2026 17:15	José Carlos		
+julio	(32) 99855-4315	Cadastrado pela barbearia	21/03/2026 16:17	Samuel Carvalho		
+Douglas santos	(32) 9981-6245	Cadastrado pela barbearia	21/03/2026 11:43	Samuel Carvalho		
+Wesley Anselmo	(27) 99839-3802	Cadastrado pela barbearia	20/03/2026 16:44	Samuel Carvalho		
+giovane mesquita	(32) 98421-6029	Cadastrado pela barbearia	20/03/2026 13:39	Samuel Carvalho		
+luis filho	(32) 99165-4191	Cadastrado pela barbearia	19/03/2026 19:34	Samuel Carvalho		
+Rafael Henrique	(32) 99823-6567	Cadastrado pela barbearia	19/03/2026 18:00	Samuel Carvalho		
+evaldo	(32) 99986-6650	Cadastrado pela barbearia	19/03/2026 17:30	Samuel Carvalho		
+Douglas paulino	(32) 98506-8763	Cadastrado pela barbearia	19/03/2026 17:18	Samuel Carvalho		
+Leonardo araujo	(82) 98160-4634	Cadastrado pela barbearia	19/03/2026 11:55	Samuel Carvalho		
+davner	(32) 99851-9526	Cadastrado pela barbearia	18/03/2026 20:30	Samuel Carvalho		
+giovane castro	(31) 99516-2171	Cadastrado pela barbearia	18/03/2026 12:20	Samuel Carvalho		
+Manuel Ruan	-	Cadastrado pela barbearia	14/03/2026 23:29	Daniel Alves		
+Cristian	-	Cadastrado pela barbearia	14/03/2026 21:17	Samuel Carvalho		
+Marcos Francisco 	(32) 98703-1256	Cadastrou-se pelo site	14/03/2026 17:24	-		
+fabiano almeida	(32) 98518-0359	Cadastrado pela barbearia	14/03/2026 16:14	Daniel Alves		
+wederson	-	Cadastrado pela barbearia	14/03/2026 15:03	Daniel Alves		
+Cristyan	(32) 9118-4833	Cadastrado pela barbearia	14/03/2026 13:43	Samuel Carvalho		
+wellermon	(31) 98203-1624	Cadastrado pela barbearia	14/03/2026 11:28	Daniel Alves		
+Alexandre rodrigues	(91) 98503-0498	Cadastrado pela barbearia	14/03/2026 09:47	Samuel Carvalho		
+Igor Gerhardt	(32) 98413-2640	Cadastrado pela barbearia	13/03/2026 18:42	José Carlos	1 corte José Carlos 	
+João Guilherme 	(55) 32984-8616	Cadastrou-se pelo site	13/03/2026 16:46	-		
+Renan parrot	(32) 99988-5581	Cadastrado pela barbearia	13/03/2026 12:39	Samuel Carvalho		
+leia	(32) 98467-3687	Cadastrado pela barbearia	13/03/2026 09:08	Samuel Carvalho		
+Guilherme Luna 	(31) 98971-0630	Cadastrou-se pelo site	13/03/2026 08:04	-		
+Deivid Mello Rust	-	Cadastrado pela barbearia	12/03/2026 17:44	José Carlos		
+andreia	(32) 98827-5396	Cadastrado pela barbearia	12/03/2026 09:57	Samuel Carvalho		
+Caminhão	-	Cadastrado pela barbearia	11/03/2026 13:22	Daniel Alves		
+Daniel del pozo	(42) 99836-0550	Cadastrado pela barbearia	11/03/2026 13:01	Samuel Carvalho		
+Vanderlei guincho	-	Cadastrado pela barbearia	10/03/2026 17:34	José Carlos		
+Pastor	-	Cadastrado pela barbearia	10/03/2026 15:20	José Carlos		
+thiago lima	(32) 99137-9021	Cadastrado pela barbearia	10/03/2026 13:10	Samuel Carvalho		
+José Carlos Elias Campos 	(35) 99909-6738	Cadastrou-se pelo site	09/03/2026 20:48	-		
+Kely	-	Cadastrado pela barbearia	07/03/2026 17:09	Daniel Alves		
+Servente	-	Cadastrado pela barbearia	06/03/2026 23:06	Daniel Alves		
+Obra	-	Cadastrado pela barbearia	06/03/2026 23:06	Daniel Alves		
+Gabriel Sanábio Mazzetti Affonso 	(32) 98812-3473	Cadastrou-se pelo site	06/03/2026 22:39	-		
+santiago  ruiz	(32) 99881-2212	Cadastrado pela barbearia	06/03/2026 20:57	Samuel Carvalho		
+Paulo vitor	(32) 9125-8017	Cadastrado pela barbearia	06/03/2026 17:59	Samuel Carvalho		
+paulao	(32) 9941-2334	Cadastrado pela barbearia	06/03/2026 17:30	Samuel Carvalho		
+jailton	(31) 99834-5355	Cadastrado pela barbearia	06/03/2026 16:39	Samuel Carvalho		
+bryan	(24) 99282-1872	Cadastrado pela barbearia	06/03/2026 14:51	Samuel Carvalho		
+Vizinhofe cima	-	Cadastrado pela barbearia	06/03/2026 13:14	Daniel Alves		
+Paloma mae joao	-	Cadastrado pela barbearia	05/03/2026 23:27	Daniel Alves		
+Darlan	-	Cadastrado pela barbearia	05/03/2026 23:26	Daniel Alves		
+marlow	(32) 98703-1028	Cadastrado pela barbearia	05/03/2026 18:32	Samuel Carvalho		
+Daniel santos	(82) 99423-9160	Cadastrado pela barbearia	05/03/2026 17:59	Samuel Carvalho		
+Douglas da silva	(32) 98703-7147	Cadastrado pela barbearia	05/03/2026 17:00	Samuel Carvalho		
+Loiro	-	Cadastrado pela barbearia	05/03/2026 16:02	Daniel Alves		
+cuca	(32) 9108-3181	Cadastrado pela barbearia	04/03/2026 19:56	Samuel Carvalho		
+Edivaldo Tomas	-	Cadastrado pela barbearia	04/03/2026 12:01	Daniel Alves		
+Dona luzia 	(21) 99136-6875	Cadastrou-se pelo site	03/03/2026 23:39	-		
+Matheus Marques	(32) 98481-1589	Cadastrado pela barbearia	03/03/2026 13:13	Samuel Carvalho		
+Edgar bellini	(32) 9146-3896	Cadastrado pela barbearia	03/03/2026 10:56	Samuel Carvalho		
+Pr. Marcão	(32) 9949-3238	Cadastrado pela barbearia	28/02/2026 20:36	Samuel Carvalho		
+Mark	(32) 99172-2344	Cadastrado pela barbearia	28/02/2026 20:05	Samuel Carvalho		
+Kaleb	-	Cadastrado pela barbearia	28/02/2026 12:12	Daniel Alves		
+Venezuelano	-	Cadastrado pela barbearia	27/02/2026 11:20	Daniel Alves		
+Rodrigo Furtado	(32) 99198-3193	Cadastrou-se pelo site	27/02/2026 11:19	-		
+Paulo Alexandre	(32) 99958-6865	Cadastrado pela barbearia	25/02/2026 13:29	Samuel Carvalho		
+Indio	-	Cadastrado pela barbearia	21/02/2026 19:29	Daniel Alves		
+Ronald Oliveira	(32) 9925-5476	Cadastrado pela barbearia	21/02/2026 16:37	Samuel Carvalho		
+bryan	(24) 99202-1872	Cadastrado pela barbearia	21/02/2026 15:18	Samuel Carvalho		
+milton	(32) 98487-9301	Cadastrado pela barbearia	21/02/2026 13:23	Samuel Carvalho		
+Milton silva	(32) 98487-9381	Cadastrado pela barbearia	21/02/2026 13:20	Samuel Carvalho		
+Luiz felipe ferreira	-	Cadastrado pela barbearia	21/02/2026 12:51	Daniel Alves		
+Eliseu Henrique	(32) 9123-4861	Cadastrado pela barbearia	21/02/2026 12:22	Samuel Carvalho		
+Glauber chagas	(32) 98827-9377	Cadastrado pela barbearia	21/02/2026 11:08	Samuel Carvalho		
+Rafael alves	(31) 98171-2115	Cadastrado pela barbearia	20/02/2026 20:18	Samuel Carvalho		
+Lucas Pimento passos	-	Cadastrado pela barbearia	20/02/2026 15:55	Daniel Alves		
+Mirian Kelly Silva de almeida	(32) 98833-6807	Cadastrou-se pelo site	20/02/2026 13:28	-		
+Felipe alves	(32) 98822-1070	Cadastrado pela barbearia	20/02/2026 11:25	Samuel Carvalho		
+Jhonata Montes Fernandes	(32) 99828-9568	Cadastrou-se pelo site	20/02/2026 10:46	-		
+Mirian junior	-	Cadastrado pela barbearia	19/02/2026 10:21	Daniel Alves		
+kellys venezuelana	(32) 98403-2584	Cadastrado pela barbearia	14/02/2026 19:57	Samuel Carvalho		
+Gabriel Graciano	(32) 99158-6663	Cadastrado pela barbearia	14/02/2026 17:59	Samuel Carvalho		
+arlem	(32) 98700-7401	Cadastrado pela barbearia	14/02/2026 17:30	Samuel Carvalho		
+jonas crispim	(32) 98703-9692	Cadastrado pela barbearia	14/02/2026 17:27	Samuel Carvalho		
+tiago campos	(32) 98452-3555	Cadastrado pela barbearia	14/02/2026 17:12	Samuel Carvalho		
+rogerio	(35) 99957-3362	Cadastrado pela barbearia	13/02/2026 14:53	Samuel Carvalho		
+luan china	(32) 99870-5868	Cadastrado pela barbearia	13/02/2026 12:44	Samuel Carvalho		
+edivaldo	(31) 99539-1780	Cadastrado pela barbearia	13/02/2026 11:42	Samuel Carvalho		
+Anderson clayton	(24) 98816-7560	Cadastrado pela barbearia	12/02/2026 19:59	Samuel Carvalho		
+antonio carlos	(32) 98701-5482	Cadastrado pela barbearia	12/02/2026 19:13	Samuel Carvalho		
+Luciano Porto Alegre	(32) 99963-7378	Cadastrado pela barbearia	12/02/2026 16:39	Samuel Carvalho		
+Marcos André rj	(21) 96966-5818	Cadastrado pela barbearia	12/02/2026 11:11	Samuel Carvalho		
+filipe	(32) 99823-9210	Cadastrado pela barbearia	07/02/2026 13:57	Samuel Carvalho		
+eikon	(32) 99107-8179	Cadastrado pela barbearia	07/02/2026 13:55	Samuel Carvalho		
+luis Henrique	(22) 99784-1957	Cadastrado pela barbearia	07/02/2026 13:54	Samuel Carvalho		
+Davidson	(31) 98329-4810	Cadastrado pela barbearia	07/02/2026 10:38	Samuel Carvalho		
+Leonardo Noé	(32) 99990-0506	Cadastrado pela barbearia	06/02/2026 11:37	Samuel Carvalho		
+Carlos manoel	(88) 98877-9341	Cadastrado pela barbearia	05/02/2026 17:04	Samuel Carvalho		
+Gabriel Alvim 	(32) 98704-1206	Cadastrou-se pelo site	04/02/2026 09:01	-		
+Caio	-	Cadastrado pela barbearia	03/02/2026 23:40	Daniel Alves		
+Lorenzo	-	Cadastrado pela barbearia	03/02/2026 23:38	Daniel Alves		
+Barbacena	-	Cadastrado pela barbearia	03/02/2026 23:38	Daniel Alves		
+josias	(32) 99986-1548	Cadastrado pela barbearia	31/01/2026 10:02	Daniel Alves		
+Kleber jose	(32) 98702-9306	Cadastrado pela barbearia	30/01/2026 19:24	Samuel Carvalho		
+leandro ronaldo	(32) 99993-1988	Cadastrado pela barbearia	30/01/2026 17:50	Daniel Alves		
+otavio	(32) 98831-7616	Cadastrado pela barbearia	30/01/2026 12:30	Samuel Carvalho		
+Maximiliano	-	Cadastrado pela barbearia	30/01/2026 12:10	Daniel Alves		
+Edmilson carioca	(21) 99894-5010	Cadastrado pela barbearia	27/01/2026 20:07	Samuel Carvalho		
+Jonathan willian	(32) 99163-7240	Cadastrado pela barbearia	27/01/2026 15:33	Samuel Carvalho		
+daniel	(22) 98151-2888	Cadastrado pela barbearia	24/01/2026 17:21	Daniel Alves		
+Adriano	(32) 98806-8641	Cadastrado pela barbearia	24/01/2026 10:32	Samuel Carvalho		
+william	(32) 99165-8998	Cadastrado pela barbearia	23/01/2026 11:09	Daniel Alves		
+Eduardo Carvalho	(32) 98816-4393	Cadastrado pela barbearia	23/01/2026 10:21	Daniel Alves		
+Lucas Pimenta 	(32) 99978-4541	Cadastrou-se pelo site	22/01/2026 15:48	-		
+Lucas Sanábio Mazzetti Ferreira 	(32) 99945-4050	Cadastrou-se pelo site	20/01/2026 20:06	-		
+Bruno Oliveira	(32) 99821-2418	Cadastrado pela barbearia	20/01/2026 15:02	Samuel Carvalho		
+Santiago	-	Cadastrado pela barbearia	17/01/2026 10:57	Daniel Alves		
+denar	(32) 99867-9558	Cadastrado pela barbearia	16/01/2026 09:45	Samuel Carvalho		
+douglas	(32) 9166-7236	Cadastrado pela barbearia	15/01/2026 15:10	Samuel Carvalho		
+Thiago 	(32) 98851-4448	Cadastrou-se pelo site	13/01/2026 19:05	-		
+joão médico	-	Cadastrado pela barbearia	10/01/2026 23:25	Daniel Alves		
+Valdir moreira	(31) 98536-0903	Cadastrado pela barbearia	09/01/2026 17:28	Samuel Carvalho		
+Kleverson piter	(32) 99834-1395	Cadastrado pela barbearia	07/01/2026 12:09	Samuel Carvalho		
+Silvio	-	Cadastrado pela barbearia	03/01/2026 16:50	Daniel Alves		
+igor	(21) 99338-2913	Cadastrado pela barbearia	03/01/2026 16:28	Samuel Carvalho		
+ary	(32) 99103-2777	Cadastrado pela barbearia	03/01/2026 15:54	Samuel Carvalho		
+yaslan	(32) 99995-5107	Cadastrado pela barbearia	31/12/2025 18:32	Samuel Carvalho		
+Polyana Magnago 	(32) 98458-6276	Cadastrou-se pelo site	31/12/2025 16:01	-		
+uiverson	(32) 99117-3047	Cadastrado pela barbearia	31/12/2025 15:21	Samuel Carvalho		
+Fernando	(32) 99111-6266	Cadastrado pela barbearia	31/12/2025 10:39	Samuel Carvalho		
+dayvison	(32) 99141-7086	Cadastrado pela barbearia	30/12/2025 20:04	Samuel Carvalho		
+raphael	(31) 99570-3983	Cadastrado pela barbearia	30/12/2025 12:57	Samuel Carvalho		
+Paulo vila 2	-	Cadastrado pela barbearia	29/12/2025 18:07	Daniel Alves		
+Anderson Martin	(32) 99172-6901	Cadastrado pela barbearia	29/12/2025 16:06	Samuel Carvalho		
+tiago	(32) 99976-4655	Cadastrado pela barbearia	27/12/2025 17:13	Samuel Carvalho		
+Gabriel Alvin	-	Cadastrado pela barbearia	26/12/2025 11:34	Daniel Alves		
+paulo	(32) 99842-1028	Cadastrado pela barbearia	24/12/2025 16:20	Samuel Carvalho		
+etore	(32) 98892-2629	Cadastrado pela barbearia	24/12/2025 16:20	Samuel Carvalho		
+Vitor vianna	(32) 99141-9002	Cadastrado pela barbearia	24/12/2025 12:57	Samuel Carvalho		
+JOAO PAULO	(35) 99145-1050	Cadastrado pela barbearia	24/12/2025 12:46	Daniel Alves		
+EDUARDO LEITE	(22) 99276-1017	Cadastrado pela barbearia	24/12/2025 10:54	Daniel Alves		
+NEEMIAS	(32) 98879-3465	Cadastrado pela barbearia	23/12/2025 22:13	Daniel Alves		
+Francisco davi	(32) 99106-7497	Cadastrado pela barbearia	23/12/2025 19:10	Samuel Carvalho		
+IURY MENDONCA	(32) 98806-9366	Cadastrado pela barbearia	23/12/2025 14:14	Daniel Alves		
+Aysllan Augusto 	(31) 98519-4714	Cadastrou-se pelo site	22/12/2025 17:03	-		
+Otavio Coelho	-	Cadastrado pela barbearia	22/12/2025 15:37	Daniel Alves		
+Vitor	(61) 98284-0590	Cadastrado pela barbearia	20/12/2025 15:02	Samuel Carvalho		
+ronaldo	(32) 98867-0897	Cadastrado pela barbearia	20/12/2025 13:21	Samuel Carvalho		
+Felipe Almeida	-	Cadastrado pela barbearia	20/12/2025 10:21	Daniel Alves		
+seu madruga	(32) 98510-3561	Cadastrado pela barbearia	19/12/2025 17:15	Daniel Alves		
+Wesley farias leite	(32) 99870-5713	Cadastrado pela barbearia	19/12/2025 15:18	Samuel Carvalho		
+Arthur pipiu	(32) 98832-6644	Cadastrou-se pelo site	19/12/2025 00:52	-		
+Vanessa	-	Cadastrado pela barbearia	19/12/2025 00:06	Daniel Alves		
+Edimilson	-	Cadastrado pela barbearia	18/12/2025 17:16	Daniel Alves		
+Pablo	-	Cadastrado pela barbearia	18/12/2025 10:24	Daniel Alves		
+Lucas moveis	-	Cadastrado pela barbearia	17/12/2025 16:08	Daniel Alves		
+Gael felipe	(32) 98820-3451	Cadastrou-se pelo site	17/12/2025 15:10	-		
+katia	-	Cadastrado pela barbearia	17/12/2025 10:10	Samuel Carvalho		
+gabriel	(32) 99859-4702	Cadastrado pela barbearia	13/12/2025 18:29	Samuel Carvalho		
+Marcos paulo	(32) 9965-8029	Cadastrado pela barbearia	13/12/2025 10:15	Samuel Carvalho		
+Paulista	-	Cadastrado pela barbearia	13/12/2025 00:45	Daniel Alves		
+Coroa 2	-	Cadastrado pela barbearia	13/12/2025 00:43	Daniel Alves		
+Coroa	-	Cadastrado pela barbearia	13/12/2025 00:42	Daniel Alves		
+Carlos Enrique Villar Xavier 	(32) 99822-3240	Cadastrou-se pelo site	12/12/2025 14:56	-		
+João gabriel 2	-	Cadastrado pela barbearia	11/12/2025 12:44	Daniel Alves		
+Felipe Renan	-	Cadastrado pela barbearia	10/12/2025 15:45	Daniel Alves		
+Lucas pimenta	-	Cadastrado pela barbearia	09/12/2025 19:07	Daniel Alves		
+Dana Helsa	-	Cadastrado pela barbearia	06/12/2025 22:26	Daniel Alves		
+João vitor	(32) 9870-3704	Cadastrado pela barbearia	06/12/2025 19:28	Samuel Carvalho		
+Gustavo	(32) 98498-6164	Cadastrado pela barbearia	06/12/2025 17:01	Samuel Carvalho		
+amilton	(31) 97315-8097	Cadastrado pela barbearia	06/12/2025 15:48	Samuel Carvalho		
+Pedro Henrique andrez	(32) 99823-9910	Cadastrado pela barbearia	06/12/2025 15:46	Samuel Carvalho		
+Vitor Luiz de morais 	(32) 99952-7924	Cadastrou-se pelo site	06/12/2025 15:38	-		
+Rafael Fonseca santos	(32) 99122-2655	Cadastrado pela barbearia	06/12/2025 14:56	Samuel Carvalho		
+genivaldo	(32) 99183-9262	Cadastrado pela barbearia	06/12/2025 10:35	Samuel Carvalho		
+pablo	(32) 99173-2449	Cadastrado pela barbearia	06/12/2025 09:18	Samuel Carvalho		
+Elizeu 	(24) 98740-1521	Cadastrou-se pelo site	06/12/2025 08:53	-		
+Ricardo	(32) 98852-3644	Cadastrado pela barbearia	04/12/2025 12:10	Samuel Carvalho		
+Açogueiro	-	Cadastrado pela barbearia	03/12/2025 20:39	Daniel Alves		
+José Maria de Araújo 	(61) 98349-9312	Cadastrou-se pelo site	02/12/2025 15:20	-		
+Miguel Guedes Lopes 	(32) 99122-3522	Cadastrou-se pelo site	02/12/2025 14:42	-		
+filipe Almeida	(32) 9859-9887	Cadastrado pela barbearia	28/11/2025 18:41	Samuel Carvalho		
+kauan bruno	(32) 98428-1975	Cadastrado pela barbearia	27/11/2025 16:42	Samuel Carvalho		
+Patrick campos da silva 	(32) 99109-6212	Cadastrou-se pelo site	27/11/2025 16:07	-		
+Sebastião	(32) 99133-7062	Cadastrado pela barbearia	26/11/2025 19:28	Samuel Carvalho		
+seu luis	-	Cadastrado pela barbearia	26/11/2025 17:44	Samuel Carvalho		
+Vanderson da Silva Faria 	(32) 99902-4548	Cadastrou-se pelo site	26/11/2025 10:59	-		
+Renan	(55) 32882-5988	Cadastrado pela barbearia	26/11/2025 10:43	Samuel Carvalho		
+Matheus dos 	-	Cadastrado pela barbearia	25/11/2025 16:35	Daniel Alves		
+agostinho	(32) 99830-4008	Cadastrado pela barbearia	25/11/2025 11:02	Daniel Alves		
+dentista	-	Cadastrado pela barbearia	25/11/2025 09:48	Samuel Carvalho		
+Eliezer Samuel 	(32) 99106-0758	Cadastrou-se pelo site	24/11/2025 20:09	-		
+Maurício	(32) 98807-7007	Cadastrado pela barbearia	22/11/2025 11:40	Samuel Carvalho		
+heitor lucas	(32) 99903-7845	Cadastrado pela barbearia	21/11/2025 17:39	Samuel Carvalho		
+hemeri	(32) 98856-4817	Cadastrado pela barbearia	21/11/2025 17:33	Daniel Alves		
+heitor	(32) 99903-4875	Cadastrado pela barbearia	21/11/2025 15:53	Samuel Carvalho		
+Jaime lima	(32) 98872-5223	Cadastrou-se pelo site	20/11/2025 17:49	-		
+darlan	(21) 97688-8229	Cadastrado pela barbearia	20/11/2025 15:21	Daniel Alves		
+Paulo Henrique 	(32) 9914-5221	Cadastrou-se pelo site	20/11/2025 09:51	-		
+Rafael Fonseca de souza	(32) 99198-4149	Cadastrou-se pelo site	19/11/2025 05:54	-		
+Ian davi	(32) 98403-3118	Cadastrado pela barbearia	18/11/2025 15:54	Samuel Carvalho		
+Francisco	(15) 99179-9561	Cadastrado pela barbearia	18/11/2025 15:54	Samuel Carvalho		
+Marcus Douglas 	(32) 98406-6110	Cadastrou-se pelo site	17/11/2025 13:25	-		
+jose adilson	(32) 9955-9113	Cadastrado pela barbearia	17/11/2025 12:22	Samuel Carvalho		
+uanderson	(32) 98801-6770	Cadastrado pela barbearia	15/11/2025 17:43	Daniel Alves		
+João Gomes	(32) 98708-4977	Cadastrado pela barbearia	15/11/2025 14:17	Daniel Alves		
+davi lucas	(32) 98706-0597	Cadastrado pela barbearia	15/11/2025 11:19	Daniel Alves		
+edmilson	(33) 98421-3200	Cadastrado pela barbearia	15/11/2025 10:28	Daniel Alves		
+Laercio Silva	(32) 98813-5449	Cadastrou-se pelo site	14/11/2025 18:06	-		
+Patrick	-	Cadastrado pela barbearia	14/11/2025 11:23	Daniel Alves		
+Alexandre (Xuxa)	-	Cadastrado pela barbearia	13/11/2025 23:07	Daniel Alves		
+Ali	-	Cadastrado pela barbearia	13/11/2025 22:24	Daniel Alves		
+willian	(21) 96776-2504	Cadastrado pela barbearia	13/11/2025 16:06	Samuel Carvalho		
+José Antônio	(32) 99140-2367	Cadastrado pela barbearia	12/11/2025 14:54	Samuel Carvalho		
+Gabriella Foppa	(32) 98816-2954	Cadastrou-se pelo site	12/11/2025 12:57	-		
+mardoqueu	(31) 98277-1092	Cadastrado pela barbearia	12/11/2025 12:40	Samuel Carvalho		
+enzo	(32) 9132-3616	Cadastrado pela barbearia	08/11/2025 17:29	Samuel Carvalho		
+felipe	(32) 99132-7590	Cadastrado pela barbearia	08/11/2025 13:02	Samuel Carvalho		
+José Wanderson de Paiva Morais	(32) 98406-8433	Cadastrou-se pelo site	08/11/2025 10:39	-		
+neto	(85) 99248-3374	Cadastrado pela barbearia	08/11/2025 10:33	Daniel Alves		
+Jackeline	(32) 99840-8555	Cadastrou-se pelo site	08/11/2025 01:27	-		
+wallace	(32) 99824-7500	Cadastrado pela barbearia	07/11/2025 19:46	Daniel Alves		
+tiago	(32) 9953-3616	Cadastrado pela barbearia	06/11/2025 10:56	Samuel Carvalho		
+Bernardo Ameida Victor	(32) 99173-7234	Cadastrou-se pelo site	05/11/2025 23:10	-		
+Flávia Brasil	(32) 98404-1315	Cadastrou-se pelo site	05/11/2025 17:53	-		
+Wagner luis de Oliveira	(32) 99906-8510	Cadastrou-se pelo site	04/11/2025 11:31	-		
+Jhonatam de Oliveira Moura	(32) 99946-1962	Cadastrou-se pelo site	02/11/2025 20:19	-		
+Raphael Souza	(32) 99130-0908	Cadastrou-se pelo site	01/11/2025 20:07	-		
+cicero	(32) 99851-9515	Cadastrado pela barbearia	01/11/2025 17:16	Samuel Carvalho		
+wanderson	(32) 98895-5696	Cadastrado pela barbearia	01/11/2025 11:06	Samuel Carvalho		
+kelersson	(32) 99985-5820	Cadastrado pela barbearia	01/11/2025 09:48	Samuel Carvalho		
+Felipe	(32) 99952-7571	Cadastrou-se pelo site	31/10/2025 14:55	-		
+Kelesson Soares de moraes	-	Cadastrado pela barbearia	31/10/2025 12:58	Daniel Alves		
+uender	(32) 98807-4973	Cadastrado pela barbearia	31/10/2025 09:25	Samuel Carvalho		
+João Marcos	(32) 98827-0688	Cadastrou-se pelo site	29/10/2025 17:07	-		
+Fabrizzio	(32) 98897-8538	Cadastrou-se pelo site	29/10/2025 16:19	-		
+ketley	(32) 9846-8871	Cadastrado pela barbearia	25/10/2025 12:56	Samuel Carvalho		
+Bruno	(32) 99841-1103	Cadastrou-se pelo site	25/10/2025 10:13	-		
+renato	(21) 99738-1089	Cadastrado pela barbearia	24/10/2025 18:41	Samuel Carvalho		
+jucimar	(32) 98855-8483	Cadastrado pela barbearia	24/10/2025 10:56	Samuel Carvalho		
+Conan k Bárbaro	(32) 98858-9288	Cadastrou-se pelo site	23/10/2025 19:12	-		
+ney	(32) 98510-8856	Cadastrado pela barbearia	23/10/2025 19:05	Samuel Carvalho		
+juracy luis	(38) 99139-5241	Cadastrado pela barbearia	21/10/2025 18:20	Samuel Carvalho		
+Dona Luzia	-	Cadastrado pela barbearia	20/10/2025 17:36	Daniel Alves		
+Noah Arcanjo	(32) 99161-2734	Cadastrou-se pelo site	18/10/2025 12:23	-		
+Pedro Ferreira Lima	(32) 98832-3395	Cadastrou-se pelo site	17/10/2025 21:39	-		
+Matheus motta	(21) 97702-8923	Cadastrou-se pelo site	17/10/2025 14:57	-		
+jean	(32) 99193-1308	Cadastrado pela barbearia	17/10/2025 12:15	Samuel Carvalho		
+Maria aparecida	-	Cadastrado pela barbearia	15/10/2025 16:15	Daniel Alves		
+Antonio Hortalan Coelho	(32) 98818-7480	Cadastrou-se pelo site	15/10/2025 12:45	-		
+Nickolas Soares	(32) 98819-3700	Cadastrou-se pelo site	15/10/2025 11:32	-		
+Matheus Moreira dos Santos	(32) 98482-4188	Cadastrou-se pelo site	14/10/2025 23:13	-		
+layon	(32) 99122-6654	Cadastrado pela barbearia	14/10/2025 11:46	Samuel Carvalho		
+Didinho	-	Cadastrado pela barbearia	11/10/2025 21:03	Daniel Alves		
+Anderson senna	(32) 98718-0117	Cadastrado pela barbearia	11/10/2025 17:37	Samuel Carvalho		
+Lucas Soares Del Penho	(32) 99142-4505	Cadastrou-se pelo site	10/10/2025 18:59	-		
+Caio Gabriel	(32) 99855-9166	Cadastrou-se pelo site	10/10/2025 16:24	-		
+Daniel	(32) 99198-2488	Cadastrado pela barbearia	10/10/2025 09:31	Samuel Carvalho		
+Miguel lucas	(32) 99145-9472	Cadastrou-se pelo site	10/10/2025 08:13	-		
+Guilherme barreto	(32) 9851-4080	Cadastrado pela barbearia	08/10/2025 17:30	Samuel Carvalho		
+edu	(32) 9996-7502	Cadastrado pela barbearia	04/10/2025 15:53	Samuel Carvalho		
+Paulo sergio	(32) 99998-9677	Cadastrado pela barbearia	04/10/2025 12:18	Samuel Carvalho		
+jose wanderson	(32) 9406-8433	Cadastrado pela barbearia	04/10/2025 10:05	Samuel Carvalho		
+gabriel	(32) 99867-4002	Cadastrou-se pelo site	03/10/2025 16:49	-		
+gabriel	(32) 99867-4008	Cadastrou-se pelo site	03/10/2025 16:46	-		
+Gabriel Bomfim	(32) 99866-4008	Cadastrou-se pelo site	03/10/2025 16:06	-		
+Felipe Augusto	(32) 98846-3608	Cadastrou-se pelo site	03/10/2025 13:36	-		
+Saulo reis	(32) 98486-2205	Cadastrado pela barbearia	03/10/2025 09:48	Samuel Carvalho		
+Alexandre	(32) 98451-5729	Cadastrou-se pelo site	02/10/2025 18:26	-		
+GUILHERME FERREIRA	(32) 99130-5596	Cadastrou-se pelo site	02/10/2025 18:22	-		
+João Victor Lima do Nascimento	(32) 99946-0860	Cadastrou-se pelo site	01/10/2025 21:54	-		
+3 Rios	-	Cadastrado pela barbearia	01/10/2025 00:23	Daniel Alves		
+Edgar José	(32) 99851-2192	Cadastrado pela barbearia	01/10/2025 00:23	Daniel Alves		
+vaanderson	(32) 99982-4548	Cadastrado pela barbearia	30/09/2025 17:02	Samuel Carvalho		
+Francisco	(85) 8838-9738	Cadastrado pela barbearia	30/09/2025 15:16	Samuel Carvalho		
+Israel	(32) 9126-1235	Cadastrado pela barbearia	30/09/2025 15:11	Samuel Carvalho		
+vitor	(32) 98840-4272	Cadastrado pela barbearia	30/09/2025 12:06	Samuel Carvalho		
+marcio	(32) 9996-3364	Cadastrado pela barbearia	27/09/2025 15:49	Samuel Carvalho		
+keibin	(32) 99843-3167	Cadastrado pela barbearia	26/09/2025 15:35	Samuel Carvalho		
+João Phelipe	(32) 99125-5049	Cadastrou-se pelo site	26/09/2025 10:54	-		
+Flavio	-	Cadastrado pela barbearia	26/09/2025 08:57	Daniel Alves		
+Thales Henrique da Silva Carmo	(32) 98820-0847	Cadastrou-se pelo site	26/09/2025 07:43	-		
+Rafael	(22) 99914-5248	Cadastrou-se pelo site	26/09/2025 06:59	-		
+Guilherme da hora	-	Cadastrado pela barbearia	25/09/2025 17:55	Daniel Alves		
+Henrique	-	Cadastrado pela barbearia	25/09/2025 12:36	Daniel Alves		
+Beto Fonseca	(32) 98500-4344	Cadastrou-se pelo site	25/09/2025 11:41	-		
+Gabriel Miranda	(32) 9999-6084	Cadastrado pela barbearia	23/09/2025 17:14	Samuel Carvalho		
+serginho	(32) 98403-4093	Cadastrado pela barbearia	23/09/2025 16:27	Samuel Carvalho		
+Antônio Augusto de Almeida Neto	(32) 99940-9371	Cadastrou-se pelo site	23/09/2025 16:07	-		
+raissa	(33) 29999-8800	Cadastrado pela barbearia	20/09/2025 12:52	Samuel Carvalho		
+maycon	(32) 9868-6078	Cadastrado pela barbearia	20/09/2025 12:09	Samuel Carvalho		
+Isaac Pereira da Silva	(32) 99820-8920	Cadastrou-se pelo site	20/09/2025 11:58	-		
+Paulo Sérgio Lopes	(32) 98480-0440	Cadastrado pela barbearia	20/09/2025 10:53	Samuel Carvalho		
+Ruan	-	Cadastrado pela barbearia	20/09/2025 10:42	Daniel Alves		
+renivaldo	(71) 99666-1683	Cadastrado pela barbearia	20/09/2025 09:09	Samuel Carvalho		
+vander	(32) 9973-2661	Cadastrado pela barbearia	19/09/2025 21:35	Samuel Carvalho		
+Saulo	-	Cadastrado pela barbearia	19/09/2025 16:58	Daniel Alves		
+vanrelze	(32) 99194-7434	Cadastrado pela barbearia	19/09/2025 15:07	Samuel Carvalho		
+Gibson	-	Cadastrado pela barbearia	19/09/2025 14:38	Daniel Alves		
+David fabio	-	Cadastrado pela barbearia	19/09/2025 09:02	Daniel Alves		
+Hárley	(22) 98181-6623	Cadastrou-se pelo site	18/09/2025 22:09	-		
+Fernanda	(27) 99724-4745	Cadastrou-se pelo site	18/09/2025 22:04	-		
+Alexandre barba	-	Cadastrado pela barbearia	18/09/2025 13:12	Daniel Alves		
+anderson	(11) 96927-9075	Cadastrado pela barbearia	17/09/2025 17:24	Samuel Carvalho		
+adriano	(32) 99901-4815	Cadastrado pela barbearia	17/09/2025 16:31	Samuel Carvalho		
+Tancredo Aguiar	(32) 99955-2966	Cadastrou-se pelo site	15/09/2025 21:36	-		
+Murilo Fernandes do Nascimento	(32) 99134-9437	Cadastrou-se pelo site	15/09/2025 11:46	-		
+Denis da silva	(32) 99133-0649	Cadastrado pela barbearia	13/09/2025 21:05	Samuel Carvalho		
+Denis	-	Cadastrado pela barbearia	13/09/2025 20:48	Daniel Alves		
+hudson	(32) 99137-7481	Cadastrado pela barbearia	13/09/2025 16:53	Samuel Carvalho		
+Mário Cézar reis vieira	(32) 98709-9467	Cadastrou-se pelo site	13/09/2025 12:37	-		
+Adao	(27) 99729-0147	Cadastrou-se pelo site	12/09/2025 19:26	-		
+Paulo geovane	(32) 9984-3035	Cadastrado pela barbearia	11/09/2025 15:21	Samuel Carvalho		
+Ramom	-	Cadastrado pela barbearia	11/09/2025 12:41	Daniel Alves		
+João Paulo Alves Pereira	(32) 99173-3084	Cadastrou-se pelo site	10/09/2025 18:59	-		
+alex da silva	(32) 9199-8792	Cadastrado pela barbearia	10/09/2025 17:04	Samuel Carvalho		
+Anezia	(32) 9887-9349	Cadastrado pela barbearia	10/09/2025 16:31	Samuel Carvalho		
+Thiago jose	(32) 98821-4448	Cadastrou-se pelo site	09/09/2025 22:29	-		
+fabiano	(32) 99824-4078	Cadastrado pela barbearia	09/09/2025 19:14	Samuel Carvalho		
+eurides	(32) 98899-9555	Cadastrado pela barbearia	09/09/2025 18:41	Samuel Carvalho		
+gilmar	(32) 98438-0278	Cadastrado pela barbearia	09/09/2025 16:08	Samuel Carvalho		
+valdir	(32) 98452-0720	Cadastrado pela barbearia	09/09/2025 16:00	Samuel Carvalho		
+Higor Fernandes felix da Silva	(32) 99112-5797	Cadastrou-se pelo site	08/09/2025 18:26	-		
+flavio Henrique	(32) 98478-5384	Cadastrado pela barbearia	06/09/2025 18:47	Samuel Carvalho		
+João compania	(32) 9833-0988	Cadastrado pela barbearia	06/09/2025 15:29	Samuel Carvalho		
+Elieser	-	Cadastrado pela barbearia	06/09/2025 15:10	Daniel Alves		
+kauan	(39) 9900-3646	Cadastrado pela barbearia	06/09/2025 12:51	Samuel Carvalho		
+Paulo cesar	(32) 99998-9637	Cadastrado pela barbearia	06/09/2025 12:00	Samuel Carvalho		
+João vitor	(32) 9908-9625	Cadastrado pela barbearia	06/09/2025 09:55	Samuel Carvalho		
+Carlos Alberto de Souza	(32) 98451-7608	Cadastrou-se pelo site	05/09/2025 19:53	-		
+adriano	(32) 99109-7695	Cadastrado pela barbearia	05/09/2025 17:28	Samuel Carvalho		
+Ramon	(32) 98897-7494	Cadastrado pela barbearia	05/09/2025 11:21	Samuel Carvalho		
+Wagner Luis de Oliveira	-	Cadastrado pela barbearia	04/09/2025 14:15	Daniel Alves		
+Fabio Epiphanio de Assis	(32) 99112-9331	Cadastrou-se pelo site	04/09/2025 14:13	-		
+Euri	-	Cadastrado pela barbearia	04/09/2025 12:04	Daniel Alves		
+Ivonaldo Lemes do Amaral	(21) 97893-4736	Cadastrou-se pelo site	02/09/2025 09:32	-		
+Fernanda	(27) 99640-7428	Cadastrou-se pelo site	31/08/2025 21:40	-		
+baiano	(32) 9107-7571	Cadastrado pela barbearia	30/08/2025 18:14	Samuel Carvalho		
+Antonio	(32) 9868-8040	Cadastrado pela barbearia	30/08/2025 15:57	Samuel Carvalho		
+evandro	(32) 9145-7979	Cadastrado pela barbearia	30/08/2025 13:53	Samuel Carvalho		
+yago	(21) 96553-0919	Cadastrado pela barbearia	30/08/2025 10:55	Samuel Carvalho		
+Joao Paulo	(32) 99126-4884	Cadastrou-se pelo site	29/08/2025 16:28	-		
+isael	(32) 98844-6355	Cadastrado pela barbearia	29/08/2025 10:48	Samuel Carvalho		
+Alan da paixão	(32) 99817-8756	Cadastrado pela barbearia	29/08/2025 10:05	Samuel Carvalho		
+fabio	(27) 9993-2771	Cadastrado pela barbearia	28/08/2025 19:18	Samuel Carvalho		
+Marcos Antônio	(32) 99941-2649	Cadastrado pela barbearia	28/08/2025 18:00	Samuel Carvalho		
+Pedro paulo	(32) 9987-2906	Cadastrado pela barbearia	28/08/2025 16:24	Samuel Carvalho		
+Douglas	(32) 98874-6123	Cadastrado pela barbearia	28/08/2025 15:21	Samuel Carvalho		
+Junior compania	(32) 9921-5607	Cadastrado pela barbearia	28/08/2025 10:56	Samuel Carvalho		
+thales	(32) 8836-8712	Cadastrado pela barbearia	27/08/2025 21:42	Samuel Carvalho		
+evangelista	(32) 9997-3253	Cadastrado pela barbearia	27/08/2025 18:25	Samuel Carvalho		
+Marcus douglas	(32) 98706-6110	Cadastrou-se pelo site	27/08/2025 16:31	-		
+yago	(32) 99151-0532	Cadastrou-se pelo site	27/08/2025 09:03	-		
+jurandi	(35) 9945-1665	Cadastrado pela barbearia	26/08/2025 19:36	Samuel Carvalho		
+flavio	(32) 98808-2362	Cadastrado pela barbearia	26/08/2025 19:34	Samuel Carvalho		
+Lucas vieira	(32) 9914-5869	Cadastrado pela barbearia	26/08/2025 17:02	Samuel Carvalho		
+Elvis Balbino	(32) 99147-6239	Cadastrou-se pelo site	26/08/2025 13:09	-		
+renen	(32) 98825-9884	Cadastrado pela barbearia	26/08/2025 12:04	Samuel Carvalho		
+Tiago Nazareth	(32) 99145-7507	Cadastrado pela barbearia	23/08/2025 20:26	Daniel Alves		
+luciano	(21) 98352-5358	Cadastrado pela barbearia	23/08/2025 15:50	Daniel Alves		
+vitor cordeiro	(32) 98461-3278	Cadastrado pela barbearia	23/08/2025 14:18	Daniel Alves		
+mauro	(21) 98215-4368	Cadastrado pela barbearia	23/08/2025 12:00	Daniel Alves		
+Tancredo Aguiar	(32) 99955-2396	Cadastrou-se pelo site	23/08/2025 10:47	-		
+wellinton	(32) 99176-8343	Cadastrado pela barbearia	23/08/2025 10:40	Daniel Alves		
+Rafael valle	(32) 99145-5266	Cadastrou-se pelo site	23/08/2025 09:33	-		
+marcos alexandre	(21) 99087-8417	Cadastrado pela barbearia	23/08/2025 09:24	Daniel Alves		
+Gabriella Foppa	(32) 8816-2954	Cadastrou-se pelo site	22/08/2025 18:49	-		
+allan	(32) 9181-4888	Cadastrado pela barbearia	22/08/2025 18:32	Samuel Carvalho		
+Chinayd	(32) 99118-8427	Cadastrou-se pelo site	22/08/2025 16:00	-		
+claudinei	(31) 99193-2182	Cadastrado pela barbearia	21/08/2025 12:49	Samuel Carvalho		
+diamersom	(32) 99141-9195	Cadastrado pela barbearia	21/08/2025 11:42	Samuel Carvalho		
+Joao vitor	-	Cadastrado pela barbearia	20/08/2025 18:43	Daniel Alves		
+rai	(32) 99142-5972	Cadastrado pela barbearia	20/08/2025 18:28	Samuel Carvalho		
+diaconiza	(32) 9950-7684	Cadastrado pela barbearia	20/08/2025 17:18	Samuel Carvalho		
+Edmilson	(32) 99129-7858	Cadastrado pela barbearia	20/08/2025 15:18	Samuel Carvalho		
+rodrigo	(32) 98853-4586	Cadastrado pela barbearia	20/08/2025 11:03	Samuel Carvalho		
+Julio vizinho	(32) 32314-0001	Cadastrado pela barbearia	20/08/2025 10:22	Samuel Carvalho		
+Geraldo	(32) 98807-9157	Cadastrou-se pelo site	20/08/2025 07:46	-		
+Luciano Trindade	(32) 99160-7088	Cadastrou-se pelo site	19/08/2025 20:59	-		
+fran	(32) 98828-6964	Cadastrado pela barbearia	19/08/2025 19:20	Samuel Carvalho		
+karina	(32) 98868-2867	Cadastrado pela barbearia	19/08/2025 18:24	Samuel Carvalho		
+Luiz Vieira	(32) 99109-8611	Cadastrado pela barbearia	19/08/2025 16:45	Samuel Carvalho		
+Arthur Pedroso	(32) 99154-0751	Cadastrou-se pelo site	18/08/2025 10:37	-		
+Anderson Francisco	(32) 98843-2144	Cadastrado pela barbearia	16/08/2025 21:51	Daniel Alves	cpf 05241377654 data 12\08\1981	
+rony	(31) 99756-9497	Cadastrado pela barbearia	16/08/2025 10:54	Daniel Alves		
+Joao	(32) 99102-6852	Cadastrou-se pelo site	16/08/2025 09:45	-		
+Wemerson Alves fraga Medeiros	(32) 99183-8781	Cadastrou-se pelo site	16/08/2025 09:44	-		
+Valdinei Felix da Silva	(32) 99105-8489	Cadastrou-se pelo site	15/08/2025 19:25	-		
+Waldeci de Almeida	(32) 98813-3439	Cadastrou-se pelo site	15/08/2025 15:16	-		
+Leonardo Cavalcante Ribeiro Zegunis	(32) 99829-9877	Cadastrou-se pelo site	14/08/2025 13:16	-		
+Leivis Gabriel de Oliveira	(32) 99984-0116	Cadastrou-se pelo site	14/08/2025 09:04	-		
+Dayvisson	(32) 98833-6294	Cadastrou-se pelo site	13/08/2025 15:07	-		
+Antonio Augusto	-	Cadastrado pela barbearia	13/08/2025 15:04	Daniel Alves		
+Guilherme Fajardo	(32) 99808-5841	Cadastrou-se pelo site	13/08/2025 14:42	-		
+Junior	(32) 99144-4773	Cadastrou-se pelo site	13/08/2025 10:25	-		
+Lucas Monnerat	(22) 98114-9016	Cadastrou-se pelo site	13/08/2025 07:39	-		
+Lucas Gabriel Santana	(32) 99952-1949	Cadastrou-se pelo site	11/08/2025 11:06	-		
+Edson Bernardo de jesus	(32) 99990-1724	Cadastrou-se pelo site	10/08/2025 18:35	-		
+Rômulo	(21) 99708-4239	Cadastrou-se pelo site	09/08/2025 12:43	-		
+joao guilheerme dos santos	-	Cadastrado pela barbearia	09/08/2025 10:26	Daniel Alves		
+Daniel pereira	(32) 98869-0854	Cadastrou-se pelo site	09/08/2025 08:58	-		
+Janderson Francisco da Silva	(38) 99959-6124	Cadastrou-se pelo site	09/08/2025 06:03	-		
+Renan de Almeida	(32) 99116-7768	Cadastrou-se pelo site	08/08/2025 21:20	-		
+carlos	(32) 99852-3240	Cadastrado pela barbearia	08/08/2025 18:43	Daniel Alves		
+Samuel / Fabiana	(32) 99117-5332	Cadastrou-se pelo site	08/08/2025 18:28	-		
+marques	(31) 98959-9620	Cadastrado pela barbearia	08/08/2025 17:42	Daniel Alves		
+Paulo Henrique	(32) 99145-2221	Cadastrou-se pelo site	08/08/2025 16:32	-		
+Daniel Souza	(19) 98943-9090	Cadastrado pela barbearia	08/08/2025 13:40	Daniel Alves	cliente novo	
+elizeu freitas	-	Cadastrado pela barbearia	08/08/2025 13:25	Daniel Alves		
+Cabelinho	-	Cadastrado pela barbearia	08/08/2025 08:53	Daniel Alves		
+Camila	(32) 99826-7495	Cadastrou-se pelo site	07/08/2025 21:16	-		
+Kauan Silva	(21) 99445-0876	Cadastrado pela barbearia	07/08/2025 19:27	Daniel Alves		
+Adão	(27) 99617-0587	Cadastrado pela barbearia	07/08/2025 19:26	Daniel Alves		
+Victor andrade	(32) 99105-1257	Cadastrou-se pelo site	07/08/2025 18:47	-		
+Ronaldo Santos	(31) 97186-9797	Cadastrado pela barbearia	07/08/2025 18:15	Daniel Alves		
+carlos LIma	(32) 98478-7969	Cadastrado pela barbearia	07/08/2025 18:14	Daniel Alves		
+Seu Nelson	(32) 99922-1015	Cadastrado pela barbearia	07/08/2025 17:23	Daniel Alves		
+Israel	(32) 99944-2187	Cadastrou-se pelo site	07/08/2025 15:59	-		
+Edmilson Eder	(32) 99120-1624	Cadastrou-se pelo site	07/08/2025 14:45	-		
+Emerson Francisco da Silva	(32) 99911-9867	Cadastrou-se pelo site	07/08/2025 12:54	-		
+Gabriel Bomfim	(32) 98467-5543	Cadastrou-se pelo site	07/08/2025 12:32	-		
+Cleber	(32) 98847-7716	Cadastrou-se pelo site	07/08/2025 11:27	-		
+Daniel	-	Cadastrado pela barbearia	07/08/2025 09:35	Daniel Alves		
+Luiz Claudio Antônio Teixeira	(21) 96787-6282	Cadastrou-se pelo site	06/08/2025 23:15	-		
+Luiz Eduardo Mariano Dias	(32) 99181-6332	Cadastrou-se pelo site	06/08/2025 23:10	-		
+Thiago de Souza Malheiro	(32) 99132-7418	Cadastrou-se pelo site	06/08/2025 19:59	-		
+Guilherme	(32) 99990-2769	Cadastrou-se pelo site	06/08/2025 09:20	-		
+Rafael Maulaz Dotta	(32) 99961-5733	Cadastrou-se pelo site	05/08/2025 16:41	-		
+Joao victor	(32) 98821-3774	Cadastrou-se pelo site	05/08/2025 13:22	-		
+Lucas Gabriel	(32) 99113-4902	Cadastrou-se pelo site	05/08/2025 08:36	-		
+Bernardo Moreira Prado	(32) 98449-8424	Cadastrou-se pelo site	05/08/2025 00:44	-		
+Vinicius flor	(31) 99864-9443	Cadastrou-se pelo site	04/08/2025 19:29	-		
+Eliseu Silveira	(32) 99185-1427	Cadastrou-se pelo site	03/08/2025 08:28	-		
+guilherme	(32) 99114-7861	Cadastrado pela barbearia	02/08/2025 21:03	Daniel Alves		
+Gladyston ferreira da silva	(11) 96727-9251	Cadastrou-se pelo site	02/08/2025 13:49	-		
+Kamila Jaqueline	(33) 99128-2323	Cadastrou-se pelo site	02/08/2025 12:47	-		
+Luis	(32) 98845-2050	Cadastrou-se pelo site	02/08/2025 11:23	-		
+André	(32) 98871-6395	Cadastrado pela barbearia	01/08/2025 21:56	Daniel Alves	Cpf 03338512694 data 04|02\1976	
+Alan Vieira de Almeida	(32) 99109-8480	Cadastrou-se pelo site	01/08/2025 15:45	-		
+Gustavo Cestário Mateus	(32) 98815-3439	Cadastrou-se pelo site	01/08/2025 13:49	-		
+Edmilson	-	Cadastrado pela barbearia	01/08/2025 13:33	Daniel Alves		
+Marcus Douglas	(32) 98478-6152	Cadastrou-se pelo site	01/08/2025 12:03	-		
+Laerte Goncalves	(32) 98869-2938	Cadastrou-se pelo site	01/08/2025 12:02	-		
+Felipe	(32) 99849-0138	Cadastrou-se pelo site	01/08/2025 11:44	-		
+Rafael Augusto da Silva	(32) 99815-6668	Cadastrou-se pelo site	01/08/2025 10:56	-		
+Igreja	-	Cadastrado pela barbearia	01/08/2025 10:38	Daniel Alves		
+Bruno Queiroz	(32) 99841-1036	Cadastrou-se pelo site	01/08/2025 10:18	-		
+Silas Luiz Crispim de Paula	(32) 99822-8555	Cadastrou-se pelo site	01/08/2025 09:05	-		
+Eliane	(32) 98874-3879	Cadastrou-se pelo site	01/08/2025 07:34	-		
+Matheus	(32) 99823-6527	Cadastrou-se pelo site	31/07/2025 18:57	-		
+devinson	(32) 9844-1939	Cadastrado pela barbearia	31/07/2025 17:05	Daniel Alves		
+Arthur piu piu	(32) 99139-4704	Cadastrado pela barbearia	31/07/2025 16:32	Daniel Alves		
+Diamerson Medeiros	(32) 99141-9591	Cadastrou-se pelo site	31/07/2025 14:26	-		
+Anderson Marques	(32) 99172-0621	Cadastrou-se pelo site	31/07/2025 10:47	-		
+Jaime	(32) 99116-1960	Cadastrou-se pelo site	31/07/2025 10:02	-		
+Junior	-	Cadastrado pela barbearia	31/07/2025 08:58	Daniel Alves		
+Fernando Augusto De Souza	(32) 98444-8660	Cadastrou-se pelo site	31/07/2025 06:36	-		
+Gabriel Miranda de Almeida	(32) 99923-6084	Cadastrou-se pelo site	30/07/2025 13:47	-		
+krelton	(32) 99972-6058	Cadastrou-se pelo site	30/07/2025 09:50	-		
+David Souza	(32) 98821-8179	Cadastrou-se pelo site	30/07/2025 09:08	-		
+Miguel Egito dos Santos	(32) 98488-6483	Cadastrou-se pelo site	30/07/2025 08:39	-		
+Marcelo	(32) 99194-5270	Cadastrou-se pelo site	30/07/2025 07:49	-		
+Alexandre Mendes	(32) 98856-9172	Cadastrou-se pelo site	29/07/2025 17:32	-		
+Felipe G.	(32) 99178-8815	Cadastrou-se pelo site	29/07/2025 15:33	-		
+Vinicius Gonçalves	(32) 98862-3425	Cadastrou-se pelo site	29/07/2025 13:22	-		
+Álax	(32) 98512-9909	Cadastrou-se pelo site	29/07/2025 13:08	-		
+Peter José dias	(32) 99103-3364	Cadastrou-se pelo site	28/07/2025 14:36	-		
+Anderson dos santos souza	(32) 99121-6363	Cadastrou-se pelo site	27/07/2025 08:45	-		
+gabriel	-	Cadastrado pela barbearia	26/07/2025 15:32	Daniel Alves		
+leandro	(32) 8708-7389	Cadastrado pela barbearia	26/07/2025 12:46	Daniel Alves		
+Isaías	(32) 99162-2431	Cadastrado pela barbearia	26/07/2025 12:03	Daniel Alves	cpf 13258647658 \ data 04\08\1995	
+Vitor Luiz de morais	(32) 99842-4617	Cadastrou-se pelo site	26/07/2025 11:51	-		
+Herica	(32) 98508-0034	Cadastrou-se pelo site	26/07/2025 10:55	-		
+Artur	(21) 96704-8824	Cadastrou-se pelo site	26/07/2025 10:48	-		
+Jackson Junior Taquari Alves	(32) 99882-0392	Cadastrou-se pelo site	26/07/2025 09:54	-		
+Davi Oliveira	-	Cadastrado pela barbearia	26/07/2025 00:45	Daniel Alves		
+irmão francisco	-	Cadastrado pela barbearia	25/07/2025 20:32	Daniel Alves		
+Webert	(32) 99161-7930	Cadastrou-se pelo site	25/07/2025 16:02	-		
+Matheus Motta	(21) 97782-8923	Cadastrou-se pelo site	25/07/2025 12:54	-		
+Edmar	-	Cadastrado pela barbearia	25/07/2025 12:38	Daniel Alves		
+Matheus Motta	-	Cadastrado pela barbearia	25/07/2025 12:34	Daniel Alves		
+Felipe de Oliveira	(32) 98402-8857	Cadastrou-se pelo site	25/07/2025 09:16	-		
+Matheus	-	Cadastrado pela barbearia	25/07/2025 09:10	Daniel Alves		
+Hewder	(32) 99845-4924	Cadastrou-se pelo site	24/07/2025 20:53	-		
+Luiz Gustavo	(32) 99962-7660	Cadastrou-se pelo site	24/07/2025 17:53	-		
+Gustavo Henrique	(32) 99144-5773	Cadastrou-se pelo site	24/07/2025 14:16	-		
+Jeferson Souza	(32) 99119-4297	Cadastrou-se pelo site	24/07/2025 12:47	-		
+Eduardo Maulaz Dotta	(32) 99854-4751	Cadastrou-se pelo site	24/07/2025 11:28	-		
+Alan Rodrigo	(32) 98893-3564	Cadastrou-se pelo site	24/07/2025 10:19	-		
+Raul Esterce	(32) 98858-9280	Cadastrou-se pelo site	24/07/2025 10:04	-		
+Silvio	-	Cadastrado pela barbearia	24/07/2025 08:54	Daniel Alves		
+Pedro Emanuel de Souza	(32) 99827-8725	Cadastrou-se pelo site	23/07/2025 21:54	-		
+João Gabriel	(32) 98716-0249	Cadastrado pela barbearia	23/07/2025 21:49	Daniel Alves		
+David de Melo Rust	(32) 99870-4920	Cadastrado pela barbearia	23/07/2025 20:54	Daniel Alves	CPF 17905657663 data 09\07\2006	
+Luiz Otavio de Oliveira de Mello Arantes	(32) 99124-0899	Cadastrou-se pelo site	23/07/2025 20:46	-		
+Rick	(32) 99842-9922	Cadastrado pela barbearia	23/07/2025 19:46	Daniel Alves	CPF 04804922609 data 23|8|1979	
+Roberto Ibraim	(32) 99174-8393	Cadastrou-se pelo site	23/07/2025 19:12	-		
+Guilherme	(32) 98894-1505	Cadastrou-se pelo site	23/07/2025 18:49	-		
+Luiz Carlos	-	Cadastrado pela barbearia	23/07/2025 18:41	Daniel Alves		
+João Marcos de Paula Coutinho	(03) 98827-0688	Cadastrou-se pelo site	23/07/2025 17:47	-		
+genilson	(32) 99947-2425	Cadastrado pela barbearia	23/07/2025 17:34	Daniel Alves	"cpf: 72018283634
+data de nascimento : 07\09\1974"	
+Anselmo	(32) 9839-4140	Cadastrado pela barbearia	23/07/2025 15:41	Daniel Alves		
+Anderson Ferreira	-	Cadastrado pela barbearia	23/07/2025 15:36	Daniel Alves		
+Glauber Pablo Epifhanio de Oliveira	(32) 99185-6727	Cadastrou-se pelo site	23/07/2025 12:44	-		
+Eder	(03) 29912-0162	Cadastrado pela barbearia	23/07/2025 11:52	Daniel Alves		
+victor emanuel rodrigues	(32) 99951-0476	Cadastrou-se pelo site	23/07/2025 01:15	-		
+João Manoel Pontes Marques	(32) 98861-2287	Cadastrou-se pelo site	22/07/2025 21:41	-		
+Elizeu	(32) 98713-0143	Cadastrou-se pelo site	22/07/2025 19:11	-		
+Edmar	(12) 98267-0811	Cadastrou-se pelo site	22/07/2025 15:10	-		
+teste	-	Cadastrado pela barbearia	22/07/2025 14:57	Daniel Alves		
+Yago	-	Cadastrado pela barbearia	22/07/2025 08:56	Daniel Alves		
+Yag	-	Cadastrado pela barbearia	22/07/2025 08:55	Daniel Alves		
+Jackson da Cruz nogueira	(32) 99969-1397	Cadastrou-se pelo site	22/07/2025 08:24	-		
+Geovani dos Reis	(32) 98866-9453	Cadastrou-se pelo site	21/07/2025 19:48	-		
+Roberto zotz	(41) 99916-9175	Cadastrou-se pelo site	21/07/2025 19:10	-		
+Javier	(32) 99954-7994	Cadastrou-se pelo site	21/07/2025 18:16	-		
+Eu mesmo	(32) 98418-9696	Cadastrou-se pelo site	21/07/2025 18:03	-		
+Guilherme	(32) 99847-5269	Cadastrou-se pelo site	21/07/2025 18:02	-		
+Leslye Marques do Valle	(32) 99124-5857	Cadastrou-se pelo site	21/07/2025 18:02	-		
+Alisson Henrique	(32) 99997-9508	Cadastrou-se pelo site	21/07/2025 17:52	-		
+Kaua nascimento	(32) 98716-0251	Cadastrou-se pelo site	21/07/2025 17:51	-		
