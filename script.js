@@ -66,16 +66,33 @@ function enviarForm(e) {
     fbq('track', 'Lead', {}, { eventID: eventId });
   }
 
-  // Google Ads — conversão
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'conversion', { 'send_to': 'AW-10817838805/3U6QCInl7bEcENW9rKYO' });
-  }
-
   // Google Analytics 4 — evento de lead
   if (typeof gtag !== 'undefined') {
     gtag('event', 'lead_gerado', { 'event_category': 'formulario' });
   }
-  mostrarObrigado();
+
+  // Google Ads — conversão
+  // mostrarObrigado() fica dentro do callback para garantir que o hit
+  // seja enviado antes da tela mudar. Fallback de 1s protege o usuário
+  // caso o gtag não carregue ou o callback demore demais.
+  var obrigadoChamado = false;
+  function chamarObrigado() {
+    if (!obrigadoChamado) {
+      obrigadoChamado = true;
+      mostrarObrigado();
+    }
+  }
+
+  setTimeout(chamarObrigado, 1000); // fallback de segurança
+
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'conversion', {
+      'send_to': 'AW-10817838805/3U6QCInl7bEcENW9rKYO',
+      'event_callback': chamarObrigado
+    });
+  } else {
+    chamarObrigado();
+  }
 }
 
 function mostrarObrigado() {
