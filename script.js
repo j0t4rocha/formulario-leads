@@ -68,14 +68,19 @@ function enviarForm(e) {
 
   // Google Ads — conversão
   if (typeof gtag !== 'undefined') {
-    gtag('event', 'conversion', { 'send_to': 'AW-10817838805' });
+    gtag('event', 'conversion', { 'send_to': 'AW-10817838805/3U6QCInl7bEcENW9rKYO' });
   }
 
+  // Google Analytics 4 — evento de lead
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'lead_gerado', { 'event_category': 'formulario' });
+  }
   mostrarObrigado();
 }
 
 function mostrarObrigado() {
   document.getElementById('form-container').style.display = 'none';
   document.getElementById('obrigado').classList.add('visible');
+  document.getElementById('obrigado').innerHTML += '<a href="https://wa.me/5521969584264?text=Oi%20Jota%2C%20acabei%20de%20preencher%20o%20formulário%20e%20quero%20minha%20análise!" target="_blank" style="display:inline-block;margin-top:1.5rem;background:#25D366;color:#fff;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:500;">👉 Garantir minha análise no WhatsApp</a>';
   window.scrollTo({ top: document.getElementById('formulario').offsetTop - 40, behavior: 'smooth' });
 }
