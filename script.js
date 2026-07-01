@@ -87,7 +87,7 @@ function enviarForm(e) {
 
   if (typeof gtag !== 'undefined') {
     gtag('event', 'conversion', {
-      'send_to': 'AW-10817838805/3U6QCInl7bEcENW9rKYO',
+      'send_to': 'AW-10817838805/tZzICO3yq7YcENW9rKYo',
       'event_callback': chamarObrigado
     });
   } else {
