@@ -109,8 +109,9 @@ section { position: relative; z-index: 1; }
 .step h3 { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
 .step p { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
 
-.form-section { padding: 80px 24px; background: var(--black-mid); }
-.form-wrap { max-width: 600px; margin: 0 auto; background: var(--black-soft); border: 1px solid var(--border); border-radius: 6px; padding: 48px 40px; }
+#formulario { margin-top: 40px; width: 100%; }
+.final-cta-section { padding: 80px 24px; background: var(--black-mid); text-align: center; }
+.form-wrap { max-width: 600px; margin: 0 auto; background: var(--black-soft); border: 1px solid var(--border); border-radius: 6px; padding: 48px 40px; text-align: left; }
 .form-wrap h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem); letter-spacing: 1px; margin-bottom: 6px; }
 .form-wrap .form-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; line-height: 1.6; }
 
