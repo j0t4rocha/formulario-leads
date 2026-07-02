@@ -9,7 +9,7 @@ var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbzDDeNhsoTVMyYOB
 
 var currentStep = 1;
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   updateProgressBar();
 });
 
@@ -53,7 +53,7 @@ function goToStep(stepNumber) {
 
   if (currentStepEl) {
     currentStepEl.classList.remove('visible');
-    setTimeout(function() {
+    setTimeout(function () {
       currentStepEl.classList.remove('active');
 
       if (stepNumber === 3) {
@@ -129,7 +129,7 @@ function selectCardOption(fieldName, optionValue, step) {
   }
 
   var selector = '.card-option[data-field="' + fieldName + '"]';
-  document.querySelectorAll(selector).forEach(function(card) {
+  document.querySelectorAll(selector).forEach(function (card) {
     if (card.getAttribute('data-value') === optionValue) {
       card.classList.add('selected');
     } else {
@@ -138,11 +138,11 @@ function selectCardOption(fieldName, optionValue, step) {
   });
 
   if (step === 2) {
-    setTimeout(function() {
+    setTimeout(function () {
       goToStep(3);
     }, 250);
   } else if (step === 3) {
-    setTimeout(function() {
+    setTimeout(function () {
       var trafegoVal = document.getElementById('input-trafego').value;
       if (trafegoVal === 'sim') {
         goToStep(4);
@@ -151,14 +151,14 @@ function selectCardOption(fieldName, optionValue, step) {
       }
     }, 250);
   } else if (step === 4) {
-    setTimeout(function() {
+    setTimeout(function () {
       goToStep(5);
     }, 250);
   } else if (step === 5) {
     var submitBlock = document.getElementById('submit-block');
     if (submitBlock) {
       submitBlock.style.display = 'block';
-      setTimeout(function() {
+      setTimeout(function () {
         submitBlock.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }, 100);
     }
@@ -179,37 +179,46 @@ function enviarForm(e) {
   var form = document.getElementById('lead-form');
   var data = new FormData(form);
 
+  // Gera event_id único para deduplicação browser <-> servidor
   var eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
 
   var payload = {
-    nome:             data.get('nome'),
-    whatsapp:         data.get('whatsapp'),
-    email:            data.get('email'),
-    instagram:        data.get('instagram') || '-',
-    trafego:          data.get('trafego'),
-    experiencia:      data.get('experiencia') || '-',
-    valor_investido:  data.get('valor_investido') || '-',
+    nome: data.get('nome'),
+    whatsapp: data.get('whatsapp'),
+    email: data.get('email'),
+    instagram: data.get('instagram') || '-',
+    trafego: data.get('trafego'),
+    experiencia: data.get('experiencia') || '-',
+    valor_investido: data.get('valor_investido') || '-',
     valor_pretendido: data.get('valor_pretendido') || '-',
-    faturamento:      data.get('faturamento'),
-    data:             new Date().toLocaleString('pt-BR'),
-    event_id:         eventId,
+    faturamento: data.get('faturamento'),
+    data: new Date().toLocaleString('pt-BR'),
+    event_id: eventId,
     event_source_url: window.location.href
   };
 
+  // Envia para Google Sheets + CAPI (servidor)
+  // Content-Type text/plain evita preflight CORS e o GAS consegue receber
   fetch(GOOGLE_SHEET_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify(payload)
-  }).catch(function() {});
+  }).catch(function () { });
 
+  // Pixel browser — usa o MESMO event_id para deduplicação
   if (typeof fbq !== 'undefined') {
     fbq('track', 'Lead', {}, { eventID: eventId });
   }
 
+  // Google Analytics 4 — evento de lead
   if (typeof gtag !== 'undefined') {
     gtag('event', 'lead_gerado', { 'event_category': 'formulario' });
   }
 
+  // Google Ads — conversão
+  // mostrarObrigado() fica dentro do callback para garantir que o hit
+  // seja enviado antes da tela mudar. Fallback de 1s protege o usuário
+  // caso o gtag não carregue ou o callback demore demais.
   var obrigadoChamado = false;
   function chamarObrigado() {
     if (!obrigadoChamado) {
@@ -218,12 +227,13 @@ function enviarForm(e) {
     }
   }
 
-  setTimeout(chamarObrigado, 1000);
+  setTimeout(chamarObrigado, 1000); // fallback de segurança
 
   if (typeof gtag !== 'undefined') {
     gtag('event', 'conversion', {
       'send_to': 'AW-10817838805/tZzICO3yq7YcENW9rKYo',
-      'event_callback': chamarObrigado
+      'event_callback': chamarObrigado,
+      'transaction_id': eventId
     });
   } else {
     chamarObrigado();
