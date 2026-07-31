@@ -13,6 +13,24 @@ document.addEventListener('DOMContentLoaded', function () {
   updateProgressBar();
 });
 
+function revealForm() {
+  var formSection = document.getElementById('formulario');
+  var ctaContainer = document.getElementById('cta-container');
+  if (formSection) {
+    formSection.classList.add('active');
+    // Força o reflow para aplicar display: block antes da animação de opacidade/transform
+    formSection.offsetHeight;
+    formSection.classList.add('visible');
+    
+    setTimeout(function () {
+      formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+  if (ctaContainer) {
+    ctaContainer.style.display = 'none';
+  }
+}
+
 function updateProgressBar() {
   var fill = document.getElementById('progress-fill');
   if (!fill) return;
@@ -205,39 +223,17 @@ function enviarForm(e) {
     body: JSON.stringify(payload)
   }).catch(function () { });
 
-  // Pixel browser — usa o MESMO event_id para deduplicação
-  if (typeof fbq !== 'undefined') {
-    fbq('track', 'Lead', {}, { eventID: eventId });
-  }
+  // Envia evento customizado para o dataLayer (Google Tag Manager)
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'lead_gerado',
+    eventId: eventId
+  });
 
-  // Google Analytics 4 — evento de lead
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'lead_gerado', { 'event_category': 'formulario' });
-  }
-
-  // Google Ads — conversão
-  // mostrarObrigado() fica dentro do callback para garantir que o hit
-  // seja enviado antes da tela mudar. Fallback de 1s protege o usuário
-  // caso o gtag não carregue ou o callback demore demais.
-  var obrigadoChamado = false;
-  function chamarObrigado() {
-    if (!obrigadoChamado) {
-      obrigadoChamado = true;
-      mostrarObrigado();
-    }
-  }
-
-  setTimeout(chamarObrigado, 1000); // fallback de segurança
-
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'conversion', {
-      'send_to': 'AW-10817838805/tZzICO3yq7YcENW9rKYo',
-      'event_callback': chamarObrigado,
-      'transaction_id': eventId
-    });
-  } else {
-    chamarObrigado();
-  }
+  // Mostra a tela de agradecimento após um pequeno delay para garantir o disparo
+  setTimeout(function () {
+    mostrarObrigado();
+  }, 100);
 }
 
 function mostrarObrigado() {

@@ -18,32 +18,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <!-- META PIXEL -->
-  <script>
-    !function (f, b, e, v, n, t, s) {
-      if (f.fbq) return; n = f.fbq = function () {
-        n.callMethod ?
-          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-      }; if (!f._fbq) f._fbq = n;
-      n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0;
-      t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
-    }(window,
-      document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1526385979054190');
-    fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1526385979054190&ev=PageView&noscript=1" /></noscript>
 
-  <!-- GOOGLE ADS -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-10817838805"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'AW-10817838805');
-    gtag('config', 'G-H1EQ9XDL0K');
-  </script>
 
 </head>
 
@@ -58,6 +33,12 @@
     <h1>Deixe de ser invisível.<span>Lote a agenda.</span></h1>
     <p>Todo dia clientes pesquisam no Google e no Instagram pela barbearia deles e encontram o seu concorrente. Isso
       também te incomoda? receba seu diagnóstico gratuito.</p>
+
+    <div class="hero-cta-container" id="cta-container">
+      <button type="button" class="btn-reveal" onclick="revealForm()">
+        Quero subir meu faturamento
+      </button>
+    </div>
 
     <div id="formulario">
       <div class="form-wrap" id="form-container">
