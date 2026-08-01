@@ -89,10 +89,7 @@ function goToStep(stepNumber) {
       nextStepEl.offsetHeight; // Force reflow
       nextStepEl.classList.add('visible');
 
-      var formContainer = document.getElementById('form-container');
-      if (formContainer) {
-        window.scrollTo({ top: formContainer.offsetTop - 40, behavior: 'smooth' });
-      }
+
     }, 250);
   } else {
     nextStepEl.classList.add('active');
@@ -176,9 +173,7 @@ function selectCardOption(fieldName, optionValue, step) {
     var submitBlock = document.getElementById('submit-block');
     if (submitBlock) {
       submitBlock.style.display = 'block';
-      setTimeout(function () {
-        submitBlock.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 100);
+
     }
   }
 }
