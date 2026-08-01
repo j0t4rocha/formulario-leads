@@ -238,7 +238,20 @@ function enviarForm(e) {
 
 function mostrarObrigado() {
   document.getElementById('form-container').style.display = 'none';
-  document.getElementById('obrigado').classList.add('visible');
-  document.getElementById('obrigado').innerHTML += '<a href="https://wa.me/5521969584264?text=Oi%20Jota%2C%20acabei%20de%20preencher%20o%20formulário%20e%20quero%20minha%20análise!" target="_blank" style="display:inline-block;margin-top:1.5rem;background:#25D366;color:#fff;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:500;">👉 Garantir minha análise no WhatsApp</a>';
-  window.scrollTo({ top: document.getElementById('formulario').offsetTop - 40, behavior: 'smooth' });
+  
+  var obrigadoEl = document.getElementById('obrigado');
+  obrigadoEl.classList.add('visible');
+  
+  var agendaSection = document.getElementById('agenda-section');
+  if (agendaSection) {
+    agendaSection.style.display = 'block';
+  }
+  
+  setTimeout(function () {
+    if (agendaSection) {
+      agendaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      obrigadoEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 150);
 }
