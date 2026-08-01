@@ -11,7 +11,24 @@ var currentStep = 1;
 
 document.addEventListener('DOMContentLoaded', function () {
   updateProgressBar();
+  initCalendarButton();
 });
+
+function initCalendarButton() {
+  var target = document.getElementById('google-scheduling-button');
+  if (!target) return;
+
+  if (typeof calendar !== 'undefined' && calendar.schedulingButton) {
+    calendar.schedulingButton.load({
+      url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0v5DVzvhKQHFgnL315eDIm_8oLY7rvD1pLyFXDmueWVDQyNosrh1vzkT-Wmz-7RccewNYDHZQc?gv=true',
+      color: '#039BE5',
+      label: 'Agendar meu diagnóstico',
+      target: target,
+    });
+  } else {
+    setTimeout(initCalendarButton, 200);
+  }
+}
 
 function revealForm() {
   var formSection = document.getElementById('formulario');
@@ -210,6 +227,15 @@ function enviarForm(e) {
     event_source_url: window.location.href
   };
 
+  // 1. Disparo do evento de Lead — no momento do submit, uma única vez
+  if (typeof fbq !== 'undefined') {
+    try {
+      fbq('track', 'Lead');
+    } catch (err) {
+      console.error('Erro ao disparar Meta Pixel Lead:', err);
+    }
+  }
+
   // Envia para Google Sheets + CAPI (servidor)
   // Content-Type text/plain evita preflight CORS e o GAS consegue receber
   fetch(GOOGLE_SHEET_URL, {
@@ -252,21 +278,23 @@ function enviarForm(e) {
   var friendlyExperiencia = mapExperiencia[payload.experiencia] || payload.experiencia;
   var friendlyFaturamento = mapFaturamento[payload.faturamento] || payload.faturamento;
 
-  var textoWhats = "Oi Jota! Acabei de preencher o formulário de diagnóstico da minha barbearia:\n\n" +
-    "*Nome:* " + payload.nome + "\n" +
-    "*WhatsApp:* " + payload.whatsapp + "\n" +
-    "*E-mail:* " + payload.email + "\n" +
-    "*Instagram:* " + (payload.instagram || '-') + "\n" +
-    "*Já investiu em tráfego:* " + (payload.trafego === 'sim' ? 'Sim' : 'Não') + "\n";
+  var textoWhats = "Fala Jota, preenchi o formulário e agendei meu diagnóstico.\n\n" +
+    "*Dados do formulário:*\n" +
+    "Nome: " + payload.nome + "\n" +
+    "WhatsApp: " + payload.whatsapp + "\n" +
+    "E-mail: " + payload.email + "\n" +
+    "Instagram: " + (payload.instagram || '-') + "\n" +
+    "Já investiu em tráfego: " + (payload.trafego === 'sim' ? 'Sim' : 'Não') + "\n";
 
   if (payload.trafego === 'sim') {
-    textoWhats += "*Quanto investia:* " + friendlyInvestimento + "\n" +
-                  "*Experiência:* " + friendlyExperiencia + "\n";
+    textoWhats += "Quanto investia: " + friendlyInvestimento + "\n" +
+                  "Experiência: " + friendlyExperiencia + "\n";
   } else {
-    textoWhats += "*Quanto pretende investir:* " + friendlyPretendido + "\n";
+    textoWhats += "Quanto pretende investir: " + friendlyPretendido + "\n";
   }
-  textoWhats += "*Faturamento mensal:* " + friendlyFaturamento + "\n\n" +
-                "Gostaria de concluir meu diagnóstico e confirmar a sessão agendada!";
+  textoWhats += "Faturamento mensal: " + friendlyFaturamento + "\n\n" +
+                "*Dados da reunião:*\n" +
+                "Dia e horário agendado: _____ (confirme aqui)";
 
   var linkWhats = "https://wa.me/5521969584264?text=" + encodeURIComponent(textoWhats);
   
