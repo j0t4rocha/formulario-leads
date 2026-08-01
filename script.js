@@ -230,6 +230,56 @@ function enviarForm(e) {
     eventId: eventId
   });
 
+  // Compilação do texto dinâmico para WhatsApp com formatação amigável
+  var mapInvestimento = {
+    'ate500': 'Até R$500/mês',
+    '500a1000': 'Entre R$500 e R$1.000/mês',
+    '1000a3000': 'Entre R$1.000 e R$3.000/mês',
+    '3000a5000': 'Entre R$3.000 e R$5.000/mês',
+    'acima5000': 'Acima de R$5.000/mês'
+  };
+  var mapExperiencia = {
+    'otima': 'Ótima — tive bons resultados',
+    'regular': 'Regular — tive alguns resultados',
+    'ruim': 'Ruim — não tive retorno',
+    'pessima': 'Péssima — perdi dinheiro'
+  };
+  var mapFaturamento = {
+    'ate8k': 'Até R$8.000/mês',
+    '8a15k': 'Entre R$8.000 e R$15.000/mês',
+    '15a30k': 'Entre R$15.000 e R$30.000/mês',
+    '30a50k': 'Entre R$30.000 e R$50.000/mês',
+    'acima50k': 'Acima de R$50.000/mês'
+  };
+
+  var friendlyInvestimento = mapInvestimento[payload.valor_investido] || payload.valor_investido;
+  var friendlyPretendido = mapInvestimento[payload.valor_pretendido] || payload.valor_pretendido;
+  var friendlyExperiencia = mapExperiencia[payload.experiencia] || payload.experiencia;
+  var friendlyFaturamento = mapFaturamento[payload.faturamento] || payload.faturamento;
+
+  var textoWhats = "Oi Jota! Acabei de preencher o formulário de diagnóstico da minha barbearia:\n\n" +
+    "*Nome:* " + payload.nome + "\n" +
+    "*WhatsApp:* " + payload.whatsapp + "\n" +
+    "*E-mail:* " + payload.email + "\n" +
+    "*Instagram:* " + (payload.instagram || '-') + "\n" +
+    "*Já investiu em tráfego:* " + (payload.trafego === 'sim' ? 'Sim' : 'Não') + "\n";
+
+  if (payload.trafego === 'sim') {
+    textoWhats += "*Quanto investia:* " + friendlyInvestimento + "\n" +
+                  "*Experiência:* " + friendlyExperiencia + "\n";
+  } else {
+    textoWhats += "*Quanto pretende investir:* " + friendlyPretendido + "\n";
+  }
+  textoWhats += "*Faturamento mensal:* " + friendlyFaturamento + "\n\n" +
+                "Gostaria de concluir meu diagnóstico e confirmar a sessão agendada!";
+
+  var linkWhats = "https://wa.me/5521969584264?text=" + encodeURIComponent(textoWhats);
+  
+  var btnConcluir = document.getElementById('btn-concluir-whatsapp');
+  if (btnConcluir) {
+    btnConcluir.href = linkWhats;
+  }
+
   // Mostra a tela de agradecimento após um pequeno delay para garantir o disparo
   setTimeout(function () {
     mostrarObrigado();
@@ -239,9 +289,6 @@ function enviarForm(e) {
 function mostrarObrigado() {
   document.getElementById('form-container').style.display = 'none';
   
-  var obrigadoEl = document.getElementById('obrigado');
-  obrigadoEl.classList.add('visible');
-  
   var agendaSection = document.getElementById('agenda-section');
   if (agendaSection) {
     agendaSection.style.display = 'block';
@@ -250,8 +297,6 @@ function mostrarObrigado() {
   setTimeout(function () {
     if (agendaSection) {
       agendaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-      obrigadoEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, 150);
 }
