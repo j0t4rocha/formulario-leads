@@ -11,24 +11,7 @@ var currentStep = 1;
 
 document.addEventListener('DOMContentLoaded', function () {
   updateProgressBar();
-  initCalendarButton();
 });
-
-function initCalendarButton() {
-  var target = document.getElementById('google-scheduling-button');
-  if (!target) return;
-
-  if (typeof calendar !== 'undefined' && calendar.schedulingButton) {
-    calendar.schedulingButton.load({
-      url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0v5DVzvhKQHFgnL315eDIm_8oLY7rvD1pLyFXDmueWVDQyNosrh1vzkT-Wmz-7RccewNYDHZQc?gv=true',
-      color: '#039BE5',
-      label: 'Agendar meu diagnóstico',
-      target: target,
-    });
-  } else {
-    setTimeout(initCalendarButton, 200);
-  }
-}
 
 function revealForm() {
   var formSection = document.getElementById('formulario');
@@ -278,29 +261,30 @@ function enviarForm(e) {
   var friendlyExperiencia = mapExperiencia[payload.experiencia] || payload.experiencia;
   var friendlyFaturamento = mapFaturamento[payload.faturamento] || payload.faturamento;
 
-  var textoWhats = "Fala Jota, preenchi o formulário e agendei meu diagnóstico.\n\n" +
-    "*Dados do formulário:*\n" +
+  var textoWhats = "Fala, Jota! Acabei de preencher o formulário no site e quero destravar o crescimento da minha barbearia.\n\n" +
+    "*Meus Dados:*\n" +
     "Nome: " + payload.nome + "\n" +
-    "WhatsApp: " + payload.whatsapp + "\n" +
     "E-mail: " + payload.email + "\n" +
-    "Instagram: " + (payload.instagram || '-') + "\n" +
-    "Já investiu em tráfego: " + (payload.trafego === 'sim' ? 'Sim' : 'Não') + "\n";
+    "WhatsApp: " + payload.whatsapp + "\n" +
+    "Instagram: " + (payload.instagram || '-') + "\n\n" +
+    "*Raio-X do Negócio:*\n" +
+    "Já investiu em tráfego?: " + (payload.trafego === 'sim' ? 'Sim' : 'Não') + "\n";
 
   if (payload.trafego === 'sim') {
-    textoWhats += "Quanto investia: " + friendlyInvestimento + "\n" +
-                  "Experiência: " + friendlyExperiencia + "\n";
+    textoWhats += "Investimento mensal: " + friendlyInvestimento + "\n" +
+                  "Experiência com tráfego: " + friendlyExperiencia + "\n";
   } else {
-    textoWhats += "Quanto pretende investir: " + friendlyPretendido + "\n";
+    textoWhats += "Investimento mensal pretendido: " + friendlyPretendido + "\n";
   }
+
   textoWhats += "Faturamento mensal: " + friendlyFaturamento + "\n\n" +
-                "*Dados da reunião:*\n" +
-                "Dia e horário agendado: _____ (confirme aqui)";
+    "Gostaria de marcar a nossa sessão de diagnóstico. Quais são os seus próximos horários disponíveis?";
 
   var linkWhats = "https://wa.me/5521969584264?text=" + encodeURIComponent(textoWhats);
-  
-  var btnConcluir = document.getElementById('btn-concluir-whatsapp');
-  if (btnConcluir) {
-    btnConcluir.href = linkWhats;
+
+  var btnFinal = document.getElementById('btn-whatsapp-final');
+  if (btnFinal) {
+    btnFinal.href = linkWhats;
   }
 
   // Mostra a tela de agradecimento após um pequeno delay para garantir o disparo
@@ -312,14 +296,53 @@ function enviarForm(e) {
 function mostrarObrigado() {
   document.getElementById('form-container').style.display = 'none';
   
-  var agendaSection = document.getElementById('agenda-section');
-  if (agendaSection) {
-    agendaSection.style.display = 'block';
+  var successSection = document.getElementById('success-section');
+  if (successSection) {
+    successSection.style.display = 'block';
   }
   
   setTimeout(function () {
-    if (agendaSection) {
-      agendaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (successSection) {
+      successSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, 150);
+}
+
+// ================================================
+// SIMULADOR DE FATURAMENTO
+// ================================================
+
+function calcularPotencial() {
+  var cadeiras = parseInt(document.getElementById('sim-cadeiras').value) || 0;
+  var ticket   = parseFloat(document.getElementById('sim-ticket').value) || 0;
+  var cortes   = parseInt(document.getElementById('sim-cortes').value) || 0;
+  var resultado = cadeiras * ticket * cortes * 26;
+
+  var resultadoEl = document.getElementById('sim-resultado');
+  var valorEl = document.getElementById('sim-valor');
+
+  valorEl.textContent = resultado.toLocaleString('pt-BR', {
+    style: 'currency', currency: 'BRL'
+  });
+  resultadoEl.style.display = 'block';
+  resultadoEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ================================================
+// FAQ ACCORDION
+// ================================================
+
+function toggleAccordion(header) {
+  var item = header.parentElement;
+  var isOpen = item.classList.contains('open');
+
+  // Fecha todos os itens
+  document.querySelectorAll('.accordion-item').forEach(function(el) {
+    el.classList.remove('open');
+  });
+
+  // Abre o clicado (se não estava aberto)
+  if (!isOpen) {
+    item.classList.add('open');
+  }
 }

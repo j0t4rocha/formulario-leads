@@ -360,8 +360,10 @@ footer {
 .radio-group-col { flex-direction: column; }
 .radio-group-col .radio-opt { min-width: 100%; }
 
-/* Seção de Agenda Pós-Envio */
-#agenda-section {
+/* ================================================
+   SUCCESS SECTION (pós-formulário)
+   ================================================ */
+#success-section {
   max-width: 600px;
   margin: 40px auto 0;
   background: var(--black-soft);
@@ -371,45 +373,350 @@ footer {
   text-align: center;
   animation: fadeUp 0.6s ease both;
 }
-.agenda-title {
+.success-check {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 24px;
+}
+.success-check svg {
+  width: 100%;
+  height: 100%;
+}
+.success-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  animation: successCircle 0.6s 0.1s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.success-tick {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: successTick 0.4s 0.5s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+@keyframes successCircle {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes successTick {
+  to { stroke-dashoffset: 0; }
+}
+.success-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
   letter-spacing: 1px;
   color: var(--text);
-  margin-bottom: 24px;
+  margin-bottom: 8px;
   line-height: 1.2;
 }
-#google-scheduling-button-container {
-  margin: 32px auto;
-  display: flex;
-  justify-content: center;
-}
-#whatsapp-cta-container {
-  margin-top: 32px;
-  border-top: 1px solid rgba(200, 168, 75, 0.15);
-  padding-top: 28px;
-}
-.whatsapp-instruction {
-  font-size: 14px;
+.success-sub {
+  font-size: 15px;
   color: var(--text-muted);
-  margin-bottom: 20px;
+  margin-bottom: 28px;
   line-height: 1.6;
 }
-.btn-concluir {
-  background: #25D366;
+.btn-whatsapp-final {
   font-size: 16px;
   padding: 16px 36px;
   border-radius: 50px;
   font-weight: 500;
   letter-spacing: 0.5px;
-  text-transform: none;
 }
-.btn-concluir:hover {
-  background: #1ebe5d;
+
+/* ================================================
+   PROVA SOCIAL
+   ================================================ */
+.prova-social {
+  padding: 80px 24px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.prova-social h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  letter-spacing: 1px;
+  margin-bottom: 48px;
+}
+.prova-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.prova-card {
+  background: var(--black-soft);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.prova-card:hover {
+  border-color: rgba(200, 168, 75, 0.4);
+  transform: translateY(-4px);
+}
+.video-placeholder {
+  aspect-ratio: 9 / 16;
+  background: rgba(17, 21, 8, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.video-placeholder span {
+  opacity: 0.6;
+}
+.prova-caption {
+  padding: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gold);
+  line-height: 1.5;
+}
+
+/* ================================================
+   ESPECIALISTA (AUTORIDADE)
+   ================================================ */
+.especialista {
+  padding: 80px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.especialista-inner {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 48px;
+  max-width: 960px;
+  margin: 0 auto;
+  align-items: center;
+}
+.especialista-foto {
+  display: flex;
+  justify-content: center;
+}
+.foto-placeholder {
+  width: 360px;
+  height: 360px;
+  background: rgba(17, 21, 8, 0.8);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.especialista-texto h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  line-height: 1.1;
+}
+.especialista-texto p {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+.especialista-texto .btn-reveal {
+  margin-top: 12px;
+}
+
+/* ================================================
+   SIMULADOR DE FATURAMENTO
+   ================================================ */
+.simulador {
+  padding: 80px 24px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.simulador-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.simulador h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+.simulador-sub {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-bottom: 36px;
+  line-height: 1.6;
+}
+.simulador-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: left;
+}
+.sim-field label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.sim-field input {
+  width: 100%;
+  background: var(--black);
+  border: 1px solid rgba(200, 168, 75, 0.2);
+  color: var(--text);
+  padding: 13px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  border-radius: 3px;
+  transition: border-color 0.2s;
+  appearance: none;
+  -moz-appearance: textfield;
+}
+.sim-field input:focus {
+  outline: none;
+  border-color: rgba(200, 168, 75, 0.5);
+}
+.sim-field input::placeholder {
+  color: #4a5040;
+}
+.simulador-form .btn-reveal {
+  margin-top: 8px;
+  align-self: center;
+}
+.sim-resultado {
+  margin-top: 36px;
+  padding: 32px;
+  background: var(--black-soft);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  text-align: center;
+  animation: fadeUp 0.5s ease both;
+}
+.sim-resultado-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+.sim-resultado-valor {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.sim-resultado-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ================================================
+   FAQ ACCORDION
+   ================================================ */
+.faq {
+  padding: 80px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.faq-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+.faq h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  letter-spacing: 1px;
+  margin-bottom: 40px;
+}
+.accordion {
+  text-align: left;
+}
+.accordion-item {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.accordion-item:hover,
+.accordion-item.open {
+  border-color: rgba(200, 168, 75, 0.4);
+}
+.accordion-header {
+  width: 100%;
+  background: var(--black-soft);
+  border: none;
+  color: var(--text);
+  padding: 20px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  transition: background 0.2s;
+}
+.accordion-header:hover {
+  background: rgba(200, 168, 75, 0.04);
+}
+.accordion-icon {
+  font-size: 20px;
+  color: var(--gold);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  line-height: 1;
+}
+.accordion-item.open .accordion-icon {
+  transform: rotate(45deg);
+}
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  padding: 0 24px;
+}
+.accordion-item.open .accordion-body {
+  max-height: 300px;
+  padding: 0 24px 20px;
+}
+.accordion-body p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+/* ================================================
+   RESPONSIVE — NEW SECTIONS
+   ================================================ */
+@media (max-width: 768px) {
+  .prova-grid {
+    grid-template-columns: 1fr;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .especialista-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .foto-placeholder {
+    width: 240px;
+    height: 240px;
+    margin: 0 auto;
+  }
+  .especialista-texto .btn-reveal {
+    margin: 12px auto 0;
+  }
 }
 
 @media (max-width: 600px) {
-  #agenda-section {
+  #success-section {
     padding: 32px 20px;
   }
 }
