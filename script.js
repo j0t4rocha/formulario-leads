@@ -11,7 +11,116 @@ var currentStep = 1;
 
 document.addEventListener('DOMContentLoaded', function () {
   updateProgressBar();
+  initScrollReveal();
+  initHeroAnimation();
+  initSwiper();
 });
+
+// ================================================
+// SWIPER - CARROSSEL DE DEPOIMENTOS
+// ================================================
+function initSwiper() {
+  if (typeof Swiper !== 'undefined') {
+    new Swiper('.testimonial-swiper', {
+      loop: true,
+      slidesPerView: 'auto',
+      centeredSlides: true,
+      spaceBetween: 5,
+      grabCursor: true,
+      speed: 4000,
+      autoplay: {
+        delay: 0,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+    });
+
+    // Lógica de interação (blur e brilho)
+    var swiperContainer = document.querySelector('.testimonial-swiper');
+    if (swiperContainer) {
+      var slides = swiperContainer.querySelectorAll('.swiper-slide');
+
+      function highlightSlide(slide) {
+        swiperContainer.classList.add('is-interacting');
+        slides.forEach(function(s) { s.classList.remove('is-highlighted'); });
+        slide.classList.add('is-highlighted');
+      }
+
+      function resetHighlight() {
+        swiperContainer.classList.remove('is-interacting');
+        slides.forEach(function(s) { s.classList.remove('is-highlighted'); });
+      }
+
+      slides.forEach(function(slide) {
+        slide.addEventListener('mouseenter', function() { highlightSlide(slide); });
+        slide.addEventListener('mouseleave', resetHighlight);
+        
+        slide.addEventListener('touchstart', function() { highlightSlide(slide); }, { passive: true });
+        slide.addEventListener('touchend', resetHighlight);
+        slide.addEventListener('touchcancel', resetHighlight);
+      });
+    }
+  }
+}
+
+function initHeroAnimation() {
+  const elements = [
+    document.querySelector('.hero .badge'),
+    document.querySelector('.hero h1'),
+    document.querySelector('.hero p'),
+    document.querySelector('.hero-cta-container')
+  ];
+
+  elements.forEach((el, index) => {
+    if (el) {
+      setTimeout(() => {
+        el.classList.add('animate-in');
+      }, index * 100);
+    }
+  });
+}
+
+// ================================================
+// SCROLL REVEAL (ANIMAÇÕES)
+// ================================================
+function initScrollReveal() {
+  const observerOptions = {
+    threshold: 0.2
+  };
+
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Observa elementos simples
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-simulador, .reveal-lento').forEach(el => {
+    revealObserver.observe(el);
+  });
+
+  // Observa grupos com delay (stagger)
+  const staggerGroups = document.querySelectorAll('.stagger-group');
+  staggerGroups.forEach(group => {
+    const items = group.querySelectorAll('.stagger-item');
+    const groupObserver = new IntersectionObserver((entries, grpObserver) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          items.forEach((item, index) => {
+            setTimeout(() => {
+              item.classList.add('in-view');
+            }, index * 120);
+          });
+          grpObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    groupObserver.observe(group);
+  });
+}
 
 function revealForm() {
   var formSection = document.getElementById('formulario');
@@ -35,28 +144,27 @@ function updateProgressBar() {
   var fill = document.getElementById('progress-fill');
   if (!fill) return;
 
-  var trafegoVal = document.getElementById('input-trafego').value;
-  var percentage = 0;
+  var cargoInput = document.getElementById('input-cargo');
+  var trafegoInput = document.getElementById('input-trafego');
+  var cargoVal = cargoInput ? cargoInput.value : '';
+  var trafegoVal = trafegoInput ? trafegoInput.value : '';
+  
+  var totalSteps = 11;
+  if (cargoVal === 'autonomo') totalSteps -= 2;
+  if (trafegoVal === 'nao') totalSteps--;
 
-  if (trafegoVal === 'sim') {
-    // 5 steps: 20%, 40%, 60%, 80%, 100%
-    if (currentStep === 1) percentage = 20;
-    else if (currentStep === 2) percentage = 40;
-    else if (currentStep === 3) percentage = 60;
-    else if (currentStep === 4) percentage = 80;
-    else if (currentStep === 5) percentage = 100;
-  } else if (trafegoVal === 'nao') {
-    // 4 steps: 25%, 50%, 75%, 100%
-    if (currentStep === 1) percentage = 25;
-    else if (currentStep === 2) percentage = 50;
-    else if (currentStep === 3) percentage = 75;
-    else if (currentStep === 5) percentage = 100;
-  } else {
-    // Before selecting trafego
-    if (currentStep === 1) percentage = 20;
-    else if (currentStep === 2) percentage = 40;
+  var passoAtual = 1;
+  if (currentStep === 1) passoAtual = 1;
+  else if (currentStep === 2) passoAtual = 2;
+  else if (currentStep === 3) passoAtual = 3;
+  else if (currentStep >= 4) {
+      var deductions = 0;
+      if (cargoVal === 'autonomo') deductions += 2;
+      if (trafegoVal === 'nao' && currentStep >= 7) deductions++;
+      passoAtual = currentStep - deductions;
   }
 
+  var percentage = (passoAtual / totalSteps) * 100;
   fill.style.width = percentage + '%';
 }
 
@@ -66,6 +174,23 @@ function goToStep(stepNumber) {
 
   if (!nextStepEl) return;
 
+  // Validação de campos obrigatórios ao avançar de passo
+  if (stepNumber > currentStep && currentStepEl) {
+    var inputs = currentStepEl.querySelectorAll('input[required]:not([type="hidden"])');
+    var isValid = true;
+    for (var i = 0; i < inputs.length; i++) {
+      if (inputs[i].value.trim() === '') {
+        inputs[i].value = ''; // Remove apenas espaços vazios para forçar o required
+      }
+      if (!inputs[i].checkValidity()) {
+        inputs[i].reportValidity();
+        isValid = false;
+        break;
+      }
+    }
+    if (!isValid) return; // Interrompe o avanço
+  }
+
   currentStep = stepNumber;
   updateProgressBar();
 
@@ -74,14 +199,14 @@ function goToStep(stepNumber) {
     setTimeout(function () {
       currentStepEl.classList.remove('active');
 
-      if (stepNumber === 3) {
+      if (stepNumber === 5) {
         var trafegoVal = document.getElementById('input-trafego').value;
         if (trafegoVal === 'sim') {
-          document.getElementById('step-3-sim').style.display = 'block';
-          document.getElementById('step-3-nao').style.display = 'none';
+          document.getElementById('step-5-sim').style.display = 'block';
+          document.getElementById('step-5-nao').style.display = 'none';
         } else {
-          document.getElementById('step-3-sim').style.display = 'none';
-          document.getElementById('step-3-nao').style.display = 'block';
+          document.getElementById('step-5-sim').style.display = 'none';
+          document.getElementById('step-5-nao').style.display = 'block';
         }
       }
 
@@ -98,33 +223,37 @@ function goToStep(stepNumber) {
   }
 }
 
-function nextStep(current) {
-  if (current === 1) {
-    var step1 = document.getElementById('step-1');
-    var inputs = step1.querySelectorAll('input[required]');
-    for (var i = 0; i < inputs.length; i++) {
-      if (!inputs[i].reportValidity()) {
-        return;
-      }
-    }
-    goToStep(2);
-  }
-}
-
 function prevStep(current) {
   if (current === 2) {
     goToStep(1);
   } else if (current === 3) {
     goToStep(2);
   } else if (current === 4) {
-    goToStep(3);
-  } else if (current === 5) {
-    var trafegoVal = document.getElementById('input-trafego').value;
-    if (trafegoVal === 'sim') {
-      goToStep(4);
+    var cargoVal = document.getElementById('input-cargo').value;
+    if (cargoVal === 'autonomo') {
+      goToStep(1);
     } else {
       goToStep(3);
     }
+  } else if (current === 5) {
+    goToStep(4);
+  } else if (current === 6) {
+    goToStep(5);
+  } else if (current === 7) {
+    var trafegoVal = document.getElementById('input-trafego').value;
+    if (trafegoVal === 'sim') {
+      goToStep(6);
+    } else {
+      goToStep(5);
+    }
+  } else if (current === 8) {
+    goToStep(7);
+  } else if (current === 9) {
+    goToStep(8);
+  } else if (current === 10) {
+    goToStep(9);
+  } else if (current === 11) {
+    goToStep(10);
   }
 }
 
@@ -132,6 +261,15 @@ function selectCardOption(fieldName, optionValue, step) {
   var input = document.getElementById('input-' + fieldName);
   if (input) {
     input.value = optionValue;
+  }
+
+  if (fieldName === 'cargo') {
+    if (optionValue === 'autonomo') {
+      var cadeirasInput = document.getElementById('input-cadeiras');
+      var unidadesInput = document.getElementById('input-unidades');
+      if(cadeirasInput) cadeirasInput.value = '';
+      if(unidadesInput) unidadesInput.value = '';
+    }
   }
 
   if (fieldName === 'trafego') {
@@ -152,29 +290,44 @@ function selectCardOption(fieldName, optionValue, step) {
     }
   });
 
-  if (step === 2) {
+  if (step === 1) {
+    setTimeout(function () {
+      var cargoVal = document.getElementById('input-cargo').value;
+      if (cargoVal === 'autonomo') {
+        goToStep(4);
+      } else {
+        goToStep(2);
+      }
+    }, 250);
+  } else if (step === 2) {
     setTimeout(function () {
       goToStep(3);
     }, 250);
   } else if (step === 3) {
     setTimeout(function () {
-      var trafegoVal = document.getElementById('input-trafego').value;
-      if (trafegoVal === 'sim') {
-        goToStep(4);
-      } else {
-        goToStep(5);
-      }
+      goToStep(4);
     }, 250);
   } else if (step === 4) {
     setTimeout(function () {
       goToStep(5);
     }, 250);
   } else if (step === 5) {
-    var submitBlock = document.getElementById('submit-block');
-    if (submitBlock) {
-      submitBlock.style.display = 'block';
-
-    }
+    setTimeout(function () {
+      var trafegoVal = document.getElementById('input-trafego').value;
+      if (trafegoVal === 'sim') {
+        goToStep(6);
+      } else {
+        goToStep(7);
+      }
+    }, 250);
+  } else if (step === 6) {
+    setTimeout(function () {
+      goToStep(7);
+    }, 250);
+  } else if (step === 7) {
+    setTimeout(function () {
+      goToStep(8);
+    }, 250);
   }
 }
 
@@ -200,6 +353,9 @@ function enviarForm(e) {
     whatsapp: data.get('whatsapp'),
     email: data.get('email'),
     instagram: data.get('instagram') || '-',
+    cargo: data.get('cargo'),
+    cadeiras: data.get('cadeiras') || '-',
+    unidades: data.get('unidades') || '-',
     trafego: data.get('trafego'),
     experiencia: data.get('experiencia') || '-',
     valor_investido: data.get('valor_investido') || '-',
@@ -268,7 +424,13 @@ function enviarForm(e) {
     "WhatsApp: " + payload.whatsapp + "\n" +
     "Instagram: " + (payload.instagram || '-') + "\n\n" +
     "*Raio-X do Negócio:*\n" +
-    "Já investiu em tráfego?: " + (payload.trafego === 'sim' ? 'Sim' : 'Não') + "\n";
+    "Cargo: " + (payload.cargo === 'autonomo' ? 'Barbeiro Autônomo' : 'Proprietário de Barbearia') + "\n";
+    
+  if (payload.cargo === 'proprietario') {
+      textoWhats += "Tamanho: " + payload.cadeiras + " em " + payload.unidades + "\n";
+  }
+
+  textoWhats += "Já investiu em tráfego?: " + (payload.trafego === 'sim' ? 'Sim' : 'Não') + "\n";
 
   if (payload.trafego === 'sim') {
     textoWhats += "Investimento mensal: " + friendlyInvestimento + "\n" +
@@ -283,8 +445,34 @@ function enviarForm(e) {
   var linkWhats = "https://wa.me/5521969584264?text=" + encodeURIComponent(textoWhats);
 
   var btnFinal = document.getElementById('btn-whatsapp-final');
-  if (btnFinal) {
-    btnFinal.href = linkWhats;
+  var alternativeMsg = document.getElementById('success-alternative');
+  var successSub = document.querySelector('.success-sub');
+  
+  if (!alternativeMsg) {
+    alternativeMsg = document.createElement('div');
+    alternativeMsg.id = 'success-alternative';
+    alternativeMsg.style.marginTop = '24px';
+    alternativeMsg.style.display = 'none';
+    alternativeMsg.innerHTML = '<p style="color: var(--text-muted); font-size: 15px; line-height: 1.6;">Recebemos seus dados com sucesso!</p><p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-top: 12px;">Em breve, um de nossos especialistas entrará em contato com você para darmos os próximos passos.</p>';
+    var successSection = document.getElementById('success-section');
+    if (successSection) {
+      successSection.appendChild(alternativeMsg);
+    }
+  }
+
+  // Lógica de qualificação (ICP)
+  var isDisqualified = (payload.faturamento === 'ate8k') && 
+                       (payload.valor_investido === 'ate500' || payload.valor_pretendido === 'ate500');
+
+  if (isDisqualified) {
+    if (btnFinal) btnFinal.style.display = 'none';
+    if (successSub) successSub.style.display = 'none';
+    if (alternativeMsg) alternativeMsg.style.display = 'block';
+  } else {
+    if (btnFinal) {
+      btnFinal.style.display = 'inline-flex';
+      btnFinal.href = linkWhats;
+    }
   }
 
   // Mostra a tela de agradecimento após um pequeno delay para garantir o disparo

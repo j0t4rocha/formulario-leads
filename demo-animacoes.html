@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Demo de Animações - Jota Ads</title>
+<style>
+  :root {
+    --gold: #c8a84b;
+    --green: #2d5a1b;
+    --green-light: #4a8c2a;
+    --black: #080a06;
+    --black-mid: #111508;
+    --black-soft: #1a1f10;
+    --text: #e8ead4;
+    --text-muted: #8a9070;
+    --border: rgba(200,168,75,0.2);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--text);
+    padding: 40px 24px;
+    line-height: 1.6;
+  }
+  h1 { font-size: 22px; margin-bottom: 8px; color: var(--gold); }
+  .desc { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
+  .demo-block {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+    margin-bottom: 48px;
+    background: var(--black-soft);
+  }
+
+  /* 1. SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+  /* 2. STAGGER (cards aparecendo em sequência) */
+  .stagger-grid { display: flex; gap: 16px; flex-wrap: wrap; }
+  .stagger-card {
+    flex: 1; min-width: 140px;
+    background: var(--black); border: 1px solid var(--border); border-radius: 6px;
+    padding: 20px; text-align: center; font-size: 13px;
+    opacity: 0; transform: translateY(20px) scale(0.95);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .stagger-card.in-view { opacity: 1; transform: translateY(0) scale(1); }
+
+  /* 3. BOTÃO COM GLOW PULSANTE */
+  .btn-pulse {
+    display: inline-block; background: linear-gradient(135deg, var(--gold), #ecd38c, var(--gold));
+    color: var(--black); font-weight: 500; padding: 16px 40px; border-radius: 50px;
+    border: none; cursor: pointer; font-size: 15px;
+    animation: pulseGlow 2.2s ease-in-out infinite;
+    transition: transform 0.2s ease;
+  }
+  .btn-pulse:hover { transform: translateY(-2px) scale(1.03); }
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 8px rgba(200,168,75,0.35); }
+    50% { box-shadow: 0 0 24px rgba(200,168,75,0.65); }
+  }
+
+  /* 4. HOVER TILT + BRILHO EM CARDS */
+  .tilt-card {
+    background: var(--black); border: 1px solid var(--border); border-radius: 8px;
+    padding: 24px; width: 220px; cursor: pointer;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .tilt-card:hover {
+    transform: translateY(-6px) rotateX(4deg);
+    border-color: rgba(200,168,75,0.6);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+  }
+
+  /* 5. NÚMERO CONTADOR */
+  .counter-num { font-size: 48px; font-weight: 700; color: var(--gold); }
+
+  /* 6. TEXTO COM GRADIENTE ANIMADO (efeito "shine") */
+  .shine-text {
+    font-size: 26px; font-weight: 700;
+    background: linear-gradient(90deg, var(--gold) 20%, #fff 50%, var(--gold) 80%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shine 3s linear infinite;
+  }
+  @keyframes shine { to { background-position: -200% center; } }
+
+  /* 7. LINHA DE PROGRESSO ANIMADA */
+  .bar-track { background: var(--black); border-radius: 4px; height: 8px; overflow: hidden; margin-top: 12px; }
+  .bar-fill {
+    height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold), #ecd38c);
+    border-radius: 4px; transition: width 1.4s cubic-bezier(0.25,1,0.5,1);
+  }
+  .bar-fill.in-view { width: 82%; }
+
+  /* 8. BACKGROUND COM MOVIMENTO SUTIL (parallax leve) */
+  .parallax-box {
+    position: relative; height: 180px; border-radius: 8px; overflow: hidden;
+    background: radial-gradient(ellipse 60% 80% at 30% 30%, rgba(45,90,27,0.35), transparent 60%),
+                radial-gradient(ellipse 50% 60% at 80% 70%, rgba(200,168,75,0.15), transparent 60%),
+                var(--black);
+    background-size: 150% 150%;
+    animation: driftBg 8s ease-in-out infinite alternate;
+    display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 13px;
+  }
+  @keyframes driftBg {
+    from { background-position: 0% 0%, 100% 100%, 0 0; }
+    to { background-position: 20% 20%, 80% 80%, 0 0; }
+  }
+
+  button { font-family: inherit; }
+</style>
+</head>
+<body>
+
+<h1>1. Scroll reveal (fade + subir)</h1>
+<p class="desc">Textos e blocos aparecem suavemente conforme o usuário rola a página. Rola pra baixo pra ver.</p>
+<div class="demo-block reveal">Este bloco aparece com fade suave quando entra na tela.</div>
+
+<h1>2. Stagger (cards em sequência)</h1>
+<p class="desc">Ao invés de tudo aparecer de uma vez, cada card entra com um pequeno atraso — dá sensação de "montagem".</p>
+<div class="demo-block">
+  <div class="stagger-grid">
+    <div class="stagger-card">Análise</div>
+    <div class="stagger-card">Estratégia</div>
+    <div class="stagger-card">Visibilidade</div>
+    <div class="stagger-card">Agenda cheia</div>
+  </div>
+</div>
+
+<h1>3. Botão CTA com glow pulsante</h1>
+<p class="desc">O botão principal "respira" com um brilho dourado, chamando atenção sem ser irritante.</p>
+<div class="demo-block">
+  <button class="btn-pulse">Quero subir meu faturamento</button>
+</div>
+
+<h1>4. Hover com elevação e leve inclinação</h1>
+<p class="desc">Passa o mouse nos cards abaixo — sensação de profundidade e resposta ao toque.</p>
+<div class="demo-block" style="display:flex; gap:20px; flex-wrap:wrap;">
+  <div class="tilt-card">Card com hover 3D</div>
+  <div class="tilt-card">Outro card</div>
+</div>
+
+<h1>5. Contador animado (números subindo)</h1>
+<p class="desc">Ótimo para estatísticas — o número "sobe" do zero até o valor final quando aparece na tela.</p>
+<div class="demo-block">
+  <div class="counter-num" id="counter">0</div>
+  <span class="desc">leads gerados este mês</span>
+</div>
+
+<h1>6. Texto com brilho animado (shine)</h1>
+<p class="desc">Efeito sutil de luz passando pelo texto — usado em títulos de destaque.</p>
+<div class="demo-block">
+  <span class="shine-text">Agenda lotada te espera</span>
+</div>
+
+<h1>7. Barra de progresso animada</h1>
+<p class="desc">Boa para mostrar métricas tipo "taxa de conversão" ou resultado de campanha.</p>
+<div class="demo-block">
+  <p style="font-size:13px; color:var(--text-muted);">Taxa de resposta no WhatsApp</p>
+  <div class="bar-track"><div class="bar-fill"></div></div>
+</div>
+
+<h1>8. Fundo com movimento sutil (respiração)</h1>
+<p class="desc">Ao invés de fundo estático, o gradiente se move bem devagar — dá vida sem distrair.</p>
+<div class="demo-block">
+  <div class="parallax-box">fundo com leve movimento contínuo</div>
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('.reveal, .bar-fill').forEach(el => observer.observe(el));
+
+  const staggerCards = document.querySelectorAll('.stagger-card');
+  const staggerObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        staggerCards.forEach((card, i) => {
+          setTimeout(() => card.classList.add('in-view'), i * 120);
+        });
+        staggerObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+  if (staggerCards.length) staggerObserver.observe(staggerCards[0].parentElement);
+
+  const counterEl = document.getElementById('counter');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        let val = 0;
+        const target = 247;
+        const step = () => {
+          val += Math.ceil((target - val) / 8);
+          counterEl.textContent = val;
+          if (val < target) requestAnimationFrame(step);
+          else counterEl.textContent = target;
+        };
+        step();
+        counterObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  counterObserver.observe(counterEl);
+</script>
+
+</body>
+</html>
