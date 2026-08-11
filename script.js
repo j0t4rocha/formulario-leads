@@ -14,6 +14,12 @@ document.addEventListener('DOMContentLoaded', function () {
   initScrollReveal();
   initHeroAnimation();
   initSwiper();
+
+  document.getElementById('lead-form').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && currentStep !== 11) {
+      e.preventDefault();
+    }
+  });
 });
 
 // ================================================
@@ -366,14 +372,7 @@ function enviarForm(e) {
     event_source_url: window.location.href
   };
 
-  // 1. Disparo do evento de Lead — no momento do submit, uma única vez
-  if (typeof fbq !== 'undefined') {
-    try {
-      fbq('track', 'Lead');
-    } catch (err) {
-      console.error('Erro ao disparar Meta Pixel Lead:', err);
-    }
-  }
+
 
   // Envia para Google Sheets + CAPI (servidor)
   // Content-Type text/plain evita preflight CORS e o GAS consegue receber
