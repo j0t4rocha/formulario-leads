@@ -569,20 +569,12 @@ footer {
   display: flex;
   justify-content: center;
 }
-.foto-placeholder {
+.foto-especialista {
   width: 360px;
   height: 360px;
-  backdrop-filter: blur(12px);
-  background: rgba(17, 21, 8, 0.5);
+  object-fit: cover;
   border: 1px solid rgba(200,168,75,0.3);
   border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  font-size: 14px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
 }
 .especialista-texto h2 {
   font-family: 'Bebas Neue', sans-serif;
@@ -796,10 +788,11 @@ footer {
     grid-template-columns: 1fr;
     text-align: center;
   }
-  .foto-placeholder {
+  .foto-especialista {
     width: 240px;
     height: 240px;
     margin: 0 auto;
+    display: block;
   }
   .especialista-texto .btn-reveal {
     margin: 12px auto 0;
