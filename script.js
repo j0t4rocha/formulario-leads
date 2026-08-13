@@ -136,10 +136,6 @@ function revealForm() {
     // Força o reflow para aplicar display: block antes da animação de opacidade/transform
     formSection.offsetHeight;
     formSection.classList.add('visible');
-    
-    setTimeout(function () {
-      formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
   }
   if (ctaContainer) {
     ctaContainer.style.display = 'none';
