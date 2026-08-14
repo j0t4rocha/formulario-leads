@@ -1,7 +1,7 @@
 // ================================================
 // CONFIGURAÇÕES
 // ================================================
-var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbzDDeNhsoTVMyYOB-3aKdgxOXXv1KdIV-9QA3SDiyQXO0EySJnCyQ0--Bxg1kU0JmjD3A/exec';
+var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbz76WN5RZBNFdpodFtebyNKf74yi3gRt4GYkpYZafDFu1DEbt253QUNx2JSH-qe5pJO1w/exec';
 
 // ================================================
 // LÓGICA DO FORMULÁRIO MULTI-ETAPAS
@@ -152,7 +152,7 @@ function updateProgressBar() {
   var trafegoVal = trafegoInput ? trafegoInput.value : '';
   
   var totalSteps = 11;
-  if (cargoVal === 'autonomo') totalSteps -= 2;
+  if (cargoVal === 'Barbeiro Autônomo') totalSteps -= 2;
   if (trafegoVal === 'nao') totalSteps--;
 
   var passoAtual = 1;
@@ -161,7 +161,7 @@ function updateProgressBar() {
   else if (currentStep === 3) passoAtual = 3;
   else if (currentStep >= 4) {
       var deductions = 0;
-      if (cargoVal === 'autonomo') deductions += 2;
+      if (cargoVal === 'Barbeiro Autônomo') deductions += 2;
       if (trafegoVal === 'nao' && currentStep >= 7) deductions++;
       passoAtual = currentStep - deductions;
   }
@@ -232,7 +232,7 @@ function prevStep(current) {
     goToStep(2);
   } else if (current === 4) {
     var cargoVal = document.getElementById('input-cargo').value;
-    if (cargoVal === 'autonomo') {
+    if (cargoVal === 'Barbeiro Autônomo') {
       goToStep(1);
     } else {
       goToStep(3);
@@ -266,7 +266,7 @@ function selectCardOption(fieldName, optionValue, step) {
   }
 
   if (fieldName === 'cargo') {
-    if (optionValue === 'autonomo') {
+    if (optionValue === 'Barbeiro Autônomo') {
       var cadeirasInput = document.getElementById('input-cadeiras');
       var unidadesInput = document.getElementById('input-unidades');
       if(cadeirasInput) cadeirasInput.value = '';
@@ -295,7 +295,7 @@ function selectCardOption(fieldName, optionValue, step) {
   if (step === 1) {
     setTimeout(function () {
       var cargoVal = document.getElementById('input-cargo').value;
-      if (cargoVal === 'autonomo') {
+      if (cargoVal === 'Barbeiro Autônomo') {
         goToStep(4);
       } else {
         goToStep(2);
@@ -374,7 +374,7 @@ function enviarForm(e) {
   // Content-Type text/plain evita preflight CORS e o GAS consegue receber
   fetch(GOOGLE_SHEET_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'text/plain' },
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify(payload)
   }).catch(function () { });
 
@@ -387,24 +387,24 @@ function enviarForm(e) {
 
   // Compilação do texto dinâmico para WhatsApp com formatação amigável
   var mapInvestimento = {
-    'ate500': 'Até R$500/mês',
-    '500a1000': 'Entre R$500 e R$1.000/mês',
-    '1000a3000': 'Entre R$1.000 e R$3.000/mês',
-    '3000a5000': 'Entre R$3.000 e R$5.000/mês',
-    'acima5000': 'Acima de R$5.000/mês'
+    'Até R$500': 'Até R$500/mês',
+    'R$500 a R$1.000': 'Entre R$500 e R$1.000/mês',
+    'R$1.000 a R$3.000': 'Entre R$1.000 e R$3.000/mês',
+    'R$3.000 a R$5.000': 'Entre R$3.000 e R$5.000/mês',
+    'Acima de R$5.000': 'Acima de R$5.000/mês'
   };
   var mapExperiencia = {
-    'otima': 'Ótima — tive bons resultados',
-    'regular': 'Regular — tive alguns resultados',
-    'ruim': 'Ruim — não tive retorno',
-    'pessima': 'Péssima — perdi dinheiro'
+    'Ótima': 'Ótima — tive bons resultados',
+    'Regular': 'Regular — tive alguns resultados',
+    'Ruim': 'Ruim — não tive retorno',
+    'Péssima': 'Péssima — perdi dinheiro'
   };
   var mapFaturamento = {
-    'ate8k': 'Até R$8.000/mês',
-    '8a15k': 'Entre R$8.000 e R$15.000/mês',
-    '15a30k': 'Entre R$15.000 e R$30.000/mês',
-    '30a50k': 'Entre R$30.000 e R$50.000/mês',
-    'acima50k': 'Acima de R$50.000/mês'
+    'Até R$8.000': 'Até R$8.000/mês',
+    'R$8.000 a R$15.000': 'Entre R$8.000 e R$15.000/mês',
+    'R$15.000 a R$30.000': 'Entre R$15.000 e R$30.000/mês',
+    'R$30.000 a R$50.000': 'Entre R$30.000 e R$50.000/mês',
+    'Acima de R$50.000': 'Acima de R$50.000/mês'
   };
 
   var friendlyInvestimento = mapInvestimento[payload.valor_investido] || payload.valor_investido;
@@ -419,9 +419,9 @@ function enviarForm(e) {
     "WhatsApp: " + payload.whatsapp + "\n" +
     "Instagram: " + (payload.instagram || '-') + "\n\n" +
     "*Raio-X do Negócio:*\n" +
-    "Cargo: " + (payload.cargo === 'autonomo' ? 'Barbeiro Autônomo' : 'Proprietário de Barbearia') + "\n";
+    "Cargo: " + (payload.cargo === 'Barbeiro Autônomo' ? 'Barbeiro Autônomo' : 'Proprietário de Barbearia') + "\n";
     
-  if (payload.cargo === 'proprietario') {
+  if (payload.cargo === 'Proprietário de Barbearia') {
       textoWhats += "Tamanho: " + payload.cadeiras + " em " + payload.unidades + "\n";
   }
 
@@ -456,8 +456,8 @@ function enviarForm(e) {
   }
 
   // Lógica de qualificação (ICP)
-  var isDisqualified = (payload.faturamento === 'ate8k') && 
-                       (payload.valor_investido === 'ate500' || payload.valor_pretendido === 'ate500');
+  var isDisqualified = (payload.faturamento === 'Até R$8.000') && 
+                       (payload.valor_investido === 'Até R$500' || payload.valor_pretendido === 'Até R$500');
 
   if (isDisqualified) {
     if (btnFinal) btnFinal.style.display = 'none';
