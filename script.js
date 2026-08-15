@@ -437,8 +437,6 @@ function enviarForm(e) {
   textoWhats += "Faturamento mensal: " + friendlyFaturamento + "\n\n" +
     "Gostaria de marcar a nossa sessão de diagnóstico. Quais são os seus próximos horários disponíveis?";
 
-  var linkWhats = "https://wa.me/5521969584264?text=" + encodeURIComponent(textoWhats);
-
   var btnFinal = document.getElementById('btn-whatsapp-final');
   var alternativeMsg = document.getElementById('success-alternative');
   var successSub = document.querySelector('.success-sub');
@@ -448,7 +446,7 @@ function enviarForm(e) {
     alternativeMsg.id = 'success-alternative';
     alternativeMsg.style.marginTop = '24px';
     alternativeMsg.style.display = 'none';
-    alternativeMsg.innerHTML = '<p style="color: var(--text-muted); font-size: 15px; line-height: 1.6;">Recebemos seus dados com sucesso!</p><p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-top: 12px;">Seus dados serão analisados e um especialista entrará em contato.</p>';
+    alternativeMsg.innerHTML = '<p style="color: var(--text-muted); font-size: 15px; line-height: 1.6;">Um especialista vai analisar os dados e entrará em contato.</p>';
     var successSection = document.getElementById('success-section');
     if (successSection) {
       successSection.appendChild(alternativeMsg);
@@ -464,6 +462,7 @@ function enviarForm(e) {
     if (successSub) successSub.style.display = 'none';
     if (alternativeMsg) alternativeMsg.style.display = 'block';
   } else {
+    var linkWhats = "https://wa.me/5521969584264?text=" + encodeURIComponent(textoWhats);
     if (btnFinal) {
       btnFinal.style.display = 'inline-flex';
       btnFinal.href = linkWhats;
