@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap');
+
 :root {
   --green-neon: #25D366;
   --green-dark: #064E3B;
@@ -153,35 +155,37 @@ section { position: relative; z-index: 1; }
   transition: opacity 1s ease-out, transform 1s ease-out;
 }
 .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--green-neon);
-  color: #000000;
-  text-align: center;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 16px 32px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-  animation: pulse 2s infinite;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #25D366 !important;
+  color: #FFFFFF !important;
+  text-align: center !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  text-shadow: none !important;
+  padding: 16px 32px !important;
+  border-radius: 6px !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4) !important;
+  animation: pulse 2s infinite !important;
 }
 .btn-primary:hover, .btn-primary:active {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
-  animation: none;
+  transform: scale(1.02) !important;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6) !important;
+  animation: none !important;
 }
 .btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  animation: none;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  animation: none !important;
 }
 
 .btn-gigante {
