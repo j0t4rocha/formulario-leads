@@ -448,7 +448,7 @@ function enviarForm(e) {
     alternativeMsg.id = 'success-alternative';
     alternativeMsg.style.marginTop = '24px';
     alternativeMsg.style.display = 'none';
-    alternativeMsg.innerHTML = '<p style="color: var(--text-muted); font-size: 15px; line-height: 1.6;">Recebemos seus dados com sucesso!</p><p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-top: 12px;">Em breve, um de nossos especialistas entrará em contato com você para darmos os próximos passos.</p>';
+    alternativeMsg.innerHTML = '<p style="color: var(--text-muted); font-size: 15px; line-height: 1.6;">Recebemos seus dados com sucesso!</p><p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-top: 12px;">Seus dados serão analisados e um especialista entrará em contato.</p>';
     var successSection = document.getElementById('success-section');
     if (successSection) {
       successSection.appendChild(alternativeMsg);
