@@ -156,7 +156,7 @@ section { position: relative; z-index: 1; }
   align-items: center;
   justify-content: center;
   background: var(--gold);
-  color: #FFFFFF;
+  color: var(--black-mid);
   text-align: center;
   font-family: 'DM Sans', sans-serif;
   font-size: 16px;
