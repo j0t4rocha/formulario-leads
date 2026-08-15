@@ -483,7 +483,7 @@ function enviarForm(e) {
     if (alternativeMsg) {
       alternativeMsg.classList.remove('is-hidden');
       alternativeMsg.style.display = 'block';
-      alternativeMsg.innerHTML = '<p class="success-alt-msg" style="color: var(--text); font-size: 16px; margin: 0;">Um especialista vai analisar os dados e entrará em contato.</p>';
+      alternativeMsg.innerHTML = '<p class="success-alt-msg" style="color: #ffffff; font-size: 16px; margin: 0; text-align: center;">Um especialista vai analisar os dados e entrará em contato.</p>';
     }
   } else {
     var linkWhats = "https://wa.me/5521969584264?text=" + encodeURIComponent(textoWhats);
