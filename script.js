@@ -175,6 +175,37 @@ function goToStep(stepNumber) {
   var nextStepEl = document.getElementById('step-' + stepNumber);
 
   if (!nextStepEl) return;
+  
+  if (stepNumber === 11) {
+    var formEl = document.getElementById('lead-form');
+    if (formEl) {
+      var formData = new FormData(formEl);
+      var payload = {};
+      formData.forEach(function(value, key) { payload[key] = value; });
+
+      var fatStr = (payload.faturamento || '').trim();
+      var invStr = (payload.valor_investido || '').trim();
+      var valPretStr = (payload.valor_pretendido || '').trim();
+      var cargoStr = (payload.cargo || '').trim();
+      var unidadesStr = (payload.unidades || '').trim();
+
+      var condicaoValorBaixo = (fatStr === 'Até R$8.000' && (invStr === 'Até R$500' || valPretStr === 'Até R$500'));
+      var isDisqualified = false;
+
+      if (condicaoValorBaixo) {
+        if (cargoStr === 'Barbeiro Autônomo') {
+          isDisqualified = true;
+        } else if (cargoStr === 'Proprietário de Barbearia' && unidadesStr === '1 unidade') {
+          isDisqualified = true;
+        }
+      }
+
+      var btnSubmit = document.getElementById('btn-submit-lead');
+      if (btnSubmit) {
+        btnSubmit.innerText = isDisqualified ? 'Concluir' : 'Agendar sessão de diagnóstico';
+      }
+    }
+  }
 
   // Validação de campos obrigatórios ao avançar de passo
   if (stepNumber > currentStep && currentStepEl) {
