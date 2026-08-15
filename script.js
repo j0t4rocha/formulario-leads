@@ -444,9 +444,9 @@ function enviarForm(e) {
   if (!alternativeMsg) {
     alternativeMsg = document.createElement('div');
     alternativeMsg.id = 'success-alternative';
-    alternativeMsg.style.marginTop = '24px';
-    alternativeMsg.style.display = 'none';
-    alternativeMsg.innerHTML = '<p style="color: var(--text-muted); font-size: 15px; line-height: 1.6;">Um especialista vai analisar os dados e entrará em contato.</p>';
+    alternativeMsg.style.marginTop = '12px';
+    alternativeMsg.classList.add('is-hidden');
+    alternativeMsg.innerHTML = '<p class="success-alt-msg">Um especialista vai analisar os dados e entrará em contato.</p>';
     var successSection = document.getElementById('success-section');
     if (successSection) {
       successSection.appendChild(alternativeMsg);
@@ -454,18 +454,51 @@ function enviarForm(e) {
   }
 
   // Lógica de qualificação (ICP)
-  var isDisqualified = (payload.faturamento === 'Até R$8.000') && 
-                       (payload.valor_investido === 'Até R$500' || payload.valor_pretendido === 'Até R$500');
+  var fatStr = (payload.faturamento || '').trim();
+  var invStr = (payload.valor_investido || '').trim();
+  var valPretStr = (payload.valor_pretendido || '').trim();
+  var cargoStr = (payload.cargo || '').trim();
+  var unidadesStr = (payload.unidades || '').trim();
+
+  var condicaoValorBaixo = (fatStr === 'Até R$8.000' && (invStr === 'Até R$500' || valPretStr === 'Até R$500'));
+  var isDisqualified = false;
+
+  if (condicaoValorBaixo) {
+    if (cargoStr === 'Barbeiro Autônomo') {
+      isDisqualified = true;
+    } else if (cargoStr === 'Proprietário de Barbearia' && unidadesStr === '1 unidade') {
+      isDisqualified = true;
+    }
+  }
 
   if (isDisqualified) {
-    if (btnFinal) btnFinal.style.display = 'none';
-    if (successSub) successSub.style.display = 'none';
-    if (alternativeMsg) alternativeMsg.style.display = 'block';
+    if (btnFinal) {
+      btnFinal.classList.add('is-hidden');
+      btnFinal.style.display = 'none';
+    }
+    if (successSub) {
+      successSub.classList.add('is-hidden');
+      successSub.style.display = 'none';
+    }
+    if (alternativeMsg) {
+      alternativeMsg.classList.remove('is-hidden');
+      alternativeMsg.style.display = 'block';
+      alternativeMsg.innerHTML = '<p class="success-alt-msg" style="color: var(--text); font-size: 16px; margin: 0;">Um especialista vai analisar os dados e entrará em contato.</p>';
+    }
   } else {
     var linkWhats = "https://wa.me/5521969584264?text=" + encodeURIComponent(textoWhats);
     if (btnFinal) {
+      btnFinal.classList.remove('is-hidden');
       btnFinal.style.display = 'inline-flex';
       btnFinal.href = linkWhats;
+    }
+    if (successSub) {
+      successSub.classList.remove('is-hidden');
+      successSub.style.display = 'block';
+    }
+    if (alternativeMsg) {
+      alternativeMsg.classList.add('is-hidden');
+      alternativeMsg.style.display = 'none';
     }
   }
 
