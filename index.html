@@ -14,10 +14,13 @@
   <!-- End Google Tag Manager -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Especialista em tráfego pago para barbearias. Deixe de ser invisível, lote sua agenda e aumente seu faturamento. Solicite sua análise gratuita.">
+  <meta name="description"
+    content="Especialista em tráfego pago para barbearias. Deixe de ser invisível, lote sua agenda e aumente seu faturamento. Solicite sua análise gratuita.">
   <title>Jota | Tráfego Pago para Barbearias</title>
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" as="style">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" as="style">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <link rel="preload" href="style.css?v=3" as="style">
@@ -31,574 +34,584 @@
       style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
   <main>
-  <section class="hero">
-    <div class="badge">Tráfego pago para barbearias</div>
-    <h1>DEIXE DE SER INVISÍVEL E <span>LOTE A AGENDA DA SUA BARBEARIA.</span></h1>
-    <p>Todo dia clientes pesquisam no Google e no Instagram pela barbearia deles e encontram o seu concorrente. Isso
-      também te incomoda?<br>Faça um diagnóstico da sua barbearia para&nbsp;mudar&nbsp;isso.</p>
+    <section class="hero">
+      <div class="badge">Tráfego pago para barbearias</div>
+      <h1>DEIXE DE SER INVISÍVEL E <span>LOTE A AGENDA DA SUA BARBEARIA.</span></h1>
+      <p>Todo dia clientes pesquisam no Google e no Instagram pela barbearia deles e encontram o seu concorrente. Isso
+        também te incomoda?<br>Faça um diagnóstico da sua barbearia para&nbsp;mudar&nbsp;isso.</p>
 
-    <div class="hero-cta-container" id="cta-container">
-      <button type="button" class="btn-primary" style="font-size: 18px; text-transform: uppercase; font-weight: 800;" onclick="revealForm()">
-        Receber meu diagnóstico
-      </button>
-    </div>
+      <div class="hero-cta-container" id="cta-container">
+        <button type="button" class="btn-primary" style="font-size: 18px; text-transform: uppercase; font-weight: 800;"
+          onclick="revealForm()">
+          Receber meu diagnóstico
+        </button>
+      </div>
 
-    <div id="formulario">
-      <div class="form-wrap" id="form-container">
-        <h2>Preencha e receba um diagnóstico do seu negócio.</h2>
+      <div id="formulario">
+        <div class="form-wrap" id="form-container">
+          <h2>Preencha e receba um diagnóstico do seu negócio.</h2>
 
-        <!-- Barra de Progresso -->
-        <div class="progress-container">
-          <div class="progress-bar-fill" id="progress-fill"></div>
-        </div>
-
-        <form id="lead-form" onsubmit="enviarForm(event)">
-
-          <!-- Passo 1: Cargo -->
-          <div class="form-step active visible" id="step-1">
-            <div class="form-group">
-              <label>Você é barbeiro autônomo ou proprietário?</label>
-              <input type="hidden" name="cargo" id="input-cargo" required />
-              <div class="card-group">
-                <div class="card-option" data-field="cargo" data-value="Barbeiro Autônomo"
-                  onclick="selectCardOption('cargo', 'Barbeiro Autônomo', 1)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content">
-                    <span class="card-title">Barbeiro Autônomo</span>
-                  </div>
-                </div>
-                <div class="card-option" data-field="cargo" data-value="Proprietário de Barbearia"
-                  onclick="selectCardOption('cargo', 'Proprietário de Barbearia', 1)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content">
-                    <span class="card-title">Proprietário de Barbearia</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <!-- Barra de Progresso -->
+          <div class="progress-container">
+            <div class="progress-bar-fill" id="progress-fill"></div>
           </div>
 
+          <form id="lead-form" onsubmit="enviarForm(event)">
 
-          <!-- Passo 2: Unidades (Apenas Proprietário) -->
-          <div class="form-step" id="step-2">
-            <div class="form-group">
-              <label>Quantas unidades você possui?</label>
-              <input type="hidden" name="unidades" id="input-unidades" required />
-              <div class="card-group card-group-col">
-                <div class="card-option" data-field="unidades" data-value="1 unidade"
-                  onclick="selectCardOption('unidades', '1 unidade', 2)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">1 unidade</span></div>
-                </div>
-                <div class="card-option" data-field="unidades" data-value="2 unidades"
-                  onclick="selectCardOption('unidades', '2 unidades', 2)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">2 unidades</span></div>
-                </div>
-                <div class="card-option" data-field="unidades" data-value="3 a 5 unidades"
-                  onclick="selectCardOption('unidades', '3 a 5 unidades', 2)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">3 a 5 unidades</span></div>
-                </div>
-                <div class="card-option" data-field="unidades" data-value="Mais de 5 unidades"
-                  onclick="selectCardOption('unidades', 'Mais de 5 unidades', 2)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">Mais de 5 unidades</span></div>
-                </div>
-              </div>
-            </div>
-            <div class="step-nav">
-              <button type="button" class="btn-prev" onclick="prevStep(2)">← Voltar</button>
-            </div>
-          </div>
-
-          <!-- Passo 3: Cadeiras (Apenas Proprietário) -->
-          <div class="form-step" id="step-3">
-            <div class="form-group">
-              <label>Quantas cadeiras no total?</label>
-              <input type="hidden" name="cadeiras" id="input-cadeiras" required />
-              <div class="card-group card-group-col">
-                <div class="card-option" data-field="cadeiras" data-value="1 a 2 cadeiras"
-                  onclick="selectCardOption('cadeiras', '1 a 2 cadeiras', 3)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">1 a 2 cadeiras</span></div>
-                </div>
-                <div class="card-option" data-field="cadeiras" data-value="3 a 5 cadeiras"
-                  onclick="selectCardOption('cadeiras', '3 a 5 cadeiras', 3)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">3 a 5 cadeiras</span></div>
-                </div>
-                <div class="card-option" data-field="cadeiras" data-value="6 a 9 cadeiras"
-                  onclick="selectCardOption('cadeiras', '6 a 9 cadeiras', 3)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">6 a 9 cadeiras</span></div>
-                </div>
-                <div class="card-option" data-field="cadeiras" data-value="10 ou mais cadeiras"
-                  onclick="selectCardOption('cadeiras', '10 ou mais cadeiras', 3)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">10 ou mais cadeiras</span></div>
-                </div>
-              </div>
-            </div>
-            <div class="step-nav">
-              <button type="button" class="btn-prev" onclick="prevStep(3)">← Voltar</button>
-            </div>
-          </div>
-
-          <!-- Passo 4: Já investiu em tráfego pago? -->
-          <div class="form-step" id="step-4">
-            <div class="form-group">
-              <label>Já investiu em tráfego pago?</label>
-              <input type="hidden" name="trafego" id="input-trafego" required />
-              <div class="card-group">
-                <div class="card-option" data-field="trafego" data-value="sim"
-                  onclick="selectCardOption('trafego', 'sim', 4)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content">
-                    <span class="card-title">Sim, já investi</span>
-                  </div>
-                </div>
-                <div class="card-option" data-field="trafego" data-value="nao"
-                  onclick="selectCardOption('trafego', 'nao', 4)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content">
-                    <span class="card-title">Não, nunca investi</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="step-nav">
-              <button type="button" class="btn-prev" onclick="prevStep(4)">← Voltar</button>
-            </div>
-          </div>
-
-          <!-- Passo 5: Quantia de Investimento -->
-          <div class="form-step" id="step-5">
-            <input type="hidden" name="valor_investido" id="input-valor_investido" value="-" />
-            <input type="hidden" name="valor_pretendido" id="input-valor_pretendido" value="-" />
-
-            <!-- Se já investiu (trafego == sim) -->
-            <div id="step-5-sim" class="conditional-step-content" style="display: none;">
+            <!-- Passo 1: Cargo -->
+            <div class="form-step active visible" id="step-1">
               <div class="form-group">
-                <label>Quanto você investia por mês?</label>
-                <div class="card-group card-group-col">
-                  <div class="card-option" data-field="valor_investido" data-value="Até R$500"
-                    onclick="selectCardOption('valor_investido', 'Até R$500', 5)">
+                <label>Você é barbeiro autônomo ou proprietário?</label>
+                <input type="hidden" name="cargo" id="input-cargo" required />
+                <div class="card-group">
+                  <div class="card-option" data-field="cargo" data-value="Barbeiro Autônomo"
+                    onclick="selectCardOption('cargo', 'Barbeiro Autônomo', 1)">
                     <div class="card-bullet"></div>
-                    <div class="card-content"><span class="card-title">Até R$500/mês</span></div>
+                    <div class="card-content">
+                      <span class="card-title">Barbeiro Autônomo</span>
+                    </div>
                   </div>
-                  <div class="card-option" data-field="valor_investido" data-value="R$500 a R$1.000"
-                    onclick="selectCardOption('valor_investido', 'R$500 a R$1.000', 5)">
+                  <div class="card-option" data-field="cargo" data-value="Proprietário de Barbearia"
+                    onclick="selectCardOption('cargo', 'Proprietário de Barbearia', 1)">
                     <div class="card-bullet"></div>
-                    <div class="card-content"><span class="card-title">Entre R$500 e R$1.000/mês</span></div>
-                  </div>
-                  <div class="card-option" data-field="valor_investido" data-value="R$1.000 a R$3.000"
-                    onclick="selectCardOption('valor_investido', 'R$1.000 a R$3.000', 5)">
-                    <div class="card-bullet"></div>
-                    <div class="card-content"><span class="card-title">Entre R$1.000 e R$3.000/mês</span></div>
-                  </div>
-                  <div class="card-option" data-field="valor_investido" data-value="R$3.000 a R$5.000"
-                    onclick="selectCardOption('valor_investido', 'R$3.000 a R$5.000', 5)">
-                    <div class="card-bullet"></div>
-                    <div class="card-content"><span class="card-title">Entre R$3.000 e R$5.000/mês</span></div>
-                  </div>
-                  <div class="card-option" data-field="valor_investido" data-value="Acima de R$5.000"
-                    onclick="selectCardOption('valor_investido', 'Acima de R$5.000', 5)">
-                    <div class="card-bullet"></div>
-                    <div class="card-content"><span class="card-title">Acima de R$5.000/mês</span></div>
+                    <div class="card-content">
+                      <span class="card-title">Proprietário de Barbearia</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Se não investiu (trafego == nao) -->
-            <div id="step-5-nao" class="conditional-step-content" style="display: none;">
+
+            <!-- Passo 2: Unidades (Apenas Proprietário) -->
+            <div class="form-step" id="step-2">
               <div class="form-group">
-                <label>Quanto pretende investir por mês?</label>
+                <label>Quantas unidades você possui?</label>
+                <input type="hidden" name="unidades" id="input-unidades" required />
                 <div class="card-group card-group-col">
-                  <div class="card-option" data-field="valor_pretendido" data-value="Até R$500"
-                    onclick="selectCardOption('valor_pretendido', 'Até R$500', 5)">
+                  <div class="card-option" data-field="unidades" data-value="1 unidade"
+                    onclick="selectCardOption('unidades', '1 unidade', 2)">
                     <div class="card-bullet"></div>
-                    <div class="card-content"><span class="card-title">Até R$500/mês</span></div>
+                    <div class="card-content"><span class="card-title">1 unidade</span></div>
                   </div>
-                  <div class="card-option" data-field="valor_pretendido" data-value="R$500 a R$1.000"
-                    onclick="selectCardOption('valor_pretendido', 'R$500 a R$1.000', 5)">
+                  <div class="card-option" data-field="unidades" data-value="2 unidades"
+                    onclick="selectCardOption('unidades', '2 unidades', 2)">
                     <div class="card-bullet"></div>
-                    <div class="card-content"><span class="card-title">Entre R$500 e R$1.000/mês</span></div>
+                    <div class="card-content"><span class="card-title">2 unidades</span></div>
                   </div>
-                  <div class="card-option" data-field="valor_pretendido" data-value="R$1.000 a R$3.000"
-                    onclick="selectCardOption('valor_pretendido', 'R$1.000 a R$3.000', 5)">
+                  <div class="card-option" data-field="unidades" data-value="3 a 5 unidades"
+                    onclick="selectCardOption('unidades', '3 a 5 unidades', 2)">
                     <div class="card-bullet"></div>
-                    <div class="card-content"><span class="card-title">Entre R$1.000 e R$3.000/mês</span></div>
+                    <div class="card-content"><span class="card-title">3 a 5 unidades</span></div>
                   </div>
-                  <div class="card-option" data-field="valor_pretendido" data-value="R$3.000 a R$5.000"
-                    onclick="selectCardOption('valor_pretendido', 'R$3.000 a R$5.000', 5)">
+                  <div class="card-option" data-field="unidades" data-value="Mais de 5 unidades"
+                    onclick="selectCardOption('unidades', 'Mais de 5 unidades', 2)">
                     <div class="card-bullet"></div>
-                    <div class="card-content"><span class="card-title">Entre R$3.000 e R$5.000/mês</span></div>
-                  </div>
-                  <div class="card-option" data-field="valor_pretendido" data-value="Acima de R$5.000"
-                    onclick="selectCardOption('valor_pretendido', 'Acima de R$5.000', 5)">
-                    <div class="card-bullet"></div>
-                    <div class="card-content"><span class="card-title">Acima de R$5.000/mês</span></div>
+                    <div class="card-content"><span class="card-title">Mais de 5 unidades</span></div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div class="step-nav">
-              <button type="button" class="btn-prev" onclick="prevStep(5)">← Voltar</button>
-            </div>
-          </div>
-
-          <!-- Passo 6: Experiência -->
-          <div class="form-step" id="step-6">
-            <div class="form-group">
-              <label>Como foi sua experiência com tráfego pago?</label>
-              <input type="hidden" name="experiencia" id="input-experiencia" value="-" />
-              <div class="card-group card-group-col">
-                <div class="card-option" data-field="experiencia" data-value="Ótima"
-                  onclick="selectCardOption('experiencia', 'Ótima', 6)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">Ótima — tive bons resultados</span></div>
-                </div>
-                <div class="card-option" data-field="experiencia" data-value="Regular"
-                  onclick="selectCardOption('experiencia', 'Regular', 6)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">Regular — tive alguns resultados</span></div>
-                </div>
-                <div class="card-option" data-field="experiencia" data-value="Ruim"
-                  onclick="selectCardOption('experiencia', 'Ruim', 6)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">Ruim — não tive retorno</span></div>
-                </div>
-                <div class="card-option" data-field="experiencia" data-value="Péssima"
-                  onclick="selectCardOption('experiencia', 'Péssima', 6)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">Péssima — perdi dinheiro</span></div>
-                </div>
+              <div class="step-nav">
+                <button type="button" class="btn-prev" onclick="prevStep(2)">← Voltar</button>
               </div>
             </div>
 
-            <div class="step-nav">
-              <button type="button" class="btn-prev" onclick="prevStep(6)">← Voltar</button>
-            </div>
-          </div>
-
-          <!-- Passo 7: Faturamento -->
-          <div class="form-step" id="step-7">
-            <div class="form-group">
-              <label>Faturamento mensal da barbearia</label>
-              <input type="hidden" name="faturamento" id="input-faturamento" required />
-              <div class="card-group card-group-col">
-                <div class="card-option" data-field="faturamento" data-value="Até R$8.000"
-                  onclick="selectCardOption('faturamento', 'Até R$8.000', 7)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">Até R$8.000/mês</span></div>
+            <!-- Passo 3: Cadeiras (Apenas Proprietário) -->
+            <div class="form-step" id="step-3">
+              <div class="form-group">
+                <label>Quantas cadeiras no total?</label>
+                <input type="hidden" name="cadeiras" id="input-cadeiras" required />
+                <div class="card-group card-group-col">
+                  <div class="card-option" data-field="cadeiras" data-value="1 a 2 cadeiras"
+                    onclick="selectCardOption('cadeiras', '1 a 2 cadeiras', 3)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">1 a 2 cadeiras</span></div>
+                  </div>
+                  <div class="card-option" data-field="cadeiras" data-value="3 a 5 cadeiras"
+                    onclick="selectCardOption('cadeiras', '3 a 5 cadeiras', 3)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">3 a 5 cadeiras</span></div>
+                  </div>
+                  <div class="card-option" data-field="cadeiras" data-value="6 a 9 cadeiras"
+                    onclick="selectCardOption('cadeiras', '6 a 9 cadeiras', 3)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">6 a 9 cadeiras</span></div>
+                  </div>
+                  <div class="card-option" data-field="cadeiras" data-value="10 ou mais cadeiras"
+                    onclick="selectCardOption('cadeiras', '10 ou mais cadeiras', 3)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">10 ou mais cadeiras</span></div>
+                  </div>
                 </div>
-                <div class="card-option" data-field="faturamento" data-value="R$8.000 a R$15.000"
-                  onclick="selectCardOption('faturamento', 'R$8.000 a R$15.000', 7)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">Entre R$8.000 e R$15.000/mês</span></div>
-                </div>
-                <div class="card-option" data-field="faturamento" data-value="R$15.000 a R$30.000"
-                  onclick="selectCardOption('faturamento', 'R$15.000 a R$30.000', 7)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">Entre R$15.000 e R$30.000/mês</span></div>
-                </div>
-                <div class="card-option" data-field="faturamento" data-value="R$30.000 a R$50.000"
-                  onclick="selectCardOption('faturamento', 'R$30.000 a R$50.000', 7)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">Entre R$30.000 e R$50.000/mês</span></div>
-                </div>
-                <div class="card-option" data-field="faturamento" data-value="Acima de R$50.000"
-                  onclick="selectCardOption('faturamento', 'Acima de R$50.000', 7)">
-                  <div class="card-bullet"></div>
-                  <div class="card-content"><span class="card-title">Acima de R$50.000/mês</span></div>
-                </div>
+              </div>
+              <div class="step-nav">
+                <button type="button" class="btn-prev" onclick="prevStep(3)">← Voltar</button>
               </div>
             </div>
 
-            <div class="step-nav">
-              <button type="button" class="btn-prev" onclick="prevStep(7)">← Voltar</button>
+            <!-- Passo 4: Já investiu em tráfego pago? -->
+            <div class="form-step" id="step-4">
+              <div class="form-group">
+                <label>Já investiu em tráfego pago?</label>
+                <input type="hidden" name="trafego" id="input-trafego" required />
+                <div class="card-group">
+                  <div class="card-option" data-field="trafego" data-value="sim"
+                    onclick="selectCardOption('trafego', 'sim', 4)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content">
+                      <span class="card-title">Sim, já investi</span>
+                    </div>
+                  </div>
+                  <div class="card-option" data-field="trafego" data-value="nao"
+                    onclick="selectCardOption('trafego', 'nao', 4)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content">
+                      <span class="card-title">Não, nunca investi</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="step-nav">
+                <button type="button" class="btn-prev" onclick="prevStep(4)">← Voltar</button>
+              </div>
             </div>
+
+            <!-- Passo 5: Quantia de Investimento -->
+            <div class="form-step" id="step-5">
+              <input type="hidden" name="valor_investido" id="input-valor_investido" value="-" />
+              <input type="hidden" name="valor_pretendido" id="input-valor_pretendido" value="-" />
+
+              <!-- Se já investiu (trafego == sim) -->
+              <div id="step-5-sim" class="conditional-step-content" style="display: none;">
+                <div class="form-group">
+                  <label>Quanto você investia por mês?</label>
+                  <div class="card-group card-group-col">
+                    <div class="card-option" data-field="valor_investido" data-value="Até R$500"
+                      onclick="selectCardOption('valor_investido', 'Até R$500', 5)">
+                      <div class="card-bullet"></div>
+                      <div class="card-content"><span class="card-title">Até R$500/mês</span></div>
+                    </div>
+                    <div class="card-option" data-field="valor_investido" data-value="R$500 a R$1.000"
+                      onclick="selectCardOption('valor_investido', 'R$500 a R$1.000', 5)">
+                      <div class="card-bullet"></div>
+                      <div class="card-content"><span class="card-title">Entre R$500 e R$1.000/mês</span></div>
+                    </div>
+                    <div class="card-option" data-field="valor_investido" data-value="R$1.000 a R$3.000"
+                      onclick="selectCardOption('valor_investido', 'R$1.000 a R$3.000', 5)">
+                      <div class="card-bullet"></div>
+                      <div class="card-content"><span class="card-title">Entre R$1.000 e R$3.000/mês</span></div>
+                    </div>
+                    <div class="card-option" data-field="valor_investido" data-value="R$3.000 a R$5.000"
+                      onclick="selectCardOption('valor_investido', 'R$3.000 a R$5.000', 5)">
+                      <div class="card-bullet"></div>
+                      <div class="card-content"><span class="card-title">Entre R$3.000 e R$5.000/mês</span></div>
+                    </div>
+                    <div class="card-option" data-field="valor_investido" data-value="Acima de R$5.000"
+                      onclick="selectCardOption('valor_investido', 'Acima de R$5.000', 5)">
+                      <div class="card-bullet"></div>
+                      <div class="card-content"><span class="card-title">Acima de R$5.000/mês</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Se não investiu (trafego == nao) -->
+              <div id="step-5-nao" class="conditional-step-content" style="display: none;">
+                <div class="form-group">
+                  <label>Quanto pretende investir por mês?</label>
+                  <div class="card-group card-group-col">
+                    <div class="card-option" data-field="valor_pretendido" data-value="Até R$500"
+                      onclick="selectCardOption('valor_pretendido', 'Até R$500', 5)">
+                      <div class="card-bullet"></div>
+                      <div class="card-content"><span class="card-title">Até R$500/mês</span></div>
+                    </div>
+                    <div class="card-option" data-field="valor_pretendido" data-value="R$500 a R$1.000"
+                      onclick="selectCardOption('valor_pretendido', 'R$500 a R$1.000', 5)">
+                      <div class="card-bullet"></div>
+                      <div class="card-content"><span class="card-title">Entre R$500 e R$1.000/mês</span></div>
+                    </div>
+                    <div class="card-option" data-field="valor_pretendido" data-value="R$1.000 a R$3.000"
+                      onclick="selectCardOption('valor_pretendido', 'R$1.000 a R$3.000', 5)">
+                      <div class="card-bullet"></div>
+                      <div class="card-content"><span class="card-title">Entre R$1.000 e R$3.000/mês</span></div>
+                    </div>
+                    <div class="card-option" data-field="valor_pretendido" data-value="R$3.000 a R$5.000"
+                      onclick="selectCardOption('valor_pretendido', 'R$3.000 a R$5.000', 5)">
+                      <div class="card-bullet"></div>
+                      <div class="card-content"><span class="card-title">Entre R$3.000 e R$5.000/mês</span></div>
+                    </div>
+                    <div class="card-option" data-field="valor_pretendido" data-value="Acima de R$5.000"
+                      onclick="selectCardOption('valor_pretendido', 'Acima de R$5.000', 5)">
+                      <div class="card-bullet"></div>
+                      <div class="card-content"><span class="card-title">Acima de R$5.000/mês</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-nav">
+                <button type="button" class="btn-prev" onclick="prevStep(5)">← Voltar</button>
+              </div>
+            </div>
+
+            <!-- Passo 6: Experiência -->
+            <div class="form-step" id="step-6">
+              <div class="form-group">
+                <label>Como foi sua experiência com tráfego pago?</label>
+                <input type="hidden" name="experiencia" id="input-experiencia" value="-" />
+                <div class="card-group card-group-col">
+                  <div class="card-option" data-field="experiencia" data-value="Ótima"
+                    onclick="selectCardOption('experiencia', 'Ótima', 6)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">Ótima — tive bons resultados</span></div>
+                  </div>
+                  <div class="card-option" data-field="experiencia" data-value="Regular"
+                    onclick="selectCardOption('experiencia', 'Regular', 6)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">Regular — tive alguns resultados</span></div>
+                  </div>
+                  <div class="card-option" data-field="experiencia" data-value="Ruim"
+                    onclick="selectCardOption('experiencia', 'Ruim', 6)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">Ruim — não tive retorno</span></div>
+                  </div>
+                  <div class="card-option" data-field="experiencia" data-value="Péssima"
+                    onclick="selectCardOption('experiencia', 'Péssima', 6)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">Péssima — perdi dinheiro</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-nav">
+                <button type="button" class="btn-prev" onclick="prevStep(6)">← Voltar</button>
+              </div>
+            </div>
+
+            <!-- Passo 7: Faturamento -->
+            <div class="form-step" id="step-7">
+              <div class="form-group">
+                <label>Faturamento mensal da barbearia</label>
+                <input type="hidden" name="faturamento" id="input-faturamento" required />
+                <div class="card-group card-group-col">
+                  <div class="card-option" data-field="faturamento" data-value="Até R$8.000"
+                    onclick="selectCardOption('faturamento', 'Até R$8.000', 7)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">Até R$8.000/mês</span></div>
+                  </div>
+                  <div class="card-option" data-field="faturamento" data-value="R$8.000 a R$15.000"
+                    onclick="selectCardOption('faturamento', 'R$8.000 a R$15.000', 7)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">Entre R$8.000 e R$15.000/mês</span></div>
+                  </div>
+                  <div class="card-option" data-field="faturamento" data-value="R$15.000 a R$30.000"
+                    onclick="selectCardOption('faturamento', 'R$15.000 a R$30.000', 7)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">Entre R$15.000 e R$30.000/mês</span></div>
+                  </div>
+                  <div class="card-option" data-field="faturamento" data-value="R$30.000 a R$50.000"
+                    onclick="selectCardOption('faturamento', 'R$30.000 a R$50.000', 7)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">Entre R$30.000 e R$50.000/mês</span></div>
+                  </div>
+                  <div class="card-option" data-field="faturamento" data-value="Acima de R$50.000"
+                    onclick="selectCardOption('faturamento', 'Acima de R$50.000', 7)">
+                    <div class="card-bullet"></div>
+                    <div class="card-content"><span class="card-title">Acima de R$50.000/mês</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-nav">
+                <button type="button" class="btn-prev" onclick="prevStep(7)">← Voltar</button>
+              </div>
+            </div>
+
+            <!-- Passo 8: Nome -->
+            <div class="form-step" id="step-8">
+              <div class="form-group">
+                <label>Seu nome</label>
+                <input type="text" name="nome" id="input-nome" placeholder="Ex: Carlos Silva" required />
+              </div>
+              <div style="margin-top: 24px;">
+                <button type="button" class="btn-primary" onclick="goToStep(9)">Próximo Passo</button>
+              </div>
+              <div class="step-nav">
+                <button type="button" class="btn-prev" onclick="prevStep(8)">← Voltar</button>
+              </div>
+            </div>
+
+            <!-- Passo 9: WhatsApp -->
+            <div class="form-step" id="step-9">
+              <div class="form-group">
+                <label>WhatsApp</label>
+                <input type="tel" name="whatsapp" id="input-whatsapp" placeholder="(21) 99999-9999" required />
+              </div>
+              <div style="margin-top: 24px;">
+                <button type="button" class="btn-primary" onclick="goToStep(10)">Próximo Passo</button>
+              </div>
+              <div class="step-nav">
+                <button type="button" class="btn-prev" onclick="prevStep(9)">← Voltar</button>
+              </div>
+            </div>
+
+            <!-- Passo 10: E-mail -->
+            <div class="form-step" id="step-10">
+              <div class="form-group">
+                <label>Melhor e-mail</label>
+                <input type="email" name="email" id="input-email" placeholder="seuemail@gmail.com" required />
+              </div>
+              <div style="margin-top: 24px;">
+                <button type="button" class="btn-primary" onclick="goToStep(11)">Próximo Passo</button>
+              </div>
+              <div class="step-nav">
+                <button type="button" class="btn-prev" onclick="prevStep(10)">← Voltar</button>
+              </div>
+            </div>
+
+            <!-- Passo 11: Instagram -->
+            <div class="form-step" id="step-11">
+              <div class="form-group">
+                <label>Instagram da barbearia</label>
+                <input type="text" name="instagram" id="input-instagram" placeholder="@suabarbearia" />
+              </div>
+
+              <div id="submit-block" style="margin-top: 24px;">
+                <button type="submit" id="btn-submit-lead" class="btn-primary btn-submit">Agendar sessão de
+                  diagnóstico</button>
+              </div>
+
+              <div class="step-nav">
+                <button type="button" class="btn-prev" onclick="prevStep(11)">← Voltar</button>
+              </div>
+            </div>
+
+
+            <p class="form-disclaimer">Análise 100% gratuita e sem compromisso. Seus dados não serão compartilhados.</p>
+          </form>
+        </div>
+
+        <div id="success-section" style="display:none;">
+          <div class="success-check">
+            <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="26" cy="26" r="25" fill="none" stroke="var(--green-neon)" stroke-width="2"
+                class="success-circle" />
+              <path fill="none" stroke="var(--green-neon)" stroke-width="3" stroke-linecap="round"
+                stroke-linejoin="round" d="M14.1 27.2l7.1 7.2 16.7-16.8" class="success-tick" />
+            </svg>
           </div>
-
-          <!-- Passo 8: Nome -->
-          <div class="form-step" id="step-8">
-            <div class="form-group">
-              <label>Seu nome</label>
-              <input type="text" name="nome" id="input-nome" placeholder="Ex: Carlos Silva" required />
-            </div>
-            <div style="margin-top: 24px;">
-              <button type="button" class="btn-primary" onclick="goToStep(9)">Próximo Passo</button>
-            </div>
-            <div class="step-nav">
-              <button type="button" class="btn-prev" onclick="prevStep(8)">← Voltar</button>
-            </div>
+          <h3 class="success-title">Seus dados foram enviados</h3>
+          <p class="success-sub">Agora finalize clicando abaixo para garantir seu diagnóstico</p>
+          <a id="btn-whatsapp-final" href="#" target="_blank" class="btn-primary">
+            <span>Garantir meu diagnóstico</span>
+          </a>
+          <div id="success-alternative" class="is-hidden" style="margin-top: 12px;">
+            <p class="success-alt-msg">Um especialista vai analisar os dados e entrará em contato.</p>
           </div>
-
-          <!-- Passo 9: WhatsApp -->
-          <div class="form-step" id="step-9">
-            <div class="form-group">
-              <label>WhatsApp</label>
-              <input type="tel" name="whatsapp" id="input-whatsapp" placeholder="(21) 99999-9999" required />
-            </div>
-            <div style="margin-top: 24px;">
-              <button type="button" class="btn-primary" onclick="goToStep(10)">Próximo Passo</button>
-            </div>
-            <div class="step-nav">
-              <button type="button" class="btn-prev" onclick="prevStep(9)">← Voltar</button>
-            </div>
-          </div>
-
-          <!-- Passo 10: E-mail -->
-          <div class="form-step" id="step-10">
-            <div class="form-group">
-              <label>Melhor e-mail</label>
-              <input type="email" name="email" id="input-email" placeholder="seuemail@gmail.com" required />
-            </div>
-            <div style="margin-top: 24px;">
-              <button type="button" class="btn-primary" onclick="goToStep(11)">Próximo Passo</button>
-            </div>
-            <div class="step-nav">
-              <button type="button" class="btn-prev" onclick="prevStep(10)">← Voltar</button>
-            </div>
-          </div>
-
-          <!-- Passo 11: Instagram -->
-          <div class="form-step" id="step-11">
-            <div class="form-group">
-              <label>Instagram da barbearia</label>
-              <input type="text" name="instagram" id="input-instagram" placeholder="@suabarbearia" />
-            </div>
-
-            <div id="submit-block" style="margin-top: 24px;">
-              <button type="submit" id="btn-submit-lead" class="btn-primary btn-submit">Agendar sessão de diagnóstico</button>
-            </div>
-
-            <div class="step-nav">
-              <button type="button" class="btn-prev" onclick="prevStep(11)">← Voltar</button>
-            </div>
-          </div>
-
-
-          <p class="form-disclaimer">Análise 100% gratuita e sem compromisso. Seus dados não serão compartilhados.</p>
-        </form>
+        </div>
       </div>
-
-      <div id="success-section" style="display:none;">
-        <div class="success-check">
-          <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="26" cy="26" r="25" fill="none" stroke="var(--green-neon)" stroke-width="2" class="success-circle" />
-            <path fill="none" stroke="var(--green-neon)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-              d="M14.1 27.2l7.1 7.2 16.7-16.8" class="success-tick" />
-          </svg>
-        </div>
-        <h3 class="success-title">Seus dados foram enviados</h3>
-        <p class="success-sub">Agora finalize clicando abaixo para garantir seu diagnóstico</p>
-        <a id="btn-whatsapp-final" href="#" target="_blank" class="btn-primary">
-          <span>Garantir meu diagnóstico</span>
-        </a>
-        <div id="success-alternative" class="is-hidden" style="margin-top: 12px;">
-          <p class="success-alt-msg">Um especialista vai analisar os dados e entrará em contato.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
 
 
-  <!-- Prova Social (Depoimentos em Prints) -->
-  <section class="prova-social-dinamica reveal-lento" id="resultados">
-    <h2>O que os nossos clientes falam.</h2>
+    <!-- Prova Social (Depoimentos em Prints) -->
+    <section class="prova-social-dinamica reveal-lento" id="resultados">
+      <h2>O que os nossos clientes falam.</h2>
 
-    <div class="swiper testimonial-swiper">
-      <div class="swiper-wrapper">
-        <!-- Substitua as URLs do placeholder abaixo pelos seus prints originais salvos em formato WebP -->
-        <div class="swiper-slide">
-          <img src="depoimento 1.webp" alt="Depoimento 1" width="188" height="146">
-        </div>
-        <div class="swiper-slide">
-          <img src="depoimento 2.webp" alt="Depoimento 2" width="216" height="144">
-        </div>
-        <div class="swiper-slide">
-          <img src="depoimento 3.webp" alt="Depoimento 3" width="196" height="145">
-        </div>
-        <div class="swiper-slide">
-          <img src="depoimento 4.webp" alt="Depoimento 4" width="190" height="134">
-        </div>
-        <div class="swiper-slide">
-          <img src="depoimento 5.webp" alt="Depoimento 5" width="187" height="137">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="como">
-    <div class="como-inner">
-      <div class="section-label" style="text-align:center">Como funciona</div>
-      <h2>Da invisibilidade à agenda cheia</h2>
-      <div class="steps">
-        <div class="step reveal-left">
-          <div class="step-num">01</div>
-          <h3>Análise do seu negócio</h3>
-          <p>Entendemos sua barbearia, sua região, seus clientes e o que já foi tentado antes.</p>
-        </div>
-        <div class="step reveal-right">
-          <div class="step-num">02</div>
-          <h3>Estratégia de anúncios</h3>
-          <p>Criamos campanhas no Meta e Google focadas em atrair clientes que já buscam pelo serviço.</p>
-        </div>
-        <div class="step reveal-left">
-          <div class="step-num">03</div>
-          <h3>Mais visibilidade</h3>
-          <p>Sua barbearia passa a aparecer para as pessoas certas, na hora certa, no lugar certo.</p>
-        </div>
-        <div class="step reveal-right">
-          <div class="step-num">04</div>
-          <h3>Agenda lotando</h3>
-          <p>Mais contatos, mais agendamentos, mais assinaturas — crescimento real e mensurável.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Especialista -->
-  <section class="especialista" id="especialista">
-    <div class="especialista-inner">
-      <div class="especialista-foto reveal-left">
-        <img src="eu.webp" alt="Foto do Especialista João" class="foto-especialista" width="945" height="1276">
-      </div>
-      <div class="especialista-texto reveal-right" style="text-align: center;">
-        <div class="section-label" style="text-align: center;">Quem é o João</div>
-        <h2>8 ANOS COMO BARBEIRO E HOJE AJUDO A LOTAR A SUA AGENDA.</h2>
-        <p>Durante meus 8 anos atuando em barbearias renomadas, me formei em marketing e descobri o segredo para atrair novos clientes todos os dias: o tráfego pago.</p>
-        <p>Eu sei que o movimento de terça não é o de sábado, e que você quer dinheiro no caixa, não apenas métricas bonitas.</p>
-        <p>Hoje, aplico toda minha experiência prática de salão e técnica de marketing para gerar os melhores resultados para o seu negócio. É tráfego pago feito por quem <strong>fala a sua língua</strong> e entende a operação por dentro.</p>
-        <a href="#formulario" class="btn-primary" onclick="revealForm()">Quero a análise do especialista</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Fundo Dourado Animado Global -->
-  <div class="bottom-gold-section">
-
-    <!-- Simulador de Faturamento -->
-    <section class="simulador reveal-simulador" id="simulador">
-      <div class="simulador-inner">
-        <div class="section-label" style="text-align:center">Calculadora</div>
-        <h2>Quanto sua barbearia pode faturar com a agenda lotada?</h2>
-        <p class="simulador-sub">Preencha os 3 campos abaixo e descubra o potencial real do seu negócio.</p>
-
-        <div class="simulador-form reveal">
-          <div class="sim-field">
-            <label>Quantidade de cadeiras</label>
-            <input type="number" id="sim-cadeiras" min="1" placeholder="Ex: 3" />
+      <div class="swiper testimonial-swiper">
+        <div class="swiper-wrapper">
+          <!-- Substitua as URLs do placeholder abaixo pelos seus prints originais salvos em formato WebP -->
+          <div class="swiper-slide">
+            <img src="depoimento 1.webp" alt="Depoimento 1" width="188" height="146">
           </div>
-          <div class="sim-field">
-            <label>Ticket médio (R$)</label>
-            <input type="number" id="sim-ticket" min="1" placeholder="Ex: 45" />
+          <div class="swiper-slide">
+            <img src="depoimento 2.webp" alt="Depoimento 2" width="216" height="144">
           </div>
-          <div class="sim-field">
-            <label>Cortes por cadeira/dia</label>
-            <input type="number" id="sim-cortes" min="1" placeholder="Ex: 8" />
+          <div class="swiper-slide">
+            <img src="depoimento 3.webp" alt="Depoimento 3" width="196" height="145">
           </div>
-          <button type="button" class="btn-primary" onclick="calcularPotencial()">Calcular Potencial</button>
+          <div class="swiper-slide">
+            <img src="depoimento 4.webp" alt="Depoimento 4" width="190" height="134">
+          </div>
+          <div class="swiper-slide">
+            <img src="depoimento 5.webp" alt="Depoimento 5" width="187" height="137">
+          </div>
         </div>
+      </div>
+    </section>
 
-        <div id="sim-resultado" class="sim-resultado" style="display:none;">
-          <p class="sim-resultado-label">Faturamento mensal estimado:</p>
-          <p class="sim-resultado-valor" id="sim-valor">R$ 0</p>
-          <p class="sim-resultado-desc">com agenda lotada (26 dias úteis/mês)</p>
-          <a href="#formulario" class="btn-primary" onclick="revealForm()" style="margin-top:24px;">
-            Quero atingir esse faturamento
+    <section class="como">
+      <div class="como-inner">
+        <div class="section-label" style="text-align:center">Como funciona</div>
+        <h2>Da invisibilidade à agenda cheia</h2>
+        <div class="steps">
+          <div class="step reveal-left">
+            <div class="step-num">01</div>
+            <h3>Análise do seu negócio</h3>
+            <p>Entendemos sua barbearia, sua região, seus clientes e o que já foi tentado antes.</p>
+          </div>
+          <div class="step reveal-right">
+            <div class="step-num">02</div>
+            <h3>Estratégia de anúncios</h3>
+            <p>Criamos campanhas no Meta e Google focadas em atrair clientes que já buscam pelo serviço.</p>
+          </div>
+          <div class="step reveal-left">
+            <div class="step-num">03</div>
+            <h3>Mais visibilidade</h3>
+            <p>Sua barbearia passa a aparecer para as pessoas certas, na hora certa, no lugar certo.</p>
+          </div>
+          <div class="step reveal-right">
+            <div class="step-num">04</div>
+            <h3>Agenda lotando</h3>
+            <p>Mais contatos, mais agendamentos, mais assinaturas — crescimento real e mensurável.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Especialista -->
+    <section class="especialista" id="especialista">
+      <div class="especialista-inner">
+        <div class="especialista-foto reveal-left">
+          <img src="eu.webp" alt="Foto do Especialista João" class="foto-especialista" width="945" height="1276">
+        </div>
+        <div class="especialista-texto reveal-right" style="text-align: center;">
+          <div class="section-label" style="text-align: center;">Quem é o João</div>
+          <h2>8 ANOS COMO BARBEIRO E HOJE AJUDO A LOTAR A SUA AGENDA.</h2>
+          <p>Durante meus 8 anos atuando em barbearias renomadas, me formei em marketing e descobri o segredo para
+            atrair novos clientes todos os dias: o tráfego pago.</p>
+          <p>Eu sei que o movimento de terça não é o de sábado, e que você quer dinheiro no caixa, não apenas métricas
+            bonitas.</p>
+          <p>Hoje, aplico toda minha experiência prática de salão e técnica de marketing para gerar os melhores
+            resultados para o seu negócio. É tráfego pago feito por quem <strong>fala a sua língua</strong> e entende a
+            operação por dentro.</p>
+          <a href="#formulario" class="btn-primary" onclick="revealForm()">Quero a análise do especialista</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fundo Dourado Animado Global -->
+    <div class="bottom-gold-section">
+
+      <!-- Simulador de Faturamento -->
+      <section class="simulador reveal-simulador" id="simulador">
+        <div class="simulador-inner">
+          <div class="section-label" style="text-align:center">Calculadora</div>
+          <h2>Quanto sua barbearia pode faturar com a agenda lotada?</h2>
+          <p class="simulador-sub">Preencha os 3 campos abaixo e descubra o potencial real do seu negócio.</p>
+
+          <div class="simulador-form reveal">
+            <div class="sim-field">
+              <label>Quantidade de cadeiras</label>
+              <input type="number" id="sim-cadeiras" min="1" placeholder="Ex: 3" />
+            </div>
+            <div class="sim-field">
+              <label>Ticket médio (R$)</label>
+              <input type="number" id="sim-ticket" min="1" placeholder="Ex: 45" />
+            </div>
+            <div class="sim-field">
+              <label>Cortes por cadeira/dia</label>
+              <input type="number" id="sim-cortes" min="1" placeholder="Ex: 8" />
+            </div>
+            <button type="button" class="btn-primary" onclick="calcularPotencial()">Calcular Potencial</button>
+          </div>
+
+          <div id="sim-resultado" class="sim-resultado" style="display:none;">
+            <p class="sim-resultado-label">Faturamento mensal estimado:</p>
+            <p class="sim-resultado-valor" id="sim-valor">R$ 0</p>
+            <p class="sim-resultado-desc">com agenda lotada (26 dias úteis/mês)</p>
+            <a href="#formulario" class="btn-primary" onclick="revealForm()" style="margin-top:24px;">
+              Quero atingir esse faturamento
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Acordeão -->
+      <section class="faq" id="faq">
+        <div class="faq-inner">
+          <div class="section-label" style="text-align:center">Dúvidas frequentes</div>
+          <h2>Tudo o que você precisa saber</h2>
+
+          <div class="accordion stagger-group">
+            <div class="accordion-item stagger-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                Em quanto tempo vejo retorno?
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-body">
+                <p>Os primeiros resultados costumam aparecer entre 7 e 14 dias após a ativação das campanhas.
+                  Em 30 dias, o fluxo de agendamentos já fica consistente. O tráfego pago atua como um verdadeiro
+                  potencializador para a sua barbearia.</p>
+              </div>
+            </div>
+
+            <div class="accordion-item stagger-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                Preciso ter muitos seguidores no Instagram?
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-body">
+                <p>Não. Tráfego pago não depende de seguidores. Os anúncios são entregues diretamente
+                  para pessoas da sua região que estão procurando pelo serviço.</p>
+              </div>
+            </div>
+
+            <div class="accordion-item stagger-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                Quanto preciso investir por mês em anúncios?
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-body">
+                <p>O investimento mínimo recomendado é de R$ 30,00 por dia em mídia paga.
+                  Com essa verba já é possível gerar resultados consistentes para a maioria das barbearias.
+                  Na sessão de diagnóstico, definimos juntos a verba ideal para o seu caso.</p>
+              </div>
+            </div>
+
+            <div class="accordion-item stagger-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                Funciona para barbearias pequenas?
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-body">
+                <p>Com certeza. Na verdade, barbearias menores costumam sentir o impacto mais rápido,
+                  porque qualquer volume novo de clientes já faz diferença no caixa.
+                  O tráfego é escalável, começamos no seu ritmo e crescemos junto.</p>
+              </div>
+            </div>
+
+            <div class="accordion-item stagger-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                Eu preciso fazer alguma coisa ou vocês cuidam de tudo?
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-body">
+                <p>A gente cuida de toda a parte técnica: criação, gerenciamento e otimização dos anúncios.
+                  O que pedimos é alinhamento semanal rápido, que você esteja pronto para um atendimento rápido
+                  aos novos contatos e pronto para gravar os conteúdos que serão usados nas campanhas. Sua parte é
+                  cortar, a nossa é lotar a agenda.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Final CTA -->
+      <section class="final-cta-section reveal">
+        <h2>Pronto para destravar o crescimento?</h2>
+        <div class="hero-cta">
+          <a href="#formulario" class="btn-primary btn-gigante btn-verde" onclick="revealForm()">
+            Quero meu diagnóstico
           </a>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- FAQ Acordeão -->
-    <section class="faq" id="faq">
-      <div class="faq-inner">
-        <div class="section-label" style="text-align:center">Dúvidas frequentes</div>
-        <h2>Tudo o que você precisa saber</h2>
-
-        <div class="accordion stagger-group">
-          <div class="accordion-item stagger-item">
-            <button class="accordion-header" onclick="toggleAccordion(this)">
-              Em quanto tempo vejo retorno?
-              <span class="accordion-icon">+</span>
-            </button>
-            <div class="accordion-body">
-              <p>Os primeiros resultados costumam aparecer entre 7 e 14 dias após a ativação das campanhas.
-                Em 30 dias, o fluxo de agendamentos já fica consistente. O tráfego pago atua como um verdadeiro potencializador para a sua barbearia.</p>
-            </div>
-          </div>
-
-          <div class="accordion-item stagger-item">
-            <button class="accordion-header" onclick="toggleAccordion(this)">
-              Preciso ter muitos seguidores no Instagram?
-              <span class="accordion-icon">+</span>
-            </button>
-            <div class="accordion-body">
-              <p>Não. Tráfego pago não depende de seguidores. Os anúncios são entregues diretamente
-                para pessoas da sua região que estão procurando pelo serviço.</p>
-            </div>
-          </div>
-
-          <div class="accordion-item stagger-item">
-            <button class="accordion-header" onclick="toggleAccordion(this)">
-              Quanto preciso investir por mês em anúncios?
-              <span class="accordion-icon">+</span>
-            </button>
-            <div class="accordion-body">
-              <p>O investimento mínimo recomendado é de R$ 30,00 por dia em mídia paga.
-                Com essa verba já é possível gerar resultados consistentes para a maioria das barbearias.
-                Na sessão de diagnóstico, definimos juntos a verba ideal para o seu caso.</p>
-            </div>
-          </div>
-
-          <div class="accordion-item stagger-item">
-            <button class="accordion-header" onclick="toggleAccordion(this)">
-              Funciona para barbearias pequenas?
-              <span class="accordion-icon">+</span>
-            </button>
-            <div class="accordion-body">
-              <p>Com certeza. Na verdade, barbearias menores costumam sentir o impacto mais rápido,
-                porque qualquer volume novo de clientes já faz diferença no caixa.
-                O tráfego é escalável, começamos no seu ritmo e crescemos junto.</p>
-            </div>
-          </div>
-
-          <div class="accordion-item stagger-item">
-            <button class="accordion-header" onclick="toggleAccordion(this)">
-              Eu preciso fazer alguma coisa ou vocês cuidam de tudo?
-              <span class="accordion-icon">+</span>
-            </button>
-            <div class="accordion-body">
-              <p>A gente cuida de toda a parte técnica: criação, gerenciamento e otimização dos anúncios.
-                O que pedimos é alinhamento semanal rápido, que você esteja pronto para um atendimento rápido
-                aos novos contatos e pronto para gravar os conteúdos que serão usados nas campanhas. Sua parte é cortar, a nossa é lotar a agenda.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Final CTA -->
-    <section class="final-cta-section reveal">
-      <h2>Pronto para destravar o crescimento?</h2>
-      <div class="hero-cta">
-        <a href="#formulario" class="btn-primary btn-gigante btn-verde" onclick="revealForm()">
-          Quero meu diagnóstico
-        </a>
-      </div>
-    </section>
+      <footer>
+        <p>© 2025 Jota Rocha · Tráfego Pago para Barbearias</p>
+      </footer>
+    </div>
   </main>
-
-  <footer>
-    <p>© 2025 Jota Rocha · Tráfego Pago para Barbearias</p>
-  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="script.js?v=3"></script>
