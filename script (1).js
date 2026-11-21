@@ -1,0 +1,602 @@
+// ================================================
+// CONFIGURAÇÕES
+// ================================================
+var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbz76WN5RZBNFdpodFtebyNKf74yi3gRt4GYkpYZafDFu1DEbt253QUNx2JSH-qe5pJO1w/exec';
+
+// ================================================
+// LÓGICA DO FORMULÁRIO MULTI-ETAPAS
+// ================================================
+
+var currentStep = 1;
+
+document.addEventListener('DOMContentLoaded', function () {
+  updateProgressBar();
+  initScrollReveal();
+  initHeroAnimation();
+  initSwiper();
+
+  document.getElementById('lead-form').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && currentStep !== 11) {
+      e.preventDefault();
+    }
+  });
+});
+
+// ================================================
+// SWIPER - CARROSSEL DE DEPOIMENTOS
+// ================================================
+function initSwiper() {
+  if (typeof Swiper !== 'undefined') {
+    new Swiper('.testimonial-swiper', {
+      loop: true,
+      slidesPerView: 'auto',
+      centeredSlides: true,
+      spaceBetween: 5,
+      grabCursor: true,
+      speed: 4000,
+      autoplay: {
+        delay: 0,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+    });
+
+    // Lógica de interação (blur e brilho)
+    var swiperContainer = document.querySelector('.testimonial-swiper');
+    if (swiperContainer) {
+      var slides = swiperContainer.querySelectorAll('.swiper-slide');
+
+      function highlightSlide(slide) {
+        swiperContainer.classList.add('is-interacting');
+        slides.forEach(function(s) { s.classList.remove('is-highlighted'); });
+        slide.classList.add('is-highlighted');
+      }
+
+      function resetHighlight() {
+        swiperContainer.classList.remove('is-interacting');
+        slides.forEach(function(s) { s.classList.remove('is-highlighted'); });
+      }
+
+      slides.forEach(function(slide) {
+        slide.addEventListener('mouseenter', function() { highlightSlide(slide); });
+        slide.addEventListener('mouseleave', resetHighlight);
+        
+        slide.addEventListener('touchstart', function() { highlightSlide(slide); }, { passive: true });
+        slide.addEventListener('touchend', resetHighlight);
+        slide.addEventListener('touchcancel', resetHighlight);
+      });
+    }
+  }
+}
+
+function initHeroAnimation() {
+  const elements = [
+    document.querySelector('.hero .badge'),
+    document.querySelector('.hero h1'),
+    document.querySelector('.hero p'),
+    document.querySelector('.hero-cta-container')
+  ];
+
+  elements.forEach((el, index) => {
+    if (el) {
+      setTimeout(() => {
+        el.classList.add('animate-in');
+      }, index * 100);
+    }
+  });
+}
+
+// ================================================
+// SCROLL REVEAL (ANIMAÇÕES)
+// ================================================
+function initScrollReveal() {
+  const observerOptions = {
+    threshold: 0.2
+  };
+
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Observa elementos simples
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-simulador, .reveal-lento').forEach(el => {
+    revealObserver.observe(el);
+  });
+
+  // Observa grupos com delay (stagger)
+  const staggerGroups = document.querySelectorAll('.stagger-group');
+  staggerGroups.forEach(group => {
+    const items = group.querySelectorAll('.stagger-item');
+    const groupObserver = new IntersectionObserver((entries, grpObserver) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          items.forEach((item, index) => {
+            setTimeout(() => {
+              item.classList.add('in-view');
+            }, index * 120);
+          });
+          grpObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    groupObserver.observe(group);
+  });
+}
+
+function revealForm() {
+  var formSection = document.getElementById('formulario');
+  var ctaContainer = document.getElementById('cta-container');
+  if (formSection) {
+    formSection.classList.add('active');
+    // Força o reflow para aplicar display: block antes da animação de opacidade/transform
+    formSection.offsetHeight;
+    formSection.classList.add('visible');
+  }
+  if (ctaContainer) {
+    ctaContainer.style.display = 'none';
+  }
+}
+
+function updateProgressBar() {
+  var fill = document.getElementById('progress-fill');
+  if (!fill) return;
+
+  var cargoInput = document.getElementById('input-cargo');
+  var trafegoInput = document.getElementById('input-trafego');
+  var cargoVal = cargoInput ? cargoInput.value : '';
+  var trafegoVal = trafegoInput ? trafegoInput.value : '';
+  
+  var totalSteps = 11;
+  if (cargoVal === 'Barbeiro Autônomo') totalSteps -= 2;
+  if (trafegoVal === 'nao') totalSteps--;
+
+  var passoAtual = 1;
+  if (currentStep === 1) passoAtual = 1;
+  else if (currentStep === 2) passoAtual = 2;
+  else if (currentStep === 3) passoAtual = 3;
+  else if (currentStep >= 4) {
+      var deductions = 0;
+      if (cargoVal === 'Barbeiro Autônomo') deductions += 2;
+      if (trafegoVal === 'nao' && currentStep >= 7) deductions++;
+      passoAtual = currentStep - deductions;
+  }
+
+  var percentage = (passoAtual / totalSteps) * 100;
+  fill.style.width = percentage + '%';
+}
+
+function goToStep(stepNumber) {
+  var currentStepEl = document.getElementById('step-' + currentStep);
+  var nextStepEl = document.getElementById('step-' + stepNumber);
+
+  if (!nextStepEl) return;
+  
+  if (stepNumber === 11) {
+    var formEl = document.getElementById('lead-form');
+    if (formEl) {
+      var formData = new FormData(formEl);
+      var payload = {};
+      formData.forEach(function(value, key) { payload[key] = value; });
+
+      var fatStr = (payload.faturamento || '').trim();
+      var invStr = (payload.valor_investido || '').trim();
+      var valPretStr = (payload.valor_pretendido || '').trim();
+      var cargoStr = (payload.cargo || '').trim();
+      var unidadesStr = (payload.unidades || '').trim();
+
+      var condicaoValorBaixo = (fatStr === 'Até R$8.000' && (invStr === 'Até R$500' || valPretStr === 'Até R$500'));
+      var isDisqualified = false;
+
+      if (condicaoValorBaixo) {
+        if (cargoStr === 'Barbeiro Autônomo') {
+          isDisqualified = true;
+        } else if (cargoStr === 'Proprietário de Barbearia' && unidadesStr === '1 unidade') {
+          isDisqualified = true;
+        }
+      }
+
+      var btnSubmit = document.getElementById('btn-submit-lead');
+      if (btnSubmit) {
+        btnSubmit.innerText = isDisqualified ? 'Concluir' : 'Agendar sessão de diagnóstico';
+      }
+    }
+  }
+
+  // Validação de campos obrigatórios ao avançar de passo
+  if (stepNumber > currentStep && currentStepEl) {
+    var inputs = currentStepEl.querySelectorAll('input[required]:not([type="hidden"])');
+    var isValid = true;
+    for (var i = 0; i < inputs.length; i++) {
+      if (inputs[i].value.trim() === '') {
+        inputs[i].value = ''; // Remove apenas espaços vazios para forçar o required
+      }
+      if (!inputs[i].checkValidity()) {
+        inputs[i].reportValidity();
+        isValid = false;
+        break;
+      }
+    }
+    if (!isValid) return; // Interrompe o avanço
+  }
+
+  currentStep = stepNumber;
+  updateProgressBar();
+
+  if (currentStepEl) {
+    currentStepEl.classList.remove('visible');
+    setTimeout(function () {
+      currentStepEl.classList.remove('active');
+
+      if (stepNumber === 5) {
+        var trafegoVal = document.getElementById('input-trafego').value;
+        if (trafegoVal === 'sim') {
+          document.getElementById('step-5-sim').style.display = 'block';
+          document.getElementById('step-5-nao').style.display = 'none';
+        } else {
+          document.getElementById('step-5-sim').style.display = 'none';
+          document.getElementById('step-5-nao').style.display = 'block';
+        }
+      }
+
+      nextStepEl.classList.add('active');
+      nextStepEl.offsetHeight; // Force reflow
+      nextStepEl.classList.add('visible');
+
+
+    }, 250);
+  } else {
+    nextStepEl.classList.add('active');
+    nextStepEl.offsetHeight;
+    nextStepEl.classList.add('visible');
+  }
+}
+
+function prevStep(current) {
+  if (current === 2) {
+    goToStep(1);
+  } else if (current === 3) {
+    goToStep(2);
+  } else if (current === 4) {
+    var cargoVal = document.getElementById('input-cargo').value;
+    if (cargoVal === 'Barbeiro Autônomo') {
+      goToStep(1);
+    } else {
+      goToStep(3);
+    }
+  } else if (current === 5) {
+    goToStep(4);
+  } else if (current === 6) {
+    goToStep(5);
+  } else if (current === 7) {
+    var trafegoVal = document.getElementById('input-trafego').value;
+    if (trafegoVal === 'sim') {
+      goToStep(6);
+    } else {
+      goToStep(5);
+    }
+  } else if (current === 8) {
+    goToStep(7);
+  } else if (current === 9) {
+    goToStep(8);
+  } else if (current === 10) {
+    goToStep(9);
+  } else if (current === 11) {
+    goToStep(10);
+  }
+}
+
+function selectCardOption(fieldName, optionValue, step) {
+  var input = document.getElementById('input-' + fieldName);
+  if (input) {
+    input.value = optionValue;
+  }
+
+  if (fieldName === 'cargo') {
+    if (optionValue === 'Barbeiro Autônomo') {
+      var cadeirasInput = document.getElementById('input-cadeiras');
+      var unidadesInput = document.getElementById('input-unidades');
+      if(cadeirasInput) cadeirasInput.value = '';
+      if(unidadesInput) unidadesInput.value = '';
+    }
+  }
+
+  if (fieldName === 'trafego') {
+    if (optionValue === 'sim') {
+      document.getElementById('input-valor_pretendido').value = '-';
+    } else {
+      document.getElementById('input-valor_investido').value = '-';
+      document.getElementById('input-experiencia').value = '-';
+    }
+  }
+
+  var selector = '.card-option[data-field="' + fieldName + '"]';
+  document.querySelectorAll(selector).forEach(function (card) {
+    if (card.getAttribute('data-value') === optionValue) {
+      card.classList.add('selected');
+    } else {
+      card.classList.remove('selected');
+    }
+  });
+
+  if (step === 1) {
+    setTimeout(function () {
+      var cargoVal = document.getElementById('input-cargo').value;
+      if (cargoVal === 'Barbeiro Autônomo') {
+        goToStep(4);
+      } else {
+        goToStep(2);
+      }
+    }, 250);
+  } else if (step === 2) {
+    setTimeout(function () {
+      goToStep(3);
+    }, 250);
+  } else if (step === 3) {
+    setTimeout(function () {
+      goToStep(4);
+    }, 250);
+  } else if (step === 4) {
+    setTimeout(function () {
+      goToStep(5);
+    }, 250);
+  } else if (step === 5) {
+    setTimeout(function () {
+      var trafegoVal = document.getElementById('input-trafego').value;
+      if (trafegoVal === 'sim') {
+        goToStep(6);
+      } else {
+        goToStep(7);
+      }
+    }, 250);
+  } else if (step === 6) {
+    setTimeout(function () {
+      goToStep(7);
+    }, 250);
+  } else if (step === 7) {
+    setTimeout(function () {
+      goToStep(8);
+    }, 250);
+  }
+}
+
+// ================================================
+// ENVIO E DIRECIONAMENTO
+// ================================================
+
+function enviarForm(e) {
+  e.preventDefault();
+
+  var btn = document.querySelector('.btn-submit');
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+
+  var form = document.getElementById('lead-form');
+  var data = new FormData(form);
+
+  // Gera event_id único para deduplicação browser <-> servidor
+  var eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+
+  var payload = {
+    nome: data.get('nome'),
+    whatsapp: data.get('whatsapp'),
+    email: data.get('email'),
+    instagram: data.get('instagram') || '-',
+    cargo: data.get('cargo'),
+    cadeiras: data.get('cadeiras') || '-',
+    unidades: data.get('unidades') || '-',
+    trafego: data.get('trafego'),
+    experiencia: data.get('experiencia') || '-',
+    valor_investido: data.get('valor_investido') || '-',
+    valor_pretendido: data.get('valor_pretendido') || '-',
+    faturamento: data.get('faturamento'),
+    data: new Date().toLocaleString('pt-BR'),
+    event_id: eventId,
+    event_source_url: window.location.href
+  };
+
+
+
+  // Envia para Google Sheets + CAPI (servidor)
+  // Content-Type text/plain evita preflight CORS e o GAS consegue receber
+  fetch(GOOGLE_SHEET_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  }).catch(function () { });
+
+  // Jota Tracking: Lead no pixel + servidor (mesmo event_id), com telefone e e-mail
+  if (window.jotaTrack) {
+    window.jotaTrack('Lead', { content_name: 'Formulário diagnóstico' }, {
+      telefone: payload.whatsapp,
+      email: payload.email
+    }, eventId);
+  }
+
+  // Envia evento customizado para o dataLayer (Google Tag Manager)
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'lead_gerado',
+    eventId: eventId
+  });
+
+  // Compilação do texto dinâmico para WhatsApp com formatação amigável
+  var mapInvestimento = {
+    'Até R$500': 'Até R$500/mês',
+    'R$500 a R$1.000': 'Entre R$500 e R$1.000/mês',
+    'R$1.000 a R$3.000': 'Entre R$1.000 e R$3.000/mês',
+    'R$3.000 a R$5.000': 'Entre R$3.000 e R$5.000/mês',
+    'Acima de R$5.000': 'Acima de R$5.000/mês'
+  };
+  var mapExperiencia = {
+    'Ótima': 'Ótima — tive bons resultados',
+    'Regular': 'Regular — tive alguns resultados',
+    'Ruim': 'Ruim — não tive retorno',
+    'Péssima': 'Péssima — perdi dinheiro'
+  };
+  var mapFaturamento = {
+    'Até R$8.000': 'Até R$8.000/mês',
+    'R$8.000 a R$15.000': 'Entre R$8.000 e R$15.000/mês',
+    'R$15.000 a R$30.000': 'Entre R$15.000 e R$30.000/mês',
+    'R$30.000 a R$50.000': 'Entre R$30.000 e R$50.000/mês',
+    'Acima de R$50.000': 'Acima de R$50.000/mês'
+  };
+
+  var friendlyInvestimento = mapInvestimento[payload.valor_investido] || payload.valor_investido;
+  var friendlyPretendido = mapInvestimento[payload.valor_pretendido] || payload.valor_pretendido;
+  var friendlyExperiencia = mapExperiencia[payload.experiencia] || payload.experiencia;
+  var friendlyFaturamento = mapFaturamento[payload.faturamento] || payload.faturamento;
+
+  var textoWhats = "Fala, Jota! Acabei de preencher o formulário no site e quero destravar o crescimento da minha barbearia.\n\n" +
+    "*Meus Dados:*\n" +
+    "Nome: " + payload.nome + "\n" +
+    "E-mail: " + payload.email + "\n" +
+    "WhatsApp: " + payload.whatsapp + "\n" +
+    "Instagram: " + (payload.instagram || '-') + "\n\n" +
+    "*Raio-X do Negócio:*\n" +
+    "Cargo: " + (payload.cargo === 'Barbeiro Autônomo' ? 'Barbeiro Autônomo' : 'Proprietário de Barbearia') + "\n";
+    
+  if (payload.cargo === 'Proprietário de Barbearia') {
+      textoWhats += "Tamanho: " + payload.cadeiras + " em " + payload.unidades + "\n";
+  }
+
+  textoWhats += "Já investiu em tráfego?: " + (payload.trafego === 'sim' ? 'Sim' : 'Não') + "\n";
+
+  if (payload.trafego === 'sim') {
+    textoWhats += "Investimento mensal: " + friendlyInvestimento + "\n" +
+                  "Experiência com tráfego: " + friendlyExperiencia + "\n";
+  } else {
+    textoWhats += "Investimento mensal pretendido: " + friendlyPretendido + "\n";
+  }
+
+  textoWhats += "Faturamento mensal: " + friendlyFaturamento + "\n\n" +
+    "Gostaria de marcar a nossa sessão de diagnóstico. Quais são os seus próximos horários disponíveis?";
+
+  var btnFinal = document.getElementById('btn-whatsapp-final');
+  var alternativeMsg = document.getElementById('success-alternative');
+  var successSub = document.querySelector('.success-sub');
+  
+  if (!alternativeMsg) {
+    alternativeMsg = document.createElement('div');
+    alternativeMsg.id = 'success-alternative';
+    alternativeMsg.style.marginTop = '12px';
+    alternativeMsg.classList.add('is-hidden');
+    alternativeMsg.innerHTML = '<p class="success-alt-msg">Um especialista vai analisar os dados e entrará em contato.</p>';
+    var successSection = document.getElementById('success-section');
+    if (successSection) {
+      successSection.appendChild(alternativeMsg);
+    }
+  }
+
+  // Lógica de qualificação (ICP)
+  var fatStr = (payload.faturamento || '').trim();
+  var invStr = (payload.valor_investido || '').trim();
+  var valPretStr = (payload.valor_pretendido || '').trim();
+  var cargoStr = (payload.cargo || '').trim();
+  var unidadesStr = (payload.unidades || '').trim();
+
+  var condicaoValorBaixo = (fatStr === 'Até R$8.000' && (invStr === 'Até R$500' || valPretStr === 'Até R$500'));
+  var isDisqualified = false;
+
+  if (condicaoValorBaixo) {
+    if (cargoStr === 'Barbeiro Autônomo') {
+      isDisqualified = true;
+    } else if (cargoStr === 'Proprietário de Barbearia' && unidadesStr === '1 unidade') {
+      isDisqualified = true;
+    }
+  }
+
+  if (isDisqualified) {
+    if (btnFinal) {
+      btnFinal.classList.add('is-hidden');
+      btnFinal.style.display = 'none';
+    }
+    if (successSub) {
+      successSub.classList.add('is-hidden');
+      successSub.style.display = 'none';
+    }
+    if (alternativeMsg) {
+      alternativeMsg.classList.remove('is-hidden');
+      alternativeMsg.style.display = 'block';
+      alternativeMsg.innerHTML = '<p class="success-alt-msg" style="color: #ffffff; font-size: 16px; margin: 0; text-align: center;">Um especialista vai analisar os dados e entrará em contato.</p>';
+    }
+  } else {
+    var linkWhats = "https://wa.me/5521969584264?text=" + encodeURIComponent(textoWhats);
+    if (btnFinal) {
+      btnFinal.classList.remove('is-hidden');
+      btnFinal.style.display = 'inline-flex';
+      btnFinal.href = linkWhats;
+    }
+    if (successSub) {
+      successSub.classList.remove('is-hidden');
+      successSub.style.display = 'block';
+    }
+    if (alternativeMsg) {
+      alternativeMsg.classList.add('is-hidden');
+      alternativeMsg.style.display = 'none';
+    }
+  }
+
+  // Mostra a tela de agradecimento após um pequeno delay para garantir o disparo
+  setTimeout(function () {
+    mostrarObrigado();
+  }, 100);
+}
+
+function mostrarObrigado() {
+  document.getElementById('form-container').style.display = 'none';
+  
+  var successSection = document.getElementById('success-section');
+  if (successSection) {
+    successSection.style.display = 'block';
+  }
+  
+  setTimeout(function () {
+    if (successSection) {
+      successSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 150);
+}
+
+// ================================================
+// SIMULADOR DE FATURAMENTO
+// ================================================
+
+function calcularPotencial() {
+  var cadeiras = parseInt(document.getElementById('sim-cadeiras').value) || 0;
+  var ticket   = parseFloat(document.getElementById('sim-ticket').value) || 0;
+  var cortes   = parseInt(document.getElementById('sim-cortes').value) || 0;
+  var resultado = cadeiras * ticket * cortes * 26;
+
+  var resultadoEl = document.getElementById('sim-resultado');
+  var valorEl = document.getElementById('sim-valor');
+
+  valorEl.textContent = resultado.toLocaleString('pt-BR', {
+    style: 'currency', currency: 'BRL'
+  });
+  resultadoEl.style.display = 'block';
+  resultadoEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ================================================
+// FAQ ACCORDION
+// ================================================
+
+function toggleAccordion(header) {
+  var item = header.parentElement;
+  var isOpen = item.classList.contains('open');
+
+  // Fecha todos os itens
+  document.querySelectorAll('.accordion-item').forEach(function(el) {
+    el.classList.remove('open');
+  });
+
+  // Abre o clicado (se não estava aberto)
+  if (!isOpen) {
+    item.classList.add('open');
+  }
+}
