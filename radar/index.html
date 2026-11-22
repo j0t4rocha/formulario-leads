@@ -557,7 +557,7 @@ async function telaLinks() {
       <p style="margin:0; color:var(--tx2)">Um link pra cada lugar: bio do Instagram, story, anúncio, Google, cartão. Quem clicar cai no WhatsApp com a mensagem pronta, e o Radar sabe de onde veio.</p>
       <div class="linha">
         <div style="flex:1 1 200px"><label for="lk-nome">Nome do link</label><input id="lk-nome" type="text" placeholder="Ex.: Bio do Instagram"></div>
-        <div style="flex:1 1 200px"><label for="lk-num">WhatsApp do cliente (DDD + número)</label><input id="lk-num" type="text" inputmode="numeric" placeholder="21 99999-9999" value="${esc(telaLinks._ultimoNumero || '')}"></div>
+        <div style="flex:1 1 200px"><label for="lk-num">WhatsApp do cliente (DDD + número; outro país: comece com +)</label><input id="lk-num" type="text" inputmode="numeric" placeholder="21 99999-9999" value="${esc(telaLinks._ultimoNumero || '')}"></div>
       </div>
       <div><label for="lk-msg">Mensagem que já vem escrita</label><input id="lk-msg" type="text" value="Olá! Quero agendar um horário"></div>
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn" id="lk-criar">Criar link</button><span id="lk-status" style="font-size:13px; color:var(--tx2)"></span></div>
