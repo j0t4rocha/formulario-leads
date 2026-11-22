@@ -139,6 +139,7 @@
       <button data-tela="dashboard" class="ativo">Dashboard</button>
       <button data-tela="conversas">Conversas</button>
       <button data-tela="crm">CRM / Funil</button>
+      <button data-tela="links">Links rastreáveis</button>
       <button data-tela="config" id="menu-config" class="oculto">Configurações</button>
     </div>
     <div class="rodape">
@@ -163,6 +164,7 @@
     <section id="tela-dashboard"></section>
     <section id="tela-conversas" class="oculto"></section>
     <section id="tela-crm" class="oculto"></section>
+    <section id="tela-links" class="oculto"></section>
     <section id="tela-config" class="oculto"></section>
   </main>
 </div>
@@ -263,6 +265,8 @@ async function carregar() {
   ]);
   estado.etapas = etapas || [];
   estado.contatos = contatos || [];
+  const { data: links } = await sb.from('links').select('*').eq('site_id', estado.site).order('criado_em', { ascending: false });
+  estado.links = links || [];
   desenhar();
 }
 
@@ -274,11 +278,12 @@ function noPeriodo(lista) {
 }
 
 function desenhar() {
-  ['dashboard', 'conversas', 'crm', 'config'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
-  $('titulo').textContent = { dashboard: 'Dashboard', conversas: 'Conversas', crm: 'CRM / Funil', config: 'Configurações' }[estado.tela];
+  ['dashboard', 'conversas', 'crm', 'links', 'config'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
+  $('titulo').textContent = { dashboard: 'Dashboard', conversas: 'Conversas', crm: 'CRM / Funil', links: 'Links rastreáveis', config: 'Configurações' }[estado.tela];
   if (estado.tela === 'dashboard') telaDashboard();
   if (estado.tela === 'conversas') telaConversas();
   if (estado.tela === 'crm') telaCRM();
+  if (estado.tela === 'links') telaLinks();
   if (estado.tela === 'config') telaConfig();
 }
 
@@ -399,6 +404,7 @@ async function abrirConversa(id, semMarcar) {
       ${c.anuncio_titulo ? `<div class="dl"><span>Anúncio</span><span>${esc(c.anuncio_titulo)}</span></div>` : ''}
       ${c.anuncio_id ? `<div class="dl"><span>ID do anúncio</span><span>${esc(c.anuncio_id)}</span></div>` : ''}
       ${c.anuncio_url ? `<div class="dl"><span>Link</span><span><a href="${esc(c.anuncio_url)}" target="_blank" rel="noopener">abrir</a></span></div>` : ''}
+      ${c.link_id ? `<div class="dl"><span>Link</span><span>${esc((estado.links || []).find((l) => l.id === c.link_id)?.nome ?? 'Link rastreável')}</span></div>` : ''}
       ${c.ref_code ? `<div class="dl"><span>Código</span><span>${esc(c.ref_code)}</span></div>` : ''}
       <div class="dl"><span>Primeiro contato</span><span>${new Date(c.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</span></div>
     </div>
@@ -430,7 +436,7 @@ function telaCRM() {
         const o = ORIGEM[c.origem] || ORIGEM.organico;
         return `<article class="ccard">
           <div class="n">${esc(c.nome || telefoneBonito(c.telefone))}<small>${quando(c.atualizado_em)}</small></div>
-          <div class="o">${o.nome}${c.anuncio_titulo ? ' · ' + esc(c.anuncio_titulo) : ''}</div>
+          <div class="o">${o.nome}${c.anuncio_titulo ? ' · ' + esc(c.anuncio_titulo) : ''}${c.link_id ? ' · ' + esc((estado.links || []).find((l) => l.id === c.link_id)?.nome ?? '') : ''}</div>
           <label class="oculto" for="mv-${c.id}">Mover para</label>
           <select id="mv-${c.id}" data-mover-sel="${c.id}">
             <option value="">Mover para…</option>
@@ -463,6 +469,65 @@ async function moverEtapa(contatoId, etapaId) {
     toast(j.enviado_meta ? 'Etapa atualizada e evento enviado à Meta.' : 'Etapa atualizada.');
     await carregar();
   } catch (_) { toast('Sem conexão. Tente de novo.'); }
+}
+
+// ================= LINKS RASTREÁVEIS =================
+function urlDoLink(l) { return `${SUPABASE_URL}/functions/v1/link?c=${l.codigo}`; }
+
+function telaLinks() {
+  const admin = estado.perfil?.papel === 'admin';
+  const linhas = (estado.links || []).map((l) => {
+    const daqui = estado.contatos.filter((c) => c.link_id === l.id);
+    const avancou = daqui.filter((c) => (etapaDe(c)?.ordem ?? 0) >= 2).length;
+    return `<tr style="border-top:1px solid var(--line2); ${l.ativo ? '' : 'opacity:.55'}">
+      <td style="padding:12px 6px"><b>${esc(l.nome)}</b><div style="font-size:12px; color:var(--tx3); word-break:break-all">${esc(urlDoLink(l))}</div></td>
+      <td style="padding:12px 6px">${l.cliques}</td>
+      <td style="padding:12px 6px">${daqui.length}</td>
+      <td style="padding:12px 6px">${avancou}</td>
+      <td style="padding:12px 6px; white-space:nowrap">
+        <button class="btn-sec" data-copiar="${l.id}">Copiar</button>
+        ${admin ? `<button class="btn-sec" data-ativar="${l.id}" data-estado="${l.ativo ? '0' : '1'}">${l.ativo ? 'Desativar' : 'Ativar'}</button>` : ''}
+      </td></tr>`;
+  }).join('');
+
+  $('tela-links').innerHTML = `<div style="display:flex; flex-direction:column; gap:18px">
+    ${admin ? `<section class="card" style="display:flex; flex-direction:column; gap:12px">
+      <h2 style="margin:0">Criar link</h2>
+      <p style="margin:0; color:var(--tx2)">Um link pra cada lugar: bio do Instagram, story, anúncio, Google, cartão. Quem clicar cai no WhatsApp com a mensagem pronta, e o Radar sabe de onde veio.</p>
+      <div class="linha">
+        <div style="flex:1 1 200px"><label for="lk-nome">Nome do link</label><input id="lk-nome" type="text" placeholder="Ex.: Bio do Instagram"></div>
+        <div style="flex:1 1 200px"><label for="lk-num">WhatsApp do cliente (DDD + número)</label><input id="lk-num" type="text" inputmode="numeric" placeholder="21 99999-9999" value="${esc(telaLinks._ultimoNumero || '')}"></div>
+      </div>
+      <div><label for="lk-msg">Mensagem que já vem escrita</label><input id="lk-msg" type="text" placeholder="Olá! Quero agendar um horário" value="Olá! Quero agendar um horário"></div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn" id="lk-criar">Criar link</button><span id="lk-status" style="font-size:13px; color:var(--tx2)"></span></div>
+    </section>` : ''}
+    <section class="card">
+      <h2>Links do cliente</h2>
+      ${linhas ? `<div style="overflow-x:auto"><table style="width:100%; border-collapse:collapse; min-width:620px">
+        <thead><tr style="color:var(--tx3); text-align:left"><th style="padding:8px 6px; font-weight:500">Link</th><th style="padding:8px 6px; font-weight:500">Cliques</th><th style="padding:8px 6px; font-weight:500">Conversas</th><th style="padding:8px 6px; font-weight:500">Avançaram</th><th></th></tr></thead>
+        <tbody>${linhas}</tbody></table></div>
+        <p style="margin:10px 0 0; font-size:12px; color:var(--tx3)">Cliques = quantas vezes abriram o link. Conversas = quantas pessoas mandaram a mensagem. Avançaram = chegaram na 2ª etapa do funil ou depois.</p>`
+      : '<div class="vazio">Nenhum link criado ainda.</div>'}
+    </section></div>`;
+
+  document.querySelectorAll('[data-copiar]').forEach((b) => b.addEventListener('click', async () => {
+    const l = estado.links.find((x) => x.id === Number(b.dataset.copiar));
+    try { await navigator.clipboard.writeText(urlDoLink(l)); b.textContent = 'Copiado ✓'; }
+    catch (_) { toast('Selecione o endereço e copie com Ctrl + C.'); }
+  }));
+  document.querySelectorAll('[data-ativar]').forEach((b) => b.addEventListener('click', async () => {
+    const r = await chamarAdmin({ acao: 'ativar_link', id: Number(b.dataset.ativar), ativo: b.dataset.estado === '1' });
+    if (!r.ok) { toast(r.erro || 'Erro.'); return; }
+    await carregar();
+  }));
+  if (admin) $('lk-criar').addEventListener('click', async () => {
+    $('lk-status').textContent = 'Criando…'; $('lk-status').style.color = 'var(--tx2)';
+    telaLinks._ultimoNumero = $('lk-num').value;
+    const r = await chamarAdmin({ acao: 'criar_link', site_id: estado.site, nome: $('lk-nome').value, numero: $('lk-num').value, mensagem: $('lk-msg').value });
+    if (!r.ok) { $('lk-status').textContent = r.erro || 'Erro.'; $('lk-status').style.color = 'var(--quente)'; return; }
+    toast('Link criado. Clique em Copiar pra usar.');
+    await carregar();
+  });
 }
 
 // ================= CONFIGURAÇÕES (só admin) =================
@@ -709,7 +774,7 @@ document.querySelectorAll('[data-tela]').forEach((b) => b.addEventListener('clic
 $('sel-site').addEventListener('change', (e) => { estado.site = e.target.value; estado.aberto = null; estado.novoCliente = false; carregar(); });
 $('sel-periodo').addEventListener('change', desenhar);
 $('bt-atualizar').addEventListener('click', carregar);
-setInterval(() => { if (!document.hidden && estado.perfil && estado.tela !== 'config') carregar(); }, 30000);
+setInterval(() => { if (!document.hidden && estado.perfil && estado.tela !== 'config' && estado.tela !== 'links') carregar(); }, 30000);
 
 iniciar();
 </script>
