@@ -133,11 +133,13 @@
     <div id="bloco-cliente">
       <label for="sel-site">Cliente</label>
       <select id="sel-site"></select>
+      <button class="btn-sec" id="bt-novo-cliente" style="width:100%; margin-top:8px">+ Novo cliente</button>
     </div>
     <div class="menu">
       <button data-tela="dashboard" class="ativo">Dashboard</button>
       <button data-tela="conversas">Conversas</button>
       <button data-tela="crm">CRM / Funil</button>
+      <button data-tela="config" id="menu-config" class="oculto">Configurações</button>
     </div>
     <div class="rodape">
       <span id="quem"></span>
@@ -161,17 +163,21 @@
     <section id="tela-dashboard"></section>
     <section id="tela-conversas" class="oculto"></section>
     <section id="tela-crm" class="oculto"></section>
+    <section id="tela-config" class="oculto"></section>
   </main>
 </div>
 <div id="toast" class="oculto" role="status"></div>
 
+<script src="config.js?v=1"></script>
 <script>
-// ================= CONFIGURAÇÃO =================
-// Cole aqui a chave pública do Supabase (Settings > API Keys > "anon public" ou "publishable").
-// Essa chave PODE ficar no site: sem login ela não acessa nada.
-const SUPABASE_URL = 'https://dwjozttehrdkhbjzkkia.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_PcFcJn4xcDfvAFbq2GloBA_o9gc5ukc';
-// =================================================
+// A chave fica no arquivo config.js (assim este arquivo pode ser atualizado sem colar a chave de novo)
+const SUPABASE_URL = (window.RADAR && window.RADAR.SUPABASE_URL) || 'https://dwjozttehrdkhbjzkkia.supabase.co';
+const SUPABASE_KEY = (window.RADAR && window.RADAR.SUPABASE_KEY) || '';
+const FN_MOVER = (window.RADAR && window.RADAR.FN_MOVER) || 'mover-etapa';
+const FN_ADMIN = (window.RADAR && window.RADAR.FN_ADMIN) || 'radar-admin';
+const TRACKER_URL = 'https://barbeariaquelucra.com/jota-tracker.js?v=1';
+const ENDPOINT_TRACK = SUPABASE_URL + '/functions/v1/meta-capi/track';
+if (!SUPABASE_KEY) alert('Falta o arquivo radar/config.js com a chave pública do Supabase.');
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = (id) => document.getElementById(id);
@@ -231,10 +237,12 @@ async function iniciar() {
   estado.perfil = perfil;
   $('quem').textContent = `${perfil.nome} · ${perfil.papel === 'admin' ? 'Administrador' : 'Cliente'}`;
 
-  const { data: sites } = await sb.from('sites').select('id, nome').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id').eq('ativo', true).order('nome');
+  estado.sites = sites || [];
   const sel = $('sel-site');
   sel.innerHTML = (sites || []).map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
   if (perfil.papel !== 'admin') $('bloco-cliente').classList.add('oculto');
+  else $('menu-config').classList.remove('oculto');
   estado.site = perfil.papel === 'admin' ? (sites?.[0]?.id ?? null) : perfil.site_id;
   sel.value = estado.site || '';
 
@@ -244,6 +252,7 @@ async function iniciar() {
 
 // ================= DADOS =================
 async function carregar() {
+  if (estado.novoCliente) { desenhar(); return; }
   if (!estado.site) { $('tela-dashboard').innerHTML = '<div class="card vazio">Nenhum cliente cadastrado ainda.</div>'; return; }
   const nomeSite = $('sel-site').selectedOptions[0]?.textContent ?? '';
   $('subtitulo').textContent = nomeSite;
@@ -265,11 +274,12 @@ function noPeriodo(lista) {
 }
 
 function desenhar() {
-  ['dashboard', 'conversas', 'crm'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
-  $('titulo').textContent = { dashboard: 'Dashboard', conversas: 'Conversas', crm: 'CRM / Funil' }[estado.tela];
+  ['dashboard', 'conversas', 'crm', 'config'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
+  $('titulo').textContent = { dashboard: 'Dashboard', conversas: 'Conversas', crm: 'CRM / Funil', config: 'Configurações' }[estado.tela];
   if (estado.tela === 'dashboard') telaDashboard();
   if (estado.tela === 'conversas') telaConversas();
   if (estado.tela === 'crm') telaCRM();
+  if (estado.tela === 'config') telaConfig();
 }
 
 // ================= DASHBOARD =================
@@ -300,7 +310,7 @@ function telaDashboard() {
   const porOrigem = Object.keys(ORIGEM).map((k) => ({ k, n: lista.filter((c) => c.origem === k).length }))
     .sort((a, b) => b.n - a.n);
   const origens = porOrigem.map(({ k, n }) => `<div class="barra-origem">
-      <div class="t"><span>${ORIGEM[k].nome}</span><span style="color:var(--tx2)">${n} leads · ${pct(n, total)}%</span></div>
+      <div class="t"><span>${ORIGEM[k].nome}</span><span style="color:var(--tx2)">${n} ${n === 1 ? 'lead' : 'leads'} · ${pct(n, total)}%</span></div>
       <div class="tr"><div class="f" style="width:${pct(n, total)}%; background:${ORIGEM[k].cor}"></div></div></div>`).join('');
 
   const porAnuncio = {};
@@ -320,7 +330,7 @@ function telaDashboard() {
     </div>
     <div class="linha">
       <div class="card" style="flex:3 1 460px"><h2>Funil de aquisição</h2>${etapas.length ? funil : '<div class="vazio">Nenhuma etapa configurada.</div>'}</div>
-      <div class="card" style="flex:2 1 300px"><h2>De onde vieram os leads</h2>${origens}<span style="font-size:12px; color:var(--tx3)">Total: ${total} leads</span></div>
+      <div class="card" style="flex:2 1 300px"><h2>De onde vieram os leads</h2>${origens}<span style="font-size:12px; color:var(--tx3)">Total: ${total} ${total === 1 ? 'lead' : 'leads'}</span></div>
     </div>
     <div class="card"><h2>Anúncios da Meta que mais avançaram no funil</h2>
       ${linhasAnuncio ? `<div style="overflow-x:auto"><table style="width:100%; border-collapse:collapse; min-width:420px">
@@ -443,7 +453,7 @@ async function moverEtapa(contatoId, etapaId) {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { location.reload(); return; }
   try {
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/funcao-mover-etapa-ts`, {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/${FN_MOVER}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_KEY },
       body: JSON.stringify({ contato_id: contatoId, etapa_id: etapaId }),
@@ -455,16 +465,251 @@ async function moverEtapa(contatoId, etapaId) {
   } catch (_) { toast('Sem conexão. Tente de novo.'); }
 }
 
+// ================= CONFIGURAÇÕES (só admin) =================
+async function chamarAdmin(corpo) {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { location.reload(); return { erro: 'Faça login de novo.' }; }
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/${FN_ADMIN}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_KEY },
+      body: JSON.stringify(corpo),
+    });
+    return await res.json().catch(() => ({ erro: 'Resposta inválida do servidor.' }));
+  } catch (_) { return { erro: 'Sem conexão com a função de configurações.' }; }
+}
+
+function slug(t) {
+  return String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
+}
+
+async function telaConfig() {
+  const novo = !!estado.novoCliente;
+  const site = novo ? { id: '', nome: '', pixel_id: '', allowed_origins: [], whatsapp_phone_number_id: '' }
+                    : (estado.sites.find((x) => x.id === estado.site) || {});
+  if (!estado.eventos) {
+    const { data } = await sb.from('eventos_meta').select('*').order('ordem');
+    estado.eventos = data || [];
+  }
+  if (!novo) {
+    estado.funilEdit = estado.etapas.map((e) => ({ ...e, palavras_txt: (e.palavras_chave || []).join(', ') }));
+  }
+  const dominios = [...new Set((site.allowed_origins || []).map((o) => o.replace(/^https?:\/\/(www\.)?/, '')))].join('\n');
+
+  $('subtitulo').textContent = novo ? 'Cadastrando um cliente novo' : (site.nome || '');
+  $('tela-config').innerHTML = `
+  <div style="display:flex; flex-direction:column; gap:18px">
+    <section class="card" style="display:flex; flex-direction:column; gap:14px">
+      <h2 style="margin:0">${novo ? 'Novo cliente' : 'Dados do cliente'}</h2>
+      <div class="linha">
+        <div style="flex:1 1 260px"><label for="cf-nome">Nome do cliente</label><input id="cf-nome" type="text" value="${esc(site.nome)}" placeholder="Ex.: Barbearia Avante"></div>
+        <div style="flex:1 1 220px"><label for="cf-id">ID (aparece no código do site)</label><input id="cf-id" type="text" value="${esc(site.id)}" ${novo ? '' : 'disabled'} placeholder="barbearia-avante"></div>
+      </div>
+      <div class="linha">
+        <div style="flex:1 1 260px"><label for="cf-pixel">ID do pixel</label><input id="cf-pixel" type="text" inputmode="numeric" value="${esc(site.pixel_id)}" placeholder="Gerenciador de Eventos › pixel › Configurações"></div>
+        <div style="flex:1 1 260px"><label for="cf-token">Token da API de Conversões</label><input id="cf-token" type="password" autocomplete="off" placeholder="${novo ? 'Cole o token aqui' : 'Deixe vazio pra manter o atual'}"></div>
+      </div>
+      <div class="linha">
+        <div style="flex:1 1 260px"><label for="cf-dom">Site(s) do cliente, um por linha</label><textarea id="cf-dom" rows="2" style="width:100%; background:#F6FAF7; border:1px solid #CFDCD3; border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="barbeariaavante.com.br">${esc(dominios)}</textarea></div>
+        <div style="flex:1 1 260px"><label for="cf-wpp">ID do número do WhatsApp (phone_number_id)</label><input id="cf-wpp" type="text" inputmode="numeric" value="${esc(site.whatsapp_phone_number_id || '')}" placeholder="App na Meta › WhatsApp › Configuração da API"></div>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center">
+        <button class="btn" id="cf-salvar">${novo ? 'Cadastrar cliente' : 'Salvar dados'}</button>
+        ${novo ? '<button class="btn-sec" id="cf-cancelar">Cancelar</button>' : '<button class="btn-sec" id="cf-testar">Testar conexão com a Meta</button>'}
+        <span id="cf-status" style="font-size:13px; color:var(--tx2)"></span>
+      </div>
+    </section>
+
+    ${novo ? '' : `
+    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+      <h2 style="margin:0">Código do site</h2>
+      <p style="margin:0; color:var(--tx2)">Cole uma vez no &lt;head&gt; do site do cliente (ou numa tag HTML personalizada do GTM). Ele cuida do pixel e do envio pelo servidor.</p>
+      <pre id="cf-codigo" style="margin:0; overflow-x:auto; background:#F6FAF7; border:1px solid #CFDCD3; border-radius:10px; padding:14px; font-size:12px; line-height:1.6; white-space:pre">${esc(`<script src="${TRACKER_URL}"\n  data-site="${site.id}"\n  data-endpoint="${ENDPOINT_TRACK}"\n  data-pixel="${site.pixel_id}"\n  defer><\/script>`)}</pre>
+      <div><button class="btn-sec" id="cf-copiar">Copiar código</button></div>
+    </section>
+
+    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+      <h2 style="margin:0">Funil do cliente</h2>
+      <p style="margin:0; color:var(--tx2)">Cada etapa pode mandar um evento pra Meta quando o contato chega nela. Palavras-chave separadas por vírgula fazem o contato avançar sozinho.</p>
+      <div id="cf-funil" style="display:flex; flex-direction:column; gap:10px"></div>
+      <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center">
+        <button class="btn-sec" id="cf-add-etapa">+ Adicionar etapa</button>
+        <button class="btn" id="cf-salvar-funil">Salvar funil</button>
+        <span id="cf-funil-status" style="font-size:13px; color:var(--tx2)"></span>
+      </div>
+    </section>
+
+    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+      <h2 style="margin:0">Acesso do cliente ao painel</h2>
+      <div id="cf-usuarios" style="font-size:13px; color:var(--tx2)">Carregando…</div>
+      <div class="linha">
+        <div style="flex:1 1 200px"><label for="us-nome">Nome</label><input id="us-nome" type="text" placeholder="Ex.: Victor"></div>
+        <div style="flex:1 1 220px"><label for="us-email">E-mail</label><input id="us-email" type="email" autocomplete="off"></div>
+        <div style="flex:1 1 180px"><label for="us-senha">Senha (mín. 8)</label><input id="us-senha" type="text" autocomplete="off"></div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn-sec" id="us-criar">Criar acesso</button><span id="us-status" style="font-size:13px; color:var(--tx2)"></span></div>
+    </section>`}
+  </div>`;
+
+  if (novo) $('cf-nome').addEventListener('input', () => { $('cf-id').value = slug($('cf-nome').value); });
+  $('cf-salvar').addEventListener('click', salvarCliente);
+  if (novo) { $('cf-cancelar').addEventListener('click', () => { estado.novoCliente = false; estado.tela = 'dashboard'; marcarMenu(); carregar(); }); return; }
+
+  $('cf-testar').addEventListener('click', async () => {
+    $('cf-status').textContent = 'Testando…';
+    const r = await chamarAdmin({ acao: 'testar_meta', site_id: site.id });
+    $('cf-status').textContent = r.mensagem || r.erro || '';
+    $('cf-status').style.color = r.ok ? 'var(--verde)' : 'var(--quente)';
+  });
+  $('cf-copiar').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText($('cf-codigo').textContent); $('cf-copiar').textContent = 'Copiado ✓'; }
+    catch (_) { toast('Selecione o código e copie com Ctrl + C.'); }
+  });
+  desenharFunil();
+  $('cf-add-etapa').addEventListener('click', () => {
+    estado.funilEdit.push({ id: null, nome: '', temperatura: 'morno', evento_meta: null, valor_padrao: null, palavras_txt: '' });
+    desenharFunil();
+  });
+  $('cf-salvar-funil').addEventListener('click', salvarFunil);
+  $('us-criar').addEventListener('click', criarUsuario);
+  listarUsuarios(site.id);
+}
+
+function desenharFunil() {
+  const codigos = new Set(estado.eventos.map((e) => e.codigo));
+  const opcoesEvento = (atual) => {
+    const personalizado = atual && !codigos.has(atual);
+    return `<option value="" ${!atual ? 'selected' : ''}>Nenhum (não envia)</option>` +
+      estado.eventos.map((e) => `<option value="${esc(e.codigo)}" ${atual === e.codigo ? 'selected' : ''}>${esc(e.nome_pt)} (${esc(e.codigo)})</option>`).join('') +
+      `<option value="__personalizado" ${personalizado ? 'selected' : ''}>Evento personalizado…</option>`;
+  };
+  $('cf-funil').innerHTML = estado.funilEdit.map((e, i) => {
+    const cor = COR[e.temperatura] || COR.frio;
+    const personalizado = e.evento_meta && !codigos.has(e.evento_meta);
+    return `<div style="border:1px solid ${cor.bd}; background:${cor.bg}; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:10px">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">
+        <b style="color:${cor.c}">Etapa ${i + 1}</b>
+        <div style="display:flex; gap:6px">
+          <button class="btn-sec" data-acao="subir" data-i="${i}" ${i === 0 ? 'disabled' : ''} aria-label="Subir etapa ${i + 1}">↑</button>
+          <button class="btn-sec" data-acao="descer" data-i="${i}" ${i === estado.funilEdit.length - 1 ? 'disabled' : ''} aria-label="Descer etapa ${i + 1}">↓</button>
+          <button class="btn-sec" data-acao="remover" data-i="${i}" aria-label="Remover etapa ${i + 1}">Remover</button>
+        </div>
+      </div>
+      <div class="linha" style="gap:10px">
+        <div style="flex:2 1 180px"><label for="et-nome-${i}">Nome</label><input id="et-nome-${i}" type="text" data-campo="nome" data-i="${i}" value="${esc(e.nome)}" placeholder="Ex.: Agendou"></div>
+        <div style="flex:1 1 120px"><label for="et-temp-${i}">Temperatura</label><select id="et-temp-${i}" data-campo="temperatura" data-i="${i}">
+          ${['frio', 'morno', 'quente'].map((t) => `<option value="${t}" ${e.temperatura === t ? 'selected' : ''}>${t[0].toUpperCase() + t.slice(1)}</option>`).join('')}
+        </select></div>
+        <div style="flex:2 1 220px"><label for="et-ev-${i}">Evento enviado à Meta</label><select id="et-ev-${i}" data-campo="evento_sel" data-i="${i}">${opcoesEvento(e.evento_meta)}</select></div>
+        <div style="flex:1 1 110px"><label for="et-valor-${i}">Valor (R$)</label><input id="et-valor-${i}" type="text" inputmode="decimal" data-campo="valor_padrao" data-i="${i}" value="${e.valor_padrao ?? ''}" placeholder="opcional"></div>
+      </div>
+      ${personalizado || e._personalizado ? `<div><label for="et-evp-${i}">Nome do evento personalizado (sem espaço)</label><input id="et-evp-${i}" type="text" data-campo="evento_meta" data-i="${i}" value="${esc(e.evento_meta || '')}" placeholder="Ex.: AgendouCorte"></div>` : ''}
+      <div><label for="et-pal-${i}">Palavras-chave (separadas por vírgula)</label><input id="et-pal-${i}" type="text" data-campo="palavras_txt" data-i="${i}" value="${esc(e.palavras_txt || '')}" placeholder="agendado, confirmado, marcado"></div>
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('#cf-funil [data-campo]').forEach((el) => {
+    const ev = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(ev, () => {
+      const e = estado.funilEdit[Number(el.dataset.i)];
+      const campo = el.dataset.campo;
+      if (campo === 'evento_sel') {
+        if (el.value === '__personalizado') { e._personalizado = true; e.evento_meta = ''; }
+        else { e._personalizado = false; e.evento_meta = el.value || null; }
+        desenharFunil(); return;
+      }
+      e[campo] = el.value;
+      if (campo === 'temperatura') desenharFunil();
+    });
+  });
+  document.querySelectorAll('#cf-funil [data-acao]').forEach((b) => b.addEventListener('click', () => {
+    const i = Number(b.dataset.i); const l = estado.funilEdit;
+    if (b.dataset.acao === 'subir' && i > 0) [l[i - 1], l[i]] = [l[i], l[i - 1]];
+    if (b.dataset.acao === 'descer' && i < l.length - 1) [l[i + 1], l[i]] = [l[i], l[i + 1]];
+    if (b.dataset.acao === 'remover') {
+      if (l.length === 1) { toast('O funil precisa de pelo menos 1 etapa.'); return; }
+      if (!confirmarRemocao(l[i])) return;
+      l.splice(i, 1);
+    }
+    desenharFunil();
+  }));
+}
+
+function confirmarRemocao(etapa) {
+  const qtd = estado.contatos.filter((c) => c.etapa_id === etapa.id).length;
+  if (!qtd) return true;
+  return window.confirm(`${qtd} ${qtd === 1 ? 'contato está' : 'contatos estão'} em "${etapa.nome}". Ao salvar, ${qtd === 1 ? 'ele volta' : 'eles voltam'} pra primeira etapa. Remover mesmo assim?`);
+}
+
+async function salvarFunil() {
+  $('cf-funil-status').textContent = 'Salvando…'; $('cf-funil-status').style.color = 'var(--tx2)';
+  const etapas = estado.funilEdit.map((e) => ({
+    id: e.id, nome: e.nome, temperatura: e.temperatura, evento_meta: e.evento_meta || null,
+    valor_padrao: e.valor_padrao, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
+  }));
+  const r = await chamarAdmin({ acao: 'salvar_funil', site_id: estado.site, etapas });
+  if (!r.ok) { $('cf-funil-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-funil-status').style.color = 'var(--quente)'; return; }
+  const { data } = await sb.from('etapas').select('*').eq('site_id', estado.site).order('ordem');
+  estado.etapas = data || [];
+  const { data: cts } = await sb.from('contatos').select('*').eq('site_id', estado.site).order('atualizado_em', { ascending: false }).limit(1000);
+  estado.contatos = cts || [];
+  telaConfig();
+  toast('Funil salvo.');
+}
+
+async function salvarCliente() {
+  const novo = !!estado.novoCliente;
+  $('cf-status').textContent = 'Salvando…'; $('cf-status').style.color = 'var(--tx2)';
+  const r = await chamarAdmin({
+    acao: 'salvar_cliente', novo,
+    id: $('cf-id').value.trim(), nome: $('cf-nome').value.trim(),
+    pixel_id: $('cf-pixel').value.trim(), token: $('cf-token').value.trim(),
+    origens: $('cf-dom').value.split('\n'), whatsapp_phone_number_id: $('cf-wpp').value.trim(),
+  });
+  if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--quente)'; return; }
+  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id').eq('ativo', true).order('nome');
+  estado.sites = sites || [];
+  $('sel-site').innerHTML = estado.sites.map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
+  estado.site = r.id; $('sel-site').value = r.id; estado.novoCliente = false;
+  toast(novo ? 'Cliente cadastrado. Agora teste a conexão e copie o código do site.' : 'Dados salvos.');
+  await carregar();
+}
+
+async function listarUsuarios(siteId) {
+  const { data } = await sb.from('perfis').select('nome, papel').eq('site_id', siteId);
+  $('cf-usuarios').innerHTML = data && data.length
+    ? 'Já têm acesso: ' + data.map((p) => `<b style="color:var(--tx)">${esc(p.nome)}</b>`).join(', ')
+    : 'Nenhum acesso criado pra este cliente ainda.';
+}
+
+async function criarUsuario() {
+  $('us-status').textContent = 'Criando…'; $('us-status').style.color = 'var(--tx2)';
+  const r = await chamarAdmin({ acao: 'criar_usuario', site_id: estado.site, nome: $('us-nome').value, email: $('us-email').value, senha: $('us-senha').value });
+  if (!r.ok) { $('us-status').textContent = r.erro || 'Erro.'; $('us-status').style.color = 'var(--quente)'; return; }
+  $('us-status').textContent = 'Acesso criado. Mande o e-mail e a senha pro cliente.'; $('us-status').style.color = 'var(--verde)';
+  $('us-senha').value = '';
+  listarUsuarios(estado.site);
+}
+
+function marcarMenu() {
+  document.querySelectorAll('[data-tela]').forEach((x) => x.classList.toggle('ativo', x.dataset.tela === estado.tela));
+}
+$('bt-novo-cliente').addEventListener('click', () => {
+  estado.novoCliente = true; estado.tela = 'config'; marcarMenu(); desenhar();
+});
+
 // ================= NAVEGAÇÃO =================
 document.querySelectorAll('[data-tela]').forEach((b) => b.addEventListener('click', () => {
   estado.tela = b.dataset.tela;
+  if (estado.novoCliente) { estado.novoCliente = false; carregar(); }
   document.querySelectorAll('[data-tela]').forEach((x) => x.classList.toggle('ativo', x === b));
   desenhar();
 }));
-$('sel-site').addEventListener('change', (e) => { estado.site = e.target.value; estado.aberto = null; carregar(); });
+$('sel-site').addEventListener('change', (e) => { estado.site = e.target.value; estado.aberto = null; estado.novoCliente = false; carregar(); });
 $('sel-periodo').addEventListener('change', desenhar);
 $('bt-atualizar').addEventListener('click', carregar);
-setInterval(() => { if (!document.hidden && estado.perfil) carregar(); }, 30000);
+setInterval(() => { if (!document.hidden && estado.perfil && estado.tela !== 'config') carregar(); }, 30000);
 
 iniciar();
 </script>
