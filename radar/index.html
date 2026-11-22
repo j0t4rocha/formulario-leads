@@ -239,7 +239,7 @@ async function iniciar() {
   estado.perfil = perfil;
   $('quem').textContent = `${perfil.nome} · ${perfil.papel === 'admin' ? 'Administrador' : 'Cliente'}`;
 
-  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   const sel = $('sel-site');
   sel.innerHTML = (sites || []).map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
@@ -525,6 +525,65 @@ async function moverEtapa(contatoId, etapaId) {
   } catch (_) { toast('Sem conexão. Tente de novo.'); }
 }
 
+// ================= CONECTAR WHATSAPP (Cadastro incorporado da Meta) =================
+const META_APP_ID = '1658120649115593';
+const META_CONFIG_ID = '1422937496496428';
+function carregarSdkMeta() {
+  if (window.FB) return Promise.resolve();
+  return new Promise((ok, falha) => {
+    window.fbAsyncInit = function () {
+      FB.init({ appId: META_APP_ID, autoLogAppEvents: true, xfbml: false, version: 'v25.0' });
+      ok();
+    };
+    const sc = document.createElement('script');
+    sc.src = 'https://connect.facebook.net/pt_BR/sdk.js'; sc.async = true; sc.defer = true; sc.crossOrigin = 'anonymous';
+    sc.onerror = () => falha(new Error('sdk'));
+    document.body.appendChild(sc);
+  });
+}
+
+async function conectarWhatsapp(siteId) {
+  const st = $('wa-status');
+  st.style.color = 'var(--tx2)'; st.textContent = 'Abrindo a janela da Meta…';
+  try { await carregarSdkMeta(); } catch (_) { st.textContent = 'Não consegui carregar o login da Meta. Desative bloqueadores e tente de novo.'; st.style.color = 'var(--quente)'; return; }
+
+  let sessao = null;
+  const ouvir = (ev) => {
+    if (!/facebook\.com$/.test(new URL(ev.origin).hostname)) return;
+    try {
+      const d = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data;
+      if (d && d.type === 'WA_EMBEDDED_SIGNUP') {
+        if (String(d.event || '').startsWith('FINISH')) sessao = d.data || {};
+        else if (d.event === 'CANCEL') sessao = { cancelado: true, etapa: d.data?.current_step };
+        else if (d.event === 'ERROR') sessao = { erro: d.data?.error_message };
+      }
+    } catch (_) {}
+  };
+  window.addEventListener('message', ouvir);
+
+  // o SDK da Meta não aceita função async direto no callback
+  FB.login((resp) => { (async () => {
+    const code = resp && resp.authResponse && resp.authResponse.code;
+    // espera até 8s a Meta mandar o número e a conta
+    for (let i = 0; i < 16 && !sessao; i++) await new Promise((r) => setTimeout(r, 500));
+    window.removeEventListener('message', ouvir);
+    if (!code || sessao?.cancelado) { st.textContent = 'Conexão cancelada.'; return; }
+    if (sessao?.erro) { st.textContent = 'A Meta informou um erro: ' + sessao.erro; st.style.color = 'var(--quente)'; return; }
+    st.textContent = 'Finalizando a conexão…';
+    const r = await chamarAdmin({ acao: 'conectar_whatsapp', site_id: siteId, code, waba_id: sessao?.waba_id, phone_number_id: sessao?.phone_number_id });
+    if (!r.ok) { st.textContent = r.erro || 'Erro ao conectar.'; st.style.color = 'var(--quente)'; return; }
+    toast('WhatsApp conectado! As novas conversas vão chegar no Radar.');
+    const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em').eq('ativo', true).order('nome');
+    estado.sites = sites || [];
+    telaConfig();
+  })(); }, {
+    config_id: META_CONFIG_ID,
+    response_type: 'code',
+    override_default_response_type: true,
+    extras: { setup: {}, featureType: 'whatsapp_business_app_onboarding', sessionInfoVersion: '3' },
+  });
+}
+
 // ================= LINKS RASTREÁVEIS =================
 function urlDoLink(l) { return `${SUPABASE_URL}/functions/v1/link?c=${l.codigo}`; }
 
@@ -680,6 +739,19 @@ async function telaConfig() {
 
     ${novo ? '' : `
     <section class="card" style="display:flex; flex-direction:column; gap:12px">
+      <h2 style="margin:0">WhatsApp do cliente</h2>
+      <p style="margin:0; color:var(--tx2)">Conecta o número que o cliente já usa no app WhatsApp Business. Ele continua usando o app no celular normalmente, e as conversas passam a chegar no Radar.</p>
+      <div style="font-size:13px; color:var(--tx2)">${site.whatsapp_conectado_em
+        ? `<b style="color:var(--verde)">Conectado</b> em ${new Date(site.whatsapp_conectado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}`
+        : (site.whatsapp_phone_number_id ? 'Ligado a um número de teste.' : 'Nenhum número conectado.')}</div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+        <button class="btn" id="wa-conectar">Conectar WhatsApp</button>
+        <span id="wa-status" style="font-size:13px; color:var(--tx2)"></span>
+      </div>
+      <p style="margin:0; font-size:12px; color:var(--tx3)">Abre a janela da Meta: entre com o Facebook, escolha "conectar o app WhatsApp Business", digite o número e escaneie o QR code que chega no celular.</p>
+    </section>
+
+    <section class="card" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Código do site</h2>
       <p style="margin:0; color:var(--tx2)">Cole uma vez no &lt;head&gt; do site do cliente (ou numa tag HTML personalizada do GTM). Ele cuida do pixel e do envio pelo servidor.</p>
       <pre id="cf-codigo" style="margin:0; overflow-x:auto; background:#F6FAF7; border:1px solid #CFDCD3; border-radius:10px; padding:14px; font-size:12px; line-height:1.6; white-space:pre">${esc(`<script src="${TRACKER_URL}"\n  data-site="${site.id}"\n  data-endpoint="${ENDPOINT_TRACK}"\n  data-pixel="${site.pixel_id}"\n  defer><\/script>`)}</pre>
@@ -713,6 +785,7 @@ async function telaConfig() {
   $('cf-salvar').addEventListener('click', salvarCliente);
   if (novo) { $('cf-cancelar').addEventListener('click', () => { estado.novoCliente = false; estado.tela = 'dashboard'; marcarMenu(); carregar(); }); return; }
 
+  $('wa-conectar').addEventListener('click', () => conectarWhatsapp(site.id));
   $('cf-testar').addEventListener('click', async () => {
     $('cf-status').textContent = 'Testando…';
     const r = await chamarAdmin({ acao: 'testar_meta', site_id: site.id });
@@ -825,7 +898,7 @@ async function salvarCliente() {
     origens: $('cf-dom').value.split('\n'), whatsapp_phone_number_id: $('cf-wpp').value.trim(),
   });
   if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--quente)'; return; }
-  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   $('sel-site').innerHTML = estado.sites.map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
   estado.site = r.id; $('sel-site').value = r.id; estado.novoCliente = false;
