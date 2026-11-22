@@ -88,6 +88,18 @@
   .bolha { max-width: 75%; padding: 10px 14px; border-radius: 14px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
   .bolha small { display: block; font-size: 10px; color: var(--tx3); text-align: right; margin-top: 4px; }
   .bolha.entrada { align-self: flex-start; background: #F1F4F2; border-bottom-left-radius: 4px; }
+  .tarefa { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 12px 0; border-bottom: 1px solid var(--line2); }
+  .tarefa .info { flex: 1 1 240px; min-width: 0; }
+  .tarefa .info b { display: block; }
+  .tarefa .info small { color: var(--tx3); font-size: 12px; }
+  .tarefa .acoes { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tarefa .acoes button { padding: 7px 10px; font-size: 13px; min-height: 36px; }
+  .tag { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 3px 9px; }
+  .barra { height: 14px; background: #EEF3EF; border-radius: 999px; overflow: hidden; }
+  .barra > div { height: 100%; background: var(--verde); border-radius: 999px; }
+  dialog.modal { border: none; border-radius: 16px; padding: 0; width: min(520px, 94vw); box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+  dialog.modal::backdrop { background: rgba(15,26,19,.45); }
+  .modal .corpo { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
   .creditos { margin: 12px 0 4px; padding: 10px 12px; border-radius: 10px; background: var(--verde-bg); border: 1px solid var(--verde-bd); font-size: 13px; color: var(--tx2); }
   .creditos b { display: block; font-size: 18px; color: var(--verde); }
   .creditos.baixo b { color: var(--quente); }
@@ -143,6 +155,7 @@
     <div id="saldo-creditos" class="creditos oculto" title="Créditos pra enviar mensagens pelo Radar"></div>
     <div class="menu">
       <button data-tela="dashboard" class="ativo">Dashboard</button>
+      <button data-tela="rotina">Rotina</button>
       <button data-tela="conversas">Conversas</button>
       <button data-tela="crm">CRM / Funil</button>
       <button data-tela="links">Links rastreáveis</button>
@@ -169,6 +182,7 @@
     </div>
 
     <section id="tela-dashboard"></section>
+    <section id="tela-rotina" class="oculto"></section>
     <section id="tela-conversas" class="oculto"></section>
     <section id="tela-crm" class="oculto"></section>
     <section id="tela-links" class="oculto"></section>
@@ -177,6 +191,7 @@
   </main>
 </div>
 <div id="toast" class="oculto" role="status"></div>
+<dialog class="modal" id="modal-envio" aria-labelledby="me-titulo"><div class="corpo" id="me-corpo"></div></dialog>
 
 <script src="config.js?v=1"></script>
 <script>
@@ -247,7 +262,7 @@ async function iniciar() {
   estado.perfil = perfil;
   $('quem').textContent = `${perfil.nome} · ${perfil.papel === 'admin' ? 'Administrador' : 'Cliente'}`;
 
-  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   const sel = $('sel-site');
   sel.innerHTML = (sites || []).map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
@@ -299,9 +314,10 @@ function noPeriodo(lista) {
 }
 
 function desenhar() {
-  ['dashboard', 'conversas', 'crm', 'links', 'modelos', 'config'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
-  $('titulo').textContent = { dashboard: 'Dashboard', conversas: 'Conversas', crm: 'CRM / Funil', links: 'Links rastreáveis', modelos: 'Modelos de mensagem', config: 'Configurações' }[estado.tela];
+  ['dashboard', 'rotina', 'conversas', 'crm', 'links', 'modelos', 'config'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
+  $('titulo').textContent = { dashboard: 'Dashboard', rotina: 'Rotina', conversas: 'Conversas', crm: 'CRM / Funil', links: 'Links rastreáveis', modelos: 'Modelos de mensagem', config: 'Configurações' }[estado.tela];
   if (estado.tela === 'dashboard') telaDashboard();
+  if (estado.tela === 'rotina') telaRotina();
   if (estado.tela === 'conversas') telaConversas();
   if (estado.tela === 'crm') telaCRM();
   if (estado.tela === 'links') telaLinks();
@@ -429,9 +445,11 @@ async function abrirConversa(id, semMarcar) {
     <form class="responder" id="form-responder">
       <label for="resp-texto" class="oculto">Mensagem</label>
       <textarea id="resp-texto" rows="1" placeholder="Escreva uma mensagem… (Enter envia, Shift+Enter pula linha)"></textarea>
+      <button class="btn-sec" id="resp-modelo" type="button" title="Mandar um modelo aprovado (pra quem está há mais de 24h sem falar)">Modelo</button>
       <button class="btn" id="resp-enviar" type="submit">Enviar</button>
     </form>
     <div style="padding:0 14px 10px; font-size:11px; color:var(--tx3)">Cada mensagem enviada pelo Radar usa 1 crédito. Responder pelo celular não gasta crédito.</div>`;
+  $('resp-modelo').addEventListener('click', () => abrirEnvio(id, null));
   $('form-responder').addEventListener('submit', (ev) => { ev.preventDefault(); enviarMensagem(id); });
   $('resp-texto').addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); enviarMensagem(id); } });
   const box = $('msgs'); box.scrollTop = box.scrollHeight;
@@ -566,6 +584,178 @@ async function mostrarCreditosConfig() {
   if (!$('cr-hist')) return;
   $('cr-hist').innerHTML = (data || []).length ? data.map((l) => `<div class="dl"><span>${quando(l.criado_em)} · ${esc(TIPO_LANC[l.tipo] || l.tipo)}${l.categoria ? ' (' + esc(CAT_LANC[l.categoria] || l.categoria) + ')' : ''}${l.motivo && l.tipo !== 'virada' ? ' · ' + esc(l.motivo) : ''}</span><span style="color:${l.creditos < 0 ? 'var(--quente)' : 'var(--verde)'}">${l.creditos > 0 ? '+' : ''}${l.creditos.toLocaleString('pt-BR')}</span></div>`).join('') : '<span style="color:var(--tx3)">Nenhuma movimentação ainda.</span>';
 }
+
+// ================= ROTINA =================
+const TIPO_TAREFA = {
+  follow_up: { t: 'Follow-up', c: 'var(--morno)', bg: 'var(--morno-bg)' },
+  reativacao: { t: 'Reativação', c: 'var(--frio)', bg: 'var(--frio-bg)' },
+  manual: { t: 'Manual', c: 'var(--tx2)', bg: '#EEF3EF' },
+};
+function hojeISO() {
+  const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 10);
+}
+function diasDesde(iso) { return iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 86400000) : null; }
+
+async function telaRotina() {
+  const hoje = hojeISO();
+  const inicioHoje = new Date(hoje + 'T00:00:00').toISOString();
+  const [{ data: abertas }, { data: feitasHoje }] = await Promise.all([
+    sb.from('tarefas').select('*').eq('site_id', estado.site).eq('status', 'aberta').lte('vence_em', hoje).order('vence_em').limit(500),
+    sb.from('tarefas').select('id, status').eq('site_id', estado.site).neq('status', 'aberta').gte('concluida_em', inicioHoje).limit(1000),
+  ]);
+  const { data: futuras } = await sb.from('tarefas').select('*').eq('site_id', estado.site).eq('status', 'aberta').gt('vence_em', hoje).order('vence_em').limit(100);
+  if (estado.tela !== 'rotina') return;
+  const lista = abertas || [];
+  const ids = [...new Set([...lista, ...(futuras || [])].map((t) => t.contato_id).filter(Boolean))];
+  const ultimaEntrada = {};
+  if (ids.length) {
+    const { data: msgs } = await sb.from('mensagens').select('contato_id, criado_em').eq('direcao', 'entrada').in('contato_id', ids).order('criado_em', { ascending: false }).limit(2000);
+    (msgs || []).forEach((m) => { if (!ultimaEntrada[m.contato_id]) ultimaEntrada[m.contato_id] = m.criado_em; });
+  }
+  estado.ultimaEntrada = ultimaEntrada;
+  const feitas = (feitasHoje || []).filter((t) => t.status === 'feita').length;
+  const puladas = (feitasHoje || []).filter((t) => t.status === 'pulada').length;
+  const total = lista.length + feitas + puladas;
+  const pctFeito = total ? Math.round(((feitas + puladas) / total) * 100) : 0;
+  const atrasadas = lista.filter((t) => t.vence_em < hoje);
+  const deHoje = lista.filter((t) => t.vence_em === hoje);
+
+  const linha = (t) => {
+    const c = estado.contatos.find((x) => x.id === t.contato_id);
+    const tp = TIPO_TAREFA[t.tipo] || TIPO_TAREFA.manual;
+    const e = c ? etapaDe(c) : null;
+    const dd = diasDesde(ultimaEntrada[t.contato_id]);
+    const nome = c ? (c.nome || telefoneBonito(c.telefone)) : 'Sem contato';
+    return `<div class="tarefa">
+      <div class="info"><b>${esc(nome)} <span class="tag" style="color:${tp.c}; background:${tp.bg}">${tp.t}</span></b>
+        <small>${esc(t.titulo || '')}${e ? ' · etapa: ' + esc(e.nome) : ''}${dd !== null ? ` · ${dd === 0 ? 'falou hoje' : `sem mandar mensagem há ${dd} ${dd === 1 ? 'dia' : 'dias'}`}` : ''}${t.vence_em < hoje ? ` · <span style="color:var(--quente)">atrasada desde ${t.vence_em.split('-').reverse().join('/')}</span>` : ''}</small></div>
+      <div class="acoes">
+        ${c ? `<button class="btn-sec" data-abrir="${c.id}">Abrir conversa</button><button class="btn" data-enviar="${t.id}">Enviar</button>` : ''}
+        <button class="btn-sec" data-feita="${t.id}" title="Resolvi por fora (sem gastar crédito)">Feita</button>
+        <button class="btn-sec" data-pular="${t.id}">Pular</button>
+      </div></div>`;
+  };
+
+  $('tela-rotina').innerHTML = `<div style="display:flex; flex-direction:column; gap:18px">
+    <section class="card" style="display:flex; flex-direction:column; gap:10px">
+      <h2 style="margin:0">Meta do dia</h2>
+      <div style="font-size:22px; font-weight:800">${feitas + puladas} de ${total} ${total === 1 ? 'tarefa resolvida' : 'tarefas resolvidas'} <span style="color:var(--verde)">(${pctFeito}%)</span></div>
+      <div class="barra" role="progressbar" aria-valuenow="${pctFeito}" aria-valuemin="0" aria-valuemax="100"><div style="width:${pctFeito}%"></div></div>
+      <div style="font-size:13px; color:var(--tx2)">${feitas} ${feitas === 1 ? 'feita' : 'feitas'} · ${puladas} ${puladas === 1 ? 'pulada' : 'puladas'} · ${lista.length} ${lista.length === 1 ? 'pendente' : 'pendentes'} (${atrasadas.length} ${atrasadas.length === 1 ? 'atrasada' : 'atrasadas'} + ${deHoje.length} de hoje)</div>
+    </section>
+    ${atrasadas.length ? `<section class="card"><h2 style="margin:0 0 4px; color:var(--quente)">Atrasadas (${atrasadas.length})</h2>${atrasadas.map(linha).join('')}</section>` : ''}
+    <section class="card"><h2 style="margin:0 0 4px">Hoje (${deHoje.length})</h2>${deHoje.length ? deHoje.map(linha).join('') : '<div class="vazio">Nenhuma tarefa pra hoje. As tarefas de follow-up e reativação aparecem sozinhas todo dia às 7h.</div>'}</section>
+    ${(futuras || []).length ? `<section class="card"><h2 style="margin:0 0 4px">Próximos dias (${futuras.length})</h2>${futuras.map(linha).join('')}</section>` : ''}
+    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+      <h2 style="margin:0">Nova tarefa</h2>
+      <div class="linha">
+        <div style="flex:2 1 220px"><label for="nt-contato">Contato</label><select id="nt-contato"><option value="">Escolha…</option>${estado.contatos.map((c) => `<option value="${c.id}">${esc(c.nome || telefoneBonito(c.telefone))}</option>`).join('')}</select></div>
+        <div style="flex:3 1 260px"><label for="nt-titulo">O que fazer</label><input id="nt-titulo" type="text" placeholder="Ex.: ligar pra confirmar o horário de sexta"></div>
+        <div style="flex:1 1 150px"><label for="nt-data">Quando</label><input id="nt-data" type="date" value="${hoje}"></div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center"><button class="btn-sec" id="nt-criar">Criar tarefa</button><span id="nt-status" style="font-size:13px; color:var(--tx2)"></span></div>
+    </section>
+  </div>`;
+
+  const atualizar = async (id, status) => {
+    const { error } = await sb.from('tarefas').update({ status, concluida_em: new Date().toISOString() }).eq('id', id);
+    if (error) { toast('Não consegui salvar: ' + error.message); return; }
+    telaRotina();
+  };
+  document.querySelectorAll('[data-feita]').forEach((b) => b.addEventListener('click', () => atualizar(Number(b.dataset.feita), 'feita')));
+  document.querySelectorAll('[data-pular]').forEach((b) => b.addEventListener('click', () => atualizar(Number(b.dataset.pular), 'pulada')));
+  document.querySelectorAll('[data-abrir]').forEach((b) => b.addEventListener('click', () => {
+    estado.aberto = Number(b.dataset.abrir); estado.tela = 'conversas'; marcarMenu(); desenhar();
+  }));
+  document.querySelectorAll('[data-enviar]').forEach((b) => b.addEventListener('click', () => {
+    const t = [...lista, ...(futuras || [])].find((x) => x.id === Number(b.dataset.enviar));
+    if (t) abrirEnvio(t.contato_id, t);
+  }));
+  $('nt-criar').addEventListener('click', async () => {
+    const st = $('nt-status'); st.style.color = 'var(--tx2)';
+    const contato = Number($('nt-contato').value) || null; const titulo = $('nt-titulo').value.trim();
+    if (!titulo) { st.textContent = 'Escreva o que fazer.'; st.style.color = 'var(--quente)'; return; }
+    const { error } = await sb.from('tarefas').insert({ site_id: estado.site, contato_id: contato, tipo: 'manual', titulo, vence_em: $('nt-data').value || hoje });
+    if (error) { st.textContent = 'Erro: ' + error.message; st.style.color = 'var(--quente)'; return; }
+    toast('Tarefa criada.'); telaRotina();
+  });
+}
+
+// ---------- janela de envio (texto livre ou modelo) ----------
+async function abrirEnvio(contatoId, tarefa) {
+  const c = estado.contatos.find((x) => x.id === contatoId);
+  if (!c) return;
+  const dlg = $('modal-envio'); const corpo = $('me-corpo');
+  let ultima = estado.ultimaEntrada && estado.ultimaEntrada[contatoId];
+  if (ultima === undefined) {
+    const { data } = await sb.from('mensagens').select('criado_em').eq('contato_id', contatoId).eq('direcao', 'entrada').order('criado_em', { ascending: false }).limit(1);
+    ultima = data?.[0]?.criado_em || null;
+  }
+  const dentro24h = ultima && (Date.now() - new Date(ultima).getTime()) < 24 * 3600 * 1000;
+  const nome = c.nome || telefoneBonito(c.telefone);
+  const primeiroNome = (c.nome || '').trim().split(/\s+/)[0] || '';
+  corpo.innerHTML = `<h2 style="margin:0" id="me-titulo">Enviar pra ${esc(nome)}</h2>
+    <div style="font-size:13px; color:var(--tx2)">${dentro24h ? 'Falou nas últimas 24h: pode mandar mensagem livre (1 crédito) ou um modelo.' : 'Está há mais de 24h sem mandar mensagem: pela regra do WhatsApp, só dá pra enviar um <b>modelo aprovado</b>.'}</div>
+    ${dentro24h ? `<div><label for="me-texto">Mensagem livre</label><textarea id="me-texto" rows="3" style="width:100%; background:#F6FAF7; border:1px solid #CFDCD3; border-radius:10px; padding:10px 12px; font:inherit"></textarea>
+      <div style="margin-top:8px"><button class="btn" id="me-enviar-texto">Enviar mensagem (1 crédito)</button></div></div>
+      <div style="border-top:1px solid var(--line2); padding-top:10px; font-weight:700">Ou use um modelo</div>` : ''}
+    <div id="me-modelos" style="font-size:13px">Carregando modelos aprovados…</div>
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><span id="me-status" style="font-size:13px; color:var(--tx2)"></span></div>
+    <div style="display:flex; justify-content:flex-end"><button class="btn-sec" id="me-fechar">Fechar</button></div>`;
+  $('me-fechar').addEventListener('click', () => fecharModal());
+  if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+
+  const status = (t, ok) => { $('me-status').textContent = t; $('me-status').style.color = ok === false ? 'var(--quente)' : ok ? 'var(--verde)' : 'var(--tx2)'; };
+  const depois = async (r) => {
+    if (!r.ok) { status(r.erro || 'Não enviou.', false); return; }
+    toast('Mensagem enviada.'); fecharModal();
+    setTimeout(atualizarCreditos, 8000);
+    if (estado.tela === 'rotina') telaRotina();
+    if (estado.tela === 'conversas' && estado.chat && estado.chat.id === contatoId && r.mensagem && !document.querySelector(`[data-msg="${r.mensagem.id}"]`)) {
+      if ($('msgs-vazio')) $('msgs-vazio').remove();
+      $('msgs-lista').insertAdjacentHTML('beforeend', bolhaHTML(r.mensagem)); const box = $('msgs'); box.scrollTop = box.scrollHeight;
+    }
+  };
+  if (dentro24h) $('me-enviar-texto').addEventListener('click', async () => {
+    const texto = $('me-texto').value.trim(); if (!texto) { status('Escreva a mensagem.', false); return; }
+    status('Enviando…'); depois(await chamarWhats({ acao: 'enviar', contato_id: contatoId, texto, tarefa_id: tarefa?.id }));
+  });
+
+  if (!estado.modelosCache || estado.modelosCache.site !== estado.site) {
+    const r = await chamarWhats({ acao: 'listar_modelos', site_id: estado.site });
+    estado.modelosCache = { site: estado.site, lista: r.ok ? r.modelos : [], erro: r.ok ? null : r.erro };
+  }
+  const aprovados = estado.modelosCache.lista.filter((m) => m.status === 'APPROVED');
+  const alvo = $('me-modelos'); if (!alvo) return;
+  if (estado.modelosCache.erro) { alvo.innerHTML = `<span style="color:var(--quente)">${esc(estado.modelosCache.erro)}</span>`; return; }
+  if (!aprovados.length) { alvo.innerHTML = 'Nenhum modelo aprovado ainda. Crie um em <b>Modelos de mensagem</b>.'; return; }
+  alvo.innerHTML = `<label for="me-modelo">Modelo</label><select id="me-modelo">${aprovados.map((m, i) => `<option value="${i}">${esc(m.nome)} · ${m.categoria === 'MARKETING' ? 'Marketing (10 créditos)' : 'Utilidade (1 crédito)'}</option>`).join('')}</select>
+    <div id="me-campos" class="linha" style="margin-top:8px"></div>
+    <div id="me-previa" style="margin-top:8px; white-space:pre-wrap; background:#D9F2E1; border-radius:12px; padding:10px 12px"></div>
+    <div style="margin-top:8px"><button class="btn" id="me-enviar-modelo">Enviar modelo</button></div>`;
+  const desenharCampos = () => {
+    const m = aprovados[Number($('me-modelo').value)];
+    const vars = [...new Set([...m.texto.matchAll(/\{\{(\d+)\}\}/g)].map((x) => Number(x[1])))].sort((a, b) => a - b);
+    $('me-campos').innerHTML = vars.map((n) => `<div style="flex:1 1 160px"><label for="mv-${n}">Campo {{${n}}}</label><input id="mv-${n}" data-var="${n}" type="text" value="${n === 1 ? esc(primeiroNome) : ''}"></div>`).join('');
+    const previa = () => {
+      const v = {}; document.querySelectorAll('[data-var]').forEach((i) => { v[i.dataset.var] = i.value || `{{${i.dataset.var}}}`; });
+      $('me-previa').textContent = m.texto.replace(/\{\{(\d+)\}\}/g, (_, n) => v[n] ?? '');
+    };
+    document.querySelectorAll('[data-var]').forEach((i) => i.addEventListener('input', previa)); previa();
+    $('me-enviar-modelo').textContent = `Enviar modelo (${m.categoria === 'MARKETING' ? '10 créditos' : '1 crédito'})`;
+  };
+  $('me-modelo').addEventListener('change', desenharCampos); desenharCampos();
+  $('me-enviar-modelo').addEventListener('click', async () => {
+    const m = aprovados[Number($('me-modelo').value)];
+    const parametros = [...document.querySelectorAll('[data-var]')].sort((a, b) => a.dataset.var - b.dataset.var).map((i) => i.value.trim());
+    if (parametros.some((x) => !x)) { status('Preencha todos os campos.', false); return; }
+    status('Enviando…');
+    depois(await chamarWhats({ acao: 'enviar_modelo', contato_id: contatoId, nome: m.nome, idioma: m.idioma, parametros, tarefa_id: tarefa?.id }));
+  });
+}
+function fecharModal() { const d = $('modal-envio'); if (d.close) d.close(); else d.removeAttribute('open'); }
+
 // ================= ENVIAR MENSAGEM / MODELOS =================
 async function chamarWhats(corpo) {
   const { data: { session } } = await sb.auth.getSession();
@@ -632,7 +822,7 @@ async function telaModelos() {
     const r = await chamarWhats({ acao: 'criar_modelo', site_id: estado.site, nome: $('md-nome').value, categoria: $('md-cat').value, idioma: 'pt_BR', texto: $('md-texto').value, exemplos });
     if (!r.ok) { st.textContent = r.erro || 'Erro.'; st.style.color = 'var(--quente)'; return; }
     st.textContent = `Modelo "${r.nome}" enviado. A Meta costuma aprovar em minutos.`; st.style.color = 'var(--verde)';
-    $('md-nome').value = ''; $('md-texto').value = ''; desenharExemplos();
+    $('md-nome').value = ''; $('md-texto').value = ''; desenharExemplos(); estado.modelosCache = null;
     listarModelos();
   });
   $('md-recarregar').addEventListener('click', listarModelos);
@@ -701,7 +891,7 @@ async function conectarWhatsapp(siteId) {
     const r = await chamarAdmin({ acao: 'conectar_whatsapp', site_id: siteId, code, waba_id: sessao?.waba_id, phone_number_id: sessao?.phone_number_id });
     if (!r.ok) { st.textContent = r.erro || 'Erro ao conectar.'; st.style.color = 'var(--quente)'; return; }
     toast('WhatsApp conectado! As novas conversas vão chegar no Radar.');
-    const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal').eq('ativo', true).order('nome');
+    const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias').eq('ativo', true).order('nome');
     estado.sites = sites || [];
     telaConfig();
   })(); }, {
@@ -885,6 +1075,16 @@ async function telaConfig() {
     </section>
 
     <section class="card" style="display:flex; flex-direction:column; gap:12px">
+      <h2 style="margin:0">Rotina</h2>
+      <p style="margin:0; color:var(--tx2)">Todo dia às 7h o Radar cria as tarefas: <b>follow-up</b> pra quem ficou na 1ª etapa do funil e parou de responder, e <b>reativação</b> pra quem chegou na última etapa e sumiu.</p>
+      <div class="linha">
+        <div style="flex:1 1 200px"><label for="ro-fu">Follow-up depois de quantos dias sem resposta</label><input id="ro-fu" type="number" min="1" max="60" value="${esc(site.rotina_followup_dias ?? 2)}"></div>
+        <div style="flex:1 1 200px"><label for="ro-re">Reativação depois de quantos dias sem conversa</label><input id="ro-re" type="number" min="7" max="365" value="${esc(site.rotina_reativacao_dias ?? 30)}"></div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center"><button class="btn-sec" id="ro-salvar">Salvar rotina</button><span id="ro-status" style="font-size:13px; color:var(--tx2)"></span></div>
+    </section>
+
+    <section class="card" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Créditos</h2>
       <p style="margin:0; color:var(--tx2)">Resposta e lembrete pelo Radar = 1 crédito. Follow-up, reativação e promoção (modelo de marketing) = 10 créditos. Receber e responder pelo celular = grátis. O crédito do mês volta todo dia 1º; os extras não vencem.</p>
       <div id="cr-saldo" style="font-size:14px"></div>
@@ -942,6 +1142,13 @@ async function telaConfig() {
     await atualizarCreditos(); mostrarCreditosConfig();
   });
   mostrarCreditosConfig();
+  $('ro-salvar').addEventListener('click', async () => {
+    const st = $('ro-status'); st.style.color = 'var(--tx2)'; st.textContent = 'Salvando…';
+    const { error } = await sb.rpc('salvar_rotina', { p_site: site.id, p_followup: Number($('ro-fu').value), p_reativacao: Number($('ro-re').value) });
+    if (error) { st.textContent = error.message; st.style.color = 'var(--quente)'; return; }
+    site.rotina_followup_dias = Number($('ro-fu').value); site.rotina_reativacao_dias = Number($('ro-re').value);
+    st.textContent = 'Rotina salva.'; st.style.color = 'var(--verde)';
+  });
   $('cf-testar').addEventListener('click', async () => {
     $('cf-status').textContent = 'Testando…';
     const r = await chamarAdmin({ acao: 'testar_meta', site_id: site.id });
@@ -1056,7 +1263,7 @@ async function salvarCliente() {
     wa_token: $('cf-watoken') ? $('cf-watoken').value.trim() : '',
   });
   if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--quente)'; return; }
-  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   $('sel-site').innerHTML = estado.sites.map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
   estado.site = r.id; $('sel-site').value = r.id; estado.novoCliente = false;
@@ -1097,7 +1304,7 @@ document.querySelectorAll('[data-tela]').forEach((b) => b.addEventListener('clic
 $('sel-site').addEventListener('change', (e) => { estado.site = e.target.value; estado.aberto = null; estado.novoCliente = false; carregar(); });
 $('sel-periodo').addEventListener('change', desenhar);
 $('bt-atualizar').addEventListener('click', carregar);
-setInterval(() => { if (!document.hidden && estado.perfil && !['config', 'links', 'conversas', 'modelos'].includes(estado.tela)) carregar(); }, 30000);
+setInterval(() => { if (!document.hidden && estado.perfil && !['config', 'links', 'conversas', 'modelos', 'rotina'].includes(estado.tela)) carregar(); }, 30000);
 
 iniciar();
 </script>
