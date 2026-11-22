@@ -443,7 +443,7 @@ async function moverEtapa(contatoId, etapaId) {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { location.reload(); return; }
   try {
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/mover-etapa`, {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/funcao-mover-etapa-ts`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_KEY },
       body: JSON.stringify({ contato_id: contatoId, etapa_id: etapaId }),
