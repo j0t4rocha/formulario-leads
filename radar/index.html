@@ -88,6 +88,9 @@
   .bolha { max-width: 75%; padding: 10px 14px; border-radius: 14px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
   .bolha small { display: block; font-size: 10px; color: var(--tx3); text-align: right; margin-top: 4px; }
   .bolha.entrada { align-self: flex-start; background: #F1F4F2; border-bottom-left-radius: 4px; }
+  .creditos { margin: 12px 0 4px; padding: 10px 12px; border-radius: 10px; background: var(--verde-bg); border: 1px solid var(--verde-bd); font-size: 13px; color: var(--tx2); }
+  .creditos b { display: block; font-size: 18px; color: var(--verde); }
+  .creditos.baixo b { color: var(--quente); }
   .responder { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--line); align-items: flex-end; }
   .responder textarea { flex: 1; resize: none; min-height: 42px; max-height: 140px; background: #F6FAF7; border: 1px solid #CFDCD3; border-radius: 10px; padding: 10px 12px; font: inherit; color: var(--tx); }
   .bolha.saida { align-self: flex-end; background: #D9F2E1; border-bottom-right-radius: 4px; }
@@ -137,6 +140,7 @@
       <select id="sel-site"></select>
       <button class="btn-sec" id="bt-novo-cliente" style="width:100%; margin-top:8px">+ Novo cliente</button>
     </div>
+    <div id="saldo-creditos" class="creditos oculto" title="Créditos pra enviar mensagens pelo Radar"></div>
     <div class="menu">
       <button data-tela="dashboard" class="ativo">Dashboard</button>
       <button data-tela="conversas">Conversas</button>
@@ -243,7 +247,7 @@ async function iniciar() {
   estado.perfil = perfil;
   $('quem').textContent = `${perfil.nome} · ${perfil.papel === 'admin' ? 'Administrador' : 'Cliente'}`;
 
-  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   const sel = $('sel-site');
   sel.innerHTML = (sites || []).map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
@@ -271,7 +275,20 @@ async function carregar() {
   estado.contatos = contatos || [];
   const { data: links } = await sb.from('links').select('*').eq('site_id', estado.site).order('criado_em', { ascending: false });
   estado.links = links || [];
+  await atualizarCreditos();
   desenhar();
+}
+
+// ================= CRÉDITOS =================
+async function atualizarCreditos() {
+  const { data } = await sb.from('sites').select('creditos_mensal, creditos_saldo_mensal, creditos_extra').eq('id', estado.site).maybeSingle();
+  estado.creditos = data || null;
+  const el = $('saldo-creditos'); if (!el) return;
+  if (!data) { el.classList.add('oculto'); return; }
+  const total = (data.creditos_saldo_mensal || 0) + (data.creditos_extra || 0);
+  el.classList.remove('oculto');
+  el.classList.toggle('baixo', total < Math.max(50, (data.creditos_mensal || 0) * 0.1));
+  el.innerHTML = `Créditos<b>${total.toLocaleString('pt-BR')}</b>${data.creditos_extra ? `${data.creditos_saldo_mensal.toLocaleString('pt-BR')} do mês + ${data.creditos_extra.toLocaleString('pt-BR')} extras` : `de ${(data.creditos_mensal || 0).toLocaleString('pt-BR')} do mês`}`;
 }
 
 function etapaDe(c) { return estado.etapas.find((e) => e.id === c.etapa_id) || null; }
@@ -413,7 +430,8 @@ async function abrirConversa(id, semMarcar) {
       <label for="resp-texto" class="oculto">Mensagem</label>
       <textarea id="resp-texto" rows="1" placeholder="Escreva uma mensagem… (Enter envia, Shift+Enter pula linha)"></textarea>
       <button class="btn" id="resp-enviar" type="submit">Enviar</button>
-    </form>`;
+    </form>
+    <div style="padding:0 14px 10px; font-size:11px; color:var(--tx3)">Cada mensagem enviada pelo Radar usa 1 crédito. Responder pelo celular não gasta crédito.</div>`;
   $('form-responder').addEventListener('submit', (ev) => { ev.preventDefault(); enviarMensagem(id); });
   $('resp-texto').addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); enviarMensagem(id); } });
   const box = $('msgs'); box.scrollTop = box.scrollHeight;
@@ -538,6 +556,16 @@ async function moverEtapa(contatoId, etapaId) {
   } catch (_) { toast('Sem conexão. Tente de novo.'); }
 }
 
+
+const TIPO_LANC = { envio: 'Envio', recarga: 'Recarga', virada: 'Crédito do mês', ajuste: 'Ajuste' };
+const CAT_LANC = { marketing: 'marketing', utility: 'utilidade', service: 'resposta', authentication: 'autenticação' };
+async function mostrarCreditosConfig() {
+  const c = estado.creditos;
+  if ($('cr-saldo') && c) $('cr-saldo').innerHTML = `Saldo agora: <b>${((c.creditos_saldo_mensal || 0) + (c.creditos_extra || 0)).toLocaleString('pt-BR')}</b> (${(c.creditos_saldo_mensal || 0).toLocaleString('pt-BR')} do mês + ${(c.creditos_extra || 0).toLocaleString('pt-BR')} extras)`;
+  const { data } = await sb.from('creditos_lancamentos').select('*').eq('site_id', estado.site).order('criado_em', { ascending: false }).limit(20);
+  if (!$('cr-hist')) return;
+  $('cr-hist').innerHTML = (data || []).length ? data.map((l) => `<div class="dl"><span>${quando(l.criado_em)} · ${esc(TIPO_LANC[l.tipo] || l.tipo)}${l.categoria ? ' (' + esc(CAT_LANC[l.categoria] || l.categoria) + ')' : ''}${l.motivo && l.tipo !== 'virada' ? ' · ' + esc(l.motivo) : ''}</span><span style="color:${l.creditos < 0 ? 'var(--quente)' : 'var(--verde)'}">${l.creditos > 0 ? '+' : ''}${l.creditos.toLocaleString('pt-BR')}</span></div>`).join('') : '<span style="color:var(--tx3)">Nenhuma movimentação ainda.</span>';
+}
 // ================= ENVIAR MENSAGEM / MODELOS =================
 async function chamarWhats(corpo) {
   const { data: { session } } = await sb.auth.getSession();
@@ -560,6 +588,7 @@ async function enviarMensagem(contatoId) {
   bt.disabled = false; bt.textContent = 'Enviar';
   if (!r.ok) { toast(r.erro || 'Não enviou.'); return; }
   caixa.value = '';
+  setTimeout(atualizarCreditos, 8000);
   if (estado.chat && estado.chat.id === contatoId && r.mensagem && !document.querySelector(`[data-msg="${r.mensagem.id}"]`)) {
     if ($('msgs-vazio')) $('msgs-vazio').remove();
     $('msgs-lista').insertAdjacentHTML('beforeend', bolhaHTML(r.mensagem));
@@ -576,6 +605,7 @@ async function telaModelos() {
   $('tela-modelos').innerHTML = `<div style="display:flex; flex-direction:column; gap:18px">
     <section class="card" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Novo modelo</h2>
+      <p style="margin:0; color:var(--tx2)">Cada envio de modelo de <b>Utilidade</b> usa 1 crédito; de <b>Marketing</b>, 10 créditos.</p>
       <p style="margin:0; color:var(--tx2)">Modelos são mensagens aprovadas pela Meta. Servem pra chamar o cliente depois de 24h sem conversa (lembrete, follow-up, promoção). Use {{1}}, {{2}}… onde entra um dado que muda, como o nome.</p>
       <div class="linha">
         <div style="flex:1 1 220px"><label for="md-nome">Nome do modelo</label><input id="md-nome" type="text" placeholder="lembrete_agendamento"></div>
@@ -671,7 +701,7 @@ async function conectarWhatsapp(siteId) {
     const r = await chamarAdmin({ acao: 'conectar_whatsapp', site_id: siteId, code, waba_id: sessao?.waba_id, phone_number_id: sessao?.phone_number_id });
     if (!r.ok) { st.textContent = r.erro || 'Erro ao conectar.'; st.style.color = 'var(--quente)'; return; }
     toast('WhatsApp conectado! As novas conversas vão chegar no Radar.');
-    const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em').eq('ativo', true).order('nome');
+    const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal').eq('ativo', true).order('nome');
     estado.sites = sites || [];
     telaConfig();
   })(); }, {
@@ -855,6 +885,19 @@ async function telaConfig() {
     </section>
 
     <section class="card" style="display:flex; flex-direction:column; gap:12px">
+      <h2 style="margin:0">Créditos</h2>
+      <p style="margin:0; color:var(--tx2)">Resposta e lembrete pelo Radar = 1 crédito. Follow-up, reativação e promoção (modelo de marketing) = 10 créditos. Receber e responder pelo celular = grátis. O crédito do mês volta todo dia 1º; os extras não vencem.</p>
+      <div id="cr-saldo" style="font-size:14px"></div>
+      <div class="linha">
+        <div style="flex:1 1 160px"><label for="cr-mensal">Crédito padrão por mês</label><input id="cr-mensal" type="number" min="0" step="100" value="${esc(site.creditos_mensal ?? 1000)}"></div>
+        <div style="flex:1 1 160px"><label for="cr-add">Adicionar créditos extras</label><input id="cr-add" type="number" step="100" placeholder="Ex.: 1000"></div>
+        <div style="flex:2 1 220px"><label for="cr-motivo">Motivo</label><input id="cr-motivo" type="text" placeholder="Ex.: pacote 1.000 pago via Pix"></div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn-sec" id="cr-salvar">Salvar créditos</button><span id="cr-status" style="font-size:13px; color:var(--tx2)"></span></div>
+      <details><summary style="cursor:pointer; font-size:13px; color:var(--tx2)">Últimas movimentações</summary><div id="cr-hist" style="font-size:13px; margin-top:8px">Carregando…</div></details>
+    </section>
+
+    <section class="card" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Código do site</h2>
       <p style="margin:0; color:var(--tx2)">Cole uma vez no &lt;head&gt; do site do cliente (ou numa tag HTML personalizada do GTM). Ele cuida do pixel e do envio pelo servidor.</p>
       <pre id="cf-codigo" style="margin:0; overflow-x:auto; background:#F6FAF7; border:1px solid #CFDCD3; border-radius:10px; padding:14px; font-size:12px; line-height:1.6; white-space:pre">${esc(`<script src="${TRACKER_URL}"\n  data-site="${site.id}"\n  data-endpoint="${ENDPOINT_TRACK}"\n  data-pixel="${site.pixel_id}"\n  defer><\/script>`)}</pre>
@@ -890,6 +933,15 @@ async function telaConfig() {
 
   $('wa-conectar').addEventListener('click', () => conectarWhatsapp(site.id));
   $('wa-salvar').addEventListener('click', salvarCliente);
+  $('cr-salvar').addEventListener('click', async () => {
+    const st = $('cr-status'); st.style.color = 'var(--tx2)'; st.textContent = 'Salvando…';
+    const r = await chamarAdmin({ acao: 'creditos', site_id: site.id, mensal: $('cr-mensal').value, adicionar: $('cr-add').value || 0, motivo: $('cr-motivo').value });
+    if (!r.ok) { st.textContent = r.erro || 'Erro.'; st.style.color = 'var(--quente)'; return; }
+    $('cr-add').value = ''; $('cr-motivo').value = '';
+    st.textContent = 'Créditos salvos.'; st.style.color = 'var(--verde)';
+    await atualizarCreditos(); mostrarCreditosConfig();
+  });
+  mostrarCreditosConfig();
   $('cf-testar').addEventListener('click', async () => {
     $('cf-status').textContent = 'Testando…';
     const r = await chamarAdmin({ acao: 'testar_meta', site_id: site.id });
@@ -1004,7 +1056,7 @@ async function salvarCliente() {
     wa_token: $('cf-watoken') ? $('cf-watoken').value.trim() : '',
   });
   if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--quente)'; return; }
-  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   $('sel-site').innerHTML = estado.sites.map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
   estado.site = r.id; $('sel-site').value = r.id; estado.novoCliente = false;
