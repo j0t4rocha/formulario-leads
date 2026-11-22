@@ -88,6 +88,8 @@
   .bolha { max-width: 75%; padding: 10px 14px; border-radius: 14px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
   .bolha small { display: block; font-size: 10px; color: var(--tx3); text-align: right; margin-top: 4px; }
   .bolha.entrada { align-self: flex-start; background: #F1F4F2; border-bottom-left-radius: 4px; }
+  .responder { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--line); align-items: flex-end; }
+  .responder textarea { flex: 1; resize: none; min-height: 42px; max-height: 140px; background: #F6FAF7; border: 1px solid #CFDCD3; border-radius: 10px; padding: 10px 12px; font: inherit; color: var(--tx); }
   .bolha.saida { align-self: flex-end; background: #D9F2E1; border-bottom-right-radius: 4px; }
   .detalhe { flex: 1 1 280px; max-width: 340px; display: flex; flex-direction: column; gap: 16px; }
   .dl { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--line2); }
@@ -140,6 +142,7 @@
       <button data-tela="conversas">Conversas</button>
       <button data-tela="crm">CRM / Funil</button>
       <button data-tela="links">Links rastreáveis</button>
+      <button data-tela="modelos">Modelos de mensagem</button>
       <button data-tela="config" id="menu-config" class="oculto">Configurações</button>
     </div>
     <div class="rodape">
@@ -165,6 +168,7 @@
     <section id="tela-conversas" class="oculto"></section>
     <section id="tela-crm" class="oculto"></section>
     <section id="tela-links" class="oculto"></section>
+    <section id="tela-modelos" class="oculto"></section>
     <section id="tela-config" class="oculto"></section>
   </main>
 </div>
@@ -278,12 +282,13 @@ function noPeriodo(lista) {
 }
 
 function desenhar() {
-  ['dashboard', 'conversas', 'crm', 'links', 'config'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
-  $('titulo').textContent = { dashboard: 'Dashboard', conversas: 'Conversas', crm: 'CRM / Funil', links: 'Links rastreáveis', config: 'Configurações' }[estado.tela];
+  ['dashboard', 'conversas', 'crm', 'links', 'modelos', 'config'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
+  $('titulo').textContent = { dashboard: 'Dashboard', conversas: 'Conversas', crm: 'CRM / Funil', links: 'Links rastreáveis', modelos: 'Modelos de mensagem', config: 'Configurações' }[estado.tela];
   if (estado.tela === 'dashboard') telaDashboard();
   if (estado.tela === 'conversas') telaConversas();
   if (estado.tela === 'crm') telaCRM();
   if (estado.tela === 'links') telaLinks();
+  if (estado.tela === 'modelos') telaModelos();
   if (estado.tela === 'config') telaConfig();
 }
 
@@ -403,7 +408,14 @@ async function abrirConversa(id, semMarcar) {
     <div class="chat-msgs" id="msgs">
       <div id="msgs-mais" style="text-align:center">${estado.chat.temMais ? '<button class="btn-sec" id="bt-mais">Carregar mensagens anteriores</button>' : ''}</div>
       <div id="msgs-lista" style="display:flex; flex-direction:column; gap:10px">${msgs.map(bolhaHTML).join('') || '<div class="vazio" id="msgs-vazio">Sem mensagens.</div>'}</div>
-    </div>`;
+    </div>
+    <form class="responder" id="form-responder">
+      <label for="resp-texto" class="oculto">Mensagem</label>
+      <textarea id="resp-texto" rows="1" placeholder="Escreva uma mensagem… (Enter envia, Shift+Enter pula linha)"></textarea>
+      <button class="btn" id="resp-enviar" type="submit">Enviar</button>
+    </form>`;
+  $('form-responder').addEventListener('submit', (ev) => { ev.preventDefault(); enviarMensagem(id); });
+  $('resp-texto').addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); enviarMensagem(id); } });
   const box = $('msgs'); box.scrollTop = box.scrollHeight;
   if ($('bt-mais')) $('bt-mais').addEventListener('click', carregarAnteriores);
 
@@ -454,8 +466,9 @@ async function buscarNovas() {
   if (estado.chat !== ch || !data || !data.length) return;
   const box = $('msgs'); const noFim = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
   if ($('msgs-vazio')) $('msgs-vazio').remove();
-  $('msgs-lista').insertAdjacentHTML('beforeend', data.map(bolhaHTML).join(''));
-  ch.maiorId = data[data.length - 1].id;
+  const novas = data.filter((m) => !document.querySelector(`[data-msg="${m.id}"]`));
+  $('msgs-lista').insertAdjacentHTML('beforeend', novas.map(bolhaHTML).join(''));
+  ch.maiorId = Math.max(ch.maiorId, data[data.length - 1].id);
   if (noFim) box.scrollTop = box.scrollHeight;
 }
 setInterval(buscarNovas, 4000);
@@ -523,6 +536,91 @@ async function moverEtapa(contatoId, etapaId) {
     toast(j.enviado_meta ? 'Etapa atualizada e evento enviado à Meta.' : 'Etapa atualizada.');
     await carregar();
   } catch (_) { toast('Sem conexão. Tente de novo.'); }
+}
+
+// ================= ENVIAR MENSAGEM / MODELOS =================
+async function chamarWhats(corpo) {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { location.reload(); return { erro: 'Faça login de novo.' }; }
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/radar-whatsapp`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_KEY },
+      body: JSON.stringify(corpo),
+    });
+    return await res.json().catch(() => ({ erro: 'Resposta inválida do servidor.' }));
+  } catch (_) { return { erro: 'Sem conexão com o servidor.' }; }
+}
+
+async function enviarMensagem(contatoId) {
+  const caixa = $('resp-texto'); const bt = $('resp-enviar');
+  const texto = caixa.value.trim(); if (!texto || bt.disabled) return;
+  bt.disabled = true; bt.textContent = 'Enviando…';
+  const r = await chamarWhats({ acao: 'enviar', contato_id: contatoId, texto });
+  bt.disabled = false; bt.textContent = 'Enviar';
+  if (!r.ok) { toast(r.erro || 'Não enviou.'); return; }
+  caixa.value = '';
+  if (estado.chat && estado.chat.id === contatoId && r.mensagem && !document.querySelector(`[data-msg="${r.mensagem.id}"]`)) {
+    if ($('msgs-vazio')) $('msgs-vazio').remove();
+    $('msgs-lista').insertAdjacentHTML('beforeend', bolhaHTML(r.mensagem));
+    const box = $('msgs'); box.scrollTop = box.scrollHeight;
+  }
+  caixa.focus();
+}
+
+const STATUS_MODELO = {
+  APPROVED: { t: 'Aprovado', c: 'var(--verde)' }, PENDING: { t: 'Em análise', c: 'var(--morno)' },
+  REJECTED: { t: 'Reprovado', c: 'var(--quente)' }, PAUSED: { t: 'Pausado', c: 'var(--tx3)' }, DISABLED: { t: 'Desativado', c: 'var(--tx3)' },
+};
+async function telaModelos() {
+  $('tela-modelos').innerHTML = `<div style="display:flex; flex-direction:column; gap:18px">
+    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+      <h2 style="margin:0">Novo modelo</h2>
+      <p style="margin:0; color:var(--tx2)">Modelos são mensagens aprovadas pela Meta. Servem pra chamar o cliente depois de 24h sem conversa (lembrete, follow-up, promoção). Use {{1}}, {{2}}… onde entra um dado que muda, como o nome.</p>
+      <div class="linha">
+        <div style="flex:1 1 220px"><label for="md-nome">Nome do modelo</label><input id="md-nome" type="text" placeholder="lembrete_agendamento"></div>
+        <div style="flex:1 1 180px"><label for="md-cat">Tipo</label><select id="md-cat"><option value="UTILITY">Utilidade (lembrete, confirmação)</option><option value="MARKETING">Marketing (promoção, convite)</option></select></div>
+      </div>
+      <div><label for="md-texto">Texto</label><textarea id="md-texto" rows="4" style="width:100%; background:#F6FAF7; border:1px solid #CFDCD3; border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="Olá {{1}}, passando pra lembrar do seu horário amanhã às {{2}}. Responda SIM pra confirmar."></textarea></div>
+      <div id="md-exemplos" class="linha"></div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn" id="md-criar">Enviar pra aprovação</button><span id="md-status" style="font-size:13px; color:var(--tx2)"></span></div>
+    </section>
+    <section class="card" style="display:flex; flex-direction:column; gap:10px">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px"><h2 style="margin:0">Modelos do cliente</h2><button class="btn-sec" id="md-recarregar">Atualizar status</button></div>
+      <div id="md-lista" style="font-size:14px">Carregando…</div>
+    </section>
+  </div>`;
+  const desenharExemplos = () => {
+    const vars = [...new Set([...$('md-texto').value.matchAll(/\{\{(\d+)\}\}/g)].map((m) => Number(m[1])))].sort((a, b) => a - b);
+    const antes = [...document.querySelectorAll('[data-ex]')].reduce((o, i) => (o[i.dataset.ex] = i.value, o), {});
+    $('md-exemplos').innerHTML = vars.map((n) => `<div style="flex:1 1 180px"><label for="ex-${n}">Exemplo pra {{${n}}}</label><input id="ex-${n}" data-ex="${n}" type="text" value="${esc(antes[n] || '')}" placeholder="${n === 1 ? 'João' : ''}"></div>`).join('');
+  };
+  $('md-texto').addEventListener('input', desenharExemplos);
+  $('md-criar').addEventListener('click', async () => {
+    const st = $('md-status'); st.style.color = 'var(--tx2)'; st.textContent = 'Enviando…';
+    const exemplos = [...document.querySelectorAll('[data-ex]')].sort((a, b) => a.dataset.ex - b.dataset.ex).map((i) => i.value);
+    const r = await chamarWhats({ acao: 'criar_modelo', site_id: estado.site, nome: $('md-nome').value, categoria: $('md-cat').value, idioma: 'pt_BR', texto: $('md-texto').value, exemplos });
+    if (!r.ok) { st.textContent = r.erro || 'Erro.'; st.style.color = 'var(--quente)'; return; }
+    st.textContent = `Modelo "${r.nome}" enviado. A Meta costuma aprovar em minutos.`; st.style.color = 'var(--verde)';
+    $('md-nome').value = ''; $('md-texto').value = ''; desenharExemplos();
+    listarModelos();
+  });
+  $('md-recarregar').addEventListener('click', listarModelos);
+  listarModelos();
+}
+async function listarModelos() {
+  const alvo = $('md-lista'); if (!alvo) return;
+  alvo.textContent = 'Carregando…';
+  const r = await chamarWhats({ acao: 'listar_modelos', site_id: estado.site });
+  if (!r.ok) { alvo.innerHTML = `<span style="color:var(--quente)">${esc(r.erro || 'Erro ao buscar.')}</span>`; return; }
+  if (!r.modelos.length) { alvo.innerHTML = '<div class="vazio">Nenhum modelo ainda.</div>'; return; }
+  alvo.innerHTML = r.modelos.map((m) => {
+    const s = STATUS_MODELO[m.status] || { t: m.status, c: 'var(--tx3)' };
+    return `<div style="border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:8px">
+      <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap"><b>${esc(m.nome)}</b><span style="font-size:12px; font-weight:700; color:${s.c}">${esc(s.t)}</span></div>
+      <div style="font-size:12px; color:var(--tx3); margin:2px 0 6px">${m.categoria === 'MARKETING' ? 'Marketing' : m.categoria === 'UTILITY' ? 'Utilidade' : esc(m.categoria)} · ${esc(m.idioma)}${m.motivo ? ' · motivo: ' + esc(m.motivo) : ''}</div>
+      <div style="white-space:pre-wrap; color:var(--tx2)">${esc(m.texto)}</div></div>`;
+  }).join('');
 }
 
 // ================= CONECTAR WHATSAPP (Cadastro incorporado da Meta) =================
@@ -744,7 +842,12 @@ async function telaConfig() {
       <div style="font-size:13px; color:var(--tx2)">${site.whatsapp_conectado_em
         ? `<b style="color:var(--verde)">Conectado</b> em ${new Date(site.whatsapp_conectado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}`
         : (site.whatsapp_phone_number_id ? 'Ligado a um número de teste.' : 'Nenhum número conectado.')}</div>
+      <div class="linha">
+        <div style="flex:1 1 220px"><label for="cf-waba">ID da conta do WhatsApp (WABA)</label><input id="cf-waba" type="text" inputmode="numeric" value="${esc(site.whatsapp_waba_id || '')}" placeholder="App na Meta › WhatsApp › Configuração da API"></div>
+        <div style="flex:1 1 260px"><label for="cf-watoken">Chave do WhatsApp (token)</label><input id="cf-watoken" type="password" autocomplete="off" placeholder="Deixe vazio pra manter a atual"></div>
+      </div>
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+        <button class="btn-sec" id="wa-salvar">Salvar dados do WhatsApp</button>
         <button class="btn" id="wa-conectar">Conectar WhatsApp</button>
         <span id="wa-status" style="font-size:13px; color:var(--tx2)"></span>
       </div>
@@ -786,6 +889,7 @@ async function telaConfig() {
   if (novo) { $('cf-cancelar').addEventListener('click', () => { estado.novoCliente = false; estado.tela = 'dashboard'; marcarMenu(); carregar(); }); return; }
 
   $('wa-conectar').addEventListener('click', () => conectarWhatsapp(site.id));
+  $('wa-salvar').addEventListener('click', salvarCliente);
   $('cf-testar').addEventListener('click', async () => {
     $('cf-status').textContent = 'Testando…';
     const r = await chamarAdmin({ acao: 'testar_meta', site_id: site.id });
@@ -896,6 +1000,8 @@ async function salvarCliente() {
     id: $('cf-id').value.trim(), nome: $('cf-nome').value.trim(),
     pixel_id: $('cf-pixel').value.trim(), token: $('cf-token').value.trim(),
     origens: $('cf-dom').value.split('\n'), whatsapp_phone_number_id: $('cf-wpp').value.trim(),
+    whatsapp_waba_id: $('cf-waba') ? $('cf-waba').value.trim() : undefined,
+    wa_token: $('cf-watoken') ? $('cf-watoken').value.trim() : '',
   });
   if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--quente)'; return; }
   const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em').eq('ativo', true).order('nome');
@@ -939,7 +1045,7 @@ document.querySelectorAll('[data-tela]').forEach((b) => b.addEventListener('clic
 $('sel-site').addEventListener('change', (e) => { estado.site = e.target.value; estado.aberto = null; estado.novoCliente = false; carregar(); });
 $('sel-periodo').addEventListener('change', desenhar);
 $('bt-atualizar').addEventListener('click', carregar);
-setInterval(() => { if (!document.hidden && estado.perfil && !['config', 'links', 'conversas'].includes(estado.tela)) carregar(); }, 30000);
+setInterval(() => { if (!document.hidden && estado.perfil && !['config', 'links', 'conversas', 'modelos'].includes(estado.tela)) carregar(); }, 30000);
 
 iniciar();
 </script>
