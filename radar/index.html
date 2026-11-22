@@ -375,24 +375,37 @@ function telaConversas() {
   if (estado.aberto) abrirConversa(estado.aberto, true);
 }
 
+const POR_PAGINA = 50;
+function bolhaHTML(m) {
+  return `<div class="bolha ${m.direcao}" data-msg="${m.id}">${esc(m.texto || '[' + (m.tipo || 'mídia') + ']')}<small>${new Date(m.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</small></div>`;
+}
+
 async function abrirConversa(id, semMarcar) {
   estado.aberto = id;
   if (!semMarcar) document.querySelectorAll('.conv-item').forEach((b) => b.classList.toggle('ativo', Number(b.dataset.contato) === id));
   const c = estado.contatos.find((x) => x.id === id); if (!c) return;
-  const [{ data: msgs }, { data: hist }] = await Promise.all([
-    sb.from('mensagens').select('*').eq('contato_id', id).order('criado_em').limit(500),
+
+  // só as últimas 50 mensagens
+  const [{ data: ult }, { data: hist }] = await Promise.all([
+    sb.from('mensagens').select('*').eq('contato_id', id).order('id', { ascending: false }).limit(POR_PAGINA),
     sb.from('historico_etapas').select('*').eq('contato_id', id).order('criado_em', { ascending: false }),
   ]);
+  if (estado.aberto !== id) return;
+  const msgs = (ult || []).slice().reverse();
+  estado.chat = { id, menorId: msgs[0]?.id ?? null, maiorId: msgs[msgs.length - 1]?.id ?? 0, temMais: (ult || []).length === POR_PAGINA };
+
   const e = etapaDe(c); const cor = COR[e?.temperatura] || COR.frio; const o = ORIGEM[c.origem] || ORIGEM.organico;
 
   $('chat').innerHTML = `<div class="chat-topo">
       <div><b>${esc(c.nome || telefoneBonito(c.telefone))}</b><div style="font-size:12px; color:var(--tx3)">${esc(telefoneBonito(c.telefone))}</div></div>
       <span class="pill" style="color:${cor.c}; background:${cor.bg}; border-color:${cor.bd}">Etapa: ${esc(e?.nome ?? '—')}</span>
     </div>
-    <div class="chat-msgs" id="msgs">${(msgs || []).map((m) =>
-      `<div class="bolha ${m.direcao}">${esc(m.texto || '[' + (m.tipo || 'mídia') + ']')}<small>${new Date(m.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</small></div>`
-    ).join('') || '<div class="vazio">Sem mensagens.</div>'}</div>`;
+    <div class="chat-msgs" id="msgs">
+      <div id="msgs-mais" style="text-align:center">${estado.chat.temMais ? '<button class="btn-sec" id="bt-mais">Carregar mensagens anteriores</button>' : ''}</div>
+      <div id="msgs-lista" style="display:flex; flex-direction:column; gap:10px">${msgs.map(bolhaHTML).join('') || '<div class="vazio" id="msgs-vazio">Sem mensagens.</div>'}</div>
+    </div>`;
   const box = $('msgs'); box.scrollTop = box.scrollHeight;
+  if ($('bt-mais')) $('bt-mais').addEventListener('click', carregarAnteriores);
 
   const nomeEtapa = (eid) => estado.etapas.find((x) => x.id === eid)?.nome ?? '—';
   $('detalhe').classList.remove('oculto');
@@ -419,6 +432,47 @@ async function abrirConversa(id, semMarcar) {
     </div></div>`;
   document.querySelectorAll('[data-mover]').forEach((b) => b.addEventListener('click', () => moverEtapa(c.id, Number(b.dataset.mover))));
 }
+
+async function carregarAnteriores() {
+  const ch = estado.chat; if (!ch || !ch.menorId) return;
+  const { data } = await sb.from('mensagens').select('*').eq('contato_id', ch.id).lt('id', ch.menorId).order('id', { ascending: false }).limit(POR_PAGINA);
+  if (estado.chat !== ch) return;
+  const antigas = (data || []).slice().reverse();
+  const box = $('msgs'); const alturaAntes = box.scrollHeight;
+  $('msgs-lista').insertAdjacentHTML('afterbegin', antigas.map(bolhaHTML).join(''));
+  if (antigas.length) ch.menorId = antigas[0].id;
+  ch.temMais = (data || []).length === POR_PAGINA;
+  if (!ch.temMais) $('msgs-mais').innerHTML = '<span style="font-size:12px; color:var(--tx3)">Início da conversa</span>';
+  box.scrollTop = box.scrollHeight - alturaAntes; // mantém a posição de leitura
+}
+
+// mensagens novas chegam sozinhas (a cada 4 segundos, só com a conversa aberta)
+async function buscarNovas() {
+  const ch = estado.chat;
+  if (!ch || estado.tela !== 'conversas' || document.hidden || !$('msgs-lista')) return;
+  const { data } = await sb.from('mensagens').select('*').eq('contato_id', ch.id).gt('id', ch.maiorId).order('id').limit(100);
+  if (estado.chat !== ch || !data || !data.length) return;
+  const box = $('msgs'); const noFim = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+  if ($('msgs-vazio')) $('msgs-vazio').remove();
+  $('msgs-lista').insertAdjacentHTML('beforeend', data.map(bolhaHTML).join(''));
+  ch.maiorId = data[data.length - 1].id;
+  if (noFim) box.scrollTop = box.scrollHeight;
+}
+setInterval(buscarNovas, 4000);
+
+// a lista de conversas atualiza sozinha sem fechar a conversa aberta
+async function atualizarListaConversas() {
+  if (estado.tela !== 'conversas' || document.hidden || !estado.site) return;
+  const { data } = await sb.from('contatos').select('*').eq('site_id', estado.site).order('atualizado_em', { ascending: false }).limit(1000);
+  if (!data) return;
+  estado.contatos = data;
+  const filtro = (telaConversas._busca || '').toLowerCase();
+  const lista = data.filter((c) => !filtro || (c.nome || '').toLowerCase().includes(filtro) || c.telefone.includes(filtro));
+  const itens = document.querySelector('.conv-lista .itens'); if (!itens) return;
+  itens.innerHTML = lista.map(itemConversa).join('') || '<div class="vazio" style="padding:16px">Nenhuma conversa ainda.</div>';
+  itens.querySelectorAll('[data-contato]').forEach((b) => b.addEventListener('click', () => abrirConversa(Number(b.dataset.contato))));
+}
+setInterval(atualizarListaConversas, 15000);
 
 // ================= CRM =================
 function telaCRM() {
@@ -474,17 +528,24 @@ async function moverEtapa(contatoId, etapaId) {
 // ================= LINKS RASTREÁVEIS =================
 function urlDoLink(l) { return `${SUPABASE_URL}/functions/v1/link?c=${l.codigo}`; }
 
-function telaLinks() {
+async function telaLinks() {
   const admin = estado.perfil?.papel === 'admin';
+  // mensagens que chegaram por link (inclui quem já era contato)
+  const { data: viaLink } = await sb.from('mensagens').select('contato_id, link_id')
+    .eq('site_id', estado.site).not('link_id', 'is', null).limit(5000);
+  const porLink = {};
+  (viaLink || []).forEach((m) => { (porLink[m.link_id] = porLink[m.link_id] || new Set()).add(m.contato_id); });
+
   const linhas = (estado.links || []).map((l) => {
-    const daqui = estado.contatos.filter((c) => c.link_id === l.id);
-    const avancou = daqui.filter((c) => (etapaDe(c)?.ordem ?? 0) >= 2).length;
+    const pessoas = [...(porLink[l.id] || new Set())];
+    const avancou = pessoas.filter((cid) => (etapaDe(estado.contatos.find((c) => c.id === cid) || {})?.ordem ?? 0) >= 2).length;
     return `<tr style="border-top:1px solid var(--line2); ${l.ativo ? '' : 'opacity:.55'}">
       <td style="padding:12px 6px"><b>${esc(l.nome)}</b><div style="font-size:12px; color:var(--tx3); word-break:break-all">${esc(urlDoLink(l))}</div></td>
       <td style="padding:12px 6px">${l.cliques}</td>
-      <td style="padding:12px 6px">${daqui.length}</td>
+      <td style="padding:12px 6px">${pessoas.length}</td>
       <td style="padding:12px 6px">${avancou}</td>
       <td style="padding:12px 6px; white-space:nowrap">
+        <button class="btn-sec" data-ver="${l.id}">Ver mensagens</button>
         <button class="btn-sec" data-copiar="${l.id}">Copiar</button>
         ${admin ? `<button class="btn-sec" data-ativar="${l.id}" data-estado="${l.ativo ? '0' : '1'}">${l.ativo ? 'Desativar' : 'Ativar'}</button>` : ''}
       </td></tr>`;
@@ -498,18 +559,21 @@ function telaLinks() {
         <div style="flex:1 1 200px"><label for="lk-nome">Nome do link</label><input id="lk-nome" type="text" placeholder="Ex.: Bio do Instagram"></div>
         <div style="flex:1 1 200px"><label for="lk-num">WhatsApp do cliente (DDD + número)</label><input id="lk-num" type="text" inputmode="numeric" placeholder="21 99999-9999" value="${esc(telaLinks._ultimoNumero || '')}"></div>
       </div>
-      <div><label for="lk-msg">Mensagem que já vem escrita</label><input id="lk-msg" type="text" placeholder="Olá! Quero agendar um horário" value="Olá! Quero agendar um horário"></div>
+      <div><label for="lk-msg">Mensagem que já vem escrita</label><input id="lk-msg" type="text" value="Olá! Quero agendar um horário"></div>
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn" id="lk-criar">Criar link</button><span id="lk-status" style="font-size:13px; color:var(--tx2)"></span></div>
     </section>` : ''}
     <section class="card">
       <h2>Links do cliente</h2>
-      ${linhas ? `<div style="overflow-x:auto"><table style="width:100%; border-collapse:collapse; min-width:620px">
-        <thead><tr style="color:var(--tx3); text-align:left"><th style="padding:8px 6px; font-weight:500">Link</th><th style="padding:8px 6px; font-weight:500">Cliques</th><th style="padding:8px 6px; font-weight:500">Conversas</th><th style="padding:8px 6px; font-weight:500">Avançaram</th><th></th></tr></thead>
+      ${linhas ? `<div style="overflow-x:auto"><table style="width:100%; border-collapse:collapse; min-width:720px">
+        <thead><tr style="color:var(--tx3); text-align:left"><th style="padding:8px 6px; font-weight:500">Link</th><th style="padding:8px 6px; font-weight:500">Cliques</th><th style="padding:8px 6px; font-weight:500">Pessoas que mandaram msg</th><th style="padding:8px 6px; font-weight:500">Avançaram</th><th></th></tr></thead>
         <tbody>${linhas}</tbody></table></div>
-        <p style="margin:10px 0 0; font-size:12px; color:var(--tx3)">Cliques = quantas vezes abriram o link. Conversas = quantas pessoas mandaram a mensagem. Avançaram = chegaram na 2ª etapa do funil ou depois.</p>`
+        <p style="margin:10px 0 0; font-size:12px; color:var(--tx3)">Cliques = quantas vezes abriram o link. Pessoas = quantas mandaram mensagem por ele (novas e antigas). Avançaram = estão na 2ª etapa do funil ou depois.</p>`
       : '<div class="vazio">Nenhum link criado ainda.</div>'}
-    </section></div>`;
+    </section>
+    <section class="card oculto" id="lk-msgs"></section>
+  </div>`;
 
+  document.querySelectorAll('[data-ver]').forEach((b) => b.addEventListener('click', () => verMensagensDoLink(Number(b.dataset.ver))));
   document.querySelectorAll('[data-copiar]').forEach((b) => b.addEventListener('click', async () => {
     const l = estado.links.find((x) => x.id === Number(b.dataset.copiar));
     try { await navigator.clipboard.writeText(urlDoLink(l)); b.textContent = 'Copiado ✓'; }
@@ -528,6 +592,34 @@ function telaLinks() {
     toast('Link criado. Clique em Copiar pra usar.');
     await carregar();
   });
+}
+
+async function verMensagensDoLink(linkId) {
+  const l = estado.links.find((x) => x.id === linkId);
+  const box = $('lk-msgs'); box.classList.remove('oculto');
+  box.innerHTML = `<h2>Mensagens do link “${esc(l?.nome)}”</h2><div class="vazio">Carregando…</div>`;
+  const { data } = await sb.from('mensagens').select('id, contato_id, texto, criado_em')
+    .eq('link_id', linkId).order('id', { ascending: false }).limit(100);
+  const linhas = (data || []).map((m) => {
+    const c = estado.contatos.find((x) => x.id === m.contato_id) || {};
+    return `<div style="display:flex; gap:12px; align-items:flex-start; justify-content:space-between; border-top:1px solid var(--line2); padding:12px 0; flex-wrap:wrap">
+      <div style="flex:1 1 300px; min-width:0">
+        <b>${esc(c.nome || telefoneBonito(c.telefone) || 'Contato')}</b>
+        <span style="font-size:12px; color:var(--tx3)"> · ${new Date(m.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
+        <div style="margin-top:4px; white-space:pre-wrap; word-break:break-word; color:var(--tx2)">${esc(m.texto || '')}</div>
+      </div>
+      <button class="btn-sec" data-abrir="${m.contato_id}">Abrir conversa</button>
+    </div>`;
+  }).join('');
+  box.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; gap:10px"><h2 style="margin:0">Mensagens do link “${esc(l?.nome)}”</h2><button class="btn-sec" id="lk-fechar">Fechar</button></div>
+    ${linhas || '<div class="vazio">Ainda não chegou mensagem por este link.</div>'}`;
+  $('lk-fechar').addEventListener('click', () => box.classList.add('oculto'));
+  box.querySelectorAll('[data-abrir]').forEach((b) => b.addEventListener('click', () => {
+    estado.tela = 'conversas'; estado.aberto = Number(b.dataset.abrir);
+    document.querySelectorAll('[data-tela]').forEach((x) => x.classList.toggle('ativo', x.dataset.tela === 'conversas'));
+    desenhar();
+  }));
+  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ================= CONFIGURAÇÕES (só admin) =================
@@ -774,7 +866,7 @@ document.querySelectorAll('[data-tela]').forEach((b) => b.addEventListener('clic
 $('sel-site').addEventListener('change', (e) => { estado.site = e.target.value; estado.aberto = null; estado.novoCliente = false; carregar(); });
 $('sel-periodo').addEventListener('change', desenhar);
 $('bt-atualizar').addEventListener('click', carregar);
-setInterval(() => { if (!document.hidden && estado.perfil && estado.tela !== 'config' && estado.tela !== 'links') carregar(); }, 30000);
+setInterval(() => { if (!document.hidden && estado.perfil && !['config', 'links', 'conversas'].includes(estado.tela)) carregar(); }, 30000);
 
 iniciar();
 </script>
