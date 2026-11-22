@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Radar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --bg: #F1F6F2; --card: #FFFFFF; --side: #F7FBF8; --line: #DDE7E0; --line2: #EAF1EC;
+    --tx: #0F1A13; --tx2: #4D5B52; --tx3: #5F6E64; --verde: #15803D; --verde-bg: #EAF7EE; --verde-bd: #B7E4C7;
+    --frio: #1D4ED8; --frio-bg: #E8F1FE; --frio-bd: #B9D3FB;
+    --morno: #B45309; --morno-bg: #FEF3E2; --morno-bd: #F6D199;
+    --quente: #B91C1C; --quente-bg: #FDECEC; --quente-bd: #F5B5B5;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--tx); font-family: 'Inter', sans-serif; font-size: 14px; }
+  h1, h2, .num { font-family: 'Space Grotesk', sans-serif; }
+  button, input, select { font: inherit; }
+  .oculto { display: none !important; }
+
+  /* login */
+  #login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .login-box { width: 100%; max-width: 380px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 32px; display: flex; flex-direction: column; gap: 16px; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-ic { width: 38px; height: 38px; border-radius: 10px; background: var(--verde); display: flex; align-items: center; justify-content: center; }
+  .logo span { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; }
+  label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px; }
+  input[type=email], input[type=password], input[type=text], select {
+    width: 100%; background: #F6FAF7; border: 1px solid #CFDCD3; border-radius: 10px; padding: 11px 13px; color: var(--tx);
+  }
+  .btn { background: var(--verde); color: #fff; border: none; border-radius: 10px; padding: 12px 18px; font-weight: 700; cursor: pointer; min-height: 44px; }
+  .btn:disabled { opacity: .6; cursor: wait; }
+  .btn-sec { background: #fff; color: var(--tx); border: 1px solid #CFDCD3; border-radius: 10px; padding: 9px 14px; cursor: pointer; font-weight: 600; }
+  .erro { color: var(--quente); font-size: 13px; min-height: 18px; }
+
+  /* app */
+  #app { display: flex; flex-wrap: wrap; min-height: 100vh; }
+  nav { flex: 1 1 220px; max-width: 248px; background: var(--side); border-right: 1px solid var(--line); padding: 22px 14px; display: flex; flex-direction: column; gap: 20px; }
+  nav .menu { display: flex; flex-direction: column; gap: 4px; }
+  nav .menu button { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; border: none; background: transparent; color: var(--tx2); font-weight: 500; cursor: pointer; text-align: left; }
+  nav .menu button.ativo { background: #E3F5E9; color: var(--tx); font-weight: 600; box-shadow: inset 3px 0 0 var(--verde); }
+  nav .rodape { margin-top: auto; border-top: 1px solid var(--line); padding-top: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--tx2); }
+  main { flex: 999 1 560px; min-width: 0; padding: 28px 32px 40px; display: flex; flex-direction: column; gap: 22px; }
+  .topo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px; }
+  .topo h1 { margin: 0; font-size: 28px; }
+  .topo p { margin: 4px 0 0; color: var(--tx2); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .card h2 { margin: 0 0 14px; font-size: 17px; }
+  .linha { display: flex; flex-wrap: wrap; gap: 16px; }
+  .kpi { flex: 1 1 200px; display: flex; flex-direction: column; gap: 6px; }
+  .kpi .rot { color: var(--tx2); font-size: 13px; }
+  .kpi .num { font-size: 30px; font-weight: 700; }
+  .kpi .obs { color: var(--tx3); font-size: 12px; }
+  .vazio { color: var(--tx3); padding: 18px 0; }
+
+  /* funil */
+  .funil-linha { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+  .funil-nome { width: 160px; flex-shrink: 0; display: flex; flex-direction: column; }
+  .funil-nome b { font-size: 14px; } .funil-nome small { font-size: 11px; font-weight: 700; }
+  .funil-trilho { flex: 1; min-width: 0; background: #F6FAF7; border-radius: 10px; height: 44px; display: flex; justify-content: center; }
+  .funil-barra { height: 44px; border-radius: 10px; border: 1px solid; display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 90px; }
+  .funil-barra .num { font-size: 20px; font-weight: 700; }
+  .barra-origem { margin-bottom: 12px; }
+  .barra-origem .t { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+  .barra-origem .tr { height: 8px; border-radius: 4px; background: var(--line2); }
+  .barra-origem .f { height: 8px; border-radius: 4px; }
+
+  /* conversas */
+  .conv { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; }
+  .conv-lista { flex: 1 1 260px; max-width: 330px; padding: 0; overflow: hidden; display: flex; flex-direction: column; max-height: 76vh; }
+  .conv-lista .busca { padding: 12px; border-bottom: 1px solid var(--line); }
+  .conv-lista .itens { overflow-y: auto; }
+  .conv-item { display: flex; gap: 10px; width: 100%; text-align: left; background: none; border: none; border-bottom: 1px solid var(--line2); padding: 12px 14px; cursor: pointer; color: inherit; }
+  .conv-item.ativo { background: #E3F5E9; }
+  .av { width: 36px; height: 36px; border-radius: 50%; background: #DDE7E0; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+  .conv-item .meio { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .conv-item .nome { font-weight: 600; display: flex; justify-content: space-between; gap: 6px; }
+  .conv-item .nome small { color: var(--tx3); font-weight: 400; font-size: 11px; }
+  .conv-item .orig { font-size: 11px; color: var(--tx3); display: flex; align-items: center; gap: 6px; }
+  .bol { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .chat { flex: 2 1 380px; min-width: 0; padding: 0; display: flex; flex-direction: column; max-height: 76vh; }
+  .chat-topo { padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .chat-msgs { padding: 18px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex: 1; }
+  .bolha { max-width: 75%; padding: 10px 14px; border-radius: 14px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
+  .bolha small { display: block; font-size: 10px; color: var(--tx3); text-align: right; margin-top: 4px; }
+  .bolha.entrada { align-self: flex-start; background: #F1F4F2; border-bottom-left-radius: 4px; }
+  .bolha.saida { align-self: flex-end; background: #D9F2E1; border-bottom-right-radius: 4px; }
+  .detalhe { flex: 1 1 280px; max-width: 340px; display: flex; flex-direction: column; gap: 16px; }
+  .dl { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--line2); }
+  .dl span:first-child { color: var(--tx3); } .dl span:last-child { text-align: right; word-break: break-word; }
+  .etapas-bt { display: flex; flex-wrap: wrap; gap: 8px; }
+  .etapas-bt button { border: 1px solid; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 13px; }
+  .hist { font-size: 12px; color: var(--tx2); display: flex; flex-direction: column; gap: 6px; }
+  .pill { font-size: 12px; font-weight: 600; border: 1px solid; border-radius: 999px; padding: 4px 10px; }
+
+  /* crm */
+  .crm { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+  .col { flex: 1 1 250px; min-width: 0; background: var(--side); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .col-topo { border: 1px solid; border-radius: 10px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .col-topo b { display: block; } .col-topo small { font-size: 11px; font-weight: 700; }
+  .col-topo .num { font-size: 22px; font-weight: 700; }
+  .ccard { background: #fff; border: 1px solid #CFDCD3; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .ccard .n { font-weight: 600; display: flex; justify-content: space-between; gap: 6px; }
+  .ccard .n small { color: var(--tx3); font-weight: 400; }
+  .ccard .o { font-size: 12px; color: var(--tx2); }
+  .ccard select { padding: 7px 10px; font-size: 13px; }
+  .aviso { background: var(--verde-bg); border: 1px solid var(--verde-bd); border-radius: 12px; padding: 12px 16px; color: #33433A; font-size: 13px; }
+  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--tx); color: #fff; padding: 12px 18px; border-radius: 10px; font-size: 13px; z-index: 10; }
+  @media (max-width: 700px) { main { padding: 20px 16px; } .funil-nome { width: 110px; } }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section id="login" class="oculto">
+  <form class="login-box" id="form-login">
+    <div class="logo"><div class="logo-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6-6"/></svg></div><span>Radar</span></div>
+    <div><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required></div>
+    <div><label for="senha">Senha</label><input id="senha" type="password" autocomplete="current-password" required></div>
+    <button class="btn" type="submit" id="bt-entrar">Entrar</button>
+    <div class="erro" id="erro-login" role="alert"></div>
+  </form>
+</section>
+
+<!-- ============ APP ============ -->
+<div id="app" class="oculto">
+  <nav aria-label="Menu principal">
+    <div class="logo"><div class="logo-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6-6"/></svg></div><span>Radar</span></div>
+    <div id="bloco-cliente">
+      <label for="sel-site">Cliente</label>
+      <select id="sel-site"></select>
+    </div>
+    <div class="menu">
+      <button data-tela="dashboard" class="ativo">Dashboard</button>
+      <button data-tela="conversas">Conversas</button>
+      <button data-tela="crm">CRM / Funil</button>
+    </div>
+    <div class="rodape">
+      <span id="quem"></span>
+      <button class="btn-sec" id="bt-sair">Sair</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="topo">
+      <div><h1 id="titulo">Dashboard</h1><p id="subtitulo"></p></div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+        <select id="sel-periodo" aria-label="Período" style="width:auto">
+          <option value="7">Últimos 7 dias</option>
+          <option value="30">Últimos 30 dias</option>
+          <option value="90">Últimos 90 dias</option>
+        </select>
+        <button class="btn-sec" id="bt-atualizar">Atualizar</button>
+      </div>
+    </div>
+
+    <section id="tela-dashboard"></section>
+    <section id="tela-conversas" class="oculto"></section>
+    <section id="tela-crm" class="oculto"></section>
+  </main>
+</div>
+<div id="toast" class="oculto" role="status"></div>
+
+<script>
+// ================= CONFIGURAÇÃO =================
+// Cole aqui a chave pública do Supabase (Settings > API Keys > "anon public" ou "publishable").
+// Essa chave PODE ficar no site: sem login ela não acessa nada.
+const SUPABASE_URL = 'https://dwjozttehrdkhbjzkkia.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_PcFcJn4xcDfvAFbq2GloBA_o9gc5ukc';
+// =================================================
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = (id) => document.getElementById(id);
+const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+const COR = {
+  frio:   { c: 'var(--frio)',   bg: 'var(--frio-bg)',   bd: 'var(--frio-bd)' },
+  morno:  { c: 'var(--morno)',  bg: 'var(--morno-bg)',  bd: 'var(--morno-bd)' },
+  quente: { c: 'var(--quente)', bg: 'var(--quente-bg)', bd: 'var(--quente-bd)' },
+};
+const ORIGEM = {
+  anuncio_meta: { nome: 'Anúncio Meta', cor: '#15803D' },
+  site:         { nome: 'Site',          cor: '#B45309' },
+  link:         { nome: 'Link rastreável', cor: '#7C3AED' },
+  organico:     { nome: 'Orgânico / direto', cor: '#5F6E64' },
+};
+
+const estado = { perfil: null, site: null, tela: 'dashboard', etapas: [], contatos: [], aberto: null };
+
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg; t.classList.remove('oculto');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.add('oculto'), 3500);
+}
+function quando(iso) {
+  const d = new Date(iso), hoje = new Date();
+  const mesmoDia = d.toDateString() === hoje.toDateString();
+  return mesmoDia ? d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+                  : d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+}
+function telefoneBonito(t) {
+  const d = String(t || '').replace(/^55/, '');
+  return d.length >= 10 ? `(${d.slice(0, 2)}) ${d.slice(2, -4)}-${d.slice(-4)}` : t;
+}
+function pct(n, total) { return total ? Math.round((n / total) * 100) : 0; }
+
+// ================= LOGIN =================
+$('form-login').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  $('bt-entrar').disabled = true; $('erro-login').textContent = '';
+  const { error } = await sb.auth.signInWithPassword({ email: $('email').value.trim(), password: $('senha').value });
+  $('bt-entrar').disabled = false;
+  if (error) { $('erro-login').textContent = 'E-mail ou senha incorretos.'; return; }
+  iniciar();
+});
+$('bt-sair').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
+
+async function iniciar() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { $('login').classList.remove('oculto'); $('app').classList.add('oculto'); return; }
+
+  const { data: perfil } = await sb.from('perfis').select('*').eq('user_id', session.user.id).maybeSingle();
+  if (!perfil) {
+    $('login').classList.remove('oculto');
+    $('erro-login').textContent = 'Seu usuário ainda não tem acesso ao Radar. Fale com o Jota.';
+    await sb.auth.signOut(); return;
+  }
+  estado.perfil = perfil;
+  $('quem').textContent = `${perfil.nome} · ${perfil.papel === 'admin' ? 'Administrador' : 'Cliente'}`;
+
+  const { data: sites } = await sb.from('sites').select('id, nome').eq('ativo', true).order('nome');
+  const sel = $('sel-site');
+  sel.innerHTML = (sites || []).map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
+  if (perfil.papel !== 'admin') $('bloco-cliente').classList.add('oculto');
+  estado.site = perfil.papel === 'admin' ? (sites?.[0]?.id ?? null) : perfil.site_id;
+  sel.value = estado.site || '';
+
+  $('login').classList.add('oculto'); $('app').classList.remove('oculto');
+  await carregar();
+}
+
+// ================= DADOS =================
+async function carregar() {
+  if (!estado.site) { $('tela-dashboard').innerHTML = '<div class="card vazio">Nenhum cliente cadastrado ainda.</div>'; return; }
+  const nomeSite = $('sel-site').selectedOptions[0]?.textContent ?? '';
+  $('subtitulo').textContent = nomeSite;
+
+  const [{ data: etapas }, { data: contatos }] = await Promise.all([
+    sb.from('etapas').select('*').eq('site_id', estado.site).order('ordem'),
+    sb.from('contatos').select('*').eq('site_id', estado.site).order('atualizado_em', { ascending: false }).limit(1000),
+  ]);
+  estado.etapas = etapas || [];
+  estado.contatos = contatos || [];
+  desenhar();
+}
+
+function etapaDe(c) { return estado.etapas.find((e) => e.id === c.etapa_id) || null; }
+function noPeriodo(lista) {
+  const dias = Number($('sel-periodo').value);
+  const corte = Date.now() - dias * 864e5;
+  return lista.filter((c) => new Date(c.criado_em).getTime() >= corte);
+}
+
+function desenhar() {
+  ['dashboard', 'conversas', 'crm'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
+  $('titulo').textContent = { dashboard: 'Dashboard', conversas: 'Conversas', crm: 'CRM / Funil' }[estado.tela];
+  if (estado.tela === 'dashboard') telaDashboard();
+  if (estado.tela === 'conversas') telaConversas();
+  if (estado.tela === 'crm') telaCRM();
+}
+
+// ================= DASHBOARD =================
+function telaDashboard() {
+  const lista = noPeriodo(estado.contatos);
+  const total = lista.length;
+  const etapas = estado.etapas;
+  // quantos chegaram em cada etapa (ou passaram dela)
+  const chegaram = etapas.map((e) => lista.filter((c) => (etapaDe(c)?.ordem ?? 0) >= e.ordem).length);
+
+  const kpis = etapas.slice(1, 3).map((e, i) => {
+    const n = chegaram[i + 1];
+    return `<div class="card kpi"><span class="rot">${esc(e.nome)}</span><span class="num">${n}</span><span class="obs">${pct(n, total)}% · ${n} de ${total} conversas</span></div>`;
+  }).join('');
+
+  const max = Math.max(...chegaram, 1);
+  const funil = etapas.map((e, i) => {
+    const cor = COR[e.temperatura] || COR.frio;
+    const w = Math.max(Math.round((chegaram[i] / max) * 100), 12);
+    const queda = i < etapas.length - 1 ? chegaram[i] - chegaram[i + 1] : null;
+    return `<div class="funil-linha">
+      <div class="funil-nome"><b>${esc(e.nome)}</b><small style="color:${cor.c}">${e.temperatura.toUpperCase()}</small></div>
+      <div class="funil-trilho"><div class="funil-barra" style="width:${w}%; background:${cor.bg}; border-color:${cor.bd}">
+        <span class="num" style="color:${cor.c}">${chegaram[i]}</span><span style="color:#33433A; font-size:12px">pessoas</span></div></div>
+    </div>${queda !== null && queda > 0 ? `<div style="font-size:12px; color:var(--tx3); margin:-6px 0 10px 174px">↓ ${queda} ainda não avançaram</div>` : ''}`;
+  }).join('');
+
+  const porOrigem = Object.keys(ORIGEM).map((k) => ({ k, n: lista.filter((c) => c.origem === k).length }))
+    .sort((a, b) => b.n - a.n);
+  const origens = porOrigem.map(({ k, n }) => `<div class="barra-origem">
+      <div class="t"><span>${ORIGEM[k].nome}</span><span style="color:var(--tx2)">${n} leads · ${pct(n, total)}%</span></div>
+      <div class="tr"><div class="f" style="width:${pct(n, total)}%; background:${ORIGEM[k].cor}"></div></div></div>`).join('');
+
+  const porAnuncio = {};
+  lista.filter((c) => c.origem === 'anuncio_meta').forEach((c) => {
+    const k = c.anuncio_titulo || c.anuncio_id || 'Anúncio sem título';
+    porAnuncio[k] = porAnuncio[k] || { conversas: 0, avancou: 0 };
+    porAnuncio[k].conversas++;
+    if ((etapaDe(c)?.ordem ?? 0) >= 2) porAnuncio[k].avancou++;
+  });
+  const linhasAnuncio = Object.entries(porAnuncio).sort((a, b) => b[1].avancou - a[1].avancou).slice(0, 8)
+    .map(([nome, v]) => `<tr style="border-top:1px solid var(--line2)"><td style="padding:10px 6px">${esc(nome)}</td><td style="padding:10px 6px">${v.conversas}</td><td style="padding:10px 6px">${v.avancou}</td></tr>`).join('');
+
+  $('tela-dashboard').innerHTML = `
+    <div class="linha">
+      <div class="card kpi"><span class="rot">Conversas novas</span><span class="num">${total}</span><span class="obs">pelo WhatsApp no período</span></div>
+      ${kpis}
+    </div>
+    <div class="linha">
+      <div class="card" style="flex:3 1 460px"><h2>Funil de aquisição</h2>${etapas.length ? funil : '<div class="vazio">Nenhuma etapa configurada.</div>'}</div>
+      <div class="card" style="flex:2 1 300px"><h2>De onde vieram os leads</h2>${origens}<span style="font-size:12px; color:var(--tx3)">Total: ${total} leads</span></div>
+    </div>
+    <div class="card"><h2>Anúncios da Meta que mais avançaram no funil</h2>
+      ${linhasAnuncio ? `<div style="overflow-x:auto"><table style="width:100%; border-collapse:collapse; min-width:420px">
+        <thead><tr style="color:var(--tx3); text-align:left"><th style="padding:8px 6px; font-weight:500">Anúncio</th><th style="padding:8px 6px; font-weight:500">Conversas</th><th style="padding:8px 6px; font-weight:500">Avançaram</th></tr></thead>
+        <tbody>${linhasAnuncio}</tbody></table></div>`
+      : '<div class="vazio">Ainda não chegou conversa de anúncio de WhatsApp neste período.</div>'}
+    </div>`;
+}
+
+// ================= CONVERSAS =================
+function itemConversa(c) {
+  const e = etapaDe(c); const cor = COR[e?.temperatura] || COR.frio; const o = ORIGEM[c.origem] || ORIGEM.organico;
+  const nome = c.nome || telefoneBonito(c.telefone);
+  return `<button class="conv-item ${estado.aberto === c.id ? 'ativo' : ''}" data-contato="${c.id}">
+    <span class="av">${esc(nome.charAt(0).toUpperCase())}</span>
+    <span class="meio"><span class="nome">${esc(nome)}<small>${quando(c.atualizado_em)}</small></span>
+    <span class="orig"><span class="bol" style="background:${cor.c}"></span>${esc(e?.nome ?? 'Sem etapa')} · ${o.nome}</span></span>
+  </button>`;
+}
+
+function telaConversas() {
+  const filtro = (telaConversas._busca || '').toLowerCase();
+  const lista = estado.contatos.filter((c) => !filtro || (c.nome || '').toLowerCase().includes(filtro) || c.telefone.includes(filtro));
+  $('tela-conversas').innerHTML = `<div class="conv">
+    <div class="card conv-lista">
+      <div class="busca"><label for="busca">Buscar</label><input id="busca" type="text" placeholder="Nome ou telefone" value="${esc(telaConversas._busca || '')}"></div>
+      <div class="itens">${lista.length ? lista.map(itemConversa).join('') : '<div class="vazio" style="padding:16px">Nenhuma conversa ainda.</div>'}</div>
+    </div>
+    <div class="card chat" id="chat"><div class="vazio" style="padding:24px">Escolha uma conversa à esquerda.</div></div>
+    <aside class="card detalhe oculto" id="detalhe" aria-label="Detalhes do lead"></aside>
+  </div>`;
+  $('busca').addEventListener('input', (e) => {
+    telaConversas._busca = e.target.value;
+    const pos = e.target.selectionStart; telaConversas(); $('busca').focus(); $('busca').setSelectionRange(pos, pos);
+  });
+  document.querySelectorAll('[data-contato]').forEach((b) => b.addEventListener('click', () => abrirConversa(Number(b.dataset.contato))));
+  if (estado.aberto) abrirConversa(estado.aberto, true);
+}
+
+async function abrirConversa(id, semMarcar) {
+  estado.aberto = id;
+  if (!semMarcar) document.querySelectorAll('.conv-item').forEach((b) => b.classList.toggle('ativo', Number(b.dataset.contato) === id));
+  const c = estado.contatos.find((x) => x.id === id); if (!c) return;
+  const [{ data: msgs }, { data: hist }] = await Promise.all([
+    sb.from('mensagens').select('*').eq('contato_id', id).order('criado_em').limit(500),
+    sb.from('historico_etapas').select('*').eq('contato_id', id).order('criado_em', { ascending: false }),
+  ]);
+  const e = etapaDe(c); const cor = COR[e?.temperatura] || COR.frio; const o = ORIGEM[c.origem] || ORIGEM.organico;
+
+  $('chat').innerHTML = `<div class="chat-topo">
+      <div><b>${esc(c.nome || telefoneBonito(c.telefone))}</b><div style="font-size:12px; color:var(--tx3)">${esc(telefoneBonito(c.telefone))}</div></div>
+      <span class="pill" style="color:${cor.c}; background:${cor.bg}; border-color:${cor.bd}">Etapa: ${esc(e?.nome ?? '—')}</span>
+    </div>
+    <div class="chat-msgs" id="msgs">${(msgs || []).map((m) =>
+      `<div class="bolha ${m.direcao}">${esc(m.texto || '[' + (m.tipo || 'mídia') + ']')}<small>${new Date(m.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</small></div>`
+    ).join('') || '<div class="vazio">Sem mensagens.</div>'}</div>`;
+  const box = $('msgs'); box.scrollTop = box.scrollHeight;
+
+  const nomeEtapa = (eid) => estado.etapas.find((x) => x.id === eid)?.nome ?? '—';
+  $('detalhe').classList.remove('oculto');
+  $('detalhe').innerHTML = `
+    <div><h2 style="margin:0 0 4px">Origem do lead</h2><span style="font-size:12px; color:var(--tx3)">Como essa pessoa chegou</span></div>
+    <div style="display:flex; align-items:center; gap:10px; background:var(--verde-bg); border:1px solid var(--verde-bd); border-radius:10px; padding:12px">
+      <span class="bol" style="width:10px; height:10px; background:${o.cor}"></span><b>${o.nome}</b></div>
+    <div>
+      ${c.anuncio_titulo ? `<div class="dl"><span>Anúncio</span><span>${esc(c.anuncio_titulo)}</span></div>` : ''}
+      ${c.anuncio_id ? `<div class="dl"><span>ID do anúncio</span><span>${esc(c.anuncio_id)}</span></div>` : ''}
+      ${c.anuncio_url ? `<div class="dl"><span>Link</span><span><a href="${esc(c.anuncio_url)}" target="_blank" rel="noopener">abrir</a></span></div>` : ''}
+      ${c.ref_code ? `<div class="dl"><span>Código</span><span>${esc(c.ref_code)}</span></div>` : ''}
+      <div class="dl"><span>Primeiro contato</span><span>${new Date(c.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</span></div>
+    </div>
+    <div><b style="display:block; margin-bottom:8px">Etapa no funil</b><div class="etapas-bt">
+      ${estado.etapas.map((x) => {
+        const k = COR[x.temperatura] || COR.frio; const sel = x.id === c.etapa_id;
+        return `<button data-mover="${x.id}" aria-pressed="${sel}" style="color:${sel ? '#fff' : k.c}; background:${sel ? k.c : k.bg}; border-color:${sel ? k.c : k.bd}; font-weight:${sel ? 700 : 500}">${esc(x.nome)}</button>`;
+      }).join('')}
+    </div></div>
+    <div><b style="display:block; margin-bottom:8px">Histórico</b><div class="hist">
+      ${(hist || []).map((h) => `<span>${quando(h.criado_em)} · ${esc(nomeEtapa(h.etapa_id))} <span style="color:var(--tx3)">(${esc(h.motivo || '')}${h.enviado_meta ? ' · enviado à Meta' : ''})</span></span>`).join('') || 'Sem histórico.'}
+    </div></div>`;
+  document.querySelectorAll('[data-mover]').forEach((b) => b.addEventListener('click', () => moverEtapa(c.id, Number(b.dataset.mover))));
+}
+
+// ================= CRM =================
+function telaCRM() {
+  const etapas = estado.etapas;
+  const colunas = etapas.map((e) => {
+    const cor = COR[e.temperatura] || COR.frio;
+    const cards = estado.contatos.filter((c) => c.etapa_id === e.id);
+    const vis = cards.slice(0, 50);
+    return `<section class="col">
+      <div class="col-topo" style="background:${cor.bg}; border-color:${cor.bd}">
+        <div><b>${esc(e.nome)}</b><small style="color:${cor.c}">${e.temperatura.toUpperCase()}${e.evento_meta ? ' · envia ' + esc(e.evento_meta) : ''}</small></div>
+        <span class="num" style="color:${cor.c}">${cards.length}</span>
+      </div>
+      ${vis.map((c) => {
+        const o = ORIGEM[c.origem] || ORIGEM.organico;
+        return `<article class="ccard">
+          <div class="n">${esc(c.nome || telefoneBonito(c.telefone))}<small>${quando(c.atualizado_em)}</small></div>
+          <div class="o">${o.nome}${c.anuncio_titulo ? ' · ' + esc(c.anuncio_titulo) : ''}</div>
+          <label class="oculto" for="mv-${c.id}">Mover para</label>
+          <select id="mv-${c.id}" data-mover-sel="${c.id}">
+            <option value="">Mover para…</option>
+            ${etapas.filter((x) => x.id !== e.id).map((x) => `<option value="${x.id}">${esc(x.nome)}</option>`).join('')}
+          </select>
+        </article>`;
+      }).join('') || '<div class="vazio" style="padding:8px">Ninguém nesta etapa.</div>'}
+      ${cards.length > 50 ? `<div style="font-size:12px; color:var(--tx3)">Mostrando 50 de ${cards.length}</div>` : ''}
+    </section>`;
+  }).join('');
+  $('tela-crm').innerHTML = `<div class="aviso" style="margin-bottom:16px">Mover pra uma etapa que tem evento envia a conversão pra Meta. As palavras-chave na conversa também mudam a etapa sozinhas.</div>
+    <div class="crm">${colunas || '<div class="card vazio">Nenhuma etapa configurada.</div>'}</div>`;
+  document.querySelectorAll('[data-mover-sel]').forEach((s) => s.addEventListener('change', () => {
+    if (s.value) moverEtapa(Number(s.dataset.moverSel), Number(s.value));
+  }));
+}
+
+// ================= MOVER ETAPA =================
+async function moverEtapa(contatoId, etapaId) {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { location.reload(); return; }
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/mover-etapa`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_KEY },
+      body: JSON.stringify({ contato_id: contatoId, etapa_id: etapaId }),
+    });
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok || !j.ok) { toast(j.erro || 'Não foi possível mudar a etapa.'); return; }
+    toast(j.enviado_meta ? 'Etapa atualizada e evento enviado à Meta.' : 'Etapa atualizada.');
+    await carregar();
+  } catch (_) { toast('Sem conexão. Tente de novo.'); }
+}
+
+// ================= NAVEGAÇÃO =================
+document.querySelectorAll('[data-tela]').forEach((b) => b.addEventListener('click', () => {
+  estado.tela = b.dataset.tela;
+  document.querySelectorAll('[data-tela]').forEach((x) => x.classList.toggle('ativo', x === b));
+  desenhar();
+}));
+$('sel-site').addEventListener('change', (e) => { estado.site = e.target.value; estado.aberto = null; carregar(); });
+$('sel-periodo').addEventListener('change', desenhar);
+$('bt-atualizar').addEventListener('click', carregar);
+setInterval(() => { if (!document.hidden && estado.perfil) carregar(); }, 30000);
+
+iniciar();
+</script>
+</body>
+</html>
