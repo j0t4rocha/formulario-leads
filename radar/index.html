@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Radar</title>
+<script>try { if (localStorage.getItem('radar-tema') === 'claro') document.documentElement.dataset.tema = 'claro'; } catch (_) {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Geist:wght@500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -190,6 +191,46 @@
   table th { color: var(--tx3); }
   table td, table th { border-color: var(--line2) !important; }
   #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(16, 18, 21, 0.96); border: 1px solid var(--verde-bd); color: var(--tx); padding: 12px 18px; border-radius: 12px; font-size: 13px; z-index: 50; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+
+  /* ===== tema claro (opcional) ===== */
+  html[data-tema="claro"] {
+    color-scheme: light;
+    --bg: #F2F7F3; --card: rgba(255, 255, 255, 0.78); --card-solido: #FFFFFF; --side: rgba(255, 255, 255, 0.72);
+    --line: rgba(15, 26, 19, 0.10); --line2: rgba(15, 26, 19, 0.06);
+    --tx: #0F1A13; --tx2: #4D5B52; --tx3: #5F6E64;
+    --verde: #10B981; --verde-claro: #047857; --verde-bg: rgba(16, 185, 129, 0.12); --verde-bd: rgba(5, 150, 105, 0.35);
+    --frio: #1D4ED8; --frio-bg: #E8F1FE; --frio-bd: #B9D3FB;
+    --morno: #B45309; --morno-bg: #FEF3E2; --morno-bd: #F6D199;
+    --quente: #B91C1C; --quente-bg: #FDECEC; --quente-bd: #F5B5B5;
+    --campo: #FFFFFF; --campo-bd: #CFDCD3;
+    --bolha-saida: #D9F2E1; --bolha-entrada: #F1F4F2;
+  }
+  html[data-tema="claro"] body {
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(16, 185, 129, 0.14), transparent 60%),
+      radial-gradient(700px 420px at -10% 110%, rgba(16, 185, 129, 0.10), transparent 60%),
+      var(--bg);
+  }
+  html[data-tema="claro"] ::selection { background: #10B981; color: #FFFFFF; }
+  html[data-tema="claro"] input::placeholder, html[data-tema="claro"] textarea::placeholder { color: #7A877F; }
+  html[data-tema="claro"] option { background: #FFFFFF; color: var(--tx); }
+  html[data-tema="claro"] .card, html[data-tema="claro"] .ccard { box-shadow: 0 1px 2px rgba(15,26,19,.04), inset 0 1px 0 rgba(255,255,255,.7); }
+  html[data-tema="claro"] .btn-sec { background: #FFFFFF; }
+  html[data-tema="claro"] .sel-lista { background: rgba(255, 255, 255, 0.96); box-shadow: 0 18px 50px rgba(15,26,19,.15); }
+  html[data-tema="claro"] dialog.modal { background: rgba(255, 255, 255, 0.98); box-shadow: 0 30px 80px rgba(15,26,19,.25); }
+  html[data-tema="claro"] dialog.modal::backdrop { background: rgba(15, 26, 19, 0.35); }
+  html[data-tema="claro"] #toast { background: #0F1A13; color: #FFFFFF; }
+  html[data-tema="claro"] .barra-salvar { background: rgba(255, 255, 255, 0.9); }
+  html[data-tema="claro"] pre, html[data-tema="claro"] .codigo { background: #0F1A13 !important; color: #A7F3D0 !important; }
+  html[data-tema="claro"] .barra, html[data-tema="claro"] .funil-trilho { background: #E6EEE8; }
+  html[data-tema="claro"] .av { background: #E3ECE6; }
+  html[data-tema="claro"] .col { background: rgba(255,255,255,.5); }
+  html[data-tema="claro"] nav .menu button:hover, html[data-tema="claro"] .conv-item:hover { background: rgba(15,26,19,.04); }
+  html[data-tema="claro"] .creditos { background: rgba(255,255,255,.7); }
+  .bt-tema { display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .bt-tema .bola { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--verde); }
+  html[data-tema="claro"] .bt-tema .bola { background: #0F1A13; }
+  html:not([data-tema="claro"]) .bt-tema .bola { background: #FFFFFF; }
   @media (max-width: 700px) { main { padding: 20px 16px; } .funil-nome { width: 110px; } nav { max-width: none; } }
 </style>
 </head>
@@ -227,6 +268,7 @@
     </div>
     <div class="rodape">
       <span id="quem"></span>
+      <button class="btn-sec bt-tema" id="bt-tema" type="button"><span class="bola" aria-hidden="true"></span><span id="bt-tema-txt">Tema claro</span></button>
       <button class="btn-sec" id="bt-sair">Sair</button>
     </div>
   </nav>
@@ -1487,6 +1529,17 @@ new MutationObserver((muts) => {
     if (n.tagName === 'SELECT') melhorarSelect(n); else n.querySelectorAll && n.querySelectorAll('select').forEach(melhorarSelect);
   });
 }).observe(document.body, { childList: true, subtree: true });
+
+
+// ================= TEMA (escuro padrão / claro opcional) =================
+function aplicarTema(t) {
+  if (t === 'claro') document.documentElement.dataset.tema = 'claro'; else delete document.documentElement.dataset.tema;
+  const txt = document.getElementById('bt-tema-txt'); if (txt) txt.textContent = t === 'claro' ? 'Tema escuro' : 'Tema claro';
+  const bt = document.getElementById('bt-tema'); if (bt) bt.setAttribute('aria-label', t === 'claro' ? 'Mudar pro tema escuro' : 'Mudar pro tema claro');
+  try { localStorage.setItem('radar-tema', t); } catch (_) {}
+}
+aplicarTema(document.documentElement.dataset.tema === 'claro' ? 'claro' : 'escuro');
+document.getElementById('bt-tema').addEventListener('click', () => aplicarTema(document.documentElement.dataset.tema === 'claro' ? 'escuro' : 'claro'));
 
 // ================= NAVEGAÇÃO =================
 document.querySelectorAll('[data-tela]').forEach((b) => b.addEventListener('click', () => {
