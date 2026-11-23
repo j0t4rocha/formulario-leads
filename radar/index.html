@@ -6,68 +6,119 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Radar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Geist:wght@500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
-    --bg: #F1F6F2; --card: #FFFFFF; --side: #F7FBF8; --line: #DDE7E0; --line2: #EAF1EC;
-    --tx: #0F1A13; --tx2: #4D5B52; --tx3: #5F6E64; --verde: #15803D; --verde-bg: #EAF7EE; --verde-bd: #B7E4C7;
-    --frio: #1D4ED8; --frio-bg: #E8F1FE; --frio-bd: #B9D3FB;
-    --morno: #B45309; --morno-bg: #FEF3E2; --morno-bd: #F6D199;
-    --quente: #B91C1C; --quente-bg: #FDECEC; --quente-bd: #F5B5B5;
+    color-scheme: dark;
+    --bg: #07080A; --card: rgba(20, 22, 26, 0.65); --card-solido: #121417; --side: rgba(12, 14, 16, 0.78);
+    --line: rgba(255, 255, 255, 0.09); --line2: rgba(255, 255, 255, 0.06);
+    --tx: #F4F6F5; --tx2: #A6B0AA; --tx3: #85908A;
+    --verde: #10B981; --verde-claro: #34D399; --verde-bg: rgba(16, 185, 129, 0.12); --verde-bd: rgba(16, 185, 129, 0.38);
+    --frio: #60A5FA; --frio-bg: rgba(96, 165, 250, 0.12); --frio-bd: rgba(96, 165, 250, 0.38);
+    --morno: #FBBF24; --morno-bg: rgba(251, 191, 36, 0.12); --morno-bd: rgba(251, 191, 36, 0.38);
+    --quente: #F87171; --quente-bg: rgba(248, 113, 113, 0.12); --quente-bd: rgba(248, 113, 113, 0.38);
+    --campo: rgba(255, 255, 255, 0.04); --campo-bd: rgba(255, 255, 255, 0.13);
+    --bolha-saida: rgba(16, 185, 129, 0.16); --bolha-entrada: rgba(255, 255, 255, 0.06);
+    --vidro: blur(14px);
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--tx); font-family: 'Inter', sans-serif; font-size: 14px; }
-  h1, h2, .num { font-family: 'Space Grotesk', sans-serif; }
-  button, input, select { font: inherit; }
+  html { background: var(--bg); }
+  body {
+    margin: 0; color: var(--tx); font-family: 'DM Sans', system-ui, sans-serif; font-size: 14px; min-height: 100vh;
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(16, 185, 129, 0.10), transparent 60%),
+      radial-gradient(700px 420px at -10% 110%, rgba(16, 185, 129, 0.07), transparent 60%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+  h1, h2, .num, .logo span { font-family: 'Geist', 'DM Sans', sans-serif; letter-spacing: -0.025em; }
+  .num, table, .tab { font-variant-numeric: tabular-nums; }
+  code, .mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+  button, input, select, textarea { font: inherit; }
+  ::selection { background: #10B981; color: #050807; }
+  input, textarea, select { accent-color: #10B981; }
   .oculto { display: none !important; }
+  a { color: var(--verde-claro); }
+
+  /* foco: verde, nunca azul */
+  :focus { outline: none; }
+  :focus-visible { outline: 2px solid var(--verde-claro); outline-offset: 2px; }
+  input:focus-visible, textarea:focus-visible, select:focus-visible, .sel-bt:focus-visible {
+    outline: none; border-color: #10B981 !important; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.22);
+  }
 
   /* login */
   #login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
-  .login-box { width: 100%; max-width: 380px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 32px; display: flex; flex-direction: column; gap: 16px; }
+  .login-box { width: 100%; max-width: 380px; background: var(--card); backdrop-filter: var(--vidro); -webkit-backdrop-filter: var(--vidro); border: 1px solid var(--line); border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 16px; box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 30px 80px rgba(0,0,0,.45); }
   .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-ic { width: 38px; height: 38px; border-radius: 10px; background: var(--verde); display: flex; align-items: center; justify-content: center; }
-  .logo span { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; }
-  label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px; }
-  input[type=email], input[type=password], input[type=text], select {
-    width: 100%; background: #F6FAF7; border: 1px solid #CFDCD3; border-radius: 10px; padding: 11px 13px; color: var(--tx);
+  .logo-ic { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(140deg, #34D399, #059669); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 24px rgba(16,185,129,.35); }
+  .logo-ic svg { stroke: #04130C; }
+  .logo span { font-weight: 800; font-size: 20px; letter-spacing: 0.02em; }
+  .logo span::after { content: '.'; color: var(--verde); }
+  label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px; color: var(--tx2); }
+  input[type=email], input[type=password], input[type=text], input[type=number], input[type=date], select, textarea {
+    width: 100%; background: var(--campo); border: 1px solid var(--campo-bd); border-radius: 10px; padding: 11px 13px; color: var(--tx);
   }
-  .btn { background: var(--verde); color: #fff; border: none; border-radius: 10px; padding: 12px 18px; font-weight: 700; cursor: pointer; min-height: 44px; }
+  input::placeholder, textarea::placeholder { color: #6E7973; }
+  option { background: #121417; color: var(--tx); }
+  .btn { background: var(--verde); color: #04130C; border: none; border-radius: 10px; padding: 12px 18px; font-weight: 700; cursor: pointer; min-height: 44px; box-shadow: 0 0 0 1px rgba(52,211,153,.35), 0 8px 24px rgba(16,185,129,.18); }
+  .btn:hover { background: var(--verde-claro); }
   .btn:disabled { opacity: .6; cursor: wait; }
-  .btn-sec { background: #fff; color: var(--tx); border: 1px solid #CFDCD3; border-radius: 10px; padding: 9px 14px; cursor: pointer; font-weight: 600; }
+  .btn-sec { background: rgba(255,255,255,.04); color: var(--tx); border: 1px solid var(--campo-bd); border-radius: 10px; padding: 9px 14px; cursor: pointer; font-weight: 600; }
+  .btn-sec:hover { border-color: var(--verde-bd); background: var(--verde-bg); }
+  .btn-sec:disabled { opacity: .45; cursor: default; }
   .erro { color: var(--quente); font-size: 13px; min-height: 18px; }
 
   /* app */
   #app { display: flex; flex-wrap: wrap; min-height: 100vh; }
-  nav { flex: 1 1 220px; max-width: 248px; background: var(--side); border-right: 1px solid var(--line); padding: 22px 14px; display: flex; flex-direction: column; gap: 20px; }
+  nav { flex: 1 1 220px; max-width: 248px; background: var(--side); backdrop-filter: var(--vidro); -webkit-backdrop-filter: var(--vidro); border-right: 1px solid var(--line); padding: 22px 14px; display: flex; flex-direction: column; gap: 20px; }
   nav .menu { display: flex; flex-direction: column; gap: 4px; }
-  nav .menu button { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; border: none; background: transparent; color: var(--tx2); font-weight: 500; cursor: pointer; text-align: left; }
-  nav .menu button.ativo { background: #E3F5E9; color: var(--tx); font-weight: 600; box-shadow: inset 3px 0 0 var(--verde); }
+  nav .menu button { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: var(--tx2); font-weight: 500; cursor: pointer; text-align: left; }
+  nav .menu button:hover { color: var(--tx); background: rgba(255,255,255,.04); }
+  nav .menu button.ativo { background: var(--verde-bg); border-color: var(--verde-bd); color: var(--verde-claro); font-weight: 700; }
   nav .rodape { margin-top: auto; border-top: 1px solid var(--line); padding-top: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--tx2); }
   main { flex: 999 1 560px; min-width: 0; padding: 28px 32px 40px; display: flex; flex-direction: column; gap: 22px; }
-  .topo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px; }
+  .topo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
   .topo h1 { margin: 0; font-size: 28px; }
   .topo p { margin: 4px 0 0; color: var(--tx2); }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .card { background: var(--card); backdrop-filter: var(--vidro); -webkit-backdrop-filter: var(--vidro); border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: inset 0 1px 0 rgba(255,255,255,.05); }
   .card h2 { margin: 0 0 14px; font-size: 17px; }
   .linha { display: flex; flex-wrap: wrap; gap: 16px; }
-  .kpi { flex: 1 1 200px; display: flex; flex-direction: column; gap: 6px; }
+  .kpi { flex: 1 1 200px; display: flex; flex-direction: column; gap: 6px; border-top: 1px solid rgba(52, 211, 153, 0.45); }
   .kpi .rot { color: var(--tx2); font-size: 13px; }
-  .kpi .num { font-size: 30px; font-weight: 700; }
+  .kpi .num { font-size: 32px; font-weight: 700; }
   .kpi .obs { color: var(--tx3); font-size: 12px; }
   .vazio { color: var(--tx3); padding: 18px 0; }
+
+  /* select próprio (sem o azul do navegador) */
+  .sel { position: relative; width: 100%; }
+  .sel.auto { width: auto; }
+  .sel > select { position: absolute; inset: 0; opacity: 0; pointer-events: none; width: 100%; }
+  .sel-bt { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--campo); border: 1px solid var(--campo-bd); border-radius: 10px; padding: 11px 13px; color: var(--tx); cursor: pointer; text-align: left; }
+  .sel-bt span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sel-bt::after { content: ''; width: 8px; height: 8px; border-right: 2px solid var(--verde-claro); border-bottom: 2px solid var(--verde-claro); transform: rotate(45deg) translateY(-3px); flex-shrink: 0; }
+  .sel.aberto .sel-bt { border-color: #10B981; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.22); }
+  .sel-lista { position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 6px); min-width: 180px; max-height: 280px; overflow-y: auto; margin: 0; padding: 6px; list-style: none; background: rgba(14, 16, 19, 0.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 18px 50px rgba(0,0,0,.5); }
+  .sel-lista li { padding: 9px 11px; border-radius: 8px; cursor: pointer; color: var(--tx); }
+  .sel-lista li[aria-selected="true"] { background: rgba(16, 185, 129, 0.16); color: var(--verde-claro); font-weight: 600; }
+  .sel-lista li.foco, .sel-lista li:hover { background: rgba(16, 185, 129, 0.10); }
 
   /* funil */
   .funil-linha { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
   .funil-nome { width: 160px; flex-shrink: 0; display: flex; flex-direction: column; }
-  .funil-nome b { font-size: 14px; } .funil-nome small { font-size: 11px; font-weight: 700; }
-  .funil-trilho { flex: 1; min-width: 0; background: #F6FAF7; border-radius: 10px; height: 44px; display: flex; justify-content: center; }
+  .funil-nome b { font-size: 14px; } .funil-nome small { font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+  .funil-trilho { flex: 1; min-width: 0; background: rgba(255,255,255,.03); border-radius: 10px; height: 44px; display: flex; justify-content: center; }
   .funil-barra { height: 44px; border-radius: 10px; border: 1px solid; display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 90px; }
   .funil-barra .num { font-size: 20px; font-weight: 700; }
   .barra-origem { margin-bottom: 12px; }
   .barra-origem .t { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
   .barra-origem .tr { height: 8px; border-radius: 4px; background: var(--line2); }
   .barra-origem .f { height: 8px; border-radius: 4px; }
+  .arrastar { cursor: grab; color: var(--tx3); font-size: 18px; line-height: 1; padding: 4px 6px; border-radius: 6px; user-select: none; }
+  .arrastar:hover { color: var(--verde-claro); background: var(--verde-bg); }
+  .etapa-ed.arrastando { opacity: .5; }
+  .etapa-ed.alvo { outline: 2px dashed var(--verde-claro); outline-offset: 3px; }
 
   /* conversas */
   .conv { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; }
@@ -75,8 +126,9 @@
   .conv-lista .busca { padding: 12px; border-bottom: 1px solid var(--line); }
   .conv-lista .itens { overflow-y: auto; }
   .conv-item { display: flex; gap: 10px; width: 100%; text-align: left; background: none; border: none; border-bottom: 1px solid var(--line2); padding: 12px 14px; cursor: pointer; color: inherit; }
-  .conv-item.ativo { background: #E3F5E9; }
-  .av { width: 36px; height: 36px; border-radius: 50%; background: #DDE7E0; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+  .conv-item:hover { background: rgba(255,255,255,.03); }
+  .conv-item.ativo { background: var(--verde-bg); box-shadow: inset 3px 0 0 var(--verde); }
+  .av { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.08); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
   .conv-item .meio { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
   .conv-item .nome { font-weight: 600; display: flex; justify-content: space-between; gap: 6px; }
   .conv-item .nome small { color: var(--tx3); font-weight: 400; font-size: 11px; }
@@ -85,9 +137,11 @@
   .chat { flex: 2 1 380px; min-width: 0; padding: 0; display: flex; flex-direction: column; max-height: 76vh; }
   .chat-topo { padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
   .chat-msgs { padding: 18px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex: 1; }
-  .bolha { max-width: 75%; padding: 10px 14px; border-radius: 14px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
-  .bolha small { display: block; font-size: 10px; color: var(--tx3); text-align: right; margin-top: 4px; }
-  .bolha.entrada { align-self: flex-start; background: #F1F4F2; border-bottom-left-radius: 4px; }
+  .bolha { max-width: 75%; padding: 10px 14px; border-radius: 14px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; border: 1px solid var(--line); }
+  .bolha small { display: block; font-size: 10.5px; color: var(--tx3); text-align: right; margin-top: 4px; }
+  .bolha.entrada { align-self: flex-start; background: var(--bolha-entrada); border-bottom-left-radius: 4px; }
+  .bolha.saida { align-self: flex-end; background: var(--bolha-saida); border-color: rgba(16,185,129,.28); border-bottom-right-radius: 4px; }
+  .bolha.saida small b { color: var(--verde-claro); font-weight: 600; }
   .tarefa { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 12px 0; border-bottom: 1px solid var(--line2); }
   .tarefa .info { flex: 1 1 240px; min-width: 0; }
   .tarefa .info b { display: block; }
@@ -95,17 +149,22 @@
   .tarefa .acoes { display: flex; gap: 6px; flex-wrap: wrap; }
   .tarefa .acoes button { padding: 7px 10px; font-size: 13px; min-height: 36px; }
   .tag { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 3px 9px; }
-  .barra { height: 14px; background: #EEF3EF; border-radius: 999px; overflow: hidden; }
-  .barra > div { height: 100%; background: var(--verde); border-radius: 999px; }
-  dialog.modal { border: none; border-radius: 16px; padding: 0; width: min(520px, 94vw); box-shadow: 0 20px 60px rgba(0,0,0,.25); }
-  dialog.modal::backdrop { background: rgba(15,26,19,.45); }
+  .barra { height: 10px; background: rgba(255,255,255,.07); border-radius: 999px; overflow: hidden; }
+  .barra > div { height: 100%; background: linear-gradient(90deg, #059669, #34D399); border-radius: 999px; box-shadow: 0 0 12px rgba(52,211,153,.5); }
+  dialog.modal { border: 1px solid var(--line); border-radius: 18px; padding: 0; width: min(520px, 94vw); background: rgba(16, 18, 21, 0.96); color: var(--tx); box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+  dialog.modal::backdrop { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); }
   .modal .corpo { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-  .creditos { margin: 12px 0 4px; padding: 10px 12px; border-radius: 10px; background: var(--verde-bg); border: 1px solid var(--verde-bd); font-size: 13px; color: var(--tx2); }
-  .creditos b { display: block; font-size: 18px; color: var(--verde); }
-  .creditos.baixo b { color: var(--quente); }
+  .previa { white-space: pre-wrap; background: var(--bolha-saida); border: 1px solid rgba(16,185,129,.28); border-radius: 12px; padding: 10px 12px; }
+  .creditos { margin: 4px 0 0; padding: 12px; border-radius: 12px; background: rgba(255,255,255,.03); border: 1px solid var(--line); font-size: 12px; color: var(--tx3); display: flex; flex-direction: column; gap: 6px; }
+  .creditos .cab { display: flex; justify-content: space-between; align-items: center; color: var(--tx2); font-size: 13px; }
+  .creditos .cab span { font-size: 11px; font-weight: 700; color: var(--verde-claro); background: var(--verde-bg); border: 1px solid var(--verde-bd); border-radius: 999px; padding: 2px 8px; }
+  .creditos .val { font-family: 'Geist', sans-serif; font-variant-numeric: tabular-nums; color: var(--tx3); }
+  .creditos .val b { font-size: 22px; color: var(--verde-claro); letter-spacing: -0.025em; }
+  .creditos.baixo .val b { color: var(--quente); }
+  .creditos.baixo .cab span { color: var(--quente); background: var(--quente-bg); border-color: var(--quente-bd); }
+  .creditos.baixo .barra > div { background: var(--quente); box-shadow: none; }
   .responder { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--line); align-items: flex-end; }
-  .responder textarea { flex: 1; resize: none; min-height: 42px; max-height: 140px; background: #F6FAF7; border: 1px solid #CFDCD3; border-radius: 10px; padding: 10px 12px; font: inherit; color: var(--tx); }
-  .bolha.saida { align-self: flex-end; background: #D9F2E1; border-bottom-right-radius: 4px; }
+  .responder textarea { flex: 1; resize: none; min-height: 42px; max-height: 140px; }
   .detalhe { flex: 1 1 280px; max-width: 340px; display: flex; flex-direction: column; gap: 16px; }
   .dl { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--line2); }
   .dl span:first-child { color: var(--tx3); } .dl span:last-child { text-align: right; word-break: break-word; }
@@ -113,21 +172,25 @@
   .etapas-bt button { border: 1px solid; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 13px; }
   .hist { font-size: 12px; color: var(--tx2); display: flex; flex-direction: column; gap: 6px; }
   .pill { font-size: 12px; font-weight: 600; border: 1px solid; border-radius: 999px; padding: 4px 10px; }
+  pre, .codigo { background: #050507 !important; color: #A7F3D0 !important; border: 1px solid var(--line) !important; }
 
   /* crm */
   .crm { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
-  .col { flex: 1 1 250px; min-width: 0; background: var(--side); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-  .col-topo { border: 1px solid; border-radius: 10px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
-  .col-topo b { display: block; } .col-topo small { font-size: 11px; font-weight: 700; }
+  .col { flex: 1 1 250px; min-width: 0; background: rgba(255,255,255,.025); border: 1px solid var(--line); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .col-topo { border: 1px solid; border-radius: 12px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .col-topo b { display: block; } .col-topo small { font-size: 11px; font-weight: 700; letter-spacing: .04em; }
   .col-topo .num { font-size: 22px; font-weight: 700; }
-  .ccard { background: #fff; border: 1px solid #CFDCD3; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .ccard { background: var(--card); backdrop-filter: var(--vidro); -webkit-backdrop-filter: var(--vidro); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
   .ccard .n { font-weight: 600; display: flex; justify-content: space-between; gap: 6px; }
   .ccard .n small { color: var(--tx3); font-weight: 400; }
   .ccard .o { font-size: 12px; color: var(--tx2); }
-  .ccard select { padding: 7px 10px; font-size: 13px; }
-  .aviso { background: var(--verde-bg); border: 1px solid var(--verde-bd); border-radius: 12px; padding: 12px 16px; color: #33433A; font-size: 13px; }
-  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--tx); color: #fff; padding: 12px 18px; border-radius: 10px; font-size: 13px; z-index: 10; }
-  @media (max-width: 700px) { main { padding: 20px 16px; } .funil-nome { width: 110px; } }
+  .ccard .sel-bt, .ccard select { padding: 7px 10px; font-size: 13px; }
+  .aviso { background: var(--verde-bg); border: 1px solid var(--verde-bd); border-radius: 12px; padding: 12px 16px; color: var(--tx2); font-size: 13px; }
+  .barra-salvar { position: sticky; top: 0; z-index: 20; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 16px; border-radius: 14px; background: rgba(10, 12, 14, 0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--verde-bd); }
+  table th { color: var(--tx3); }
+  table td, table th { border-color: var(--line2) !important; }
+  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(16, 18, 21, 0.96); border: 1px solid var(--verde-bd); color: var(--tx); padding: 12px 18px; border-radius: 12px; font-size: 13px; z-index: 50; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+  @media (max-width: 700px) { main { padding: 20px 16px; } .funil-nome { width: 110px; } nav { max-width: none; } }
 </style>
 </head>
 <body>
@@ -135,7 +198,7 @@
 <!-- ============ LOGIN ============ -->
 <section id="login" class="oculto">
   <form class="login-box" id="form-login">
-    <div class="logo"><div class="logo-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6-6"/></svg></div><span>Radar</span></div>
+    <div class="logo"><div class="logo-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6-6"/></svg></div><span>Radar</span></div>
     <div><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required></div>
     <div><label for="senha">Senha</label><input id="senha" type="password" autocomplete="current-password" required></div>
     <button class="btn" type="submit" id="bt-entrar">Entrar</button>
@@ -146,7 +209,7 @@
 <!-- ============ APP ============ -->
 <div id="app" class="oculto">
   <nav aria-label="Menu principal">
-    <div class="logo"><div class="logo-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6-6"/></svg></div><span>Radar</span></div>
+    <div class="logo"><div class="logo-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6-6"/></svg></div><span>Radar</span></div>
     <div id="bloco-cliente">
       <label for="sel-site">Cliente</label>
       <select id="sel-site"></select>
@@ -214,10 +277,10 @@ const COR = {
   quente: { c: 'var(--quente)', bg: 'var(--quente-bg)', bd: 'var(--quente-bd)' },
 };
 const ORIGEM = {
-  anuncio_meta: { nome: 'Anúncio Meta', cor: '#15803D' },
-  site:         { nome: 'Site',          cor: '#B45309' },
-  link:         { nome: 'Link rastreável', cor: '#7C3AED' },
-  organico:     { nome: 'Orgânico / direto', cor: '#5F6E64' },
+  anuncio_meta: { nome: 'Anúncio Meta', cor: '#34D399' },
+  site:         { nome: 'Site',          cor: '#FBBF24' },
+  link:         { nome: 'Link rastreável', cor: '#A78BFA' },
+  organico:     { nome: 'Orgânico / direto', cor: '#8B9690' },
 };
 
 const estado = { perfil: null, site: null, tela: 'dashboard', etapas: [], contatos: [], aberto: null };
@@ -300,10 +363,16 @@ async function atualizarCreditos() {
   estado.creditos = data || null;
   const el = $('saldo-creditos'); if (!el) return;
   if (!data) { el.classList.add('oculto'); return; }
-  const total = (data.creditos_saldo_mensal || 0) + (data.creditos_extra || 0);
+  const mensal = data.creditos_mensal || 0, saldoMes = data.creditos_saldo_mensal || 0, extra = data.creditos_extra || 0;
+  const total = saldoMes + extra;
+  const baixo = total < Math.max(50, mensal * 0.1);
+  const pctBarra = mensal ? Math.max(0, Math.min(100, Math.round((saldoMes / mensal) * 100))) : (total ? 100 : 0);
   el.classList.remove('oculto');
-  el.classList.toggle('baixo', total < Math.max(50, (data.creditos_mensal || 0) * 0.1));
-  el.innerHTML = `Créditos<b>${total.toLocaleString('pt-BR')}</b>${data.creditos_extra ? `${data.creditos_saldo_mensal.toLocaleString('pt-BR')} do mês + ${data.creditos_extra.toLocaleString('pt-BR')} extras` : `de ${(data.creditos_mensal || 0).toLocaleString('pt-BR')} do mês`}`;
+  el.classList.toggle('baixo', baixo);
+  el.innerHTML = `<div class="cab">Créditos <span>${baixo ? 'Baixo' : 'Ativo'}</span></div>
+    <div class="val"><b>${total.toLocaleString('pt-BR')}</b> / ${mensal.toLocaleString('pt-BR')}</div>
+    <div class="barra" role="progressbar" aria-label="Créditos do mês" aria-valuenow="${pctBarra}" aria-valuemin="0" aria-valuemax="100"><div style="width:${pctBarra}%"></div></div>
+    <div>${extra ? `+ ${extra.toLocaleString('pt-BR')} extras · ` : ''}Renova dia 1º</div>`;
 }
 
 function etapaDe(c) { return estado.etapas.find((e) => e.id === c.etapa_id) || null; }
@@ -346,7 +415,7 @@ function telaDashboard() {
     return `<div class="funil-linha">
       <div class="funil-nome"><b>${esc(e.nome)}</b><small style="color:${cor.c}">${e.temperatura.toUpperCase()}</small></div>
       <div class="funil-trilho"><div class="funil-barra" style="width:${w}%; background:${cor.bg}; border-color:${cor.bd}">
-        <span class="num" style="color:${cor.c}">${chegaram[i]}</span><span style="color:#33433A; font-size:12px">pessoas</span></div></div>
+        <span class="num" style="color:${cor.c}">${chegaram[i]}</span><span style="color:var(--tx2); font-size:12px">pessoas</span></div></div>
     </div>${queda !== null && queda > 0 ? `<div style="font-size:12px; color:var(--tx3); margin:-6px 0 10px 174px">↓ ${queda} ainda não avançaram</div>` : ''}`;
   }).join('');
 
@@ -415,7 +484,11 @@ function telaConversas() {
 
 const POR_PAGINA = 50;
 function bolhaHTML(m) {
-  return `<div class="bolha ${m.direcao}" data-msg="${m.id}">${esc(m.texto || '[' + (m.tipo || 'mídia') + ']')}<small>${new Date(m.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</small></div>`;
+  const quando = new Date(m.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+  const rotulo = m.direcao === 'entrada' ? 'Recebido · grátis'
+    : m.tipo === 'template' ? '<b>Modelo enviado pelo Radar</b>'
+    : '<b>Enviado pelo Radar</b> · 1 crédito';
+  return `<div class="bolha ${m.direcao}" data-msg="${m.id}">${esc(m.texto || '[' + (m.tipo || 'mídia') + ']')}<small>${quando} · ${rotulo}</small></div>`;
 }
 
 async function abrirConversa(id, semMarcar) {
@@ -472,7 +545,7 @@ async function abrirConversa(id, semMarcar) {
     <div><b style="display:block; margin-bottom:8px">Etapa no funil</b><div class="etapas-bt">
       ${estado.etapas.map((x) => {
         const k = COR[x.temperatura] || COR.frio; const sel = x.id === c.etapa_id;
-        return `<button data-mover="${x.id}" aria-pressed="${sel}" style="color:${sel ? '#fff' : k.c}; background:${sel ? k.c : k.bg}; border-color:${sel ? k.c : k.bd}; font-weight:${sel ? 700 : 500}">${esc(x.nome)}</button>`;
+        return `<button data-mover="${x.id}" aria-pressed="${sel}" style="color:${sel ? '#06120C' : k.c}; background:${sel ? k.c : k.bg}; border-color:${sel ? k.c : k.bd}; font-weight:${sel ? 700 : 500}">${esc(x.nome)}</button>`;
       }).join('')}
     </div></div>
     <div><b style="display:block; margin-bottom:8px">Histórico</b><div class="hist">
@@ -589,7 +662,7 @@ async function mostrarCreditosConfig() {
 const TIPO_TAREFA = {
   follow_up: { t: 'Follow-up', c: 'var(--morno)', bg: 'var(--morno-bg)' },
   reativacao: { t: 'Reativação', c: 'var(--frio)', bg: 'var(--frio-bg)' },
-  manual: { t: 'Manual', c: 'var(--tx2)', bg: '#EEF3EF' },
+  manual: { t: 'Manual', c: 'var(--tx2)', bg: 'rgba(255,255,255,.07)' },
 };
 function hojeISO() {
   const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -697,7 +770,7 @@ async function abrirEnvio(contatoId, tarefa) {
   const primeiroNome = (c.nome || '').trim().split(/\s+/)[0] || '';
   corpo.innerHTML = `<h2 style="margin:0" id="me-titulo">Enviar pra ${esc(nome)}</h2>
     <div style="font-size:13px; color:var(--tx2)">${dentro24h ? 'Falou nas últimas 24h: pode mandar mensagem livre (1 crédito) ou um modelo.' : 'Está há mais de 24h sem mandar mensagem: pela regra do WhatsApp, só dá pra enviar um <b>modelo aprovado</b>.'}</div>
-    ${dentro24h ? `<div><label for="me-texto">Mensagem livre</label><textarea id="me-texto" rows="3" style="width:100%; background:#F6FAF7; border:1px solid #CFDCD3; border-radius:10px; padding:10px 12px; font:inherit"></textarea>
+    ${dentro24h ? `<div><label for="me-texto">Mensagem livre</label><textarea id="me-texto" rows="3" style="width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:10px 12px; font:inherit"></textarea>
       <div style="margin-top:8px"><button class="btn" id="me-enviar-texto">Enviar mensagem (1 crédito)</button></div></div>
       <div style="border-top:1px solid var(--line2); padding-top:10px; font-weight:700">Ou use um modelo</div>` : ''}
     <div id="me-modelos" style="font-size:13px">Carregando modelos aprovados…</div>
@@ -732,7 +805,7 @@ async function abrirEnvio(contatoId, tarefa) {
   if (!aprovados.length) { alvo.innerHTML = 'Nenhum modelo aprovado ainda. Crie um em <b>Modelos de mensagem</b>.'; return; }
   alvo.innerHTML = `<label for="me-modelo">Modelo</label><select id="me-modelo">${aprovados.map((m, i) => `<option value="${i}">${esc(m.nome)} · ${m.categoria === 'MARKETING' ? 'Marketing (10 créditos)' : 'Utilidade (1 crédito)'}</option>`).join('')}</select>
     <div id="me-campos" class="linha" style="margin-top:8px"></div>
-    <div id="me-previa" style="margin-top:8px; white-space:pre-wrap; background:#D9F2E1; border-radius:12px; padding:10px 12px"></div>
+    <div id="me-previa" class="previa" style="margin-top:8px"></div>
     <div style="margin-top:8px"><button class="btn" id="me-enviar-modelo">Enviar modelo</button></div>`;
   const desenharCampos = () => {
     const m = aprovados[Number($('me-modelo').value)];
@@ -801,7 +874,7 @@ async function telaModelos() {
         <div style="flex:1 1 220px"><label for="md-nome">Nome do modelo</label><input id="md-nome" type="text" placeholder="lembrete_agendamento"></div>
         <div style="flex:1 1 180px"><label for="md-cat">Tipo</label><select id="md-cat"><option value="UTILITY">Utilidade (lembrete, confirmação)</option><option value="MARKETING">Marketing (promoção, convite)</option></select></div>
       </div>
-      <div><label for="md-texto">Texto</label><textarea id="md-texto" rows="4" style="width:100%; background:#F6FAF7; border:1px solid #CFDCD3; border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="Olá {{1}}, passando pra lembrar do seu horário amanhã às {{2}}. Responda SIM pra confirmar."></textarea></div>
+      <div><label for="md-texto">Texto</label><textarea id="md-texto" rows="4" style="width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="Olá {{1}}, passando pra lembrar do seu horário amanhã às {{2}}. Responda SIM pra confirmar."></textarea></div>
       <div id="md-exemplos" class="linha"></div>
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn" id="md-criar">Enviar pra aprovação</button><span id="md-status" style="font-size:13px; color:var(--tx2)"></span></div>
     </section>
@@ -1034,6 +1107,8 @@ async function telaConfig() {
   $('subtitulo').textContent = novo ? 'Cadastrando um cliente novo' : (site.nome || '');
   $('tela-config').innerHTML = `
   <div style="display:flex; flex-direction:column; gap:18px">
+    ${novo ? '' : `<div class="barra-salvar"><span style="color:var(--tx2); font-size:13px">Cliente, WhatsApp, rotina, créditos e funil: <b style="color:var(--tx)">salve tudo de uma vez</b> ou cada bloco no seu botão.</span>
+      <div style="display:flex; gap:10px; align-items:center"><span id="st-salvar-tudo" style="font-size:13px"></span><button class="btn" id="bt-salvar-tudo">Salvar tudo</button></div></div>`}
     <section class="card" style="display:flex; flex-direction:column; gap:14px">
       <h2 style="margin:0">${novo ? 'Novo cliente' : 'Dados do cliente'}</h2>
       <div class="linha">
@@ -1045,7 +1120,7 @@ async function telaConfig() {
         <div style="flex:1 1 260px"><label for="cf-token">Token da API de Conversões</label><input id="cf-token" type="password" autocomplete="off" placeholder="${novo ? 'Cole o token aqui' : 'Deixe vazio pra manter o atual'}"></div>
       </div>
       <div class="linha">
-        <div style="flex:1 1 260px"><label for="cf-dom">Site(s) do cliente, um por linha</label><textarea id="cf-dom" rows="2" style="width:100%; background:#F6FAF7; border:1px solid #CFDCD3; border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="barbeariaavante.com.br">${esc(dominios)}</textarea></div>
+        <div style="flex:1 1 260px"><label for="cf-dom">Site(s) do cliente, um por linha</label><textarea id="cf-dom" rows="2" style="width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="barbeariaavante.com.br">${esc(dominios)}</textarea></div>
         <div style="flex:1 1 260px"><label for="cf-wpp">ID do número do WhatsApp (phone_number_id)</label><input id="cf-wpp" type="text" inputmode="numeric" value="${esc(site.whatsapp_phone_number_id || '')}" placeholder="App na Meta › WhatsApp › Configuração da API"></div>
       </div>
       <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center">
@@ -1100,7 +1175,7 @@ async function telaConfig() {
     <section class="card" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Código do site</h2>
       <p style="margin:0; color:var(--tx2)">Cole uma vez no &lt;head&gt; do site do cliente (ou numa tag HTML personalizada do GTM). Ele cuida do pixel e do envio pelo servidor.</p>
-      <pre id="cf-codigo" style="margin:0; overflow-x:auto; background:#F6FAF7; border:1px solid #CFDCD3; border-radius:10px; padding:14px; font-size:12px; line-height:1.6; white-space:pre">${esc(`<script src="${TRACKER_URL}"\n  data-site="${site.id}"\n  data-endpoint="${ENDPOINT_TRACK}"\n  data-pixel="${site.pixel_id}"\n  defer><\/script>`)}</pre>
+      <pre id="cf-codigo" class="codigo mono" style="margin:0; overflow-x:auto; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:14px; font-size:12px; line-height:1.6; white-space:pre">${esc(`<script src="${TRACKER_URL}"\n  data-site="${site.id}"\n  data-endpoint="${ENDPOINT_TRACK}"\n  data-pixel="${site.pixel_id}"\n  defer><\/script>`)}</pre>
       <div><button class="btn-sec" id="cf-copiar">Copiar código</button></div>
     </section>
 
@@ -1129,6 +1204,7 @@ async function telaConfig() {
 
   if (novo) $('cf-nome').addEventListener('input', () => { $('cf-id').value = slug($('cf-nome').value); });
   $('cf-salvar').addEventListener('click', salvarCliente);
+  if ($('bt-salvar-tudo')) $('bt-salvar-tudo').addEventListener('click', salvarTudo);
   if (novo) { $('cf-cancelar').addEventListener('click', () => { estado.novoCliente = false; estado.tela = 'dashboard'; marcarMenu(); carregar(); }); return; }
 
   $('wa-conectar').addEventListener('click', () => conectarWhatsapp(site.id));
@@ -1180,9 +1256,9 @@ function desenharFunil() {
   $('cf-funil').innerHTML = estado.funilEdit.map((e, i) => {
     const cor = COR[e.temperatura] || COR.frio;
     const personalizado = e.evento_meta && !codigos.has(e.evento_meta);
-    return `<div style="border:1px solid ${cor.bd}; background:${cor.bg}; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:10px">
+    return `<div class="etapa-ed" data-pos="${i}" style="border:1px solid ${cor.bd}; background:${cor.bg}; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:10px">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">
-        <b style="color:${cor.c}">Etapa ${i + 1}</b>
+        <b style="color:${cor.c}; display:flex; align-items:center; gap:8px"><span class="arrastar" data-alca="${i}" title="Arraste pra mudar a ordem" aria-hidden="true">⠿</span>Etapa ${i + 1}</b>
         <div style="display:flex; gap:6px">
           <button class="btn-sec" data-acao="subir" data-i="${i}" ${i === 0 ? 'disabled' : ''} aria-label="Subir etapa ${i + 1}">↑</button>
           <button class="btn-sec" data-acao="descer" data-i="${i}" ${i === estado.funilEdit.length - 1 ? 'disabled' : ''} aria-label="Descer etapa ${i + 1}">↓</button>
@@ -1216,6 +1292,22 @@ function desenharFunil() {
       if (campo === 'temperatura') desenharFunil();
     });
   });
+  // arrastar e soltar pra reordenar
+  let origem = null;
+  document.querySelectorAll('#cf-funil .etapa-ed').forEach((card) => {
+    const alca = card.querySelector('[data-alca]');
+    alca.addEventListener('pointerdown', () => { card.draggable = true; });
+    card.addEventListener('dragstart', (ev) => { origem = Number(card.dataset.pos); card.classList.add('arrastando'); ev.dataTransfer.effectAllowed = 'move'; try { ev.dataTransfer.setData('text/plain', String(origem)); } catch (_) {} });
+    card.addEventListener('dragend', () => { card.draggable = false; card.classList.remove('arrastando'); document.querySelectorAll('#cf-funil .alvo').forEach((x) => x.classList.remove('alvo')); });
+    card.addEventListener('dragover', (ev) => { if (origem === null) return; ev.preventDefault(); card.classList.add('alvo'); });
+    card.addEventListener('dragleave', () => card.classList.remove('alvo'));
+    card.addEventListener('drop', (ev) => {
+      ev.preventDefault(); const destino = Number(card.dataset.pos);
+      if (origem === null || origem === destino) return;
+      const l = estado.funilEdit; const [item] = l.splice(origem, 1); l.splice(destino, 0, item);
+      origem = null; desenharFunil();
+    });
+  });
   document.querySelectorAll('#cf-funil [data-acao]').forEach((b) => b.addEventListener('click', () => {
     const i = Number(b.dataset.i); const l = estado.funilEdit;
     if (b.dataset.acao === 'subir' && i > 0) [l[i - 1], l[i]] = [l[i], l[i - 1]];
@@ -1242,13 +1334,14 @@ async function salvarFunil() {
     valor_padrao: e.valor_padrao, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
   }));
   const r = await chamarAdmin({ acao: 'salvar_funil', site_id: estado.site, etapas });
-  if (!r.ok) { $('cf-funil-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-funil-status').style.color = 'var(--quente)'; return; }
+  if (!r.ok) { $('cf-funil-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-funil-status').style.color = 'var(--quente)'; return false; }
   const { data } = await sb.from('etapas').select('*').eq('site_id', estado.site).order('ordem');
   estado.etapas = data || [];
   const { data: cts } = await sb.from('contatos').select('*').eq('site_id', estado.site).order('atualizado_em', { ascending: false }).limit(1000);
   estado.contatos = cts || [];
   telaConfig();
   toast('Funil salvo.');
+  return true;
 }
 
 async function salvarCliente() {
@@ -1262,13 +1355,39 @@ async function salvarCliente() {
     whatsapp_waba_id: $('cf-waba') ? $('cf-waba').value.trim() : undefined,
     wa_token: $('cf-watoken') ? $('cf-watoken').value.trim() : '',
   });
-  if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--quente)'; return; }
+  if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--quente)'; return false; }
   const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   $('sel-site').innerHTML = estado.sites.map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
   estado.site = r.id; $('sel-site').value = r.id; estado.novoCliente = false;
   toast(novo ? 'Cliente cadastrado. Agora teste a conexão e copie o código do site.' : 'Dados salvos.');
   await carregar();
+  return true;
+}
+
+// Salva cliente + WhatsApp, rotina, créditos e funil de uma vez
+async function salvarTudo() {
+  const bt = $('bt-salvar-tudo'); const st = $('st-salvar-tudo');
+  bt.disabled = true; st.style.color = 'var(--tx2)'; st.textContent = 'Salvando tudo…';
+  const site = estado.site; const erros = [];
+  const fu = Number($('ro-fu').value), re = Number($('ro-re').value);
+  const cr = { mensal: $('cr-mensal').value, adicionar: $('cr-add').value || 0, motivo: $('cr-motivo').value };
+  const etapas = estado.funilEdit.map((e) => ({
+    id: e.id, nome: e.nome, temperatura: e.temperatura, evento_meta: e.evento_meta || null,
+    valor_padrao: e.valor_padrao, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
+  }));
+  const { error: eRot } = await sb.rpc('salvar_rotina', { p_site: site, p_followup: fu, p_reativacao: re });
+  if (eRot) erros.push('Rotina: ' + eRot.message);
+  const rCr = await chamarAdmin({ acao: 'creditos', site_id: site, ...cr });
+  if (!rCr.ok) erros.push('Créditos: ' + (rCr.erro || 'erro'));
+  const rFu = await chamarAdmin({ acao: 'salvar_funil', site_id: site, etapas });
+  if (!rFu.ok) erros.push('Funil: ' + (rFu.erro || 'erro'));
+  const okCliente = await salvarCliente();
+  if (!okCliente) erros.push('Dados do cliente: veja a mensagem no bloco 1');
+  await atualizarCreditos();
+  if (erros.length) { toast('Algumas partes não salvaram: ' + erros.join(' · ')); }
+  else toast('Tudo salvo.');
+  const b2 = $('bt-salvar-tudo'); if (b2) b2.disabled = false;
 }
 
 async function listarUsuarios(siteId) {
@@ -1293,6 +1412,81 @@ function marcarMenu() {
 $('bt-novo-cliente').addEventListener('click', () => {
   estado.novoCliente = true; estado.tela = 'config'; marcarMenu(); desenhar();
 });
+
+
+// ================= SELECT PRÓPRIO (troca o menu nativo, sem azul) =================
+function melhorarSelect(sel) {
+  if (sel.dataset.enh || sel.multiple || sel.closest('.sel')) return;
+  sel.dataset.enh = '1';
+  const caixa = document.createElement('div');
+  caixa.className = 'sel' + (sel.style.width === 'auto' ? ' auto' : '');
+  sel.parentNode.insertBefore(caixa, sel);
+  caixa.appendChild(sel);
+  sel.tabIndex = -1; sel.setAttribute('aria-hidden', 'true');
+  const bt = document.createElement('button');
+  bt.type = 'button'; bt.className = 'sel-bt'; bt.setAttribute('aria-haspopup', 'listbox'); bt.setAttribute('aria-expanded', 'false');
+  const rotulo = sel.id && document.querySelector(`label[for="${sel.id}"]`);
+  const nomeAcess = sel.getAttribute('aria-label') || (rotulo && rotulo.textContent.trim()) || '';
+  if (rotulo) { rotulo.addEventListener('click', (ev) => { ev.preventDefault(); bt.focus(); }); }
+  caixa.appendChild(bt);
+  const lista = document.createElement('ul');
+  lista.className = 'sel-lista oculto'; lista.setAttribute('role', 'listbox');
+  if (nomeAcess) lista.setAttribute('aria-label', nomeAcess);
+  caixa.appendChild(lista);
+  let foco = -1;
+  const texto = () => {
+    const o = sel.options[sel.selectedIndex];
+    bt.innerHTML = `<span>${esc(o ? o.textContent : '')}</span>`;
+    bt.setAttribute('aria-label', (nomeAcess ? nomeAcess + ': ' : '') + (o ? o.textContent : ''));
+    bt.disabled = sel.disabled;
+  };
+  const montar = () => {
+    lista.innerHTML = [...sel.options].map((o, i) => `<li role="option" data-i="${i}" aria-selected="${i === sel.selectedIndex}">${esc(o.textContent)}</li>`).join('');
+  };
+  const fechar = () => { caixa.classList.remove('aberto'); lista.classList.add('oculto'); bt.setAttribute('aria-expanded', 'false'); };
+  const abrir = () => {
+    document.querySelectorAll('.sel.aberto').forEach((x) => x !== caixa && x._fechar && x._fechar());
+    montar(); foco = sel.selectedIndex; marcarFoco();
+    caixa.classList.add('aberto'); lista.classList.remove('oculto'); bt.setAttribute('aria-expanded', 'true');
+  };
+  const marcarFoco = () => {
+    lista.querySelectorAll('li').forEach((li, i) => li.classList.toggle('foco', i === foco));
+    const li = lista.querySelector('li.foco'); if (li && li.scrollIntoView) li.scrollIntoView({ block: 'nearest' });
+  };
+  const escolher = (i) => {
+    if (i < 0 || i >= sel.options.length) return;
+    const mudou = sel.selectedIndex !== i;
+    sel.selectedIndex = i; texto(); fechar(); bt.focus();
+    if (mudou) sel.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+  caixa._fechar = fechar;
+  bt.addEventListener('click', () => (caixa.classList.contains('aberto') ? fechar() : abrir()));
+  lista.addEventListener('mousedown', (ev) => ev.preventDefault());
+  lista.addEventListener('click', (ev) => { const li = ev.target.closest('li'); if (li) escolher(Number(li.dataset.i)); });
+  bt.addEventListener('keydown', (ev) => {
+    const aberto = caixa.classList.contains('aberto');
+    if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+      ev.preventDefault(); if (!aberto) { abrir(); return; }
+      foco = Math.max(0, Math.min(sel.options.length - 1, foco + (ev.key === 'ArrowDown' ? 1 : -1))); marcarFoco();
+    } else if ((ev.key === 'Enter' || ev.key === ' ') && aberto) { ev.preventDefault(); escolher(foco); }
+    else if (ev.key === 'Escape' && aberto) { ev.preventDefault(); fechar(); }
+    else if (ev.key === 'Tab' && aberto) fechar();
+  });
+  sel.addEventListener('change', texto);
+  // quando o código troca as opções ou o valor por fora
+  new MutationObserver(texto).observe(sel, { childList: true, subtree: true, attributes: true });
+  const desc = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value');
+  Object.defineProperty(sel, 'value', { configurable: true, get() { return desc.get.call(this); }, set(v) { const i = [...this.options].findIndex((op) => op.value === String(v)); if (i >= 0) this.selectedIndex = i; else desc.set.call(this, v); texto(); } });
+  texto();
+}
+document.addEventListener('click', (ev) => { if (!ev.target.closest('.sel')) document.querySelectorAll('.sel.aberto').forEach((x) => x._fechar && x._fechar()); });
+document.querySelectorAll('select').forEach(melhorarSelect);
+new MutationObserver((muts) => {
+  for (const m of muts) m.addedNodes.forEach((n) => {
+    if (n.nodeType !== 1) return;
+    if (n.tagName === 'SELECT') melhorarSelect(n); else n.querySelectorAll && n.querySelectorAll('select').forEach(melhorarSelect);
+  });
+}).observe(document.body, { childList: true, subtree: true });
 
 // ================= NAVEGAÇÃO =================
 document.querySelectorAll('[data-tela]').forEach((b) => b.addEventListener('click', () => {
