@@ -166,7 +166,9 @@
   .creditos.baixo .cab span { color: var(--alerta); background: var(--alerta-bg); border-color: var(--alerta-bd); }
   .creditos.baixo .barra > div { background: var(--alerta); box-shadow: none; }
   .responder { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--line); align-items: flex-end; }
-  .responder textarea { flex: 1; resize: none; min-height: 42px; max-height: 140px; }
+  .responder { flex-wrap: wrap; }
+  .responder textarea { flex: 1 1 100%; order: -1; resize: none; min-height: 42px; max-height: 140px; }
+  .responder #resp-enviar { margin-left: auto; }
   .detalhe { flex: 1 1 280px; max-width: 340px; display: flex; flex-direction: column; gap: 16px; }
   .dl { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--line2); }
   .dl span:first-child { color: var(--tx3); } .dl span:last-child { text-align: right; word-break: break-word; }
