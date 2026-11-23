@@ -219,6 +219,9 @@
   .auto-bloco { display: flex; flex-direction: column; gap: 4px; }
   .auto-bloco p { margin: 0; font-size: 14px; line-height: 1.5; text-align: left; }
   .auto-rot { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--tx3); font-weight: 600; margin: 0; }
+  .auto-desc { min-height: calc(1.5em * 2 + 12px); }
+  .auto-bloco p.l3 { min-height: 4.5em; } .auto-bloco p.l2 { min-height: 3em; }
+  .auto-campo label { min-height: 1.5em; }
   .auto-campo { display: flex; flex-direction: column; gap: 6px; }
   .auto-campo label { font-size: 13px; color: var(--tx2); margin: 0; }
   .auto-num { display: inline-flex; align-items: center; gap: 8px; }
@@ -1450,8 +1453,8 @@ async function telaModelos() {
     <div class="auto-card" data-auto="${k}">
       <div class="auto-topo"><h3>${titulo}</h3>${chave('ch-' + k, ligado)}</div>
       <p class="auto-desc">${oque}</p>
-      <div class="auto-bloco"><span class="auto-rot">Quem recebe</span><p>${quem}</p></div>
-      <div class="auto-bloco"><span class="auto-rot">Quando</span><p>${quando}</p></div>
+      <div class="auto-bloco"><span class="auto-rot">Quem recebe</span><p class="l3">${quem}</p></div>
+      <div class="auto-bloco"><span class="auto-rot">Quando</span><p class="l2">${quando}</p></div>
       <div class="auto-campo">${campo}</div>
       <div class="auto-bloco"><label class="auto-rot" for="${selId}">Mensagem que vai</label><select id="${selId}" data-atual="${esc(modeloAtual || '')}"><option value="">Carregando modelos…</option></select></div>
       <div class="previa" id="pv-${k}"></div>
