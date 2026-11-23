@@ -187,6 +187,25 @@
   .ccard .n small { color: var(--tx3); font-weight: 400; }
   .ccard .o { font-size: 12px; color: var(--tx2); }
   .ccard .sel-bt, .ccard select { padding: 7px 10px; font-size: 13px; }
+  .card:has(.sel-lista:not(.oculto)), .linha:has(.sel-lista:not(.oculto)) { position: relative; z-index: 45; }
+  .origem-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 10px; margin-bottom: 14px; }
+  .origem-tile { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; }
+  .origem-tile .t { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--tx2); }
+  .origem-tile .t i { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+  .origem-tile b { font-size: 24px; letter-spacing: -0.02em; } .origem-tile small { color: var(--tx3); font-size: 12px; }
+  .visao { display: flex; flex-direction: column; gap: 10px; }
+  .visao .item { display: flex; align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .visao .item .ico { width: 36px; height: 36px; border-radius: 10px; background: var(--verde-bg); color: var(--verde-claro); display: flex; align-items: center; justify-content: center; }
+  .visao .item b { font-size: 22px; display: block; } .visao .item span { font-size: 12px; color: var(--tx2); }
+  .grafico { position: relative; }
+  .grafico svg { width: 100%; height: 240px; display: block; overflow: visible; }
+  .grafico .dica { position: absolute; pointer-events: none; background: var(--card-solido, rgba(16,18,21,.97)); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.35); white-space: nowrap; z-index: 5; }
+  html[data-tema="claro"] .grafico .dica { background: #fff; }
+  .legenda { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--tx2); margin-top: 8px; }
+  .legenda span { display: inline-flex; align-items: center; gap: 6px; } .legenda i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  .chave { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+  .chave button { background: transparent; border: 0; color: var(--tx2); font: inherit; font-size: 12px; padding: 7px 10px; border-radius: 8px; cursor: pointer; }
+  .chave button[aria-pressed="true"] { background: var(--verde-bg); color: var(--verde-claro); font-weight: 700; }
   .ic { display: inline-flex; flex-shrink: 0; } .ic svg { width: 100%; height: 100%; }
   .selo { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--verde-claro); background: var(--verde-bg); border: 1px solid var(--verde-bd); border-radius: 999px; padding: 2px 8px 2px 6px; white-space: nowrap; }
   .selo.leve { color: var(--tx2); background: transparent; border-color: var(--line2, rgba(255,255,255,.12)); }
@@ -520,6 +539,77 @@ function desenhar() {
 }
 
 // ================= DASHBOARD =================
+const GRUPOS = [
+  { k: 'anuncio_meta', nome: 'Meta Ads', ic: 'meta', cor: '#059669', origens: ['anuncio_meta'] },
+  { k: 'google', nome: 'Google', ic: 'google', cor: '#34D399', origens: ['google'] },
+  { k: 'link', nome: 'Links rastreáveis', ic: 'link', cor: '#6EE7B7', origens: ['link'] },
+  { k: 'site', nome: 'Site', ic: 'site', cor: '#A7F3D0', origens: ['site'] },
+  { k: 'outras', nome: 'Outras origens', ic: 'indicacao', cor: '#3F7A62', origens: ['indicacao', 'outro'] },
+  { k: 'organico', nome: 'Não rastreada', ic: 'organico', cor: '#8A938E', origens: ['organico'] },
+];
+const grupoDe = (c) => GRUPOS.find((g) => g.origens.includes(c.origem)) || GRUPOS[GRUPOS.length - 1];
+function duracao(ms) {
+  if (ms == null) return '—';
+  const min = Math.round(ms / 60000);
+  if (min < 1) return 'menos de 1 min';
+  if (min < 60) return `${min} min`;
+  const h = Math.floor(min / 60), m = min % 60;
+  if (h < 24) return m ? `${h}h ${m}min` : `${h}h`;
+  const d = Math.floor(h / 24); return `${d} ${d === 1 ? 'dia' : 'dias'} e ${h % 24}h`;
+}
+const isoDia = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+function graficoPorDia(lista) {
+  let [de, ate] = intervaloPeriodo();
+  const datas = lista.map((c) => new Date(c.criado_em));
+  if (!de) de = datas.length ? new Date(Math.min(...datas)) : new Date();
+  ate = ate || new Date();
+  const dias = []; const d = new Date(de); d.setHours(0, 0, 0, 0);
+  while (d <= ate && dias.length < 400) { dias.push(isoDia(d)); d.setDate(d.getDate() + 1); }
+  const semanal = dias.length > 45;
+  const chave = (iso) => { if (!semanal) return iso; const x = new Date(iso + 'T12:00:00'); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return isoDia(x); };
+  const baldes = [...new Set(dias.map(chave))];
+  const cont = Object.fromEntries(baldes.map((b) => [b, Object.fromEntries(GRUPOS.map((g) => [g.k, 0]))]));
+  lista.forEach((c) => { const b = chave(isoDia(new Date(c.criado_em))); if (cont[b]) cont[b][grupoDe(c).k]++; });
+  const max = Math.max(1, ...baldes.map((b) => Object.values(cont[b]).reduce((x, y) => x + y, 0)));
+  const passo = max <= 5 ? 1 : max <= 10 ? 2 : max <= 25 ? 5 : max <= 50 ? 10 : Math.ceil(max / 50) * 10;
+  const topo = Math.ceil(max / passo) * passo;
+  const W = 700, H = 210, esq = 30, larg = (W - esq) / baldes.length, bw = Math.max(3, Math.min(34, larg * 0.62));
+  const y = (v) => H - (v / topo) * (H - 10);
+  let svg = '';
+  for (let v = 0; v <= topo; v += passo) svg += `<line x1="${esq}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="currentColor" stroke-opacity=".1"/><text x="${esq - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="currentColor" fill-opacity=".5">${v}</text>`;
+  const cadaRotulo = Math.ceil(baldes.length / 12);
+  baldes.forEach((b, i) => {
+    const x = esq + i * larg + (larg - bw) / 2; let acum = 0;
+    GRUPOS.forEach((g) => {
+      const n = cont[b][g.k]; if (!n) return;
+      const y1 = y(acum + n), y0 = y(acum); acum += n;
+      svg += `<rect x="${x}" y="${y1}" width="${bw}" height="${Math.max(0, y0 - y1 - 1)}" rx="3" fill="${g.cor}"/>`;
+      if (y0 - y1 > 14 && bw > 16) svg += `<text x="${x + bw / 2}" y="${(y0 + y1) / 2 + 4}" text-anchor="middle" font-size="10" font-weight="700" fill="#04130C">${n}</text>`;
+    });
+    svg += `<rect class="alvo-dia" data-b="${b}" x="${esq + i * larg}" y="0" width="${larg}" height="${H}" fill="transparent"/>`;
+    if (i % cadaRotulo === 0) { const [, mm, dd] = b.split('-'); svg += `<text x="${x + bw / 2}" y="${H + 18}" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".55">${dd}/${mm}</text>`; }
+  });
+  graficoPorDia._cont = cont; graficoPorDia._semanal = semanal;
+  return `<div class="grafico" id="graf-dia"><svg viewBox="0 0 ${W} ${H + 26}" preserveAspectRatio="none" role="img" aria-label="Conversas novas por ${semanal ? 'semana' : 'dia'}, separadas por origem">${svg}</svg><div class="dica oculto" id="graf-dica"></div></div>
+    <div class="legenda">${GRUPOS.map((g) => `<span><i style="background:${g.cor}"></i>${g.nome}</span>`).join('')}${semanal ? '<span style="color:var(--tx3)">· barras por semana</span>' : ''}</div>`;
+}
+function ligarGrafico() {
+  const box = $('graf-dia'); if (!box) return; const dica = $('graf-dica');
+  box.querySelectorAll('.alvo-dia').forEach((r) => {
+    r.addEventListener('mouseenter', () => {
+      const b = r.dataset.b, c = graficoPorDia._cont[b]; const tot = Object.values(c).reduce((x, y) => x + y, 0);
+      const [aa, mm, dd] = b.split('-');
+      dica.innerHTML = `<b>${graficoPorDia._semanal ? 'Semana de ' : ''}${dd}/${mm}</b> · ${tot} ${tot === 1 ? 'conversa' : 'conversas'}<br>` + GRUPOS.map((g) => `<span style="display:flex; gap:6px; align-items:center"><i style="width:8px; height:8px; border-radius:2px; background:${g.cor}; display:inline-block"></i>${g.nome}: <b>${c[g.k]}</b></span>`).join('');
+      dica.classList.remove('oculto');
+      const rb = r.getBoundingClientRect(), bb = box.getBoundingClientRect();
+      let left = rb.left - bb.left + rb.width + 8; if (left + 190 > bb.width) left = rb.left - bb.left - 198;
+      dica.style.left = Math.max(0, left) + 'px'; dica.style.top = '10px';
+    });
+    r.addEventListener('mouseleave', () => dica.classList.add('oculto'));
+  });
+}
+
 function telaDashboard() {
   const doPeriodo = noPeriodo(estado.contatos);
   const lista = comFiltro(doPeriodo);
@@ -527,11 +617,8 @@ function telaDashboard() {
   const etapas = estado.etapas;
   const f = estado.filtro;
   const chegaram = etapas.map((e) => lista.filter((c) => (etapaDe(c)?.ordem ?? 0) >= e.ordem).length);
-
-  const kpis = etapas.slice(1, 3).map((e, i) => {
-    const n = chegaram[i + 1];
-    return `<div class="card kpi"><span class="rot">${esc(e.nome)}</span><span class="num">${n}</span><span class="obs">${n} de ${total} conversas · ${pct(n, total)}%</span></div>`;
-  }).join('');
+  const porGrupo = Object.fromEntries(GRUPOS.map((g) => [g.k, lista.filter((c) => grupoDe(c) === g).length]));
+  const naoRastreadas = porGrupo.organico, rastreadas = total - naoRastreadas;
 
   const max = Math.max(...chegaram, 1);
   const funil = etapas.map((e, i) => {
@@ -541,17 +628,10 @@ function telaDashboard() {
     return `<div class="funil-linha">
       <div class="funil-nome"><b>${esc(e.nome)}</b><small style="color:${cor.c}">${e.temperatura.toUpperCase()}</small></div>
       <div class="funil-trilho"><div class="funil-barra" style="width:${w}%; background:${cor.bg}; border-color:${cor.bd}">
-        <span class="num" style="color:${cor.c}">${chegaram[i]}</span><span style="color:var(--tx2); font-size:12px">pessoas</span></div></div>
+        <span class="num" style="color:${cor.c}">${chegaram[i]}</span><span style="color:var(--tx2); font-size:12px">${chegaram[i] === 1 ? 'pessoa' : 'pessoas'} · ${pct(chegaram[i], total)}%</span></div></div>
     </div>${queda !== null && queda > 0 ? `<div style="font-size:12px; color:var(--tx3); margin:-6px 0 10px 174px">↓ ${queda} ainda não avançaram</div>` : ''}`;
   }).join('');
 
-  const porOrigem = Object.keys(ORIGEM).map((k) => ({ k, n: lista.filter((c) => c.origem === k).length }))
-    .filter((x) => x.n > 0 || ['anuncio_meta', 'google', 'link'].includes(x.k)).sort((a, b) => b.n - a.n);
-  const origens = porOrigem.map(({ k, n }) => `<div class="barra-origem">
-      <div class="t"><span style="display:inline-flex; align-items:center; gap:7px">${icone(ORIGEM[k].ic, 16)}${ORIGEM[k].nome}</span><span style="color:var(--tx2)">${n} ${n === 1 ? 'lead' : 'leads'} · ${pct(n, total)}%</span></div>
-      <div class="tr"><div class="f" style="width:${pct(n, total)}%; background:${ORIGEM[k].cor}"></div></div></div>`).join('');
-
-  // tabela por campanha / lugar
   const agrupar = (campo, vazio) => {
     const g = {};
     lista.forEach((c) => {
@@ -567,11 +647,14 @@ function telaDashboard() {
       <thead><tr style="color:var(--tx3); text-align:left"><th style="padding:8px 6px; font-weight:500">${titulo}</th><th style="padding:8px 6px; font-weight:500">Conversas</th><th style="padding:8px 6px; font-weight:500">Avançaram</th><th style="padding:8px 6px; font-weight:500">Agendaram</th></tr></thead>
       <tbody>${linhas.map(([nome, v]) => `<tr style="border-top:1px solid var(--line2)"><td style="padding:10px 6px"><span style="display:inline-flex; align-items:center; gap:7px">${comIc(nome, v)}${esc(nome)}</span></td><td style="padding:10px 6px">${v.conversas}</td><td style="padding:10px 6px">${v.avancou} <span style="color:var(--tx3)">(${pct(v.avancou, v.conversas)}%)</span></td><td style="padding:10px 6px">${v.agendou}</td></tr>`).join('')}</tbody></table></div>`
     : '<div class="vazio">Nada neste período.</div>';
-  const porCampanha = agrupar('campanha', 'Sem campanha');
-  const porLugar = agrupar('lugar', 'Não informado');
 
   const opc = (vals, atual, todos) => `<option value="">${todos}</option>` + vals.map((v) => `<option value="${esc(v)}" ${v === atual ? 'selected' : ''}>${esc(v)}</option>`).join('');
   const temFiltro = f.origem || f.campanha || f.lugar;
+  const ico = (svg) => `<span class="ico">${svg}</span>`;
+  const icRelogio = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+  const icConversa = IC.organico.replace('<svg', '<svg width="18" height="18"');
+  const icLink = IC.link.replace('<svg', '<svg width="18" height="18"');
+  const icNao = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>';
 
   $('tela-dashboard').innerHTML = `
     <div class="card filtros" style="margin-bottom:16px">
@@ -582,19 +665,96 @@ function telaDashboard() {
     </div>
     <div style="font-size:13px; color:var(--tx3); margin:-6px 0 14px">Período: ${esc(textoPeriodo())}${temFiltro ? ` · mostrando ${total} de ${doPeriodo.length} conversas` : ''}</div>
     <div class="linha">
-      <div class="card kpi"><span class="rot">Conversas novas</span><span class="num">${total}</span><span class="obs">pelo WhatsApp no período</span></div>
-      ${kpis}
+      <div class="card" style="flex:1 1 270px; max-width:100%"><h2>Visão geral</h2><div class="visao">
+        <div class="item">${ico(icConversa)}<div><b>${total}</b><span>conversas novas no período</span></div></div>
+        <div class="item">${ico(icLink)}<div><b>${rastreadas} <small style="font-size:13px; color:var(--tx2); font-weight:500">${pct(rastreadas, total)}%</small></b><span>rastreadas (sabemos de onde vieram)</span></div></div>
+        <div class="item">${ico(icNao)}<div><b>${naoRastreadas} <small style="font-size:13px; color:var(--tx2); font-weight:500">${pct(naoRastreadas, total)}%</small></b><span>não rastreadas (chamaram direto)</span></div></div>
+        <div class="item" style="flex-wrap:wrap">${ico(icRelogio)}<div style="flex:1"><b id="tm-resp">…</b><span>tempo médio da 1ª resposta</span></div>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--tx2); margin:0; width:100%"><input type="checkbox" id="tm-segunda" ${telaDashboard._segunda ? 'checked' : ''} style="width:auto; min-height:0"> Contar a partir da 2ª mensagem (quando a 1ª é saudação automática)</label></div>
+      </div></div>
+      <div class="card" style="flex:3 1 460px; min-width:0"><h2>Origem das conversas</h2>
+        <div class="origem-grade">${GRUPOS.map((g) => `<div class="origem-tile"><span class="t"><i style="background:${g.cor}"></i>${icone(g.ic, 13)}${g.nome}</span><b>${porGrupo[g.k]}</b><small>${pct(porGrupo[g.k], total)}% das conversas</small></div>`).join('')}</div>
+        ${graficoPorDia(lista)}
+      </div>
     </div>
     <div class="linha">
-      <div class="card" style="flex:3 1 460px"><h2>Funil de aquisição</h2>${etapas.length ? funil : '<div class="vazio">Nenhuma etapa configurada.</div>'}</div>
-      <div class="card" style="flex:2 1 300px"><h2>De onde vieram os leads</h2>${origens}<span style="font-size:12px; color:var(--tx3)">Total: ${total} ${total === 1 ? 'lead' : 'leads'}</span></div>
+      <div class="card" style="flex:1 1 360px"><h2>Funil da jornada</h2>${etapas.length ? funil : '<div class="vazio">Nenhuma etapa configurada.</div>'}</div>
+      <div class="card" style="flex:2 1 460px; min-width:0" id="card-vendas"><div class="vazio">Carregando vendas…</div></div>
     </div>
     <div class="linha">
-      <div class="card" style="flex:1 1 440px"><h2>Por campanha</h2>${tabela(porCampanha, 'Campanha', (n, v) => n === 'Sem campanha' ? '' : icone((ORIGEM[v.origem] || ORIGEM.outro).ic, 15))}</div>
-      <div class="card" style="flex:1 1 440px"><h2>Por lugar</h2>${tabela(porLugar, 'Lugar', (n) => icLugar(n) ? icone(icLugar(n), 15) : '')}</div>
+      <div class="card" style="flex:1 1 440px"><h2>Por campanha</h2>${tabela(agrupar('campanha', 'Sem campanha'), 'Campanha', (n, v) => n === 'Sem campanha' ? '' : icone((ORIGEM[v.origem] || ORIGEM.outro).ic, 15))}</div>
+      <div class="card" style="flex:1 1 440px"><h2>Por lugar</h2>${tabela(agrupar('lugar', 'Não informado'), 'Lugar', (n) => icLugar(n) ? icone(icLugar(n), 15) : '')}</div>
     </div>`;
   ['origem', 'campanha', 'lugar'].forEach((k) => $('fl-' + k).addEventListener('change', (ev) => { estado.filtro[k] = ev.target.value; telaDashboard(); }));
   if ($('fl-limpar')) $('fl-limpar').addEventListener('click', () => { estado.filtro = { origem: '', campanha: '', lugar: '' }; telaDashboard(); });
+  $('tm-segunda').addEventListener('change', (ev) => { telaDashboard._segunda = ev.target.checked; tempoResposta(lista); });
+  ligarGrafico();
+  tempoResposta(lista);
+  carregarVendas();
+}
+
+async function tempoResposta(lista) {
+  const el = $('tm-resp'); if (!el) return;
+  const ids = lista.map((c) => c.id); if (!ids.length) { el.textContent = '—'; return; }
+  const msgs = [];
+  for (let i = 0; i < ids.length; i += 150) {
+    const { data } = await sb.from('mensagens').select('contato_id, direcao, criado_em').in('contato_id', ids.slice(i, i + 150)).order('criado_em').limit(5000);
+    msgs.push(...(data || []));
+  }
+  const por = {}; msgs.forEach((m) => { (por[m.contato_id] = por[m.contato_id] || []).push(m); });
+  const qual = telaDashboard._segunda ? 1 : 0; const tempos = [];
+  Object.values(por).forEach((ms) => {
+    ms.sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em));
+    const i0 = ms.findIndex((m) => m.direcao === 'entrada'); if (i0 < 0) return;
+    const resp = ms.slice(i0 + 1).filter((m) => m.direcao === 'saida')[qual];
+    if (resp) tempos.push(new Date(resp.criado_em) - new Date(ms[i0].criado_em));
+  });
+  if (!$('tm-resp')) return;
+  $('tm-resp').textContent = tempos.length ? duracao(tempos.reduce((a, b) => a + b, 0) / tempos.length) : '—';
+  $('tm-resp').title = `${tempos.length} ${tempos.length === 1 ? 'conversa respondida' : 'conversas respondidas'}`;
+}
+
+function etapaVenda() { const e = estado.etapas; return e.find((x) => x.evento_meta === 'Purchase') || e[e.length - 1] || null; }
+async function carregarVendas() {
+  const box = $('card-vendas'); if (!box) return;
+  const ev = etapaVenda();
+  if (!ev) { box.innerHTML = '<h2>Vendas</h2><div class="vazio">Configure as etapas do funil.</div>'; return; }
+  const naVenda = estado.contatos.filter((c) => (etapaDe(c)?.ordem ?? 0) >= ev.ordem);
+  const ids = naVenda.map((c) => c.id); const quandoVendeu = {};
+  for (let i = 0; i < ids.length; i += 150) {
+    const { data } = await sb.from('historico_etapas').select('contato_id, etapa_id, criado_em').in('contato_id', ids.slice(i, i + 150)).order('criado_em').limit(5000);
+    (data || []).forEach((h) => { const e = estado.etapas.find((x) => x.id === h.etapa_id); if (e && e.ordem >= ev.ordem && !quandoVendeu[h.contato_id]) quandoVendeu[h.contato_id] = h.criado_em; });
+  }
+  if (!$('card-vendas')) return;
+  const porVenda = carregarVendas._modo === 'venda';
+  const [de, ate] = intervaloPeriodo();
+  const dentro = (iso) => { if (!iso) return false; const t = new Date(iso).getTime(); return (!de || t >= de.getTime()) && (!ate || t <= ate.getTime()); };
+  const vendas = comFiltro(naVenda).map((c) => ({ c, venda: quandoVendeu[c.id] || c.atualizado_em }))
+    .filter((v) => dentro(porVenda ? v.venda : v.c.criado_em))
+    .sort((a, b) => new Date(b.venda) - new Date(a.venda));
+  const valor = Number(ev.valor_padrao) || 0;
+  const dt = (iso) => new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+  box.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px">
+      <h2 style="margin:0">${esc(ev.nome)} (${vendas.length})${valor ? ` <small style="color:var(--tx2); font-weight:500">· R$ ${(valor * vendas.length).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</small>` : ''}</h2>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+        <div class="chave" role="group" aria-label="Contar pela data"><button data-modo="contato" aria-pressed="${!porVenda}">Data do 1º contato</button><button data-modo="venda" aria-pressed="${porVenda}">Data da venda</button></div>
+        <button class="btn-sec" id="vd-baixar" ${vendas.length ? '' : 'disabled'}>Baixar planilha</button>
+      </div></div>
+    ${vendas.length ? `<div style="overflow-x:auto; max-height:360px"><table style="width:100%; border-collapse:collapse; min-width:520px">
+      <thead><tr style="color:var(--tx3); text-align:left"><th style="padding:8px 6px; font-weight:500">Cliente</th><th style="padding:8px 6px; font-weight:500">Origem</th><th style="padding:8px 6px; font-weight:500">1º contato</th><th style="padding:8px 6px; font-weight:500">${esc(ev.nome)} em</th></tr></thead>
+      <tbody>${vendas.map(({ c, venda }) => `<tr style="border-top:1px solid var(--line2); cursor:pointer" data-abrir-lead="${c.id}"><td style="padding:10px 6px"><b>${esc(c.nome || telefoneBonito(c.telefone))}</b>${c.campanha ? `<div style="font-size:12px; color:var(--tx3)">${esc(c.campanha)}</div>` : ''}</td><td style="padding:10px 6px">${selo(c)}</td><td style="padding:10px 6px">${dt(c.criado_em)}</td><td style="padding:10px 6px">${dt(venda)}</td></tr>`).join('')}</tbody></table></div>`
+    : `<div class="vazio" style="padding:24px; text-align:center">Ninguém chegou em “${esc(ev.nome)}” neste período.</div>`}`;
+  box.querySelectorAll('[data-modo]').forEach((b) => b.addEventListener('click', () => { carregarVendas._modo = b.dataset.modo; carregarVendas(); }));
+  box.querySelectorAll('[data-abrir-lead]').forEach((tr) => tr.addEventListener('click', () => { estado.aberto = Number(tr.dataset.abrirLead); estado.tela = 'conversas'; marcarMenu(); desenhar(); }));
+  if ($('vd-baixar')) $('vd-baixar').addEventListener('click', () => {
+    const q = (t) => `"${String(t ?? '').replace(/"/g, '""')}"`;
+    const linhas = [['Nome', 'Telefone', 'Origem', 'Campanha', 'Lugar', 'Primeiro contato', ev.nome + ' em', 'Valor'].map(q).join(';')]
+      .concat(vendas.map(({ c, venda }) => [c.nome || '', c.telefone, (ORIGEM[c.origem] || ORIGEM.outro).nome, c.campanha || '', c.lugar || '', dt(c.criado_em), dt(venda), valor ? valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : ''].map(q).join(';')));
+    const blob = new Blob(['﻿' + linhas.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = `vendas_${slug($('sel-site').selectedOptions[0]?.textContent || 'cliente')}_${isoDia(new Date())}.csv`;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
 }
 
 // ================= CONVERSAS =================
@@ -650,6 +810,7 @@ function bolhaHTML(m) {
   const quando = new Date(m.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
   const rotulo = m.direcao === 'entrada' ? 'Recebido · grátis'
     : m.tipo === 'template' ? '<b>Modelo enviado pelo Radar</b>'
+    : m.tipo === 'celular' ? 'Respondido pelo celular · grátis'
     : '<b>Enviado pelo Radar</b> · 1 crédito';
   return `<div class="bolha ${m.direcao}" data-msg="${m.id}">${esc(m.texto || '[' + (m.tipo || 'mídia') + ']')}<small>${quando} · ${rotulo}</small></div>`;
 }
