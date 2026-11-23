@@ -208,12 +208,22 @@
   .chave { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
   .chave button { background: transparent; border: 0; color: var(--tx2); font: inherit; font-size: 12px; padding: 7px 10px; border-radius: 8px; cursor: pointer; }
   .chave button[aria-pressed="true"] { background: var(--verde-bg); color: var(--verde-claro); font-weight: 700; }
-  .auto-grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; }
+  .auto-grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; align-items: stretch; }
   .auto-card { border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; transition: border-color .2s, background .2s; }
   .auto-card.ligado { border-color: var(--verde-bd); background: var(--verde-bg); }
-  .criterio { display: grid; grid-template-columns: 92px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; }
-  .criterio > span { color: var(--tx3); }
-  .num-in { width: 64px !important; min-height: 32px !important; padding: 4px 8px !important; display: inline-block; text-align: center; }
+  .auto-card { gap: 0 !important; }
+  .auto-card > * + * { margin-top: 12px; }
+  .auto-topo { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .auto-topo h3 { margin: 0; font-size: 17px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .auto-desc { margin: 6px 0 0 !important; font-size: 14px; color: var(--tx2); line-height: 1.5; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .auto-bloco { display: flex; flex-direction: column; gap: 4px; }
+  .auto-bloco p { margin: 0; font-size: 14px; line-height: 1.5; text-align: left; }
+  .auto-rot { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--tx3); font-weight: 600; margin: 0; }
+  .auto-campo { display: flex; flex-direction: column; gap: 6px; }
+  .auto-campo label { font-size: 13px; color: var(--tx2); margin: 0; }
+  .auto-num { display: inline-flex; align-items: center; gap: 8px; }
+  .auto-num input { width: 84px !important; text-align: center; }
+  .auto-num span { font-size: 14px; color: var(--tx2); }
   .previa { font-size: 13px; color: var(--tx2); white-space: pre-wrap; border-left: 2px solid var(--verde-bd); padding-left: 10px; }
   .previa:empty { display: none; }
   .chavinha { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; flex-shrink: 0; margin: 0; }
@@ -223,7 +233,9 @@
   .chavinha input:checked + span { background: var(--verde); border-color: var(--verde); }
   .chavinha input:checked + span::after { transform: translateX(20px); }
   .chavinha input:focus-visible + span { outline: 2px solid var(--verde-claro); outline-offset: 2px; }
-  .chavinha b { font-size: 12px; color: var(--tx2); min-width: 62px; }
+  .chavinha { flex-direction: column; align-items: center; gap: 3px !important; }
+  .chavinha b { font-size: 11px; color: var(--tx3); font-weight: 600; text-align: center; }
+  .chavinha input:checked ~ b { color: var(--verde-claro); }
   .grupo-modelo { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--tx3); margin: 10px 0 6px; }
   .modelo-card { border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 8px; }
   .desc-modelo { font-size: 13px; margin-top: 4px; cursor: pointer; }
@@ -1434,27 +1446,33 @@ async function telaModelos() {
   const site = estado.sites.find((x) => x.id === estado.site) || {};
   const e1 = estado.etapas[0]?.nome || 'primeira etapa'; const eU = estado.etapas[estado.etapas.length - 1]?.nome || 'última etapa';
   const chave = (id, ligado) => `<label class="chavinha" title="Liga ou desliga o envio automático"><input type="checkbox" id="${id}" ${ligado ? 'checked' : ''}><span></span><b>${ligado ? 'Ligado' : 'Desligado'}</b></label>`;
-  const cartao = (k, titulo, ligado, oque, quem, quando, selId, modeloAtual) => `
+  const cartao = (k, titulo, ligado, oque, quem, quando, campo, selId, modeloAtual) => `
     <div class="auto-card" data-auto="${k}">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px"><div><h3 style="margin:0; font-size:17px">${titulo}</h3><div style="font-size:13px; color:var(--tx2); margin-top:2px">${oque}</div></div>${chave('ch-' + k, ligado)}</div>
-      <div class="criterio"><span>Quem recebe</span><div>${quem}</div></div>
-      <div class="criterio"><span>Quando</span><div>${quando}</div></div>
-      <div><label for="${selId}">Mensagem que vai</label><select id="${selId}" data-atual="${esc(modeloAtual || '')}"><option value="">Carregando modelos…</option></select></div>
+      <div class="auto-topo"><h3>${titulo}</h3>${chave('ch-' + k, ligado)}</div>
+      <p class="auto-desc">${oque}</p>
+      <div class="auto-bloco"><span class="auto-rot">Quem recebe</span><p>${quem}</p></div>
+      <div class="auto-bloco"><span class="auto-rot">Quando</span><p>${quando}</p></div>
+      <div class="auto-campo">${campo}</div>
+      <div class="auto-bloco"><label class="auto-rot" for="${selId}">Mensagem que vai</label><select id="${selId}" data-atual="${esc(modeloAtual || '')}"><option value="">Carregando modelos…</option></select></div>
       <div class="previa" id="pv-${k}"></div>
     </div>`;
+  const campo = (id, rot, val, min, max, suf) => `<label for="${id}">${rot}</label><span class="auto-num"><input type="number" id="${id}" min="${min}" max="${max}" value="${esc(val)}"><span>${suf}</span></span>`;
   $('tela-modelos').innerHTML = `<div style="display:flex; flex-direction:column; gap:18px">
     <section class="card" style="display:flex; flex-direction:column; gap:14px">
       <div><h2 style="margin:0">Envio automático</h2><p style="margin:4px 0 0; color:var(--tx2)">A chavinha é a permissão: ligada, o Radar manda sozinho; desligada, vira só tarefa pra você mandar. Salva na hora.</p></div>
       <div class="auto-grade">
         ${cartao('lembrete', 'Lembrete de horário', site.auto_lembrete, 'Avisa o cliente antes do horário marcado.',
           'Quem tem horário marcado no campo <b>Agendamento</b> da ficha do lead.',
-          `<input type="number" id="cr-horas" min="1" max="48" value="${esc(site.lembrete_horas ?? 3)}" class="num-in"> horas antes do horário. Custa 1 crédito.`, 'au-lem-mod', site.lembrete_modelo)}
+          'Antes do horário, no tempo que você escolher. Custa 1 crédito.',
+          campo('cr-horas', 'Mandar quantas horas antes', site.lembrete_horas ?? 3, 1, 48, 'horas'), 'au-lem-mod', site.lembrete_modelo)}
         ${cartao('follow_up', 'Follow-up', site.auto_followup, 'Chama de volta quem começou a conversa e parou de responder.',
-          `Quem está em <b>${esc(e1)}</b> e está há <input type="number" id="cr-fu" min="1" max="60" value="${esc(site.rotina_followup_dias ?? 2)}" class="num-in"> dias sem responder (até 30 dias). No máximo 1 follow-up por semana pra mesma pessoa.`,
-          'Todo dia, entre 9h e 20h. Modelo de marketing custa 10 créditos; de utilidade, 1.', 'au-fu-mod', site.followup_modelo)}
+          `Quem está em <b>${esc(e1)}</b> e parou de responder. Vale até 30 dias, e cada pessoa recebe no máximo 1 por semana.`,
+          'Todo dia, entre 9h e 20h. Marketing custa 10 créditos; utilidade, 1.',
+          campo('cr-fu', 'Mandar depois de quantos dias sem resposta', site.rotina_followup_dias ?? 2, 1, 60, 'dias'), 'au-fu-mod', site.followup_modelo)}
         ${cartao('reativacao', 'Reativação', site.auto_reativacao, 'Chama de volta quem já foi cliente e sumiu.',
-          `Quem chegou em <b>${esc(eU)}</b> e está há <input type="number" id="cr-re" min="7" max="365" value="${esc(site.rotina_reativacao_dias ?? 30)}" class="num-in"> dias sem conversar.`,
-          'Todo dia, entre 9h e 20h. Modelo de marketing custa 10 créditos.', 'au-re-mod', site.reativacao_modelo)}
+          `Quem chegou em <b>${esc(eU)}</b> e parou de conversar.`,
+          'Todo dia, entre 9h e 20h. Marketing custa 10 créditos.',
+          campo('cr-re', 'Mandar depois de quantos dias sem conversa', site.rotina_reativacao_dias ?? 30, 7, 365, 'dias'), 'au-re-mod', site.reativacao_modelo)}
       </div>
       <div id="au-status" style="font-size:13px; color:var(--tx2); min-height:18px"></div>
     </section>
