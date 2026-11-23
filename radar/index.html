@@ -1299,7 +1299,7 @@ function arrastavel(card) {
         voando = card.cloneNode(true); voando.classList.add('voando');
         Object.assign(voando.style, { left: r.left + 'px', top: r.top + 'px', width: r.width + 'px' });
         document.body.appendChild(voando); card.classList.add('fantasma');
-        try { card.setPointerCapture(e.pointerId); } catch (_) {}
+
       }
       e.preventDefault();
       voando.style.left = (e.clientX - dx) + 'px'; voando.style.top = (e.clientY - dy) + 'px';
@@ -1313,7 +1313,7 @@ function arrastavel(card) {
       flip(todos(), () => { col.insertBefore(card, ref); });
     };
     const soltar = (e) => {
-      card.removeEventListener('pointermove', mover); card.removeEventListener('pointerup', soltar); card.removeEventListener('pointercancel', soltar);
+      window.removeEventListener('pointermove', mover); window.removeEventListener('pointerup', soltar); window.removeEventListener('pointercancel', soltar);
       document.querySelectorAll('#crm .col').forEach((c) => c.classList.remove('alvo'));
       if (!voando) return;
       const destino = card.closest('.col'); const r = card.getBoundingClientRect();
@@ -1326,7 +1326,7 @@ function arrastavel(card) {
         moverEtapa(id, etapaId, { local: true });
       }
     };
-    card.addEventListener('pointermove', mover); card.addEventListener('pointerup', soltar); card.addEventListener('pointercancel', soltar);
+    window.addEventListener('pointermove', mover); window.addEventListener('pointerup', soltar); window.addEventListener('pointercancel', soltar);
   });
 }
 
@@ -2245,7 +2245,7 @@ function desenharFunil() {
       voando.classList.add('voando-etapa');
       Object.assign(voando.style, { position: 'fixed', left: r0.left + 'px', top: (ev.clientY - dy) + 'px', width: r0.width + 'px', zIndex: 60, pointerEvents: 'none', boxShadow: '0 18px 50px rgba(0,0,0,.35)', transform: 'scale(1.02)', transition: 'transform .15s' });
       document.body.appendChild(voando); card.style.opacity = '.25';
-      try { alca.setPointerCapture(ev.pointerId); } catch (_) {}
+
       let rolar = null;
       const mover = (e) => {
         voando.style.top = (e.clientY - dy) + 'px';
@@ -2262,7 +2262,7 @@ function desenharFunil() {
       };
       const soltar = () => {
         clearInterval(rolar);
-        alca.removeEventListener('pointermove', mover); alca.removeEventListener('pointerup', soltar); alca.removeEventListener('pointercancel', soltar);
+        window.removeEventListener('pointermove', mover); window.removeEventListener('pointerup', soltar); window.removeEventListener('pointercancel', soltar);
         const r = card.getBoundingClientRect();
         voando.style.transition = 'top .18s ease, transform .18s ease'; voando.style.top = r.top + 'px'; voando.style.transform = 'none';
         setTimeout(() => {
@@ -2273,7 +2273,8 @@ function desenharFunil() {
           if (antes !== ordem.join()) ordemMudou(); else desenharFunil();
         }, 190);
       };
-      alca.addEventListener('pointermove', mover); alca.addEventListener('pointerup', soltar); alca.addEventListener('pointercancel', soltar);
+      // escuta na janela: mover o card no DOM solta a "captura" do ponteiro e o arraste travava
+      window.addEventListener('pointermove', mover); window.addEventListener('pointerup', soltar); window.addEventListener('pointercancel', soltar);
     });
   });
   document.querySelectorAll('#cf-funil [data-acao]').forEach((b) => b.addEventListener('click', () => {
