@@ -211,6 +211,11 @@
   .fid-grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
   .fid-grade > div { border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 2px; }
   .fid-grade b { font-size: 24px; line-height: 1.2; } .fid-grade span { font-size: 13px; color: var(--tx2); } .fid-grade small { font-size: 12px; color: var(--tx3); }
+  #cf-funil.ordenando .etapa-ed > :not(:first-child) { display: none; }
+  #cf-funil.ordenando .etapa-ed { padding: 10px 12px !important; }
+  #cf-funil.ordenando .etapa-ed button { display: none; }
+  .voando-etapa > :not(:first-child) { display: none; }
+  .voando-etapa button { display: none; }
   .vis-resumo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .vis-resumo > div { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: flex; flex-direction: column; }
   .vis-resumo b { font-size: 16px; } .vis-resumo span { font-size: 11px; color: var(--tx3); }
@@ -2232,24 +2237,33 @@ function desenharFunil() {
     alca.style.touchAction = 'none'; alca.style.cursor = 'grab';
     alca.addEventListener('pointerdown', (ev) => {
       ev.preventDefault(); _arrastandoFunil = true;
-      const lista = $('cf-funil'); const r0 = card.getBoundingClientRect(); const dy = ev.clientY - r0.top;
+      const lista = $('cf-funil');
+      // durante o arraste as etapas ficam compactas (só o nome): fica fácil trocar de lugar
+      lista.classList.add('ordenando');
+      const r0 = card.getBoundingClientRect(); const dy = r0.height / 2;
       const voando = card.cloneNode(true);
-      Object.assign(voando.style, { position: 'fixed', left: r0.left + 'px', top: r0.top + 'px', width: r0.width + 'px', zIndex: 60, pointerEvents: 'none', boxShadow: '0 18px 50px rgba(0,0,0,.35)', transform: 'scale(1.02)', transition: 'transform .15s' });
+      voando.classList.add('voando-etapa');
+      Object.assign(voando.style, { position: 'fixed', left: r0.left + 'px', top: (ev.clientY - dy) + 'px', width: r0.width + 'px', zIndex: 60, pointerEvents: 'none', boxShadow: '0 18px 50px rgba(0,0,0,.35)', transform: 'scale(1.02)', transition: 'transform .15s' });
       document.body.appendChild(voando); card.style.opacity = '.25';
       try { alca.setPointerCapture(ev.pointerId); } catch (_) {}
+      let rolar = null;
       const mover = (e) => {
         voando.style.top = (e.clientY - dy) + 'px';
+        clearInterval(rolar);
+        if (e.clientY < 70) rolar = setInterval(() => window.scrollBy(0, -14), 16);
+        else if (e.clientY > innerHeight - 70) rolar = setInterval(() => window.scrollBy(0, 14), 16);
         const irmaos = [...lista.querySelectorAll('.etapa-ed')].filter((n) => n !== card);
         const depois = irmaos.find((n) => { const r = n.getBoundingClientRect(); return e.clientY < r.top + r.height / 2; }) || null;
         if (card.nextElementSibling === depois || (!depois && card === lista.lastElementChild)) return;
         flip([...lista.querySelectorAll('.etapa-ed')], () => lista.insertBefore(card, depois));
       };
       const soltar = () => {
+        clearInterval(rolar);
         alca.removeEventListener('pointermove', mover); alca.removeEventListener('pointerup', soltar); alca.removeEventListener('pointercancel', soltar);
         const r = card.getBoundingClientRect();
         voando.style.transition = 'top .18s ease, transform .18s ease'; voando.style.top = r.top + 'px'; voando.style.transform = 'none';
         setTimeout(() => {
-          voando.remove(); card.style.opacity = ''; _arrastandoFunil = false;
+          voando.remove(); card.style.opacity = ''; _arrastandoFunil = false; lista.classList.remove('ordenando');
           const ordem = [...lista.querySelectorAll('.etapa-ed')].map((n) => n.dataset.k);
           const antes = estado.funilEdit.map((x) => x._k).join();
           estado.funilEdit.sort((x, y) => ordem.indexOf(x._k) - ordem.indexOf(y._k));
