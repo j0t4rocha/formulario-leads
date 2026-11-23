@@ -791,7 +791,7 @@ setInterval(atualizarListaConversas, 15000);
 // ================= CRM =================
 function cardCRM(c, etapas, e) {
   return `<article class="ccard" data-card="${c.id}">
-    <div class="n"><span>${esc(c.nome || telefoneBonito(c.telefone))}</span><span style="display:flex; gap:6px; align-items:center"><small>${quando(c.atualizado_em)}</small><span class="alca" aria-hidden="true" title="Arraste">⠿</span></span></div>
+    <div class="n"><span>${esc(c.nome || telefoneBonito(c.telefone))}</span><span style="display:flex; gap:6px; align-items:center"><small>${quando(c.atualizado_em)}</small><span class="alca" aria-hidden="true" title="Arraste"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg></span></span></div>
     <div class="o" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center">${selo(c)}${lugarHTML(c.lugar)}</div>
     ${c.campanha ? `<div class="o">${esc(c.campanha)}</div>` : ''}
     <label class="oculto" for="mv-${c.id}">Mover para</label>
@@ -817,7 +817,7 @@ function telaCRM() {
       ${cards.length > 50 ? `<div style="font-size:12px; color:var(--tx3)">Mostrando 50 de ${cards.length}</div>` : ''}
     </section>`;
   }).join('');
-  $('tela-crm').innerHTML = `<div class="aviso" style="margin-bottom:16px">Arraste o card pra outra etapa (no celular, segure pelo ⠿). Etapa com evento envia a conversão pra Meta.</div>
+  $('tela-crm').innerHTML = `<div class="aviso" style="margin-bottom:16px">Arraste o card pra outra etapa (no celular, segure pelos pontinhos no canto do card). Etapa com evento envia a conversão pra Meta.</div>
     <div class="crm" id="crm">${colunas || '<div class="card vazio">Nenhuma etapa configurada.</div>'}</div>`;
   document.querySelectorAll('[data-mover-sel]').forEach((s) => s.addEventListener('change', () => {
     if (s.value) moverEtapa(Number(s.dataset.moverSel), Number(s.value));
@@ -1541,7 +1541,7 @@ function desenharFunil() {
     const personalizado = e.evento_meta && !codigos.has(e.evento_meta);
     return `<div class="etapa-ed" data-pos="${i}" style="border:1px solid ${cor.bd}; background:${cor.bg}; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:10px">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">
-        <b style="color:${cor.c}; display:flex; align-items:center; gap:8px"><span class="arrastar" data-alca="${i}" title="Arraste pra mudar a ordem" aria-hidden="true">⠿</span>Etapa ${i + 1}</b>
+        <b style="color:${cor.c}; display:flex; align-items:center; gap:8px"><span class="arrastar" data-alca="${i}" title="Arraste pra mudar a ordem" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg></span>Etapa ${i + 1}</b>
         <div style="display:flex; gap:6px">
           <button class="btn-sec" data-acao="subir" data-i="${i}" ${i === 0 ? 'disabled' : ''} aria-label="Subir etapa ${i + 1}">↑</button>
           <button class="btn-sec" data-acao="descer" data-i="${i}" ${i === estado.funilEdit.length - 1 ? 'disabled' : ''} aria-label="Descer etapa ${i + 1}">↓</button>
