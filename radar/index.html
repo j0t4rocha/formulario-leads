@@ -2231,7 +2231,7 @@ function desenharFunil() {
     const alca = card.querySelector('[data-alca]');
     alca.style.touchAction = 'none'; alca.style.cursor = 'grab';
     alca.addEventListener('pointerdown', (ev) => {
-      ev.preventDefault();
+      ev.preventDefault(); _arrastandoFunil = true;
       const lista = $('cf-funil'); const r0 = card.getBoundingClientRect(); const dy = ev.clientY - r0.top;
       const voando = card.cloneNode(true);
       Object.assign(voando.style, { position: 'fixed', left: r0.left + 'px', top: r0.top + 'px', width: r0.width + 'px', zIndex: 60, pointerEvents: 'none', boxShadow: '0 18px 50px rgba(0,0,0,.35)', transform: 'scale(1.02)', transition: 'transform .15s' });
@@ -2249,7 +2249,7 @@ function desenharFunil() {
         const r = card.getBoundingClientRect();
         voando.style.transition = 'top .18s ease, transform .18s ease'; voando.style.top = r.top + 'px'; voando.style.transform = 'none';
         setTimeout(() => {
-          voando.remove(); card.style.opacity = '';
+          voando.remove(); card.style.opacity = ''; _arrastandoFunil = false;
           const ordem = [...lista.querySelectorAll('.etapa-ed')].map((n) => n.dataset.k);
           const antes = estado.funilEdit.map((x) => x._k).join();
           estado.funilEdit.sort((x, y) => ordem.indexOf(x._k) - ordem.indexOf(y._k));
@@ -2277,16 +2277,25 @@ function desenharFunil() {
 }
 
 // nova ordem: redesenha e salva sozinho, avisando na tela
-let _tSalvarOrdem = null;
+// uma gravação por vez; se mexer de novo enquanto grava, grava a última ordem logo depois
+let _arrastandoFunil = false;
+let _tSalvarOrdem = null, _funilVersao = 0, _gravandoFunil = false, _regravar = false;
 function ordemMudou() {
+  _funilVersao++;
   desenharFunil();
   const st = $('cf-funil-status'); if (st) { st.style.color = 'var(--tx2)'; st.textContent = 'Nova ordem… salvando'; }
   clearTimeout(_tSalvarOrdem);
-  _tSalvarOrdem = setTimeout(async () => {
-    const ok = await salvarFunil({ silencioso: true });
-    const st2 = $('cf-funil-status');
-    if (ok && st2) { st2.style.color = 'var(--verde-claro)'; st2.textContent = '✓ Ordem salva'; setTimeout(() => { if (st2.textContent === '✓ Ordem salva') st2.textContent = ''; }, 4000); }
-  }, 700);
+  _tSalvarOrdem = setTimeout(gravarOrdem, 600);
+}
+async function gravarOrdem() {
+  if (_gravandoFunil) { _regravar = true; return; }
+  _gravandoFunil = true;
+  const v = _funilVersao;
+  const ok = await salvarFunil({ silencioso: true, versao: v });
+  _gravandoFunil = false;
+  if (_regravar || v !== _funilVersao) { _regravar = false; return gravarOrdem(); }
+  const st2 = $('cf-funil-status');
+  if (ok && st2) { st2.style.color = 'var(--verde-claro)'; st2.textContent = '✓ Ordem salva'; setTimeout(() => { if (st2.textContent === '✓ Ordem salva') st2.textContent = ''; }, 4000); }
 }
 
 function confirmarRemocao(etapa) {
@@ -2305,9 +2314,20 @@ async function salvarFunil(op = {}) {
   if (!r.ok) { $('cf-funil-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-funil-status').style.color = 'var(--alerta)'; return false; }
   const { data } = await sb.from('etapas').select('*').eq('site_id', estado.site).order('ordem');
   estado.etapas = data || [];
+  if (op.silencioso) {
+    // só troca pela versão do servidor se ninguém mexeu enquanto gravava (senão a lista "voltava")
+    // etapas novas ganharam id no servidor: liga pelo nome pra não criar de novo
+    const usados = new Set(estado.funilEdit.filter((e) => e.id).map((e) => e.id));
+    estado.funilEdit.filter((e) => !e.id).forEach((e) => { const s2 = estado.etapas.find((x) => !usados.has(x.id) && x.nome === e.nome.trim()); if (s2) { e.id = s2.id; usados.add(s2.id); } });
+    if (op.versao === _funilVersao && !_arrastandoFunil) {
+      const chaves = Object.fromEntries(estado.funilEdit.filter((e) => e.id).map((e) => [e.id, e._k]));
+      estado.funilEdit = estado.etapas.map((e) => ({ ...e, _k: chaves[e.id], palavras_txt: (e.palavras_chave || []).join(', ') }));
+      desenharFunil();
+    }
+    return true;
+  }
   const { data: cts } = await sb.from('contatos').select('*').eq('site_id', estado.site).order('atualizado_em', { ascending: false }).limit(1000);
   estado.contatos = cts || [];
-  if (op.silencioso) { estado.funilEdit = estado.etapas.map((e) => ({ ...e, palavras_txt: (e.palavras_chave || []).join(', ') })); desenharFunil(); toast('Ordem do funil salva.'); return true; }
   telaConfig();
   toast('Funil salvo.');
   return true;
