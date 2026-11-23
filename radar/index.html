@@ -208,6 +208,12 @@
   .chave { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
   .chave button { background: transparent; border: 0; color: var(--tx2); font: inherit; font-size: 12px; padding: 7px 10px; border-radius: 8px; cursor: pointer; }
   .chave button[aria-pressed="true"] { background: var(--verde-bg); color: var(--verde-claro); font-weight: 700; }
+  .etapa-funil { border: 0; border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; color: #04130C; font: inherit; cursor: pointer; text-align: left; transition: transform .15s, box-shadow .15s; }
+  .etapa-funil:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(16,185,129,.25); }
+  .etapa-funil.aberta { box-shadow: 0 0 0 2px var(--verde-claro); }
+  .etapa-funil .seta { font-size: 14px; opacity: .7; }
+  .linha-lead { display: flex; align-items: center; gap: 12px; padding: 10px 6px; border-top: 1px solid var(--line2); cursor: pointer; flex-wrap: wrap; }
+  .linha-lead:hover { background: var(--verde-bg); }
   .auto-grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; align-items: stretch; }
   .auto-card { border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; transition: border-color .2s, background .2s; }
   .auto-card.ligado { border-color: var(--verde-bd); background: var(--verde-bg); }
@@ -621,6 +627,29 @@ function duracao(ms) {
 }
 const isoDia = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
+// lista de quem chegou na etapa clicada do funil (Resultados)
+function listaEtapa(lista) {
+  const e = estado.etapas.find((x) => x.id === telaDashboard._etapa); if (!e) return '';
+  const so = !!telaDashboard._soAqui;
+  const pessoas = lista.filter((c) => so ? c.etapa_id === e.id : (etapaDe(c)?.ordem ?? 0) >= e.ordem)
+    .sort((a, b) => new Date(b.ultima_msg_em || b.atualizado_em) - new Date(a.ultima_msg_em || a.atualizado_em));
+  const paradas = lista.filter((c) => c.etapa_id === e.id).length;
+  return `<div class="card" id="lista-etapa" style="margin-bottom:16px">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:6px">
+      <h2 style="margin:0">${esc(e.nome)} · ${pessoas.length} ${pessoas.length === 1 ? 'conversa' : 'conversas'}</h2>
+      <div style="display:flex; gap:12px; align-items:center"><label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--tx2); margin:0"><input type="checkbox" id="le-so" ${so ? 'checked' : ''} style="width:auto; min-height:0"> Só quem ainda está nessa etapa (${paradas})</label>
+      <button class="btn-sec" id="le-fechar" aria-label="Fechar lista">Fechar</button></div>
+    </div>
+    <div style="font-size:13px; color:var(--tx3); margin-bottom:8px">${so ? `Quem está parado em ${esc(e.nome)} agora.` : `Todo mundo que chegou em ${esc(e.nome)} ou passou dela, no período.`} Clique pra abrir a conversa.</div>
+    ${pessoas.length ? `<div style="max-height:420px; overflow-y:auto">${pessoas.map((c) => { const ea = etapaDe(c);
+      return `<div class="linha-lead" data-abrir-lead="${c.id}" role="button" tabindex="0">
+        <div style="min-width:0; flex:1"><b>${esc(c.nome || telefoneBonito(c.telefone))}</b><div style="font-size:12px; color:var(--tx3)">${telefoneBonito(c.telefone)}${c.campanha ? ' · ' + esc(c.campanha) : ''}</div></div>
+        <div>${selo(c)}</div>
+        <div style="font-size:13px; color:var(--tx2); width:130px">Agora em <b>${esc(ea?.nome || '—')}</b></div>
+        <div style="font-size:12px; color:var(--tx3); width:90px; text-align:right">${quando(c.ultima_msg_em || c.atualizado_em)}</div>
+      </div>`; }).join('')}</div>` : '<div class="vazio">Ninguém aqui no período.</div>'}
+  </div>`;
+}
 function telaDashboard() {
   const doPeriodo = noPeriodo(estado.contatos);
   const lista = comFiltro(doPeriodo);
@@ -646,8 +675,9 @@ function telaDashboard() {
   const funil = etapas.map((e, i) => {
     const larg = etapas.length > 1 ? 100 - (i * 44) / (etapas.length - 1) : 100;
     const passo = i > 0 ? `<div style="text-align:center; font-size:13px; color:var(--tx3); padding:6px 0">↓ ${chegaram[i]} de ${chegaram[i - 1]} avançaram · ${pct(chegaram[i], chegaram[i - 1])}%</div>` : '';
-    return `${passo}<div style="display:flex; justify-content:center"><div style="width:${larg}%; background:${tons[Math.min(i, tons.length - 1)]}; border-radius:10px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; gap:10px; color:#04130C">
-      <span style="font-size:15px; font-weight:600">${esc(e.nome)}</span><span style="font-size:24px; font-weight:800">${chegaram[i]}</span></div></div>`;
+    const aberto = telaDashboard._etapa === e.id;
+    return `${passo}<div style="display:flex; justify-content:center"><button class="etapa-funil ${aberto ? 'aberta' : ''}" data-etapa-res="${e.id}" aria-expanded="${aberto}" title="Ver quem está aqui" style="width:${larg}%; background:${tons[Math.min(i, tons.length - 1)]}">
+      <span style="font-size:15px; font-weight:600">${esc(e.nome)}</span><span style="display:flex; align-items:center; gap:8px"><span style="font-size:24px; font-weight:800">${chegaram[i]}</span><span class="seta">${aberto ? '▴' : '▾'}</span></span></button></div>`;
   }).join('');
 
   const opc = (vals, atual, todos) => `<option value="">${todos}</option>` + vals.map((v) => `<option value="${esc(v)}" ${v === atual ? 'selected' : ''}>${esc(v)}</option>`).join('');
@@ -675,8 +705,9 @@ function telaDashboard() {
     </div>
     <div class="linha">
       <div class="card" style="flex:1 1 340px"><h2>De onde vieram</h2>${linhasOrigem}</div>
-      <div class="card" style="flex:1 1 340px"><h2>Funil</h2>${etapas.length ? funil : '<div class="vazio">Nenhuma etapa configurada.</div>'}</div>
+      <div class="card" style="flex:1 1 340px"><h2>Funil</h2>${etapas.length ? funil + '<div style="font-size:12px; color:var(--tx3); text-align:center; margin-top:10px">Clique numa etapa pra ver as conversas</div>' : '<div class="vazio">Nenhuma etapa configurada.</div>'}</div>
     </div>
+    ${listaEtapa(lista)}
     <div class="card" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; padding:14px 18px">
       <span style="color:var(--tx2)">${icone('relogio', 22)}</span>
       <span style="flex:1; font-size:15px">Tempo médio de resposta</span>
@@ -696,6 +727,14 @@ function telaDashboard() {
   ['origem', 'campanha', 'lugar'].forEach((k) => $('fl-' + k).addEventListener('change', (ev2) => { estado.filtro[k] = ev2.target.value; telaDashboard(); }));
   if ($('fl-limpar')) $('fl-limpar').addEventListener('click', () => { estado.filtro = { origem: '', campanha: '', lugar: '' }; telaDashboard(); });
   document.querySelectorAll('[data-por]').forEach((b) => b.addEventListener('click', () => { telaDashboard._por = b.dataset.por; telaDashboard(); }));
+  document.querySelectorAll('[data-etapa-res]').forEach((b) => b.addEventListener('click', () => {
+    const id = Number(b.dataset.etapaRes); telaDashboard._etapa = telaDashboard._etapa === id ? null : id;
+    telaDashboard._soAqui = false; telaDashboard();
+    if (telaDashboard._etapa) $('lista-etapa')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }));
+  if ($('le-fechar')) $('le-fechar').addEventListener('click', () => { telaDashboard._etapa = null; telaDashboard(); });
+  if ($('le-so')) $('le-so').addEventListener('change', (ev) => { telaDashboard._soAqui = ev.target.checked; telaDashboard(); $('lista-etapa')?.scrollIntoView({ block: 'nearest' }); });
+  document.querySelectorAll('[data-abrir-lead]').forEach((tr) => { const ir = () => { estado.aberto = Number(tr.dataset.abrirLead); estado.tela = 'conversas'; marcarMenu(); desenhar(); }; tr.addEventListener('click', ir); tr.addEventListener('keydown', (k) => { if (k.key === 'Enter') ir(); }); });
   $('tm-segunda').addEventListener('change', (ev2) => { telaDashboard._segunda = ev2.target.checked; tempoResposta(lista); });
   tempoResposta(lista);
   carregarVendas();
