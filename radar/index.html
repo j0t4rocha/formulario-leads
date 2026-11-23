@@ -16,9 +16,10 @@
     --line: rgba(255, 255, 255, 0.09); --line2: rgba(255, 255, 255, 0.06);
     --tx: #F4F6F5; --tx2: #A6B0AA; --tx3: #85908A;
     --verde: #10B981; --verde-claro: #34D399; --verde-bg: rgba(16, 185, 129, 0.12); --verde-bd: rgba(16, 185, 129, 0.38);
-    --frio: #60A5FA; --frio-bg: rgba(96, 165, 250, 0.12); --frio-bd: rgba(96, 165, 250, 0.38);
-    --morno: #FBBF24; --morno-bg: rgba(251, 191, 36, 0.12); --morno-bd: rgba(251, 191, 36, 0.38);
-    --quente: #F87171; --quente-bg: rgba(248, 113, 113, 0.12); --quente-bd: rgba(248, 113, 113, 0.38);
+    --frio: #8FB3A1; --frio-bg: rgba(143, 179, 161, 0.10); --frio-bd: rgba(143, 179, 161, 0.30);
+    --morno: #34D399; --morno-bg: rgba(52, 211, 153, 0.12); --morno-bd: rgba(52, 211, 153, 0.38);
+    --quente: #A7F3D0; --quente-bg: rgba(16, 185, 129, 0.26); --quente-bd: rgba(110, 231, 183, 0.65);
+    --alerta: #F3F6F4; --alerta-bg: rgba(255, 255, 255, 0.08); --alerta-bd: rgba(255, 255, 255, 0.35);
     --campo: rgba(255, 255, 255, 0.04); --campo-bd: rgba(255, 255, 255, 0.13);
     --bolha-saida: rgba(16, 185, 129, 0.16); --bolha-entrada: rgba(255, 255, 255, 0.06);
     --vidro: blur(14px);
@@ -69,7 +70,7 @@
   .btn-sec { background: rgba(255,255,255,.04); color: var(--tx); border: 1px solid var(--campo-bd); border-radius: 10px; padding: 9px 14px; cursor: pointer; font-weight: 600; }
   .btn-sec:hover { border-color: var(--verde-bd); background: var(--verde-bg); }
   .btn-sec:disabled { opacity: .45; cursor: default; }
-  .erro { color: var(--quente); font-size: 13px; min-height: 18px; }
+  .erro { color: var(--alerta); font-weight: 600; font-size: 13px; min-height: 18px; }
 
   /* app */
   #app { display: flex; flex-wrap: wrap; min-height: 100vh; }
@@ -161,9 +162,9 @@
   .creditos .cab span { font-size: 11px; font-weight: 700; color: var(--verde-claro); background: var(--verde-bg); border: 1px solid var(--verde-bd); border-radius: 999px; padding: 2px 8px; }
   .creditos .val { font-family: 'Geist', sans-serif; font-variant-numeric: tabular-nums; color: var(--tx3); }
   .creditos .val b { font-size: 22px; color: var(--verde-claro); letter-spacing: -0.025em; }
-  .creditos.baixo .val b { color: var(--quente); }
-  .creditos.baixo .cab span { color: var(--quente); background: var(--quente-bg); border-color: var(--quente-bd); }
-  .creditos.baixo .barra > div { background: var(--quente); box-shadow: none; }
+  .creditos.baixo .val b { color: var(--alerta); }
+  .creditos.baixo .cab span { color: var(--alerta); background: var(--alerta-bg); border-color: var(--alerta-bd); }
+  .creditos.baixo .barra > div { background: var(--alerta); box-shadow: none; }
   .responder { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--line); align-items: flex-end; }
   .responder textarea { flex: 1; resize: none; min-height: 42px; max-height: 140px; }
   .detalhe { flex: 1 1 280px; max-width: 340px; display: flex; flex-direction: column; gap: 16px; }
@@ -177,7 +178,7 @@
 
   /* crm */
   .crm { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
-  .col { flex: 1 1 250px; min-width: 0; background: rgba(255,255,255,.025); border: 1px solid var(--line); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .col { flex: 1 1 250px; min-width: 0; min-height: 180px; transition: outline-color .15s; background: rgba(255,255,255,.025); border: 1px solid var(--line); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
   .col-topo { border: 1px solid; border-radius: 12px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
   .col-topo b { display: block; } .col-topo small { font-size: 11px; font-weight: 700; letter-spacing: .04em; }
   .col-topo .num { font-size: 22px; font-weight: 700; }
@@ -186,6 +187,25 @@
   .ccard .n small { color: var(--tx3); font-weight: 400; }
   .ccard .o { font-size: 12px; color: var(--tx2); }
   .ccard .sel-bt, .ccard select { padding: 7px 10px; font-size: 13px; }
+  .ic { display: inline-flex; flex-shrink: 0; } .ic svg { width: 100%; height: 100%; }
+  .selo { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--verde-claro); background: var(--verde-bg); border: 1px solid var(--verde-bd); border-radius: 999px; padding: 2px 8px 2px 6px; white-space: nowrap; }
+  .selo.leve { color: var(--tx2); background: transparent; border-color: var(--line2, rgba(255,255,255,.12)); }
+  nav .menu .grupo { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--tx3); margin: 14px 10px 4px; }
+  nav .menu .grupo:first-child { margin-top: 0; }
+  nav .menu button { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .badge { min-width: 20px; height: 20px; border-radius: 999px; background: var(--verde); color: #04130C; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; padding: 0 6px; }
+  .abas { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line2, rgba(255,255,255,.1)); padding-bottom: 8px; }
+  .abas button { background: transparent; border: 1px solid transparent; color: var(--tx2); border-radius: 999px; padding: 8px 14px; cursor: pointer; font: inherit; font-size: 13px; min-height: 36px; }
+  .abas button[aria-selected="true"] { background: var(--verde-bg); border-color: var(--verde-bd); color: var(--verde-claro); font-weight: 700; }
+  .ccard { cursor: grab; touch-action: pan-y; transition: box-shadow .2s, opacity .2s; user-select: none; }
+  .ccard .alca { float: right; color: var(--tx3); font-size: 14px; line-height: 1; padding: 2px 4px; cursor: grab; touch-action: none; }
+  .ccard.fantasma { opacity: .25; }
+  .ccard.voando { position: fixed; z-index: 60; pointer-events: none; margin: 0; box-shadow: 0 18px 50px rgba(0,0,0,.45), 0 0 0 1px var(--verde-bd); transform: rotate(2deg) scale(1.03); transition: transform .15s; cursor: grabbing; }
+  .col.alvo { outline: 2px dashed var(--verde-claro); outline-offset: 4px; border-radius: 14px; }
+  .periodo-datas { display: inline-flex; gap: 6px; align-items: center; }
+  .periodo-datas input { width: auto; min-height: 40px; padding: 8px 10px; }
+  .filtros { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+  .filtros > div { flex: 1 1 170px; }
   .aviso { background: var(--verde-bg); border: 1px solid var(--verde-bd); border-radius: 12px; padding: 12px 16px; color: var(--tx2); font-size: 13px; }
   .barra-salvar { position: sticky; top: 0; z-index: 20; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 16px; border-radius: 14px; background: rgba(10, 12, 14, 0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--verde-bd); }
   table th { color: var(--tx3); }
@@ -199,9 +219,10 @@
     --line: rgba(15, 26, 19, 0.10); --line2: rgba(15, 26, 19, 0.06);
     --tx: #0F1A13; --tx2: #4D5B52; --tx3: #5F6E64;
     --verde: #10B981; --verde-claro: #047857; --verde-bg: rgba(16, 185, 129, 0.12); --verde-bd: rgba(5, 150, 105, 0.35);
-    --frio: #1D4ED8; --frio-bg: #E8F1FE; --frio-bd: #B9D3FB;
-    --morno: #B45309; --morno-bg: #FEF3E2; --morno-bd: #F6D199;
-    --quente: #B91C1C; --quente-bg: #FDECEC; --quente-bd: #F5B5B5;
+    --frio: #5E7D6E; --frio-bg: #EEF3F0; --frio-bd: #CBDAD2;
+    --morno: #059669; --morno-bg: #E3F7EE; --morno-bd: #A7E3C8;
+    --quente: #065F46; --quente-bg: #BDEFD6; --quente-bd: #4FC596;
+    --alerta: #0F1A15; --alerta-bg: #E9ECEA; --alerta-bd: #9AA5A0;
     --campo: #FFFFFF; --campo-bd: #CFDCD3;
     --bolha-saida: #D9F2E1; --bolha-entrada: #F1F4F2;
   }
@@ -258,13 +279,16 @@
     </div>
     <div id="saldo-creditos" class="creditos oculto" title="Créditos pra enviar mensagens pelo Radar"></div>
     <div class="menu">
-      <button data-tela="dashboard" class="ativo">Dashboard</button>
-      <button data-tela="rotina">Rotina</button>
-      <button data-tela="conversas">Conversas</button>
-      <button data-tela="crm">CRM / Funil</button>
-      <button data-tela="links">Links rastreáveis</button>
-      <button data-tela="modelos">Modelos de mensagem</button>
-      <button data-tela="config" id="menu-config" class="oculto">Configurações</button>
+      <div class="grupo">Operação</div>
+      <button data-tela="rotina" class="ativo"><span>Hoje</span><span class="badge oculto" id="badge-hoje"></span></button>
+      <button data-tela="conversas"><span>Conversas</span><span class="badge oculto" id="badge-conv" title="Esperando resposta"></span></button>
+      <button data-tela="crm"><span>Funil</span></button>
+      <div class="grupo">Análise</div>
+      <button data-tela="dashboard"><span>Resultados</span></button>
+      <button data-tela="links"><span>Links rastreáveis</span></button>
+      <div class="grupo">Ajustes</div>
+      <button data-tela="modelos"><span>Modelos de mensagem</span></button>
+      <button data-tela="config" id="menu-config" class="oculto"><span>Configurações</span></button>
     </div>
     <div class="rodape">
       <span id="quem"></span>
@@ -275,13 +299,21 @@
 
   <main>
     <div class="topo">
-      <div><h1 id="titulo">Dashboard</h1><p id="subtitulo"></p></div>
+      <div><h1 id="titulo">Hoje</h1><p id="subtitulo"></p></div>
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
         <select id="sel-periodo" aria-label="Período" style="width:auto">
           <option value="7">Últimos 7 dias</option>
           <option value="30">Últimos 30 dias</option>
           <option value="90">Últimos 90 dias</option>
+          <option value="hoje">Hoje</option>
+          <option value="mes">Este mês</option>
+          <option value="custom">Personalizado…</option>
         </select>
+        <span class="periodo-datas oculto" id="periodo-datas">
+          <label for="per-de" class="oculto">De</label><input type="date" id="per-de">
+          <span style="color:var(--tx3)">até</span>
+          <label for="per-ate" class="oculto">Até</label><input type="date" id="per-ate">
+        </span>
         <button class="btn-sec" id="bt-atualizar">Atualizar</button>
       </div>
     </div>
@@ -318,14 +350,36 @@ const COR = {
   morno:  { c: 'var(--morno)',  bg: 'var(--morno-bg)',  bd: 'var(--morno-bd)' },
   quente: { c: 'var(--quente)', bg: 'var(--quente-bg)', bd: 'var(--quente-bd)' },
 };
-const ORIGEM = {
-  anuncio_meta: { nome: 'Anúncio Meta', cor: '#34D399' },
-  site:         { nome: 'Site',          cor: '#FBBF24' },
-  link:         { nome: 'Link rastreável', cor: '#A78BFA' },
-  organico:     { nome: 'Orgânico / direto', cor: '#8B9690' },
+// ícones genéricos (desenhos próprios, não são os logotipos oficiais)
+const IC = {
+  meta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6.5a8 8 0 0 1 0 11"/></svg>',
+  google: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12h-7"/><path d="M19 12a7 7 0 1 1-2.05-4.95"/></svg>',
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>',
+  site: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
+  organico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>',
+  indicacao: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M18 8v6M15 11h6"/></svg>',
+  outro: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18" cy="12" r="1.8"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>',
+  facebook: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M15 8h-1.5A2.5 2.5 0 0 0 11 10.5V20M9 13h5"/></svg>',
 };
+const ORIGEM = {
+  anuncio_meta: { nome: 'Anúncio Meta',     cor: '#34D399', ic: 'meta' },
+  google:       { nome: 'Google',           cor: '#6EE7B7', ic: 'google' },
+  link:         { nome: 'Link rastreável',  cor: '#10B981', ic: 'link' },
+  site:         { nome: 'Site',             cor: '#A7F3D0', ic: 'site' },
+  indicacao:    { nome: 'Indicação',        cor: '#4ADE80', ic: 'indicacao' },
+  organico:     { nome: 'Orgânico / direto', cor: '#8FB3A1', ic: 'organico' },
+  outro:        { nome: 'Outro',            cor: '#5E6B64', ic: 'outro' },
+};
+function icone(nome, tam = 14) { return `<span class="ic" style="width:${tam}px; height:${tam}px" aria-hidden="true">${IC[nome] || IC.outro}</span>`; }
+function selo(c) {
+  const o = ORIGEM[c.origem] || ORIGEM.organico;
+  return `<span class="selo" title="${esc(o.nome)}">${icone(o.ic)}${esc(o.nome)}</span>`;
+}
+function icLugar(l) { const t = (l || '').toLowerCase(); return t.includes('insta') ? 'instagram' : t.includes('face') ? 'facebook' : t.includes('google') ? 'google' : null; }
+function lugarHTML(l) { if (!l) return ''; const ic = icLugar(l); return `<span class="selo leve">${ic ? icone(ic) : ''}${esc(l)}</span>`; }
 
-const estado = { perfil: null, site: null, tela: 'dashboard', etapas: [], contatos: [], aberto: null };
+const estado = { perfil: null, site: null, tela: 'rotina', etapas: [], contatos: [], aberto: null };
 
 function toast(msg) {
   const t = $('toast'); t.textContent = msg; t.classList.remove('oculto');
@@ -395,6 +449,8 @@ async function carregar() {
   estado.contatos = contatos || [];
   const { data: links } = await sb.from('links').select('*').eq('site_id', estado.site).order('criado_em', { ascending: false });
   estado.links = links || [];
+  const { data: tAbertas } = await sb.from('tarefas').select('id').eq('site_id', estado.site).eq('status', 'aberta').lte('vence_em', hojeISO()).limit(500);
+  estado.tarefasAbertas = (tAbertas || []).length;
   await atualizarCreditos();
   desenhar();
 }
@@ -418,15 +474,42 @@ async function atualizarCreditos() {
 }
 
 function etapaDe(c) { return estado.etapas.find((e) => e.id === c.etapa_id) || null; }
-function noPeriodo(lista) {
-  const dias = Number($('sel-periodo').value);
-  const corte = Date.now() - dias * 864e5;
-  return lista.filter((c) => new Date(c.criado_em).getTime() >= corte);
+function intervaloPeriodo() {
+  const v = $('sel-periodo').value; const agora = new Date();
+  const ini = (d) => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
+  if (v === 'hoje') return [ini(agora), null];
+  if (v === 'mes') return [new Date(agora.getFullYear(), agora.getMonth(), 1), null];
+  if (v === 'custom') {
+    const de = $('per-de').value, ate = $('per-ate').value;
+    return [de ? new Date(de + 'T00:00:00') : null, ate ? new Date(ate + 'T23:59:59.999') : null];
+  }
+  return [new Date(Date.now() - Number(v) * 864e5), null];
 }
+function textoPeriodo() {
+  const v = $('sel-periodo').value;
+  if (v !== 'custom') return $('sel-periodo').selectedOptions[0]?.textContent.toLowerCase() || '';
+  const f = (d) => d ? d.split('-').reverse().join('/') : '…';
+  return `de ${f($('per-de').value)} até ${f($('per-ate').value)}`;
+}
+function noPeriodo(lista) {
+  const [de, ate] = intervaloPeriodo();
+  return lista.filter((c) => { const t = new Date(c.criado_em).getTime(); return (!de || t >= de.getTime()) && (!ate || t <= ate.getTime()); });
+}
+// filtros de origem / campanha / lugar (Resultados)
+estado.filtro = { origem: '', campanha: '', lugar: '' };
+function comFiltro(lista) {
+  const f = estado.filtro;
+  return lista.filter((c) => (!f.origem || c.origem === f.origem) && (!f.campanha || (c.campanha || '') === f.campanha) && (!f.lugar || (c.lugar || '') === f.lugar));
+}
+function valoresDe(campo) { return [...new Set(estado.contatos.map((c) => c[campo]).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt-BR')); }
 
 function desenhar() {
   ['dashboard', 'rotina', 'conversas', 'crm', 'links', 'modelos', 'config'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
-  $('titulo').textContent = { dashboard: 'Dashboard', rotina: 'Rotina', conversas: 'Conversas', crm: 'CRM / Funil', links: 'Links rastreáveis', modelos: 'Modelos de mensagem', config: 'Configurações' }[estado.tela];
+  $('titulo').textContent = { dashboard: 'Resultados', rotina: 'Hoje', conversas: 'Conversas', crm: 'Funil', links: 'Links rastreáveis', modelos: 'Modelos de mensagem', config: 'Configurações' }[estado.tela];
+  const comPeriodo = estado.tela === 'dashboard';
+  $('sel-periodo').closest('.sel') ? $('sel-periodo').closest('.sel').classList.toggle('oculto', !comPeriodo) : $('sel-periodo').classList.toggle('oculto', !comPeriodo);
+  $('periodo-datas').classList.toggle('oculto', !comPeriodo || $('sel-periodo').value !== 'custom');
+  atualizarBadges();
   if (estado.tela === 'dashboard') telaDashboard();
   if (estado.tela === 'rotina') telaRotina();
   if (estado.tela === 'conversas') telaConversas();
@@ -438,15 +521,16 @@ function desenhar() {
 
 // ================= DASHBOARD =================
 function telaDashboard() {
-  const lista = noPeriodo(estado.contatos);
+  const doPeriodo = noPeriodo(estado.contatos);
+  const lista = comFiltro(doPeriodo);
   const total = lista.length;
   const etapas = estado.etapas;
-  // quantos chegaram em cada etapa (ou passaram dela)
+  const f = estado.filtro;
   const chegaram = etapas.map((e) => lista.filter((c) => (etapaDe(c)?.ordem ?? 0) >= e.ordem).length);
 
   const kpis = etapas.slice(1, 3).map((e, i) => {
     const n = chegaram[i + 1];
-    return `<div class="card kpi"><span class="rot">${esc(e.nome)}</span><span class="num">${n}</span><span class="obs">${pct(n, total)}% · ${n} de ${total} conversas</span></div>`;
+    return `<div class="card kpi"><span class="rot">${esc(e.nome)}</span><span class="num">${n}</span><span class="obs">${n} de ${total} conversas · ${pct(n, total)}%</span></div>`;
   }).join('');
 
   const max = Math.max(...chegaram, 1);
@@ -462,22 +546,41 @@ function telaDashboard() {
   }).join('');
 
   const porOrigem = Object.keys(ORIGEM).map((k) => ({ k, n: lista.filter((c) => c.origem === k).length }))
-    .sort((a, b) => b.n - a.n);
+    .filter((x) => x.n > 0 || ['anuncio_meta', 'google', 'link'].includes(x.k)).sort((a, b) => b.n - a.n);
   const origens = porOrigem.map(({ k, n }) => `<div class="barra-origem">
-      <div class="t"><span>${ORIGEM[k].nome}</span><span style="color:var(--tx2)">${n} ${n === 1 ? 'lead' : 'leads'} · ${pct(n, total)}%</span></div>
+      <div class="t"><span style="display:inline-flex; align-items:center; gap:7px">${icone(ORIGEM[k].ic, 16)}${ORIGEM[k].nome}</span><span style="color:var(--tx2)">${n} ${n === 1 ? 'lead' : 'leads'} · ${pct(n, total)}%</span></div>
       <div class="tr"><div class="f" style="width:${pct(n, total)}%; background:${ORIGEM[k].cor}"></div></div></div>`).join('');
 
-  const porAnuncio = {};
-  lista.filter((c) => c.origem === 'anuncio_meta').forEach((c) => {
-    const k = c.anuncio_titulo || c.anuncio_id || 'Anúncio sem título';
-    porAnuncio[k] = porAnuncio[k] || { conversas: 0, avancou: 0 };
-    porAnuncio[k].conversas++;
-    if ((etapaDe(c)?.ordem ?? 0) >= 2) porAnuncio[k].avancou++;
-  });
-  const linhasAnuncio = Object.entries(porAnuncio).sort((a, b) => b[1].avancou - a[1].avancou).slice(0, 8)
-    .map(([nome, v]) => `<tr style="border-top:1px solid var(--line2)"><td style="padding:10px 6px">${esc(nome)}</td><td style="padding:10px 6px">${v.conversas}</td><td style="padding:10px 6px">${v.avancou}</td></tr>`).join('');
+  // tabela por campanha / lugar
+  const agrupar = (campo, vazio) => {
+    const g = {};
+    lista.forEach((c) => {
+      const k = c[campo] || vazio;
+      g[k] = g[k] || { conversas: 0, avancou: 0, agendou: 0, origem: c.origem };
+      g[k].conversas++;
+      if ((etapaDe(c)?.ordem ?? 0) >= 2) g[k].avancou++;
+      if (c.agendado_em) g[k].agendou++;
+    });
+    return Object.entries(g).sort((a, b) => b[1].conversas - a[1].conversas).slice(0, 12);
+  };
+  const tabela = (linhas, titulo, comIc) => linhas.length ? `<div style="overflow-x:auto"><table style="width:100%; border-collapse:collapse; min-width:440px">
+      <thead><tr style="color:var(--tx3); text-align:left"><th style="padding:8px 6px; font-weight:500">${titulo}</th><th style="padding:8px 6px; font-weight:500">Conversas</th><th style="padding:8px 6px; font-weight:500">Avançaram</th><th style="padding:8px 6px; font-weight:500">Agendaram</th></tr></thead>
+      <tbody>${linhas.map(([nome, v]) => `<tr style="border-top:1px solid var(--line2)"><td style="padding:10px 6px"><span style="display:inline-flex; align-items:center; gap:7px">${comIc(nome, v)}${esc(nome)}</span></td><td style="padding:10px 6px">${v.conversas}</td><td style="padding:10px 6px">${v.avancou} <span style="color:var(--tx3)">(${pct(v.avancou, v.conversas)}%)</span></td><td style="padding:10px 6px">${v.agendou}</td></tr>`).join('')}</tbody></table></div>`
+    : '<div class="vazio">Nada neste período.</div>';
+  const porCampanha = agrupar('campanha', 'Sem campanha');
+  const porLugar = agrupar('lugar', 'Não informado');
+
+  const opc = (vals, atual, todos) => `<option value="">${todos}</option>` + vals.map((v) => `<option value="${esc(v)}" ${v === atual ? 'selected' : ''}>${esc(v)}</option>`).join('');
+  const temFiltro = f.origem || f.campanha || f.lugar;
 
   $('tela-dashboard').innerHTML = `
+    <div class="card filtros" style="margin-bottom:16px">
+      <div><label for="fl-origem">De onde veio</label><select id="fl-origem">${`<option value="">Todas as origens</option>` + Object.entries(ORIGEM).map(([k, o]) => `<option value="${k}" ${k === f.origem ? 'selected' : ''}>${o.nome}</option>`).join('')}</select></div>
+      <div><label for="fl-campanha">Campanha</label><select id="fl-campanha">${opc(valoresDe('campanha'), f.campanha, 'Todas as campanhas')}</select></div>
+      <div><label for="fl-lugar">Lugar</label><select id="fl-lugar">${opc(valoresDe('lugar'), f.lugar, 'Todos os lugares')}</select></div>
+      ${temFiltro ? '<div style="flex:0 0 auto"><button class="btn-sec" id="fl-limpar">Limpar filtros</button></div>' : ''}
+    </div>
+    <div style="font-size:13px; color:var(--tx3); margin:-6px 0 14px">Período: ${esc(textoPeriodo())}${temFiltro ? ` · mostrando ${total} de ${doPeriodo.length} conversas` : ''}</div>
     <div class="linha">
       <div class="card kpi"><span class="rot">Conversas novas</span><span class="num">${total}</span><span class="obs">pelo WhatsApp no período</span></div>
       ${kpis}
@@ -486,12 +589,12 @@ function telaDashboard() {
       <div class="card" style="flex:3 1 460px"><h2>Funil de aquisição</h2>${etapas.length ? funil : '<div class="vazio">Nenhuma etapa configurada.</div>'}</div>
       <div class="card" style="flex:2 1 300px"><h2>De onde vieram os leads</h2>${origens}<span style="font-size:12px; color:var(--tx3)">Total: ${total} ${total === 1 ? 'lead' : 'leads'}</span></div>
     </div>
-    <div class="card"><h2>Anúncios da Meta que mais avançaram no funil</h2>
-      ${linhasAnuncio ? `<div style="overflow-x:auto"><table style="width:100%; border-collapse:collapse; min-width:420px">
-        <thead><tr style="color:var(--tx3); text-align:left"><th style="padding:8px 6px; font-weight:500">Anúncio</th><th style="padding:8px 6px; font-weight:500">Conversas</th><th style="padding:8px 6px; font-weight:500">Avançaram</th></tr></thead>
-        <tbody>${linhasAnuncio}</tbody></table></div>`
-      : '<div class="vazio">Ainda não chegou conversa de anúncio de WhatsApp neste período.</div>'}
+    <div class="linha">
+      <div class="card" style="flex:1 1 440px"><h2>Por campanha</h2>${tabela(porCampanha, 'Campanha', (n, v) => n === 'Sem campanha' ? '' : icone((ORIGEM[v.origem] || ORIGEM.outro).ic, 15))}</div>
+      <div class="card" style="flex:1 1 440px"><h2>Por lugar</h2>${tabela(porLugar, 'Lugar', (n) => icLugar(n) ? icone(icLugar(n), 15) : '')}</div>
     </div>`;
+  ['origem', 'campanha', 'lugar'].forEach((k) => $('fl-' + k).addEventListener('change', (ev) => { estado.filtro[k] = ev.target.value; telaDashboard(); }));
+  if ($('fl-limpar')) $('fl-limpar').addEventListener('click', () => { estado.filtro = { origem: '', campanha: '', lugar: '' }; telaDashboard(); });
 }
 
 // ================= CONVERSAS =================
@@ -501,17 +604,34 @@ function itemConversa(c) {
   return `<button class="conv-item ${estado.aberto === c.id ? 'ativo' : ''}" data-contato="${c.id}">
     <span class="av">${esc(nome.charAt(0).toUpperCase())}</span>
     <span class="meio"><span class="nome">${esc(nome)}<small>${quando(c.atualizado_em)}</small></span>
-    <span class="orig"><span class="bol" style="background:${cor.c}"></span>${esc(e?.nome ?? 'Sem etapa')} · ${o.nome}</span></span>
+    <span class="orig"><span class="bol" style="background:${cor.c}"></span>${esc(e?.nome ?? 'Sem etapa')} · ${icone(o.ic, 13)} ${o.nome}${c.lugar ? ' · ' + esc(c.lugar) : ''}</span></span>
+    ${esperando(c) ? '<span class="badge" title="Esperando resposta" style="align-self:center">!</span>' : ''}
   </button>`;
 }
+function esperando(c) { return c.ultima_direcao === 'entrada'; }
+function atualizarBadges() {
+  const n = (estado.contatos || []).filter(esperando).length;
+  const b = $('badge-conv'); if (b) { b.textContent = n > 99 ? '99+' : n; b.classList.toggle('oculto', !n); }
+  const h = $('badge-hoje'); if (h) { const t = estado.tarefasAbertas || 0; h.textContent = t; h.classList.toggle('oculto', !t); }
+}
 
-function telaConversas() {
+function listaConversas(base) {
   const filtro = (telaConversas._busca || '').toLowerCase();
-  const lista = estado.contatos.filter((c) => !filtro || (c.nome || '').toLowerCase().includes(filtro) || c.telefone.includes(filtro));
+  const aba = telaConversas._aba || 'todas';
+  return base.filter((c) => (aba !== 'sem' || esperando(c)) && (!filtro || (c.nome || '').toLowerCase().includes(filtro) || c.telefone.includes(filtro)));
+}
+function telaConversas() {
+  const lista = listaConversas(estado.contatos);
+  const aba = telaConversas._aba || 'todas';
+  const nSem = estado.contatos.filter(esperando).length;
   $('tela-conversas').innerHTML = `<div class="conv">
     <div class="card conv-lista">
+      <div class="abas" role="tablist" style="padding:10px 10px 8px">
+        <button role="tab" data-aba-conv="sem" aria-selected="${aba === 'sem'}">Sem resposta (${nSem})</button>
+        <button role="tab" data-aba-conv="todas" aria-selected="${aba === 'todas'}">Todas (${estado.contatos.length})</button>
+      </div>
       <div class="busca"><label for="busca">Buscar</label><input id="busca" type="text" placeholder="Nome ou telefone" value="${esc(telaConversas._busca || '')}"></div>
-      <div class="itens">${lista.length ? lista.map(itemConversa).join('') : '<div class="vazio" style="padding:16px">Nenhuma conversa ainda.</div>'}</div>
+      <div class="itens">${lista.length ? lista.map(itemConversa).join('') : `<div class="vazio" style="padding:16px">${aba === 'sem' ? 'Ninguém esperando resposta.' : 'Nenhuma conversa ainda.'}</div>`}</div>
     </div>
     <div class="card chat" id="chat"><div class="vazio" style="padding:24px">Escolha uma conversa à esquerda.</div></div>
     <aside class="card detalhe oculto" id="detalhe" aria-label="Detalhes do lead"></aside>
@@ -520,6 +640,7 @@ function telaConversas() {
     telaConversas._busca = e.target.value;
     const pos = e.target.selectionStart; telaConversas(); $('busca').focus(); $('busca').setSelectionRange(pos, pos);
   });
+  document.querySelectorAll('[data-aba-conv]').forEach((b) => b.addEventListener('click', () => { telaConversas._aba = b.dataset.abaConv; telaConversas(); }));
   document.querySelectorAll('[data-contato]').forEach((b) => b.addEventListener('click', () => abrirConversa(Number(b.dataset.contato))));
   if (estado.aberto) abrirConversa(estado.aberto, true);
 }
@@ -574,9 +695,23 @@ async function abrirConversa(id, semMarcar) {
   $('detalhe').classList.remove('oculto');
   $('detalhe').innerHTML = `
     <div><h2 style="margin:0 0 4px">Origem do lead</h2><span style="font-size:12px; color:var(--tx3)">Como essa pessoa chegou</span></div>
-    <div style="display:flex; align-items:center; gap:10px; background:var(--verde-bg); border:1px solid var(--verde-bd); border-radius:10px; padding:12px">
-      <span class="bol" style="width:10px; height:10px; background:${o.cor}"></span><b>${o.nome}</b></div>
+    <div style="display:flex; align-items:center; gap:10px; background:var(--verde-bg); border:1px solid var(--verde-bd); border-radius:10px; padding:12px; color:var(--verde-claro)">
+      ${icone(o.ic, 20)}<b>${o.nome}</b>${c.lugar ? `<span style="margin-left:auto">${lugarHTML(c.lugar)}</span>` : ''}</div>
+    <details id="ld-editar" ${c.origem === 'organico' && !c.campanha ? 'open' : ''}>
+      <summary style="cursor:pointer; font-size:13px; color:var(--verde-claro)">Editar origem, campanha e agendamento</summary>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px">
+        <div><label for="ld-origem">De onde veio</label><select id="ld-origem">${Object.entries(ORIGEM).map(([k, x]) => `<option value="${k}" ${k === c.origem ? 'selected' : ''}>${x.nome}</option>`).join('')}</select></div>
+        <div><label for="ld-campanha">Campanha</label><input id="ld-campanha" type="text" list="dl-campanhas" value="${esc(c.campanha || '')}" placeholder="Ex.: Corte + barba novembro"></div>
+        <div><label for="ld-lugar">Lugar</label><input id="ld-lugar" type="text" list="dl-lugares" value="${esc(c.lugar || '')}" placeholder="Ex.: Instagram, Facebook, Google, bio, panfleto"></div>
+        <div><label for="ld-agenda">Agendamento</label><input id="ld-agenda" type="datetime-local" value="${c.agendado_em ? paraLocal(c.agendado_em) : ''}"></div>
+        <datalist id="dl-campanhas">${valoresDe('campanha').map((v) => `<option value="${esc(v)}">`).join('')}</datalist>
+        <datalist id="dl-lugares">${[...new Set(['Instagram', 'Facebook', 'Google', 'Bio do Instagram', 'Indicação', ...valoresDe('lugar')])].map((v) => `<option value="${esc(v)}">`).join('')}</datalist>
+        <div style="display:flex; gap:10px; align-items:center"><button class="btn-sec" id="ld-salvar" type="button">Salvar detalhes</button><span id="ld-status" style="font-size:12px; color:var(--tx2)"></span></div>
+      </div>
+    </details>
     <div>
+      ${c.campanha ? `<div class="dl"><span>Campanha</span><span>${esc(c.campanha)}</span></div>` : ''}
+      ${c.agendado_em ? `<div class="dl"><span>Agendado</span><span>${new Date(c.agendado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</span></div>` : ''}
       ${c.anuncio_titulo ? `<div class="dl"><span>Anúncio</span><span>${esc(c.anuncio_titulo)}</span></div>` : ''}
       ${c.anuncio_id ? `<div class="dl"><span>ID do anúncio</span><span>${esc(c.anuncio_id)}</span></div>` : ''}
       ${c.anuncio_url ? `<div class="dl"><span>Link</span><span><a href="${esc(c.anuncio_url)}" target="_blank" rel="noopener">abrir</a></span></div>` : ''}
@@ -594,6 +729,21 @@ async function abrirConversa(id, semMarcar) {
       ${(hist || []).map((h) => `<span>${quando(h.criado_em)} · ${esc(nomeEtapa(h.etapa_id))} <span style="color:var(--tx3)">(${esc(h.motivo || '')}${h.enviado_meta ? ' · enviado à Meta' : ''})</span></span>`).join('') || 'Sem histórico.'}
     </div></div>`;
   document.querySelectorAll('[data-mover]').forEach((b) => b.addEventListener('click', () => moverEtapa(c.id, Number(b.dataset.mover))));
+  $('ld-salvar').addEventListener('click', () => salvarLead(c.id));
+}
+function paraLocal(iso) { const d = new Date(iso); const p = (n) => String(n).padStart(2, '0'); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; }
+async function salvarLead(id) {
+  const st = $('ld-status'); st.style.color = 'var(--tx2)'; st.textContent = 'Salvando…';
+  const ag = $('ld-agenda').value;
+  const corpo = { p_id: id, p_origem: $('ld-origem').value, p_campanha: $('ld-campanha').value, p_lugar: $('ld-lugar').value, p_agendado_em: ag ? new Date(ag).toISOString() : null };
+  const { error } = await sb.rpc('atualizar_lead', corpo);
+  if (error) { st.textContent = 'Erro: ' + error.message; st.style.color = 'var(--alerta)'; return; }
+  const c = estado.contatos.find((x) => x.id === id);
+  if (c) Object.assign(c, { origem: corpo.p_origem, campanha: corpo.p_campanha.trim() || null, lugar: corpo.p_lugar.trim() || null, agendado_em: corpo.p_agendado_em });
+  toast('Detalhes do lead salvos.');
+  const it = document.querySelector(`.conv-item[data-contato="${id}"]`); if (it && c) it.outerHTML = itemConversa(c);
+  const novo = document.querySelector(`.conv-item[data-contato="${id}"]`); if (novo) novo.addEventListener('click', () => abrirConversa(id));
+  abrirConversa(id, true);
 }
 
 async function carregarAnteriores() {
@@ -630,8 +780,8 @@ async function atualizarListaConversas() {
   const { data } = await sb.from('contatos').select('*').eq('site_id', estado.site).order('atualizado_em', { ascending: false }).limit(1000);
   if (!data) return;
   estado.contatos = data;
-  const filtro = (telaConversas._busca || '').toLowerCase();
-  const lista = data.filter((c) => !filtro || (c.nome || '').toLowerCase().includes(filtro) || c.telefone.includes(filtro));
+  atualizarBadges();
+  const lista = listaConversas(data);
   const itens = document.querySelector('.conv-lista .itens'); if (!itens) return;
   itens.innerHTML = lista.map(itemConversa).join('') || '<div class="vazio" style="padding:16px">Nenhuma conversa ainda.</div>';
   itens.querySelectorAll('[data-contato]').forEach((b) => b.addEventListener('click', () => abrirConversa(Number(b.dataset.contato))));
@@ -639,41 +789,103 @@ async function atualizarListaConversas() {
 setInterval(atualizarListaConversas, 15000);
 
 // ================= CRM =================
+function cardCRM(c, etapas, e) {
+  return `<article class="ccard" data-card="${c.id}">
+    <div class="n"><span>${esc(c.nome || telefoneBonito(c.telefone))}</span><span style="display:flex; gap:6px; align-items:center"><small>${quando(c.atualizado_em)}</small><span class="alca" aria-hidden="true" title="Arraste">⠿</span></span></div>
+    <div class="o" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center">${selo(c)}${lugarHTML(c.lugar)}</div>
+    ${c.campanha ? `<div class="o">${esc(c.campanha)}</div>` : ''}
+    <label class="oculto" for="mv-${c.id}">Mover para</label>
+    <select id="mv-${c.id}" data-mover-sel="${c.id}">
+      <option value="">Mover para…</option>
+      ${etapas.filter((x) => x.id !== e.id).map((x) => `<option value="${x.id}">${esc(x.nome)}</option>`).join('')}
+    </select>
+  </article>`;
+}
 function telaCRM() {
   const etapas = estado.etapas;
   const colunas = etapas.map((e) => {
     const cor = COR[e.temperatura] || COR.frio;
     const cards = estado.contatos.filter((c) => c.etapa_id === e.id);
     const vis = cards.slice(0, 50);
-    return `<section class="col">
+    return `<section class="col" data-etapa="${e.id}">
       <div class="col-topo" style="background:${cor.bg}; border-color:${cor.bd}">
         <div><b>${esc(e.nome)}</b><small style="color:${cor.c}">${e.temperatura.toUpperCase()}${e.evento_meta ? ' · envia ' + esc(e.evento_meta) : ''}</small></div>
-        <span class="num" style="color:${cor.c}">${cards.length}</span>
+        <span class="num" data-conta="${e.id}" style="color:${cor.c}">${cards.length}</span>
       </div>
-      ${vis.map((c) => {
-        const o = ORIGEM[c.origem] || ORIGEM.organico;
-        return `<article class="ccard">
-          <div class="n">${esc(c.nome || telefoneBonito(c.telefone))}<small>${quando(c.atualizado_em)}</small></div>
-          <div class="o">${o.nome}${c.anuncio_titulo ? ' · ' + esc(c.anuncio_titulo) : ''}${c.link_id ? ' · ' + esc((estado.links || []).find((l) => l.id === c.link_id)?.nome ?? '') : ''}</div>
-          <label class="oculto" for="mv-${c.id}">Mover para</label>
-          <select id="mv-${c.id}" data-mover-sel="${c.id}">
-            <option value="">Mover para…</option>
-            ${etapas.filter((x) => x.id !== e.id).map((x) => `<option value="${x.id}">${esc(x.nome)}</option>`).join('')}
-          </select>
-        </article>`;
-      }).join('') || '<div class="vazio" style="padding:8px">Ninguém nesta etapa.</div>'}
+      ${vis.map((c) => cardCRM(c, etapas, e)).join('')}
+      <div class="vazio col-vazio ${cards.length ? 'oculto' : ''}" style="padding:8px">Ninguém nesta etapa.</div>
       ${cards.length > 50 ? `<div style="font-size:12px; color:var(--tx3)">Mostrando 50 de ${cards.length}</div>` : ''}
     </section>`;
   }).join('');
-  $('tela-crm').innerHTML = `<div class="aviso" style="margin-bottom:16px">Mover pra uma etapa que tem evento envia a conversão pra Meta. As palavras-chave na conversa também mudam a etapa sozinhas.</div>
-    <div class="crm">${colunas || '<div class="card vazio">Nenhuma etapa configurada.</div>'}</div>`;
+  $('tela-crm').innerHTML = `<div class="aviso" style="margin-bottom:16px">Arraste o card pra outra etapa (no celular, segure pelo ⠿). Etapa com evento envia a conversão pra Meta.</div>
+    <div class="crm" id="crm">${colunas || '<div class="card vazio">Nenhuma etapa configurada.</div>'}</div>`;
   document.querySelectorAll('[data-mover-sel]').forEach((s) => s.addEventListener('change', () => {
     if (s.value) moverEtapa(Number(s.dataset.moverSel), Number(s.value));
   }));
+  document.querySelectorAll('#crm .ccard').forEach(arrastavel);
+}
+
+// anima os cards que mudaram de lugar (FLIP)
+function flip(nos, mudar) {
+  const antes = new Map(nos.map((n) => [n, n.getBoundingClientRect()]));
+  mudar();
+  antes.forEach((r, n) => {
+    if (!n.isConnected) return;
+    const d = n.getBoundingClientRect(); const dx = r.left - d.left, dy = r.top - d.top;
+    if (!dx && !dy) return;
+    n.style.transition = 'none'; n.style.transform = `translate(${dx}px, ${dy}px)`;
+    n.getBoundingClientRect();
+    n.style.transition = 'transform 220ms cubic-bezier(.2,.8,.2,1)'; n.style.transform = '';
+    setTimeout(() => { n.style.transition = ''; }, 240);
+  });
+}
+
+function arrastavel(card) {
+  card.addEventListener('pointerdown', (ev) => {
+    if (ev.button !== 0 || ev.target.closest('select, .sel, button, a, input')) return;
+    if (ev.pointerType !== 'mouse' && !ev.target.closest('.alca')) return;
+    const x0 = ev.clientX, y0 = ev.clientY; let voando = null, dx = 0, dy = 0, origem = card.closest('.col');
+    const todos = () => [...document.querySelectorAll('#crm .ccard:not(.voando)')];
+    const mover = (e) => {
+      if (!voando) {
+        if (Math.hypot(e.clientX - x0, e.clientY - y0) < 6) return;
+        const r = card.getBoundingClientRect(); dx = x0 - r.left; dy = y0 - r.top;
+        voando = card.cloneNode(true); voando.classList.add('voando');
+        Object.assign(voando.style, { left: r.left + 'px', top: r.top + 'px', width: r.width + 'px' });
+        document.body.appendChild(voando); card.classList.add('fantasma');
+        try { card.setPointerCapture(e.pointerId); } catch (_) {}
+      }
+      e.preventDefault();
+      voando.style.left = (e.clientX - dx) + 'px'; voando.style.top = (e.clientY - dy) + 'px';
+      const col = document.elementFromPoint(e.clientX, e.clientY)?.closest('#crm .col');
+      document.querySelectorAll('#crm .col').forEach((c) => c.classList.toggle('alvo', c === col && c !== origem));
+      if (!col) return;
+      const irmaos = [...col.querySelectorAll('.ccard:not(.fantasma):not(.voando)')];
+      const depois = irmaos.find((n) => { const r = n.getBoundingClientRect(); return e.clientY < r.top + r.height / 2; });
+      const ref = depois || col.querySelector('.col-vazio');
+      if (card.nextElementSibling === ref && card.parentElement === col) return;
+      flip(todos(), () => { col.insertBefore(card, ref); });
+    };
+    const soltar = (e) => {
+      card.removeEventListener('pointermove', mover); card.removeEventListener('pointerup', soltar); card.removeEventListener('pointercancel', soltar);
+      document.querySelectorAll('#crm .col').forEach((c) => c.classList.remove('alvo'));
+      if (!voando) return;
+      const destino = card.closest('.col'); const r = card.getBoundingClientRect();
+      voando.style.transition = 'left 200ms ease, top 200ms ease, transform 200ms ease';
+      voando.style.left = r.left + 'px'; voando.style.top = r.top + 'px'; voando.style.transform = 'none';
+      setTimeout(() => { voando.remove(); card.classList.remove('fantasma'); }, 210);
+      if (destino && destino !== origem) {
+        const id = Number(card.dataset.card), etapaId = Number(destino.dataset.etapa);
+        [origem, destino].forEach((c) => { const n = c.querySelectorAll('.ccard').length; c.querySelector('[data-conta]').textContent = n; c.querySelector('.col-vazio').classList.toggle('oculto', n > 0); });
+        moverEtapa(id, etapaId, { local: true });
+      }
+    };
+    card.addEventListener('pointermove', mover); card.addEventListener('pointerup', soltar); card.addEventListener('pointercancel', soltar);
+  });
 }
 
 // ================= MOVER ETAPA =================
-async function moverEtapa(contatoId, etapaId) {
+async function moverEtapa(contatoId, etapaId, op = {}) {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { location.reload(); return; }
   try {
@@ -683,10 +895,20 @@ async function moverEtapa(contatoId, etapaId) {
       body: JSON.stringify({ contato_id: contatoId, etapa_id: etapaId }),
     });
     const j = await res.json().catch(() => ({}));
-    if (!res.ok || !j.ok) { toast(j.erro || 'Não foi possível mudar a etapa.'); return; }
+    if (!res.ok || !j.ok) { toast(j.erro || 'Não foi possível mudar a etapa.'); if (op.local) telaCRM(); return; }
     toast(j.enviado_meta ? 'Etapa atualizada e evento enviado à Meta.' : 'Etapa atualizada.');
+    if (op.local) {
+      const c = estado.contatos.find((x) => x.id === contatoId); if (c) c.etapa_id = etapaId;
+      const velho = document.querySelector(`#crm [data-card="${contatoId}"]`); const e = estado.etapas.find((x) => x.id === etapaId);
+      if (velho && c && e) {
+        const tmp = document.createElement('div'); tmp.innerHTML = cardCRM(c, estado.etapas, e).trim();
+        const novo = tmp.firstElementChild; velho.replaceWith(novo); arrastavel(novo);
+        const s2 = novo.querySelector('select'); s2.addEventListener('change', () => { if (s2.value) moverEtapa(contatoId, Number(s2.value)); });
+      }
+      return;
+    }
     await carregar();
-  } catch (_) { toast('Sem conexão. Tente de novo.'); }
+  } catch (_) { toast('Sem conexão. Tente de novo.'); if (op.local) telaCRM(); }
 }
 
 
@@ -697,7 +919,7 @@ async function mostrarCreditosConfig() {
   if ($('cr-saldo') && c) $('cr-saldo').innerHTML = `Saldo agora: <b>${((c.creditos_saldo_mensal || 0) + (c.creditos_extra || 0)).toLocaleString('pt-BR')}</b> (${(c.creditos_saldo_mensal || 0).toLocaleString('pt-BR')} do mês + ${(c.creditos_extra || 0).toLocaleString('pt-BR')} extras)`;
   const { data } = await sb.from('creditos_lancamentos').select('*').eq('site_id', estado.site).order('criado_em', { ascending: false }).limit(20);
   if (!$('cr-hist')) return;
-  $('cr-hist').innerHTML = (data || []).length ? data.map((l) => `<div class="dl"><span>${quando(l.criado_em)} · ${esc(TIPO_LANC[l.tipo] || l.tipo)}${l.categoria ? ' (' + esc(CAT_LANC[l.categoria] || l.categoria) + ')' : ''}${l.motivo && l.tipo !== 'virada' ? ' · ' + esc(l.motivo) : ''}</span><span style="color:${l.creditos < 0 ? 'var(--quente)' : 'var(--verde)'}">${l.creditos > 0 ? '+' : ''}${l.creditos.toLocaleString('pt-BR')}</span></div>`).join('') : '<span style="color:var(--tx3)">Nenhuma movimentação ainda.</span>';
+  $('cr-hist').innerHTML = (data || []).length ? data.map((l) => `<div class="dl"><span>${quando(l.criado_em)} · ${esc(TIPO_LANC[l.tipo] || l.tipo)}${l.categoria ? ' (' + esc(CAT_LANC[l.categoria] || l.categoria) + ')' : ''}${l.motivo && l.tipo !== 'virada' ? ' · ' + esc(l.motivo) : ''}</span><span style="color:${l.creditos < 0 ? 'var(--alerta)' : 'var(--verde)'}">${l.creditos > 0 ? '+' : ''}${l.creditos.toLocaleString('pt-BR')}</span></div>`).join('') : '<span style="color:var(--tx3)">Nenhuma movimentação ainda.</span>';
 }
 
 // ================= ROTINA =================
@@ -735,6 +957,14 @@ async function telaRotina() {
   const pctFeito = total ? Math.round(((feitas + puladas) / total) * 100) : 0;
   const atrasadas = lista.filter((t) => t.vence_em < hoje);
   const deHoje = lista.filter((t) => t.vence_em === hoje);
+  estado.tarefasAbertas = lista.length; atualizarBadges();
+  const semResposta = estado.contatos.filter(esperando).sort((a, b) => new Date(a.ultima_msg_em || a.atualizado_em) - new Date(b.ultima_msg_em || b.atualizado_em));
+  const fimHoje = new Date(hoje + 'T23:59:59').getTime(), iniHoje = new Date(hoje + 'T00:00:00').getTime();
+  const agendadosHoje = estado.contatos.filter((c) => c.agendado_em && new Date(c.agendado_em).getTime() >= iniHoje && new Date(c.agendado_em).getTime() <= fimHoje)
+    .sort((a, b) => new Date(a.agendado_em) - new Date(b.agendado_em));
+  const linhaContato = (c, extra) => `<div class="tarefa">
+      <div class="info"><b>${esc(c.nome || telefoneBonito(c.telefone))} ${selo(c)}</b><small>${extra}</small></div>
+      <div class="acoes"><button class="btn-sec" data-abrir="${c.id}">Abrir conversa</button></div></div>`;
 
   const linha = (t) => {
     const c = estado.contatos.find((x) => x.id === t.contato_id);
@@ -744,7 +974,7 @@ async function telaRotina() {
     const nome = c ? (c.nome || telefoneBonito(c.telefone)) : 'Sem contato';
     return `<div class="tarefa">
       <div class="info"><b>${esc(nome)} <span class="tag" style="color:${tp.c}; background:${tp.bg}">${tp.t}</span></b>
-        <small>${esc(t.titulo || '')}${e ? ' · etapa: ' + esc(e.nome) : ''}${dd !== null ? ` · ${dd === 0 ? 'falou hoje' : `sem mandar mensagem há ${dd} ${dd === 1 ? 'dia' : 'dias'}`}` : ''}${t.vence_em < hoje ? ` · <span style="color:var(--quente)">atrasada desde ${t.vence_em.split('-').reverse().join('/')}</span>` : ''}</small></div>
+        <small>${esc(t.titulo || '')}${e ? ' · etapa: ' + esc(e.nome) : ''}${dd !== null ? ` · ${dd === 0 ? 'falou hoje' : `sem mandar mensagem há ${dd} ${dd === 1 ? 'dia' : 'dias'}`}` : ''}${t.vence_em < hoje ? ` · <span style="color:var(--alerta)">atrasada desde ${t.vence_em.split('-').reverse().join('/')}</span>` : ''}</small></div>
       <div class="acoes">
         ${c ? `<button class="btn-sec" data-abrir="${c.id}">Abrir conversa</button><button class="btn" data-enviar="${t.id}">Enviar</button>` : ''}
         <button class="btn-sec" data-feita="${t.id}" title="Resolvi por fora (sem gastar crédito)">Feita</button>
@@ -759,7 +989,9 @@ async function telaRotina() {
       <div class="barra" role="progressbar" aria-valuenow="${pctFeito}" aria-valuemin="0" aria-valuemax="100"><div style="width:${pctFeito}%"></div></div>
       <div style="font-size:13px; color:var(--tx2)">${feitas} ${feitas === 1 ? 'feita' : 'feitas'} · ${puladas} ${puladas === 1 ? 'pulada' : 'puladas'} · ${lista.length} ${lista.length === 1 ? 'pendente' : 'pendentes'} (${atrasadas.length} ${atrasadas.length === 1 ? 'atrasada' : 'atrasadas'} + ${deHoje.length} de hoje)</div>
     </section>
-    ${atrasadas.length ? `<section class="card"><h2 style="margin:0 0 4px; color:var(--quente)">Atrasadas (${atrasadas.length})</h2>${atrasadas.map(linha).join('')}</section>` : ''}
+    ${semResposta.length ? `<section class="card"><h2 style="margin:0 0 4px">Esperando resposta (${semResposta.length})</h2>${semResposta.slice(0, 15).map((c) => linhaContato(c, `mandou mensagem ${quando(c.ultima_msg_em || c.atualizado_em)}`)).join('')}${semResposta.length > 15 ? `<div style="font-size:12px; color:var(--tx3); padding-top:8px">Mostrando 15 de ${semResposta.length} · veja todos em Conversas › Sem resposta</div>` : ''}</section>` : ''}
+    ${agendadosHoje.length ? `<section class="card"><h2 style="margin:0 0 4px">Agendados pra hoje (${agendadosHoje.length})</h2>${agendadosHoje.map((c) => linhaContato(c, 'às ' + new Date(c.agendado_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }))).join('')}</section>` : ''}
+    ${atrasadas.length ? `<section class="card"><h2 style="margin:0 0 4px; color:var(--alerta)">⚠ Atrasadas (${atrasadas.length})</h2>${atrasadas.map(linha).join('')}</section>` : ''}
     <section class="card"><h2 style="margin:0 0 4px">Hoje (${deHoje.length})</h2>${deHoje.length ? deHoje.map(linha).join('') : '<div class="vazio">Nenhuma tarefa pra hoje. As tarefas de follow-up e reativação aparecem sozinhas todo dia às 7h.</div>'}</section>
     ${(futuras || []).length ? `<section class="card"><h2 style="margin:0 0 4px">Próximos dias (${futuras.length})</h2>${futuras.map(linha).join('')}</section>` : ''}
     <section class="card" style="display:flex; flex-direction:column; gap:12px">
@@ -790,9 +1022,9 @@ async function telaRotina() {
   $('nt-criar').addEventListener('click', async () => {
     const st = $('nt-status'); st.style.color = 'var(--tx2)';
     const contato = Number($('nt-contato').value) || null; const titulo = $('nt-titulo').value.trim();
-    if (!titulo) { st.textContent = 'Escreva o que fazer.'; st.style.color = 'var(--quente)'; return; }
+    if (!titulo) { st.textContent = 'Escreva o que fazer.'; st.style.color = 'var(--alerta)'; return; }
     const { error } = await sb.from('tarefas').insert({ site_id: estado.site, contato_id: contato, tipo: 'manual', titulo, vence_em: $('nt-data').value || hoje });
-    if (error) { st.textContent = 'Erro: ' + error.message; st.style.color = 'var(--quente)'; return; }
+    if (error) { st.textContent = 'Erro: ' + error.message; st.style.color = 'var(--alerta)'; return; }
     toast('Tarefa criada.'); telaRotina();
   });
 }
@@ -821,7 +1053,7 @@ async function abrirEnvio(contatoId, tarefa) {
   $('me-fechar').addEventListener('click', () => fecharModal());
   if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
 
-  const status = (t, ok) => { $('me-status').textContent = t; $('me-status').style.color = ok === false ? 'var(--quente)' : ok ? 'var(--verde)' : 'var(--tx2)'; };
+  const status = (t, ok) => { $('me-status').textContent = t; $('me-status').style.color = ok === false ? 'var(--alerta)' : ok ? 'var(--verde)' : 'var(--tx2)'; };
   const depois = async (r) => {
     if (!r.ok) { status(r.erro || 'Não enviou.', false); return; }
     toast('Mensagem enviada.'); fecharModal();
@@ -843,7 +1075,7 @@ async function abrirEnvio(contatoId, tarefa) {
   }
   const aprovados = estado.modelosCache.lista.filter((m) => m.status === 'APPROVED');
   const alvo = $('me-modelos'); if (!alvo) return;
-  if (estado.modelosCache.erro) { alvo.innerHTML = `<span style="color:var(--quente)">${esc(estado.modelosCache.erro)}</span>`; return; }
+  if (estado.modelosCache.erro) { alvo.innerHTML = `<span style="color:var(--alerta)">${esc(estado.modelosCache.erro)}</span>`; return; }
   if (!aprovados.length) { alvo.innerHTML = 'Nenhum modelo aprovado ainda. Crie um em <b>Modelos de mensagem</b>.'; return; }
   alvo.innerHTML = `<label for="me-modelo">Modelo</label><select id="me-modelo">${aprovados.map((m, i) => `<option value="${i}">${esc(m.nome)} · ${m.categoria === 'MARKETING' ? 'Marketing (10 créditos)' : 'Utilidade (1 crédito)'}</option>`).join('')}</select>
     <div id="me-campos" class="linha" style="margin-top:8px"></div>
@@ -904,7 +1136,7 @@ async function enviarMensagem(contatoId) {
 
 const STATUS_MODELO = {
   APPROVED: { t: 'Aprovado', c: 'var(--verde)' }, PENDING: { t: 'Em análise', c: 'var(--morno)' },
-  REJECTED: { t: 'Reprovado', c: 'var(--quente)' }, PAUSED: { t: 'Pausado', c: 'var(--tx3)' }, DISABLED: { t: 'Desativado', c: 'var(--tx3)' },
+  REJECTED: { t: 'Reprovado', c: 'var(--alerta)' }, PAUSED: { t: 'Pausado', c: 'var(--tx3)' }, DISABLED: { t: 'Desativado', c: 'var(--tx3)' },
 };
 async function telaModelos() {
   $('tela-modelos').innerHTML = `<div style="display:flex; flex-direction:column; gap:18px">
@@ -935,7 +1167,7 @@ async function telaModelos() {
     const st = $('md-status'); st.style.color = 'var(--tx2)'; st.textContent = 'Enviando…';
     const exemplos = [...document.querySelectorAll('[data-ex]')].sort((a, b) => a.dataset.ex - b.dataset.ex).map((i) => i.value);
     const r = await chamarWhats({ acao: 'criar_modelo', site_id: estado.site, nome: $('md-nome').value, categoria: $('md-cat').value, idioma: 'pt_BR', texto: $('md-texto').value, exemplos });
-    if (!r.ok) { st.textContent = r.erro || 'Erro.'; st.style.color = 'var(--quente)'; return; }
+    if (!r.ok) { st.textContent = r.erro || 'Erro.'; st.style.color = 'var(--alerta)'; return; }
     st.textContent = `Modelo "${r.nome}" enviado. A Meta costuma aprovar em minutos.`; st.style.color = 'var(--verde)';
     $('md-nome').value = ''; $('md-texto').value = ''; desenharExemplos(); estado.modelosCache = null;
     listarModelos();
@@ -947,7 +1179,7 @@ async function listarModelos() {
   const alvo = $('md-lista'); if (!alvo) return;
   alvo.textContent = 'Carregando…';
   const r = await chamarWhats({ acao: 'listar_modelos', site_id: estado.site });
-  if (!r.ok) { alvo.innerHTML = `<span style="color:var(--quente)">${esc(r.erro || 'Erro ao buscar.')}</span>`; return; }
+  if (!r.ok) { alvo.innerHTML = `<span style="color:var(--alerta)">${esc(r.erro || 'Erro ao buscar.')}</span>`; return; }
   if (!r.modelos.length) { alvo.innerHTML = '<div class="vazio">Nenhum modelo ainda.</div>'; return; }
   alvo.innerHTML = r.modelos.map((m) => {
     const s = STATUS_MODELO[m.status] || { t: m.status, c: 'var(--tx3)' };
@@ -978,7 +1210,7 @@ function carregarSdkMeta() {
 async function conectarWhatsapp(siteId) {
   const st = $('wa-status');
   st.style.color = 'var(--tx2)'; st.textContent = 'Abrindo a janela da Meta…';
-  try { await carregarSdkMeta(); } catch (_) { st.textContent = 'Não consegui carregar o login da Meta. Desative bloqueadores e tente de novo.'; st.style.color = 'var(--quente)'; return; }
+  try { await carregarSdkMeta(); } catch (_) { st.textContent = 'Não consegui carregar o login da Meta. Desative bloqueadores e tente de novo.'; st.style.color = 'var(--alerta)'; return; }
 
   let sessao = null;
   const ouvir = (ev) => {
@@ -1001,10 +1233,10 @@ async function conectarWhatsapp(siteId) {
     for (let i = 0; i < 16 && !sessao; i++) await new Promise((r) => setTimeout(r, 500));
     window.removeEventListener('message', ouvir);
     if (!code || sessao?.cancelado) { st.textContent = 'Conexão cancelada.'; return; }
-    if (sessao?.erro) { st.textContent = 'A Meta informou um erro: ' + sessao.erro; st.style.color = 'var(--quente)'; return; }
+    if (sessao?.erro) { st.textContent = 'A Meta informou um erro: ' + sessao.erro; st.style.color = 'var(--alerta)'; return; }
     st.textContent = 'Finalizando a conexão…';
     const r = await chamarAdmin({ acao: 'conectar_whatsapp', site_id: siteId, code, waba_id: sessao?.waba_id, phone_number_id: sessao?.phone_number_id });
-    if (!r.ok) { st.textContent = r.erro || 'Erro ao conectar.'; st.style.color = 'var(--quente)'; return; }
+    if (!r.ok) { st.textContent = r.erro || 'Erro ao conectar.'; st.style.color = 'var(--alerta)'; return; }
     toast('WhatsApp conectado! As novas conversas vão chegar no Radar.');
     const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias').eq('ativo', true).order('nome');
     estado.sites = sites || [];
@@ -1080,7 +1312,7 @@ async function telaLinks() {
     $('lk-status').textContent = 'Criando…'; $('lk-status').style.color = 'var(--tx2)';
     telaLinks._ultimoNumero = $('lk-num').value;
     const r = await chamarAdmin({ acao: 'criar_link', site_id: estado.site, nome: $('lk-nome').value, numero: $('lk-num').value, mensagem: $('lk-msg').value });
-    if (!r.ok) { $('lk-status').textContent = r.erro || 'Erro.'; $('lk-status').style.color = 'var(--quente)'; return; }
+    if (!r.ok) { $('lk-status').textContent = r.erro || 'Erro.'; $('lk-status').style.color = 'var(--alerta)'; return; }
     toast('Link criado. Clique em Copiar pra usar.');
     await carregar();
   });
@@ -1151,7 +1383,10 @@ async function telaConfig() {
   <div style="display:flex; flex-direction:column; gap:18px">
     ${novo ? '' : `<div class="barra-salvar"><span style="color:var(--tx2); font-size:13px">Cliente, WhatsApp, rotina, créditos e funil: <b style="color:var(--tx)">salve tudo de uma vez</b> ou cada bloco no seu botão.</span>
       <div style="display:flex; gap:10px; align-items:center"><span id="st-salvar-tudo" style="font-size:13px"></span><button class="btn" id="bt-salvar-tudo">Salvar tudo</button></div></div>`}
-    <section class="card" style="display:flex; flex-direction:column; gap:14px">
+    ${novo ? '' : `<div class="abas" role="tablist" aria-label="Seções das configurações">
+      ${[['cliente', 'Cliente'], ['whatsapp', 'WhatsApp'], ['funil', 'Funil'], ['rotina', 'Rotina e créditos'], ['acessos', 'Acessos']].map(([k, n]) => `<button role="tab" data-aba-cfg="${k}" aria-selected="${(telaConfig._aba || 'cliente') === k}">${n}</button>`).join('')}
+    </div>`}
+    <section class="card" data-aba="cliente" style="display:flex; flex-direction:column; gap:14px">
       <h2 style="margin:0">${novo ? 'Novo cliente' : 'Dados do cliente'}</h2>
       <div class="linha">
         <div style="flex:1 1 260px"><label for="cf-nome">Nome do cliente</label><input id="cf-nome" type="text" value="${esc(site.nome)}" placeholder="Ex.: Barbearia Avante"></div>
@@ -1173,7 +1408,7 @@ async function telaConfig() {
     </section>
 
     ${novo ? '' : `
-    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+    <section class="card" data-aba="whatsapp" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">WhatsApp do cliente</h2>
       <p style="margin:0; color:var(--tx2)">Conecta o número que o cliente já usa no app WhatsApp Business. Ele continua usando o app no celular normalmente, e as conversas passam a chegar no Radar.</p>
       <div style="font-size:13px; color:var(--tx2)">${site.whatsapp_conectado_em
@@ -1191,7 +1426,7 @@ async function telaConfig() {
       <p style="margin:0; font-size:12px; color:var(--tx3)">Abre a janela da Meta: entre com o Facebook, escolha "conectar o app WhatsApp Business", digite o número e escaneie o QR code que chega no celular.</p>
     </section>
 
-    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+    <section class="card" data-aba="rotina" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Rotina</h2>
       <p style="margin:0; color:var(--tx2)">Todo dia às 7h o Radar cria as tarefas: <b>follow-up</b> pra quem ficou na 1ª etapa do funil e parou de responder, e <b>reativação</b> pra quem chegou na última etapa e sumiu.</p>
       <div class="linha">
@@ -1201,7 +1436,7 @@ async function telaConfig() {
       <div style="display:flex; gap:10px; align-items:center"><button class="btn-sec" id="ro-salvar">Salvar rotina</button><span id="ro-status" style="font-size:13px; color:var(--tx2)"></span></div>
     </section>
 
-    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+    <section class="card" data-aba="rotina" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Créditos</h2>
       <p style="margin:0; color:var(--tx2)">Resposta e lembrete pelo Radar = 1 crédito. Follow-up, reativação e promoção (modelo de marketing) = 10 créditos. Receber e responder pelo celular = grátis. O crédito do mês volta todo dia 1º; os extras não vencem.</p>
       <div id="cr-saldo" style="font-size:14px"></div>
@@ -1214,14 +1449,14 @@ async function telaConfig() {
       <details><summary style="cursor:pointer; font-size:13px; color:var(--tx2)">Últimas movimentações</summary><div id="cr-hist" style="font-size:13px; margin-top:8px">Carregando…</div></details>
     </section>
 
-    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+    <section class="card" data-aba="cliente" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Código do site</h2>
       <p style="margin:0; color:var(--tx2)">Cole uma vez no &lt;head&gt; do site do cliente (ou numa tag HTML personalizada do GTM). Ele cuida do pixel e do envio pelo servidor.</p>
       <pre id="cf-codigo" class="codigo mono" style="margin:0; overflow-x:auto; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:14px; font-size:12px; line-height:1.6; white-space:pre">${esc(`<script src="${TRACKER_URL}"\n  data-site="${site.id}"\n  data-endpoint="${ENDPOINT_TRACK}"\n  data-pixel="${site.pixel_id}"\n  defer><\/script>`)}</pre>
       <div><button class="btn-sec" id="cf-copiar">Copiar código</button></div>
     </section>
 
-    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+    <section class="card" data-aba="funil" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Funil do cliente</h2>
       <p style="margin:0; color:var(--tx2)">Cada etapa pode mandar um evento pra Meta quando o contato chega nela. Palavras-chave separadas por vírgula fazem o contato avançar sozinho.</p>
       <div id="cf-funil" style="display:flex; flex-direction:column; gap:10px"></div>
@@ -1232,7 +1467,7 @@ async function telaConfig() {
       </div>
     </section>
 
-    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+    <section class="card" data-aba="acessos" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Acesso do cliente ao painel</h2>
       <div id="cf-usuarios" style="font-size:13px; color:var(--tx2)">Carregando…</div>
       <div class="linha">
@@ -1247,14 +1482,20 @@ async function telaConfig() {
   if (novo) $('cf-nome').addEventListener('input', () => { $('cf-id').value = slug($('cf-nome').value); });
   $('cf-salvar').addEventListener('click', salvarCliente);
   if ($('bt-salvar-tudo')) $('bt-salvar-tudo').addEventListener('click', salvarTudo);
-  if (novo) { $('cf-cancelar').addEventListener('click', () => { estado.novoCliente = false; estado.tela = 'dashboard'; marcarMenu(); carregar(); }); return; }
+  const mostrarAba = (k) => {
+    telaConfig._aba = k;
+    document.querySelectorAll('#tela-config [data-aba]').forEach((sec) => sec.classList.toggle('oculto', sec.dataset.aba !== k));
+    document.querySelectorAll('[data-aba-cfg]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.abaCfg === k)));
+  };
+  if (!novo) { mostrarAba(telaConfig._aba || 'cliente'); document.querySelectorAll('[data-aba-cfg]').forEach((b) => b.addEventListener('click', () => mostrarAba(b.dataset.abaCfg))); }
+  if (novo) { $('cf-cancelar').addEventListener('click', () => { estado.novoCliente = false; estado.tela = 'rotina'; marcarMenu(); carregar(); }); return; }
 
   $('wa-conectar').addEventListener('click', () => conectarWhatsapp(site.id));
   $('wa-salvar').addEventListener('click', salvarCliente);
   $('cr-salvar').addEventListener('click', async () => {
     const st = $('cr-status'); st.style.color = 'var(--tx2)'; st.textContent = 'Salvando…';
     const r = await chamarAdmin({ acao: 'creditos', site_id: site.id, mensal: $('cr-mensal').value, adicionar: $('cr-add').value || 0, motivo: $('cr-motivo').value });
-    if (!r.ok) { st.textContent = r.erro || 'Erro.'; st.style.color = 'var(--quente)'; return; }
+    if (!r.ok) { st.textContent = r.erro || 'Erro.'; st.style.color = 'var(--alerta)'; return; }
     $('cr-add').value = ''; $('cr-motivo').value = '';
     st.textContent = 'Créditos salvos.'; st.style.color = 'var(--verde)';
     await atualizarCreditos(); mostrarCreditosConfig();
@@ -1263,7 +1504,7 @@ async function telaConfig() {
   $('ro-salvar').addEventListener('click', async () => {
     const st = $('ro-status'); st.style.color = 'var(--tx2)'; st.textContent = 'Salvando…';
     const { error } = await sb.rpc('salvar_rotina', { p_site: site.id, p_followup: Number($('ro-fu').value), p_reativacao: Number($('ro-re').value) });
-    if (error) { st.textContent = error.message; st.style.color = 'var(--quente)'; return; }
+    if (error) { st.textContent = error.message; st.style.color = 'var(--alerta)'; return; }
     site.rotina_followup_dias = Number($('ro-fu').value); site.rotina_reativacao_dias = Number($('ro-re').value);
     st.textContent = 'Rotina salva.'; st.style.color = 'var(--verde)';
   });
@@ -1271,7 +1512,7 @@ async function telaConfig() {
     $('cf-status').textContent = 'Testando…';
     const r = await chamarAdmin({ acao: 'testar_meta', site_id: site.id });
     $('cf-status').textContent = r.mensagem || r.erro || '';
-    $('cf-status').style.color = r.ok ? 'var(--verde)' : 'var(--quente)';
+    $('cf-status').style.color = r.ok ? 'var(--verde)' : 'var(--alerta)';
   });
   $('cf-copiar').addEventListener('click', async () => {
     try { await navigator.clipboard.writeText($('cf-codigo').textContent); $('cf-copiar').textContent = 'Copiado ✓'; }
@@ -1376,7 +1617,7 @@ async function salvarFunil() {
     valor_padrao: e.valor_padrao, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
   }));
   const r = await chamarAdmin({ acao: 'salvar_funil', site_id: estado.site, etapas });
-  if (!r.ok) { $('cf-funil-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-funil-status').style.color = 'var(--quente)'; return false; }
+  if (!r.ok) { $('cf-funil-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-funil-status').style.color = 'var(--alerta)'; return false; }
   const { data } = await sb.from('etapas').select('*').eq('site_id', estado.site).order('ordem');
   estado.etapas = data || [];
   const { data: cts } = await sb.from('contatos').select('*').eq('site_id', estado.site).order('atualizado_em', { ascending: false }).limit(1000);
@@ -1397,7 +1638,7 @@ async function salvarCliente() {
     whatsapp_waba_id: $('cf-waba') ? $('cf-waba').value.trim() : undefined,
     wa_token: $('cf-watoken') ? $('cf-watoken').value.trim() : '',
   });
-  if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--quente)'; return false; }
+  if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--alerta)'; return false; }
   const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   $('sel-site').innerHTML = estado.sites.map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
@@ -1442,7 +1683,7 @@ async function listarUsuarios(siteId) {
 async function criarUsuario() {
   $('us-status').textContent = 'Criando…'; $('us-status').style.color = 'var(--tx2)';
   const r = await chamarAdmin({ acao: 'criar_usuario', site_id: estado.site, nome: $('us-nome').value, email: $('us-email').value, senha: $('us-senha').value });
-  if (!r.ok) { $('us-status').textContent = r.erro || 'Erro.'; $('us-status').style.color = 'var(--quente)'; return; }
+  if (!r.ok) { $('us-status').textContent = r.erro || 'Erro.'; $('us-status').style.color = 'var(--alerta)'; return; }
   $('us-status').textContent = 'Acesso criado. Mande o e-mail e a senha pro cliente.'; $('us-status').style.color = 'var(--verde)';
   $('us-senha').value = '';
   listarUsuarios(estado.site);
@@ -1549,7 +1790,15 @@ document.querySelectorAll('[data-tela]').forEach((b) => b.addEventListener('clic
   desenhar();
 }));
 $('sel-site').addEventListener('change', (e) => { estado.site = e.target.value; estado.aberto = null; estado.novoCliente = false; carregar(); });
-$('sel-periodo').addEventListener('change', desenhar);
+$('sel-periodo').addEventListener('change', () => {
+  if ($('sel-periodo').value === 'custom' && !$('per-de').value) {
+    const hoje = new Date(); const ini = new Date(Date.now() - 29 * 864e5);
+    const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    $('per-de').value = iso(ini); $('per-ate').value = iso(hoje);
+  }
+  desenhar();
+});
+['per-de', 'per-ate'].forEach((id) => $(id).addEventListener('change', desenhar));
 $('bt-atualizar').addEventListener('click', carregar);
 setInterval(() => { if (!document.hidden && estado.perfil && !['config', 'links', 'conversas', 'modelos', 'rotina'].includes(estado.tela)) carregar(); }, 30000);
 
