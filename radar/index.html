@@ -2253,10 +2253,7 @@ function desenharFunil() {
         if (e.clientY < 70) rolar = setInterval(() => window.scrollBy(0, -14), 16);
         else if (e.clientY > innerHeight - 70) rolar = setInterval(() => window.scrollBy(0, 14), 16);
         const irmaos = [...lista.querySelectorAll('.etapa-ed')].filter((n) => n !== card);
-        // troca de lugar com pouco movimento: descendo basta passar 30% da próxima; subindo, 30% da de cima
-        const desce = e.clientY >= (mover._y ?? e.clientY); mover._y = e.clientY;
-        const corte = desce ? 0.3 : 0.7;
-        const depois = irmaos.find((n) => { const r = n.getBoundingClientRect(); return e.clientY < r.top + r.height * corte; }) || null;
+        const depois = irmaos.find((n) => { const r = n.getBoundingClientRect(); return e.clientY < r.top + r.height / 2; }) || null;
         if (card.nextElementSibling === depois || (!depois && card === lista.lastElementChild)) return;
         flip([...lista.querySelectorAll('.etapa-ed')], () => lista.insertBefore(card, depois));
       };
