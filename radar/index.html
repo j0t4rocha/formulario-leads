@@ -208,6 +208,26 @@
   .chave { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
   .chave button { background: transparent; border: 0; color: var(--tx2); font: inherit; font-size: 12px; padding: 7px 10px; border-radius: 8px; cursor: pointer; }
   .chave button[aria-pressed="true"] { background: var(--verde-bg); color: var(--verde-claro); font-weight: 700; }
+  .auto-grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; }
+  .auto-card { border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; transition: border-color .2s, background .2s; }
+  .auto-card.ligado { border-color: var(--verde-bd); background: var(--verde-bg); }
+  .criterio { display: grid; grid-template-columns: 92px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; }
+  .criterio > span { color: var(--tx3); }
+  .num-in { width: 64px !important; min-height: 32px !important; padding: 4px 8px !important; display: inline-block; text-align: center; }
+  .previa { font-size: 13px; color: var(--tx2); white-space: pre-wrap; border-left: 2px solid var(--verde-bd); padding-left: 10px; }
+  .previa:empty { display: none; }
+  .chavinha { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; flex-shrink: 0; margin: 0; }
+  .chavinha input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .chavinha span { width: 46px; height: 26px; border-radius: 999px; background: var(--line2, rgba(255,255,255,.15)); border: 1px solid var(--line); position: relative; transition: background .2s; }
+  .chavinha span::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+  .chavinha input:checked + span { background: var(--verde); border-color: var(--verde); }
+  .chavinha input:checked + span::after { transform: translateX(20px); }
+  .chavinha input:focus-visible + span { outline: 2px solid var(--verde-claro); outline-offset: 2px; }
+  .chavinha b { font-size: 12px; color: var(--tx2); min-width: 62px; }
+  .grupo-modelo { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--tx3); margin: 10px 0 6px; }
+  .modelo-card { border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+  .desc-modelo { font-size: 13px; margin-top: 4px; cursor: pointer; }
+  .modelo-card .midia img, .modelo-card .midia video { max-width: 100%; border-radius: 8px; margin: 4px 0 6px; display: block; }
   .auto-item { border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
   .auto-liga { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; margin: 0; }
   .auto-liga input { width: 20px; height: 20px; min-height: 0; margin-top: 2px; accent-color: var(--verde); flex-shrink: 0; }
@@ -321,7 +341,7 @@
       <button data-tela="crm"><span>Funil</span></button>
       <div class="grupo">Ferramentas</div>
       <button data-tela="links"><span>Links rastreáveis</span></button>
-      <button data-tela="modelos"><span>Modelos de mensagem</span></button>
+      <button data-tela="modelos"><span>Mensagens</span></button>
       <button data-tela="config" id="menu-config" class="oculto"><span>Configurações</span></button>
     </div>
     <div class="rodape">
@@ -547,7 +567,7 @@ function valoresDe(campo) { return [...new Set(estado.contatos.map((c) => c[camp
 
 function desenhar() {
   ['dashboard', 'rotina', 'conversas', 'crm', 'links', 'modelos', 'config'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
-  $('titulo').textContent = { dashboard: 'Resultados', rotina: 'Tarefas', conversas: 'Conversas', crm: 'Funil', links: 'Links rastreáveis', modelos: 'Modelos de mensagem', config: 'Configurações' }[estado.tela];
+  $('titulo').textContent = { dashboard: 'Resultados', rotina: 'Tarefas', conversas: 'Conversas', crm: 'Funil', links: 'Links rastreáveis', modelos: 'Mensagens', config: 'Configurações' }[estado.tela];
   const comPeriodo = estado.tela === 'dashboard';
   $('sel-periodo').closest('.sel') ? $('sel-periodo').closest('.sel').classList.toggle('oculto', !comPeriodo) : $('sel-periodo').classList.toggle('oculto', !comPeriodo);
   $('periodo-datas').classList.toggle('oculto', !comPeriodo || $('sel-periodo').value !== 'custom');
@@ -1403,56 +1423,176 @@ const STATUS_MODELO = {
   APPROVED: { t: 'Aprovado', c: 'var(--verde)' }, PENDING: { t: 'Em análise', c: 'var(--morno)' },
   REJECTED: { t: 'Reprovado', c: 'var(--alerta)' }, PAUSED: { t: 'Pausado', c: 'var(--tx3)' }, DISABLED: { t: 'Desativado', c: 'var(--tx3)' },
 };
+const FINALIDADE = {
+  lembrete: { t: 'Lembrete de horário', d: 'Lembra o cliente do horário marcado.' },
+  follow_up: { t: 'Follow-up', d: 'Chama de volta quem começou a conversa e parou de responder.' },
+  reativacao: { t: 'Reativação', d: 'Chama de volta quem já foi cliente e sumiu.' },
+  promocao: { t: 'Promoção', d: 'Oferta, convite ou novidade pra base.' },
+  outro: { t: 'Outro', d: '' },
+};
 async function telaModelos() {
+  const site = estado.sites.find((x) => x.id === estado.site) || {};
+  const e1 = estado.etapas[0]?.nome || 'primeira etapa'; const eU = estado.etapas[estado.etapas.length - 1]?.nome || 'última etapa';
+  const chave = (id, ligado) => `<label class="chavinha" title="Liga ou desliga o envio automático"><input type="checkbox" id="${id}" ${ligado ? 'checked' : ''}><span></span><b>${ligado ? 'Ligado' : 'Desligado'}</b></label>`;
+  const cartao = (k, titulo, ligado, oque, quem, quando, selId, modeloAtual) => `
+    <div class="auto-card" data-auto="${k}">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px"><div><h3 style="margin:0; font-size:17px">${titulo}</h3><div style="font-size:13px; color:var(--tx2); margin-top:2px">${oque}</div></div>${chave('ch-' + k, ligado)}</div>
+      <div class="criterio"><span>Quem recebe</span><div>${quem}</div></div>
+      <div class="criterio"><span>Quando</span><div>${quando}</div></div>
+      <div><label for="${selId}">Mensagem que vai</label><select id="${selId}" data-atual="${esc(modeloAtual || '')}"><option value="">Carregando modelos…</option></select></div>
+      <div class="previa" id="pv-${k}"></div>
+    </div>`;
   $('tela-modelos').innerHTML = `<div style="display:flex; flex-direction:column; gap:18px">
-    <section class="card" style="display:flex; flex-direction:column; gap:12px">
-      <h2 style="margin:0">Novo modelo</h2>
-      <p style="margin:0; color:var(--tx2)">Cada envio de modelo de <b>Utilidade</b> usa 1 crédito; de <b>Marketing</b>, 10 créditos.</p>
-      <p style="margin:0; color:var(--tx2)">Modelos são mensagens aprovadas pela Meta. Servem pra chamar o cliente depois de 24h sem conversa (lembrete, follow-up, promoção). Use {{1}}, {{2}}… onde entra um dado que muda, como o nome.</p>
-      <div class="linha">
-        <div style="flex:1 1 220px"><label for="md-nome">Nome do modelo</label><input id="md-nome" type="text" placeholder="lembrete_agendamento"></div>
-        <div style="flex:1 1 180px"><label for="md-cat">Tipo</label><select id="md-cat"><option value="UTILITY">Utilidade (lembrete, confirmação)</option><option value="MARKETING">Marketing (promoção, convite)</option></select></div>
+    <section class="card" style="display:flex; flex-direction:column; gap:14px">
+      <div><h2 style="margin:0">Envio automático</h2><p style="margin:4px 0 0; color:var(--tx2)">A chavinha é a permissão: ligada, o Radar manda sozinho; desligada, vira só tarefa pra você mandar. Salva na hora.</p></div>
+      <div class="auto-grade">
+        ${cartao('lembrete', 'Lembrete de horário', site.auto_lembrete, 'Avisa o cliente antes do horário marcado.',
+          'Quem tem horário marcado no campo <b>Agendamento</b> da ficha do lead.',
+          `<input type="number" id="cr-horas" min="1" max="48" value="${esc(site.lembrete_horas ?? 3)}" class="num-in"> horas antes do horário. Custa 1 crédito.`, 'au-lem-mod', site.lembrete_modelo)}
+        ${cartao('follow_up', 'Follow-up', site.auto_followup, 'Chama de volta quem começou a conversa e parou de responder.',
+          `Quem está em <b>${esc(e1)}</b> e está há <input type="number" id="cr-fu" min="1" max="60" value="${esc(site.rotina_followup_dias ?? 2)}" class="num-in"> dias sem responder (até 30 dias). No máximo 1 follow-up por semana pra mesma pessoa.`,
+          'Todo dia, entre 9h e 20h. Modelo de marketing custa 10 créditos; de utilidade, 1.', 'au-fu-mod', site.followup_modelo)}
+        ${cartao('reativacao', 'Reativação', site.auto_reativacao, 'Chama de volta quem já foi cliente e sumiu.',
+          `Quem chegou em <b>${esc(eU)}</b> e está há <input type="number" id="cr-re" min="7" max="365" value="${esc(site.rotina_reativacao_dias ?? 30)}" class="num-in"> dias sem conversar.`,
+          'Todo dia, entre 9h e 20h. Modelo de marketing custa 10 créditos.', 'au-re-mod', site.reativacao_modelo)}
       </div>
-      <div><label for="md-texto">Texto</label><textarea id="md-texto" rows="4" style="width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="Olá {{1}}, passando pra lembrar do seu horário amanhã às {{2}}. Responda SIM pra confirmar."></textarea></div>
+      <div id="au-status" style="font-size:13px; color:var(--tx2); min-height:18px"></div>
+    </section>
+
+    <section class="card" style="display:flex; flex-direction:column; gap:10px">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px"><h2 style="margin:0">Seus modelos</h2><button class="btn-sec" id="md-recarregar">Atualizar status</button></div>
+      <p style="margin:0; color:var(--tx2)">Modelos são mensagens aprovadas pela Meta. Servem pra chamar o cliente depois de 24h sem conversa.</p>
+      <div id="md-lista" style="font-size:14px">Carregando…</div>
+    </section>
+
+    <section class="card" style="display:flex; flex-direction:column; gap:12px">
+      <h2 style="margin:0">Criar modelo</h2>
+      <div class="linha">
+        <div style="flex:1 1 200px"><label for="md-fin">Pra que serve</label><select id="md-fin">${Object.entries(FINALIDADE).map(([k, f]) => `<option value="${k}">${f.t}</option>`).join('')}</select></div>
+        <div style="flex:1 1 200px"><label for="md-cat">Tipo na Meta</label><select id="md-cat"><option value="UTILITY">Utilidade · 1 crédito (lembrete, confirmação)</option><option value="MARKETING">Marketing · 10 créditos (follow-up, promoção)</option></select></div>
+      </div>
+      <div class="linha">
+        <div style="flex:1 1 220px"><label for="md-nome">Nome do modelo</label><input id="md-nome" type="text" placeholder="lembrete_auto"></div>
+        <div style="flex:2 1 280px"><label for="md-desc">Descrição (só aparece pra você)</label><input id="md-desc" type="text" placeholder="Ex.: lembrete 3h antes, pede confirmação com SIM"></div>
+      </div>
+      <div><label for="md-midia">Foto ou vídeo no topo (opcional)</label><input id="md-midia" type="file" accept="image/jpeg,image/png,video/mp4"><div style="font-size:12px; color:var(--tx3); margin-top:4px">Foto JPG/PNG até 5 MB ou vídeo MP4 até 16 MB. Ela vai junto toda vez que o modelo for enviado.</div></div>
+      <div><label for="md-texto">Texto</label><textarea id="md-texto" rows="4" style="width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="Olá {{1}}! Passando pra lembrar do seu horário {{2}}. Responda SIM pra confirmar."></textarea>
+        <div style="font-size:12px; color:var(--tx3); margin-top:4px">{{1}} = primeiro nome do cliente. No lembrete, {{2}} = dia e hora (ex.: “hoje às 15:30”).</div></div>
       <div id="md-exemplos" class="linha"></div>
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn" id="md-criar">Enviar pra aprovação</button><span id="md-status" style="font-size:13px; color:var(--tx2)"></span></div>
     </section>
-    <section class="card" style="display:flex; flex-direction:column; gap:10px">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px"><h2 style="margin:0">Modelos do cliente</h2><button class="btn-sec" id="md-recarregar">Atualizar status</button></div>
-      <div id="md-lista" style="font-size:14px">Carregando…</div>
-    </section>
   </div>`;
+
+  // criterio / chavinhas: salva na hora
+  const salvar = async () => {
+    const st = $('au-status'); st.style.color = 'var(--tx2)'; st.textContent = 'Salvando…';
+    const [{ error: e1r }, { error: e2r }] = await Promise.all([
+      sb.rpc('salvar_automacao', { p_site: estado.site, p_lembrete: $('ch-lembrete').checked, p_horas: Number($('cr-horas').value) || 3, p_lembrete_modelo: $('au-lem-mod').value,
+        p_followup: $('ch-follow_up').checked, p_followup_modelo: $('au-fu-mod').value, p_reativacao: $('ch-reativacao').checked, p_reativacao_modelo: $('au-re-mod').value }),
+      sb.rpc('salvar_rotina', { p_site: estado.site, p_followup: Number($('cr-fu').value), p_reativacao: Number($('cr-re').value) }),
+    ]);
+    const erro = e1r || e2r;
+    if (erro) { st.style.color = 'var(--alerta)'; st.textContent = erro.message; return false; }
+    Object.assign(site, { auto_lembrete: $('ch-lembrete').checked, lembrete_horas: Number($('cr-horas').value) || 3, lembrete_modelo: $('au-lem-mod').value || null,
+      auto_followup: $('ch-follow_up').checked, followup_modelo: $('au-fu-mod').value || null, auto_reativacao: $('ch-reativacao').checked, reativacao_modelo: $('au-re-mod').value || null,
+      rotina_followup_dias: Number($('cr-fu').value), rotina_reativacao_dias: Number($('cr-re').value) });
+    st.style.color = 'var(--verde-claro)'; st.textContent = '✓ Salvo';
+    setTimeout(() => { if ($('au-status')?.textContent === '✓ Salvo') $('au-status').textContent = ''; }, 3000);
+    return true;
+  };
+  [['lembrete', 'au-lem-mod'], ['follow_up', 'au-fu-mod'], ['reativacao', 'au-re-mod']].forEach(([k, sel]) => {
+    const ch = $('ch-' + k);
+    ch.addEventListener('change', async () => {
+      if (ch.checked && !$(sel).value) { ch.checked = false; $('au-status').style.color = 'var(--alerta)'; $('au-status').textContent = 'Escolha a mensagem que vai antes de ligar.'; return; }
+      ch.parentElement.querySelector('b').textContent = ch.checked ? 'Ligado' : 'Desligado';
+      ch.closest('.auto-card').classList.toggle('ligado', ch.checked);
+      if (!(await salvar())) { ch.checked = !ch.checked; ch.parentElement.querySelector('b').textContent = ch.checked ? 'Ligado' : 'Desligado'; ch.closest('.auto-card').classList.toggle('ligado', ch.checked); }
+    });
+    ch.closest('.auto-card').classList.toggle('ligado', ch.checked);
+    $(sel).addEventListener('change', () => { mostrarPrevia(k, $(sel).value); salvar(); });
+  });
+  ['cr-horas', 'cr-fu', 'cr-re'].forEach((id) => $(id).addEventListener('change', salvar));
+
   const desenharExemplos = () => {
     const vars = [...new Set([...$('md-texto').value.matchAll(/\{\{(\d+)\}\}/g)].map((m) => Number(m[1])))].sort((a, b) => a - b);
     const antes = [...document.querySelectorAll('[data-ex]')].reduce((o, i) => (o[i.dataset.ex] = i.value, o), {});
-    $('md-exemplos').innerHTML = vars.map((n) => `<div style="flex:1 1 180px"><label for="ex-${n}">Exemplo pra {{${n}}}</label><input id="ex-${n}" data-ex="${n}" type="text" value="${esc(antes[n] || '')}" placeholder="${n === 1 ? 'João' : ''}"></div>`).join('');
+    $('md-exemplos').innerHTML = vars.map((n) => `<div style="flex:1 1 180px"><label for="ex-${n}">Exemplo pra {{${n}}}</label><input id="ex-${n}" data-ex="${n}" type="text" value="${esc(antes[n] || (n === 1 ? 'João' : n === 2 ? 'hoje às 15:30' : ''))}"></div>`).join('');
   };
   $('md-texto').addEventListener('input', desenharExemplos);
+  $('md-fin').addEventListener('change', () => { $('md-cat').value = $('md-fin').value === 'lembrete' ? 'UTILITY' : 'MARKETING'; });
   $('md-criar').addEventListener('click', async () => {
     const st = $('md-status'); st.style.color = 'var(--tx2)'; st.textContent = 'Enviando…';
+    let midia_path = null, midia_mime = null; const f = $('md-midia').files[0];
+    if (f) {
+      if (!['image/jpeg', 'image/png', 'video/mp4'].includes(f.type)) { st.textContent = 'No topo vale foto JPG/PNG ou vídeo MP4.'; st.style.color = 'var(--alerta)'; return; }
+      if (f.size > (f.type.startsWith('image/') ? 5 : 16) * 1024 * 1024) { st.textContent = 'Arquivo grande demais.'; st.style.color = 'var(--alerta)'; return; }
+      midia_path = `${estado.site}/modelos/${Date.now()}_${f.name.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(-60)}`;
+      const up = await sb.storage.from('midia').upload(midia_path, f, { contentType: f.type });
+      if (up.error) { st.textContent = 'Não subiu o arquivo: ' + up.error.message; st.style.color = 'var(--alerta)'; return; }
+      midia_mime = f.type;
+    }
     const exemplos = [...document.querySelectorAll('[data-ex]')].sort((a, b) => a.dataset.ex - b.dataset.ex).map((i) => i.value);
-    const r = await chamarWhats({ acao: 'criar_modelo', site_id: estado.site, nome: $('md-nome').value, categoria: $('md-cat').value, idioma: 'pt_BR', texto: $('md-texto').value, exemplos });
+    const r = await chamarWhats({ acao: 'criar_modelo', site_id: estado.site, nome: $('md-nome').value, categoria: $('md-cat').value, idioma: 'pt_BR', texto: $('md-texto').value, exemplos,
+      finalidade: $('md-fin').value, descricao: $('md-desc').value, midia_path, midia_mime });
     if (!r.ok) { st.textContent = r.erro || 'Erro.'; st.style.color = 'var(--alerta)'; return; }
     st.textContent = `Modelo "${r.nome}" enviado. A Meta costuma aprovar em minutos.`; st.style.color = 'var(--verde)';
-    $('md-nome').value = ''; $('md-texto').value = ''; desenharExemplos(); estado.modelosCache = null;
+    $('md-nome').value = ''; $('md-texto').value = ''; $('md-desc').value = ''; $('md-midia').value = ''; desenharExemplos(); estado.modelosCache = null;
     listarModelos();
   });
   $('md-recarregar').addEventListener('click', listarModelos);
   listarModelos();
 }
+function mostrarPrevia(k, nome) {
+  const el = $('pv-' + k); if (!el) return;
+  const m = (estado.modelosLista || []).find((x) => x.nome === nome);
+  el.innerHTML = m ? `${m.cabecalho && m.cabecalho !== 'TEXT' ? `<div style="font-size:12px; color:var(--tx3)">${m.cabecalho === 'VIDEO' ? '🎬 com vídeo' : '📷 com foto'} no topo</div>` : ''}${esc(m.texto)}` : '';
+}
 async function listarModelos() {
   const alvo = $('md-lista'); if (!alvo) return;
   alvo.textContent = 'Carregando…';
-  const r = await chamarWhats({ acao: 'listar_modelos', site_id: estado.site });
+  const [r, { data: infos }] = await Promise.all([
+    chamarWhats({ acao: 'listar_modelos', site_id: estado.site }),
+    sb.from('modelos_info').select('*').eq('site_id', estado.site),
+  ]);
   if (!r.ok) { alvo.innerHTML = `<span style="color:var(--alerta)">${esc(r.erro || 'Erro ao buscar.')}</span>`; return; }
-  if (!r.modelos.length) { alvo.innerHTML = '<div class="vazio">Nenhum modelo ainda.</div>'; return; }
-  alvo.innerHTML = r.modelos.map((m) => {
-    const s = STATUS_MODELO[m.status] || { t: m.status, c: 'var(--tx3)' };
-    return `<div style="border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:8px">
-      <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap"><b>${esc(m.nome)}</b><span style="font-size:12px; font-weight:700; color:${s.c}">${esc(s.t)}</span></div>
-      <div style="font-size:12px; color:var(--tx3); margin:2px 0 6px">${m.categoria === 'MARKETING' ? 'Marketing' : m.categoria === 'UTILITY' ? 'Utilidade' : esc(m.categoria)} · ${esc(m.idioma)}${m.motivo ? ' · motivo: ' + esc(m.motivo) : ''}</div>
+  const info = Object.fromEntries((infos || []).map((i) => [i.nome, i]));
+  estado.modelosLista = r.modelos;
+  // listas das automações
+  const aprovados = r.modelos.filter((m) => m.status === 'APPROVED');
+  [['au-lem-mod', 'lembrete'], ['au-fu-mod', 'follow_up'], ['au-re-mod', 'reativacao']].forEach(([id, fin]) => {
+    const sel = $(id); if (!sel) return; const atual = sel.dataset.atual;
+    const ordem = [...aprovados].sort((a, b) => (info[b.nome]?.finalidade === fin) - (info[a.nome]?.finalidade === fin));
+    sel.innerHTML = `<option value="">${aprovados.length ? 'Escolha a mensagem…' : 'Nenhum modelo aprovado ainda'}</option>` + ordem.map((m) => `<option value="${esc(m.nome)}" ${m.nome === atual ? 'selected' : ''}>${esc(m.nome)}${info[m.nome]?.finalidade === fin ? ' ★' : ''} · ${m.categoria === 'MARKETING' ? '10 créditos' : '1 crédito'}</option>`).join('')
+      + (atual && !aprovados.some((m) => m.nome === atual) ? `<option value="${esc(atual)}" selected>${esc(atual)} (não aprovado)</option>` : '');
+    mostrarPrevia(fin, sel.value);
+  });
+  if (!r.modelos.length) { alvo.innerHTML = '<div class="vazio">Nenhum modelo ainda. Crie o primeiro logo abaixo.</div>'; return; }
+  const usoAuto = (nome) => { const s2 = estado.sites.find((x) => x.id === estado.site) || {}; return [s2.auto_lembrete && s2.lembrete_modelo === nome && 'lembrete automático', s2.auto_followup && s2.followup_modelo === nome && 'follow-up automático', s2.auto_reativacao && s2.reativacao_modelo === nome && 'reativação automática'].filter(Boolean); };
+  const grupos = {};
+  r.modelos.forEach((m) => { const f = info[m.nome]?.finalidade || 'outro'; (grupos[f] = grupos[f] || []).push(m); });
+  alvo.innerHTML = Object.keys(FINALIDADE).filter((f) => grupos[f]).map((f) => `<div style="margin-bottom:6px"><div class="grupo-modelo">${FINALIDADE[f].t}</div>${grupos[f].map((m) => {
+    const s2 = STATUS_MODELO[m.status] || { t: m.status, c: 'var(--tx3)' }; const i = info[m.nome] || {}; const uso = usoAuto(m.nome);
+    return `<div class="modelo-card">
+      <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap"><b>${esc(m.nome)}</b><span style="font-size:12px; font-weight:700; color:${s2.c}">${esc(s2.t)}</span></div>
+      <div class="desc-modelo" data-desc="${esc(m.nome)}" data-fin="${esc(f)}" title="Clique pra editar">${i.descricao ? esc(i.descricao) : '<span style="color:var(--tx3)">+ Escrever pra que serve esse modelo</span>'}</div>
+      <div style="font-size:12px; color:var(--tx3); margin:2px 0 6px">${m.categoria === 'MARKETING' ? 'Marketing · 10 créditos' : m.categoria === 'UTILITY' ? 'Utilidade · 1 crédito' : esc(m.categoria)}${m.cabecalho === 'IMAGE' ? ' · 📷 com foto' : m.cabecalho === 'VIDEO' ? ' · 🎬 com vídeo' : ''}${uso.length ? ` · <span style="color:var(--verde-claro)">⚡ usado no ${uso.join(' e ')}</span>` : ''}${m.motivo ? ' · motivo: ' + esc(m.motivo) : ''}</div>
+      ${i.midia_path ? `<div class="midia" data-path="${esc(i.midia_path)}" data-mime="${esc(i.midia_mime || '')}" style="max-width:220px"></div>` : ''}
       <div style="white-space:pre-wrap; color:var(--tx2)">${esc(m.texto)}</div></div>`;
-  }).join('');
+  }).join('')}</div>`).join('');
+  carregarMidias();
+  alvo.querySelectorAll('[data-desc]').forEach((el) => el.addEventListener('click', () => {
+    if (el.querySelector('input')) return;
+    const atual = info[el.dataset.desc] || {};
+    el.innerHTML = `<div class="linha" style="align-items:flex-end"><div style="flex:1 1 160px"><label>Pra que serve</label><select data-fin-ed>${Object.entries(FINALIDADE).map(([k, f2]) => `<option value="${k}" ${k === (atual.finalidade || el.dataset.fin) ? 'selected' : ''}>${f2.t}</option>`).join('')}</select></div>
+      <div style="flex:3 1 240px"><label>Descrição</label><input type="text" data-desc-ed value="${esc(atual.descricao || '')}" placeholder="Ex.: lembrete 3h antes, pede SIM"></div><button class="btn-sec" data-desc-ok>Salvar</button></div>`;
+    el.querySelector('[data-desc-ed]').focus();
+    el.querySelector('[data-desc-ok]').addEventListener('click', async (ev) => {
+      ev.stopPropagation();
+      const { error } = await sb.from('modelos_info').upsert({ site_id: estado.site, nome: el.dataset.desc, finalidade: el.querySelector('[data-fin-ed]').value, descricao: el.querySelector('[data-desc-ed]').value.trim() || null, atualizado_em: new Date().toISOString() });
+      if (error) { toast('Não salvou: ' + error.message); return; }
+      toast('Descrição salva.'); listarModelos();
+    });
+  }));
 }
 
 // ================= CONECTAR WHATSAPP (Cadastro incorporado da Meta) =================
@@ -1649,7 +1789,7 @@ async function telaConfig() {
     ${novo ? '' : `<div class="barra-salvar"><span style="color:var(--tx2); font-size:13px">Cliente, WhatsApp, rotina, créditos e funil: <b style="color:var(--tx)">salve tudo de uma vez</b> ou cada bloco no seu botão.</span>
       <div style="display:flex; gap:10px; align-items:center"><span id="st-salvar-tudo" style="font-size:13px"></span><button class="btn" id="bt-salvar-tudo">Salvar tudo</button></div></div>`}
     ${novo ? '' : `<div class="abas" role="tablist" aria-label="Seções das configurações">
-      ${[['cliente', 'Cliente'], ['whatsapp', 'WhatsApp'], ['funil', 'Funil'], ['auto', 'Mensagens automáticas'], ['rotina', 'Rotina e créditos'], ['acessos', 'Acessos']].map(([k, n]) => `<button role="tab" data-aba-cfg="${k}" aria-selected="${(telaConfig._aba || 'cliente') === k}">${n}</button>`).join('')}
+      ${[['cliente', 'Cliente'], ['whatsapp', 'WhatsApp'], ['funil', 'Funil'], ['rotina', 'Créditos'], ['acessos', 'Acessos']].map(([k, n]) => `<button role="tab" data-aba-cfg="${k}" aria-selected="${(telaConfig._aba || 'cliente') === k}">${n}</button>`).join('')}
     </div>`}
     <section class="card" data-aba="cliente" style="display:flex; flex-direction:column; gap:14px">
       <h2 style="margin:0">${novo ? 'Novo cliente' : 'Dados do cliente'}</h2>
@@ -1689,36 +1829,6 @@ async function telaConfig() {
         <span id="wa-status" style="font-size:13px; color:var(--tx2)"></span>
       </div>
       <p style="margin:0; font-size:12px; color:var(--tx3)">Abre a janela da Meta: entre com o Facebook, escolha "conectar o app WhatsApp Business", digite o número e escaneie o QR code que chega no celular.</p>
-    </section>
-
-    <section class="card" data-aba="rotina" style="display:flex; flex-direction:column; gap:12px">
-      <h2 style="margin:0">Rotina</h2>
-      <p style="margin:0; color:var(--tx2)">Todo dia às 7h o Radar cria as tarefas: <b>follow-up</b> pra quem ficou na 1ª etapa do funil e parou de responder, e <b>reativação</b> pra quem chegou na última etapa e sumiu.</p>
-      <div class="linha">
-        <div style="flex:1 1 200px"><label for="ro-fu">Follow-up depois de quantos dias sem resposta</label><input id="ro-fu" type="number" min="1" max="60" value="${esc(site.rotina_followup_dias ?? 2)}"></div>
-        <div style="flex:1 1 200px"><label for="ro-re">Reativação depois de quantos dias sem conversa</label><input id="ro-re" type="number" min="7" max="365" value="${esc(site.rotina_reativacao_dias ?? 30)}"></div>
-      </div>
-      <div style="display:flex; gap:10px; align-items:center"><button class="btn-sec" id="ro-salvar">Salvar rotina</button><span id="ro-status" style="font-size:13px; color:var(--tx2)"></span></div>
-    </section>
-
-    <section class="card" data-aba="auto" style="display:flex; flex-direction:column; gap:14px">
-      <h2 style="margin:0">Mensagens automáticas</h2>
-      <p style="margin:0; color:var(--tx2)">Tudo começa desligado. Ligue só o que o cliente quiser. Cada automação usa um <b>modelo aprovado</b> pela Meta (veja em Modelos de mensagem): no texto do modelo, <b>{{1}}</b> vira o primeiro nome do cliente e, no lembrete, <b>{{2}}</b> vira o dia e a hora (ex.: “hoje às 15:30”).</p>
-      <div id="au-carregando" style="font-size:13px; color:var(--tx3)">Buscando os modelos aprovados…</div>
-      <div class="auto-item">
-        <label class="auto-liga"><input type="checkbox" id="au-lem" ${site.auto_lembrete ? 'checked' : ''}> <span><b>Lembrete de horário</b><small>Manda sozinho antes do horário marcado (campo “Agendamento” na ficha do lead). Usa 1 crédito.</small></span></label>
-        <div class="linha"><div style="flex:2 1 220px"><label for="au-lem-mod">Modelo</label><select id="au-lem-mod" data-atual="${esc(site.lembrete_modelo || '')}"></select></div>
-          <div style="flex:1 1 140px"><label for="au-lem-h">Quantas horas antes</label><input id="au-lem-h" type="number" min="1" max="48" value="${esc(site.lembrete_horas ?? 3)}"></div></div>
-      </div>
-      <div class="auto-item">
-        <label class="auto-liga"><input type="checkbox" id="au-fu" ${site.auto_followup ? 'checked' : ''}> <span><b>Follow-up automático</b><small>Nas tarefas de follow-up do dia, manda o modelo sozinho (entre 9h e 20h) e marca como feita.</small></span></label>
-        <div><label for="au-fu-mod">Modelo</label><select id="au-fu-mod" data-atual="${esc(site.followup_modelo || '')}"></select></div>
-      </div>
-      <div class="auto-item">
-        <label class="auto-liga"><input type="checkbox" id="au-re" ${site.auto_reativacao ? 'checked' : ''}> <span><b>Reativação automática</b><small>Nas tarefas de reativação do dia, manda o modelo sozinho (entre 9h e 20h). Modelo de marketing usa 10 créditos.</small></span></label>
-        <div><label for="au-re-mod">Modelo</label><select id="au-re-mod" data-atual="${esc(site.reativacao_modelo || '')}"></select></div>
-      </div>
-      <div style="display:flex; gap:10px; align-items:center"><button class="btn-sec" id="au-salvar">Salvar automações</button><span id="au-status" style="font-size:13px; color:var(--tx2)"></span></div>
     </section>
 
     <section class="card" data-aba="rotina" style="display:flex; flex-direction:column; gap:12px">
@@ -1786,14 +1896,6 @@ async function telaConfig() {
     await atualizarCreditos(); mostrarCreditosConfig();
   });
   mostrarCreditosConfig();
-  if ($('au-salvar')) { $('au-salvar').addEventListener('click', salvarAutomacao); carregarModelosAuto(); }
-  $('ro-salvar').addEventListener('click', async () => {
-    const st = $('ro-status'); st.style.color = 'var(--tx2)'; st.textContent = 'Salvando…';
-    const { error } = await sb.rpc('salvar_rotina', { p_site: site.id, p_followup: Number($('ro-fu').value), p_reativacao: Number($('ro-re').value) });
-    if (error) { st.textContent = error.message; st.style.color = 'var(--alerta)'; return; }
-    site.rotina_followup_dias = Number($('ro-fu').value); site.rotina_reativacao_dias = Number($('ro-re').value);
-    st.textContent = 'Rotina salva.'; st.style.color = 'var(--verde)';
-  });
   $('cf-testar').addEventListener('click', async () => {
     $('cf-status').textContent = 'Testando…';
     const r = await chamarAdmin({ acao: 'testar_meta', site_id: site.id });
@@ -1975,51 +2077,21 @@ async function salvarTudo() {
   const bt = $('bt-salvar-tudo'); const st = $('st-salvar-tudo');
   bt.disabled = true; st.style.color = 'var(--tx2)'; st.textContent = 'Salvando tudo…';
   const site = estado.site; const erros = [];
-  const fu = Number($('ro-fu').value), re = Number($('ro-re').value);
   const cr = { mensal: $('cr-mensal').value, adicionar: $('cr-add').value || 0, motivo: $('cr-motivo').value };
   const etapas = estado.funilEdit.map((e) => ({
     id: e.id, nome: e.nome, temperatura: e.temperatura, evento_meta: e.evento_meta || null,
     valor_padrao: e.valor_padrao, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
   }));
-  const { error: eRot } = await sb.rpc('salvar_rotina', { p_site: site, p_followup: fu, p_reativacao: re });
-  if (eRot) erros.push('Rotina: ' + eRot.message);
   const rCr = await chamarAdmin({ acao: 'creditos', site_id: site, ...cr });
   if (!rCr.ok) erros.push('Créditos: ' + (rCr.erro || 'erro'));
   const rFu = await chamarAdmin({ acao: 'salvar_funil', site_id: site, etapas });
   if (!rFu.ok) erros.push('Funil: ' + (rFu.erro || 'erro'));
-  if ($('au-salvar') && !(await salvarAutomacao())) erros.push('Mensagens automáticas: ' + $('au-status').textContent);
   const okCliente = await salvarCliente();
   if (!okCliente) erros.push('Dados do cliente: veja a mensagem no bloco 1');
   await atualizarCreditos();
   if (erros.length) { toast('Algumas partes não salvaram: ' + erros.join(' · ')); }
   else toast('Tudo salvo.');
   const b2 = $('bt-salvar-tudo'); if (b2) b2.disabled = false;
-}
-
-async function carregarModelosAuto() {
-  const r = await chamarWhats({ acao: 'listar_modelos', site_id: estado.site });
-  const aviso = $('au-carregando'); if (!aviso) return;
-  const aprovados = (r.modelos || []).filter((m) => m.status === 'APPROVED');
-  aviso.textContent = !r.ok ? (r.erro || 'Não consegui buscar os modelos.') : aprovados.length ? `${aprovados.length} ${aprovados.length === 1 ? 'modelo aprovado disponível' : 'modelos aprovados disponíveis'}.` : 'Nenhum modelo aprovado ainda. Crie em Modelos de mensagem e espere a Meta aprovar.';
-  ['au-lem-mod', 'au-fu-mod', 'au-re-mod'].forEach((id) => {
-    const sel = $(id); if (!sel) return; const atual = sel.dataset.atual;
-    sel.innerHTML = '<option value="">Escolha um modelo…</option>' + aprovados.map((m) => `<option value="${esc(m.nome)}" ${m.nome === atual ? 'selected' : ''}>${esc(m.nome)} · ${m.categoria === 'MARKETING' ? 'marketing (10 créditos)' : 'utilidade (1 crédito)'}</option>`).join('')
-      + (atual && !aprovados.some((m) => m.nome === atual) ? `<option value="${esc(atual)}" selected>${esc(atual)} (não aprovado)</option>` : '');
-    sel.title = aprovados.find((m) => m.nome === sel.value)?.texto || '';
-  });
-}
-async function salvarAutomacao() {
-  const st = $('au-status'); if (!st) return true; st.style.color = 'var(--tx2)'; st.textContent = 'Salvando…';
-  const { error } = await sb.rpc('salvar_automacao', {
-    p_site: estado.site, p_lembrete: $('au-lem').checked, p_horas: Number($('au-lem-h').value) || 3, p_lembrete_modelo: $('au-lem-mod').value,
-    p_followup: $('au-fu').checked, p_followup_modelo: $('au-fu-mod').value, p_reativacao: $('au-re').checked, p_reativacao_modelo: $('au-re-mod').value,
-  });
-  if (error) { st.style.color = 'var(--alerta)'; st.textContent = error.message; return false; }
-  const s2 = estado.sites.find((x) => x.id === estado.site);
-  if (s2) Object.assign(s2, { auto_lembrete: $('au-lem').checked, lembrete_horas: Number($('au-lem-h').value) || 3, lembrete_modelo: $('au-lem-mod').value || null, auto_followup: $('au-fu').checked, followup_modelo: $('au-fu-mod').value || null, auto_reativacao: $('au-re').checked, reativacao_modelo: $('au-re-mod').value || null });
-  const ligadas = ['au-lem', 'au-fu', 'au-re'].filter((id) => $(id).checked).length;
-  st.style.color = 'var(--verde-claro)'; st.textContent = ligadas ? `✓ Salvo · ${ligadas} ${ligadas === 1 ? 'automação ligada' : 'automações ligadas'}` : '✓ Salvo · tudo desligado';
-  return true;
 }
 
 async function listarUsuarios(siteId) {
