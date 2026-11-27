@@ -343,6 +343,30 @@
   .btn, .btn-sec, nav .menu button, .conv-item, .etapa-funil, .abas button, .chave button { transition: background-color .15s, border-color .15s, color .15s, box-shadow .15s, transform .15s; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
 
+
+  /* ===== Fase 2 · componentes ===== */
+  :root { --cg-google: #E8EAED; --cg-direto: #4D5B52; }
+  html[data-tema="claro"] { --cg-google: #9AA5A0; --cg-direto: #CFDCD3; }
+  .delta { display: inline-flex; align-items: center; gap: 2px; padding: 1px 7px; border-radius: 999px; background: var(--verde-bg); color: var(--verde-claro); font-variant-numeric: tabular-nums; font-weight: 600; margin-right: 4px; }
+  .delta.cai { background: var(--alerta-bg); color: var(--tx2); }
+  .obs-delta { font-size: 12px; color: var(--tx3); margin-top: 6px; }
+  .gs { position: relative; display: flex; align-items: flex-end; gap: 12px; padding: 0 4px; }
+  .gs-linha { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--line2); pointer-events: none; }
+  .gs-dia { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; }
+  .gs-pilha { width: 100%; max-width: 56px; display: flex; flex-direction: column; gap: 2px; }
+  .gs-zero { height: 3px; border-radius: 3px; background: var(--line); }
+  .gs-tot { font-size: 13px; color: var(--tx2); font-variant-numeric: tabular-nums; }
+  .gs-rot { font-size: 12px; color: var(--tx3); white-space: nowrap; }
+  .gs-dia.hoje .gs-tot { color: var(--tx); font-weight: 600; } .gs-dia.hoje .gs-rot { color: var(--verde-claro); font-weight: 600; }
+  .gs-leg { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line2); gap: 18px; font-size: 13px; }
+  .gs-leg b { font-weight: 600; color: var(--tx); font-variant-numeric: tabular-nums; }
+  .creditos .val { color: var(--tx3); }
+  #toast { left: auto; right: 24px; bottom: 24px; transform: none; display: flex; align-items: center; gap: 10px; border-radius: 12px; background: rgba(10,20,15,.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(52,211,153,.45); box-shadow: 0 12px 40px rgba(0,0,0,.45), 0 0 24px rgba(16,185,129,.16); animation: toast-in .18s ease-out; }
+  .toast-ic { width: 22px; height: 22px; border-radius: 999px; background: #10B981; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (max-width: 700px) { #toast { left: 16px; right: 16px; bottom: 16px; } .gs { gap: 6px; } .gs-rot { font-size: 11px; } }
+  .selo, .pill, .tag { line-height: 1.4; }
+
   /* ===== tema claro (opcional) ===== */
   html[data-tema="claro"] {
     color-scheme: light;
@@ -520,7 +544,7 @@ function lugarHTML(l) { if (!l) return ''; const ic = icLugar(l); return `<span 
 const estado = { perfil: null, site: null, tela: 'dashboard', etapas: [], contatos: [], aberto: null };
 
 function toast(msg) {
-  const t = $('toast'); t.textContent = msg; t.classList.remove('oculto');
+  const t = $('toast'); t.innerHTML = `<span class="toast-ic" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#04130C" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg></span><span>${esc(msg)}</span>`; t.classList.remove('oculto');
   clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.add('oculto'), 3500);
 }
 function quando(iso) {
@@ -610,7 +634,7 @@ async function atualizarCreditos() {
   el.innerHTML = `<div class="cab">Créditos <span>${baixo ? 'Baixo' : 'Ativo'}</span></div>
     <div class="val"><b>${total.toLocaleString('pt-BR')}</b> / ${mensal.toLocaleString('pt-BR')}</div>
     <div class="barra" role="progressbar" aria-label="Créditos do mês" aria-valuenow="${pctBarra}" aria-valuemin="0" aria-valuemax="100"><div style="width:${pctBarra}%"></div></div>
-    <div>${extra ? `+ ${extra.toLocaleString('pt-BR')} extras · ` : ''}Renova dia 1º</div>`;
+    <div>${mensal ? `${pctBarra}% disponível · ` : ''}${extra ? `+ ${extra.toLocaleString('pt-BR')} extras · ` : ''}Renova dia 1º</div>`;
 }
 
 function etapaDe(c) { return estado.etapas.find((e) => e.id === c.etapa_id) || null; }
@@ -631,6 +655,61 @@ function textoPeriodo() {
   if (v !== 'custom') return $('sel-periodo').selectedOptions[0]?.textContent.toLowerCase() || '';
   const f = (d) => d ? d.split('-').reverse().join('/') : '…';
   return `de ${f($('per-de').value)} até ${f($('per-ate').value)}`;
+}
+function periodoAnterior() {
+  const [de, ate] = intervaloPeriodo();
+  if (!de) return null;
+  const fim = ate ? ate.getTime() : Date.now();
+  const dur = fim - de.getTime();
+  if (dur <= 0) return null;
+  return [new Date(de.getTime() - dur), new Date(de.getTime() - 1)];
+}
+function noIntervalo(lista, de, ate) {
+  return lista.filter((c) => { const t = new Date(c.criado_em).getTime(); return t >= de.getTime() && t <= ate.getTime(); });
+}
+function deltaHTML(agora, antes) {
+  if (antes == null) return '';
+  if (!antes) return agora ? '<span class="delta">novo</span> sem dados no período anterior' : '';
+  const d = Math.round(((agora - antes) / antes) * 100);
+  const seta = d >= 0 ? '↑' : '↓';
+  return `<span class="delta ${d < 0 ? 'cai' : ''}">${seta} ${Math.abs(d)}%</span> vs ${antes} no período anterior`;
+}
+const COR_GRAF = { anuncio_meta: '#0866FF', google: 'var(--cg-google)', link: '#10B981', site: '#34D399', outras: '#6EE7B7', organico: 'var(--cg-direto)' };
+function graficoSemana(base) {
+  const dias = [];
+  const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+  for (let i = 6; i >= 0; i--) { const d = new Date(hoje); d.setDate(d.getDate() - i); dias.push(d); }
+  const nomes = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  const porDia = dias.map((d) => {
+    const fim = new Date(d); fim.setDate(fim.getDate() + 1);
+    const doDia = base.filter((c) => { const t = new Date(c.criado_em); return t >= d && t < fim; });
+    const grupos = GRUPOS.map((g) => ({ g, n: doDia.filter((c) => grupoDe(c) === g).length }));
+    return { d, total: doDia.length, grupos };
+  });
+  const total = porDia.reduce((a, x) => a + x.total, 0);
+  const iniAnt = new Date(dias[0]); iniAnt.setDate(iniAnt.getDate() - 7);
+  const antes = base.filter((c) => { const t = new Date(c.criado_em); return t >= iniAnt && t < dias[0]; }).length;
+  const max = Math.max(1, ...porDia.map((x) => x.total));
+  const ALT = 170;
+  const barras = porDia.map((x, i) => {
+    const eHoje = i === 6;
+    const rot = `${nomes[x.d.getDay()]} ${String(x.d.getDate()).padStart(2, '0')}`;
+    const titulo = `${rot}: ${x.total} ${x.total === 1 ? 'conversa' : 'conversas'}` + x.grupos.filter((y) => y.n).map((y) => ` · ${y.g.nome} ${y.n}`).join('');
+    const pilha = x.grupos.filter((y) => y.n).reverse().map((y, j) => `<div style="height:${Math.max(3, Math.round((y.n / max) * ALT))}px; background:${COR_GRAF[y.g.k] || y.g.barra}; ${j === 0 ? 'border-radius:7px 7px 0 0;' : ''}"></div>`).join('');
+    return `<div class="gs-dia${eHoje ? ' hoje' : ''}" title="${esc(titulo)}"><span class="gs-tot">${x.total}</span><div class="gs-pilha">${pilha || '<div class="gs-zero"></div>'}</div><span class="gs-rot">${eHoje ? 'Hoje' : rot}</span></div>`;
+  }).join('');
+  const grade = [0.33, 0.66, 1].map((f) => `<div class="gs-linha" style="bottom:${28 + Math.round(f * ALT)}px"></div>`).join('');
+  const usados = GRUPOS.map((g) => ({ g, n: porDia.reduce((a, x) => a + x.grupos.find((y) => y.g === g).n, 0) })).filter(({ g, n }) => n > 0 || g.sempre);
+  const legenda = usados.map(({ g, n }) => `<span><i style="background:${COR_GRAF[g.k] || g.barra}"></i>${esc(g.nome)} <b>${n}</b></span>`).join('');
+  const d = antes ? Math.round(((total - antes) / antes) * 100) : null;
+  return `<div class="card" style="flex:1 1 100%; min-width:0">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; margin-bottom:14px">
+      <div><h2 style="margin:0">Conversas da semana</h2><div style="font-size:13px; color:var(--tx3); margin-top:4px">Novas conversas por dia nos últimos 7 dias, separadas por origem</div></div>
+      <div style="text-align:right"><div class="num" style="font-size:26px; font-weight:600">${total}</div><div style="font-size:12px; color:${d != null && d < 0 ? 'var(--tx2)' : 'var(--verde-claro)'}">${d == null ? (antes === 0 && total ? 'sem conversas na semana anterior' : '') : `${d >= 0 ? '+' : ''}${d}% vs semana anterior (${antes})`}</div></div>
+    </div>
+    <div class="gs" style="height:${ALT + 60}px">${grade}${barras}</div>
+    <div class="legenda gs-leg">${legenda}</div>
+  </div>`;
 }
 function noPeriodo(lista) {
   const [de, ate] = intervaloPeriodo();
@@ -839,12 +918,15 @@ function telaDashboard() {
   const lista = comFiltro(doPeriodo);
   const total = lista.length;
   const etapas = estado.etapas;
+  const pAnt = periodoAnterior();
+  const listaAnt = pAnt ? comFiltro(noIntervalo(estado.contatos, pAnt[0], pAnt[1])) : null;
+  const chegaramAnt = listaAnt ? estado.etapas.map((e) => listaAnt.filter((c) => (etapaDe(c)?.ordem ?? 0) >= e.ordem).length) : null;
   const f = estado.filtro;
   const chegaram = etapas.map((e) => lista.filter((c) => (etapaDe(c)?.ordem ?? 0) >= e.ordem).length);
   const ev = etapaVenda();
   const iVenda = ev ? etapas.indexOf(ev) : -1;
   const iMeio = etapas.length > 2 ? 1 : -1;
-  const numCard = (n, rot) => `<div class="card" style="flex:1 1 150px; padding:16px"><div class="num" style="font-size:30px; font-weight:700; line-height:1.1">${n}</div><div style="font-size:14px; color:var(--tx2)">${esc(rot)}</div><div style="font-size:12px; color:var(--tx3)">${n} de ${total} · ${pct(n, total)}%</div></div>`;
+  const numCard = (n, rot, i) => `<div class="card" style="flex:1 1 150px; padding:16px"><div class="num" style="font-size:30px; font-weight:700; line-height:1.1">${n}</div><div style="font-size:14px; color:var(--tx2)">${esc(rot)}</div><div style="font-size:12px; color:var(--tx3)">${n} de ${total} · ${pct(n, total)}%</div>${chegaramAnt && i != null ? `<div class="obs-delta">${deltaHTML(n, chegaramAnt[i])}</div>` : ''}</div>`;
 
   const linhasOrigem = GRUPOS.map((g) => ({ g, n: lista.filter((c) => grupoDe(c) === g).length }))
     .filter(({ g, n }) => n > 0 || g.sempre)
@@ -882,11 +964,12 @@ function telaDashboard() {
     <div class="linha">
       <div class="card" style="flex:2 1 300px; padding:16px; display:flex; align-items:center; gap:14px">
         <span style="width:48px; height:48px; border-radius:12px; background:#25D366; color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0">${icone('whatsapp', 28)}</span>
-        <div><div style="font-size:34px; font-weight:700; line-height:1.05">${total}</div><div style="font-size:14px; color:var(--tx2)">conversas novas no WhatsApp</div></div>
+        <div><div style="font-size:34px; font-weight:700; line-height:1.05">${total}</div><div style="font-size:14px; color:var(--tx2)">conversas novas no WhatsApp</div>${listaAnt ? `<div class="obs-delta">${deltaHTML(total, listaAnt.length)}</div>` : ''}</div>
       </div>
-      ${iMeio >= 0 && iMeio !== iVenda ? numCard(chegaram[iMeio], etapas[iMeio].nome.toLowerCase()) : ''}
-      ${iVenda > 0 ? numCard(chegaram[iVenda], ev.nome.toLowerCase()) : ''}
+      ${iMeio >= 0 && iMeio !== iVenda ? numCard(chegaram[iMeio], etapas[iMeio].nome.toLowerCase(), iMeio) : ''}
+      ${iVenda > 0 ? numCard(chegaram[iVenda], ev.nome.toLowerCase(), iVenda) : ''}
     </div>
+    <div class="linha">${graficoSemana(comFiltro(estado.contatos))}</div>
     <div class="linha">
       <div class="card" style="flex:1 1 340px"><h2>De onde vieram</h2>${linhasOrigem}</div>
       <div class="card" style="flex:1 1 340px"><h2>Funil</h2>${etapas.length ? funil + '<div style="font-size:12px; color:var(--tx3); text-align:center; margin-top:10px">Clique numa etapa pra ver as conversas</div>' : '<div class="vazio">Nenhuma etapa configurada.</div>'}</div>
