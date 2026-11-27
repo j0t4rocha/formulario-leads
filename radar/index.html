@@ -614,6 +614,56 @@
   .sv-lista { display:flex; flex-direction:column; gap:6px; }
   .sv-cab, .sv-linha { display:grid; grid-template-columns:minmax(0,1fr) 120px auto; gap:8px; align-items:center; }
   .sv-cab { font-size:12px; color:var(--tx3); padding:0 2px; }
+  .seq-geral { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px; }
+  .seq-g { display:flex; flex-direction:column; gap:6px; padding:12px; border:1px solid var(--line2); border-radius:12px; background:var(--campo); }
+  .seq-g small, .seq-g .seq-check { font-size:12px; color:var(--tx3); } .seq-g .seq-check { font-size:14px; color:var(--tx); display:flex; gap:8px; align-items:center; }
+  .seq-g textarea, .seq-versao textarea { width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:9px 11px; font:inherit; color:var(--tx); resize:vertical; }
+  .seq-g-larga { grid-column:1 / -1; }
+  .seq-fluxos { display:flex; flex-direction:column; gap:18px; }
+  .seq-secao { display:flex; flex-direction:column; gap:10px; }
+  .seq-sec-cab h3 { margin:0; font-size:15px; } .seq-sec-cab p { margin:2px 0 0; font-size:13px; color:var(--tx2); max-width:760px; }
+  .seq-grade { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:12px; }
+  .seq-fluxo { display:flex; flex-direction:column; gap:10px; padding:14px; border:1px solid var(--line); border-radius:14px; background:var(--solido-2); }
+  .seq-fluxo.ligado { border-color:var(--verde-bd); }
+  .lem-edit { display:flex; flex-direction:column; gap:10px; padding-top:6px; border-top:1px solid var(--line); }
+  .seq-fluxo.aberto .lem-edit { max-width:560px; }
+  .seq-fluxo.aberto { grid-column:1 / -1; }
+  .seq-topo { display:flex; gap:10px; align-items:flex-start; }
+  .seq-ic { width:30px; height:30px; flex:0 0 30px; border-radius:9px; display:grid; place-items:center; background:rgba(16,185,129,.12); color:var(--verde-claro); }
+  .seq-tit { flex:1; min-width:0; } .seq-tit h3 { margin:0; font-size:15px; } .seq-tit small { display:block; font-size:12px; color:var(--tx2); margin-top:2px; }
+  .seq-linha { display:flex; flex-wrap:wrap; gap:4px; align-items:center; }
+  .seq-chip { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600; padding:3px 8px; border-radius:999px; border:1px solid var(--line2); color:var(--tx2); white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .seq-chip.texto, .seq-chip.botao { border-color:var(--verde-bd); color:var(--verde-claro); }
+  .seq-chip.vazio { border-style:dashed; color:var(--tx3); }
+  .seq-seta { width:8px; height:1px; background:var(--line2); display:inline-block; }
+  .seq-rodape { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+  .seq-regras { border:1px solid var(--line); border-radius:12px; padding:10px 14px; }
+  .seq-regras summary { cursor:pointer; font-size:14px; } .seq-regras summary span { color:var(--tx3); font-size:13px; }
+  .seq-regras[open] .seq-geral { margin-top:10px; }
+  .seq-passo.fechado { padding:0; }
+  .seq-p-cab { display:flex; gap:8px; align-items:center; width:100%; padding:9px 12px; background:none; border:0; color:var(--tx); font:inherit; font-size:13px; text-align:left; cursor:pointer; border-radius:12px; }
+  .seq-p-cab:hover { background:rgba(255,255,255,.03); }
+  .seq-num { width:20px; height:20px; flex:0 0 20px; border-radius:50%; display:grid; place-items:center; font-size:11px; font-weight:700; background:var(--line2); }
+  .seq-prev { flex:1; min-width:0; color:var(--tx2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .seq-prev.falta, .seq-vers.falta { color:var(--alerta); }
+  .seq-vers { font-size:11px; color:var(--tx3); white-space:nowrap; }
+  .seq-passos { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .seq-passos { gap:6px; }
+  .seq-passo { display:flex; flex-direction:column; gap:8px; padding:12px; border:1px solid var(--line2); border-radius:12px; background:var(--campo); }
+  .seq-passo-cab { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .seq-quando { display:flex; gap:6px; align-items:center; flex-wrap:wrap; font-size:13px; color:var(--tx2); }
+  .seq-quando { flex-wrap:nowrap; } .seq-quando > input { width:72px; flex:0 0 72px; } .seq-quando .sel { flex:0 0 110px; width:110px; } .seq-quando > span { white-space:nowrap; }
+  .seq-passo-cab > b { flex:0 0 auto; }
+  .seq-acoes { margin-left:auto; display:flex; gap:6px; align-items:center; }
+  .seq-versoes { display:flex; flex-direction:column; gap:8px; }
+  .seq-versao label { font-size:12px; color:var(--tx3); }
+  .seq-aviso { font-size:13px; padding:8px 10px; border-radius:10px; border:1px solid rgba(239,68,68,.4); background:rgba(239,68,68,.08); color:var(--tx); }
+  .seq-modelos { display:flex; flex-direction:column; gap:6px; }
+  .seq-modelo { display:flex; gap:8px; align-items:flex-start; font-size:13px; cursor:pointer; }
+  .seq-modelo small { display:block; color:var(--tx3); margin-top:2px; }
+  .seq-resumo { font-size:12px; color:var(--tx3); }
+  .seq-dias { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:13px; }
+  .pausado-box { display:flex; gap:8px; align-items:center; padding:10px 12px; border-radius:12px; border:1px dashed var(--line2); font-size:13px; color:var(--tx2); }
   .mv-sug { display:flex; gap:8px; align-items:center; padding:10px 12px; border-radius:10px; background:rgba(16,185,129,.10); border:1px solid rgba(16,185,129,.35); font-size:13px; color:var(--tx); }
   .selo.alerta-leve { background:rgba(245,158,11,.0); border:1px dashed var(--tx3); color:var(--tx2); }
 </style>
@@ -808,7 +858,7 @@ async function iniciar() {
   $('quem-nome').textContent = perfil.nome || '';
   $('quem-av').innerHTML = fotoHTML(perfil.foto_path, perfil.nome, 34) + '<span class="eu-cam" aria-hidden="true">' + icone('camera', 10) + '</span>';
 
-  const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo, automacoes').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   const sel = $('sel-site');
   sel.innerHTML = (sites || []).map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
@@ -1497,6 +1547,7 @@ function comMarcadores(msgs, c) {
 function bolhaHTML(m) {
   const quando = new Date(m.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
   const rotulo = m.direcao === 'entrada' ? 'Recebido · grátis'
+    : m.automatico ? `<b>Automático</b> · ${m.tipo === 'template' ? 'modelo' : 'grátis'}`
     : m.tipo === 'template' ? '<b>Modelo enviado pelo Radar</b>'
     : m.tipo === 'celular' ? 'Respondido pelo celular · grátis'
     : '<b>Enviado pelo Radar</b> · 1 crédito';
@@ -1593,6 +1644,7 @@ async function abrirConversa(id, semMarcar) {
       <div class="origem-box volta">${logoGrupo(grupoToque(tbC), 30)}<span><b>Voltou pelo tráfego</b><small>${esc(descToque(tbC))} · ${fmtD(tbC.criado_em)}</small></span></div>`
     : `<div class="origem-box ${gC.k === 'anuncio_meta' ? 'meta' : ''}">${logoGrupo(gC, 34)}<span><b>${esc(gC.nome)}</b><small>${c.lugar ? esc(c.lugar) : 'origem do primeiro contato'}</small></span></div>`}
     <div>${linha('Campanha', c.campanha ? esc(c.campanha) : '')}${linha('Anúncio', c.anuncio_titulo ? esc(c.anuncio_titulo) : '')}${linha('Link', c.link_id ? esc((estado.links || []).find((l) => l.id === c.link_id)?.nome ?? 'Link rastreável') : '')}${linha('Chegou em', `<span class="mono">${fmtD(c.criado_em)}</span>`)}</div>
+    ${c.auto_pausado ? `<div class="pausado-box">${icone('ajuda', 14)}<span>Pediu pra não receber mensagens automáticas.</span><button class="link-bt" type="button" id="ld-retomar">Retomar</button></div>` : ''}
     <div class="fat-box"><small>Total faturado</small><b>${brl(totalL).replace(',00', '')}</b><small>${veioL.length} ${veioL.length === 1 ? 'ida' : 'idas'}${ultimaIda ? ' · última em ' + ultimaIda : ''}${depoisToque != null ? ` · <span style="color:var(--verde-claro); font-weight:600">${brl(depoisToque).replace(',00', '')} depois do retorno</span>` : ''}</small></div>
     <div><label for="ld-etapa">Etapa</label><select id="ld-etapa">${estado.etapas.map((x) => `<option value="${x.id}" ${x.id === c.etapa_id ? 'selected' : ''}>${esc(x.nome)}</option>`).join('')}</select></div>
     ${c.agendado_em ? `<div class="dl"><span>Próximo horário</span><span class="mono">${fmtD(c.agendado_em)}</span></div>` : ''}
@@ -1601,6 +1653,12 @@ async function abrirConversa(id, semMarcar) {
   $('ld-etapa').addEventListener('change', (ev2) => moverEtapa(c.id, Number(ev2.target.value)));
   $('ld-hist').addEventListener('click', () => abrirModalLead('origem'));
   $('ld-ida').addEventListener('click', () => abrirModalLead('idas'));
+  if ($('ld-retomar')) $('ld-retomar').addEventListener('click', async () => {
+    if (!confirm('Voltar a mandar mensagens automáticas pra essa pessoa? Ela pediu pra parar. Só retome se ela pediu de novo.')) return;
+    const { error } = await sb.rpc('retomar_automacao', { p_contato: c.id });
+    if (error) { toast('Não consegui retomar.'); return; }
+    c.auto_pausado = false; toast('Mensagens automáticas retomadas.'); abrirConversa(c.id);
+  });
 }
 
 // ---------- pop-up: detalhes do lead ----------
@@ -2102,6 +2160,7 @@ const TIPO_TAREFA = {
   follow_up: { t: 'Follow-up', c: 'var(--morno)', bg: 'var(--morno-bg)' },
   reativacao: { t: 'Reativação', c: 'var(--frio)', bg: 'var(--frio-bg)' },
   manual: { t: 'Manual', c: 'var(--tx2)', bg: 'rgba(255,255,255,.07)' },
+  agendar: { t: 'URGENTE · agendar', c: 'var(--alerta)', bg: 'rgba(239,68,68,.12)' },
 };
 function hojeISO() {
   const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -2425,34 +2484,31 @@ async function telaModelos() {
   const e1 = estado.etapas[0]?.nome || 'primeira etapa'; const eU = estado.etapas[estado.etapas.length - 1]?.nome || 'última etapa';
   const chave = (id, ligado) => `<label class="chavinha" title="Liga ou desliga o envio automático"><input type="checkbox" id="${id}" ${ligado ? 'checked' : ''}><span></span><b>${ligado ? 'Ligado' : 'Desligado'}</b></label>`;
   const cartao = (k, titulo, ligado, oque, quem, quando, campo, selId, modeloAtual) => `
-    <div class="auto-card" data-auto="${k}">
-      <div class="auto-topo"><h3>${titulo}</h3>${chave('ch-' + k, ligado)}</div>
-      <p class="auto-desc">${oque}</p>
-      <div class="auto-bloco"><span class="auto-rot">Quem recebe</span><p class="l3">${quem}</p></div>
-      <div class="auto-bloco"><span class="auto-rot">Quando</span><p class="l2">${quando}</p></div>
-      <div class="auto-campo">${campo}</div>
-      <div class="auto-bloco"><label class="auto-rot" for="${selId}">Mensagem que vai</label><select id="${selId}" data-atual="${esc(modeloAtual || '')}"><option value="">Carregando modelos…</option></select></div>
-      <div class="previa" id="pv-${k}"></div>
+    <div class="auto-card seq-fluxo" data-auto="${k}">
+      <div class="seq-topo"><span class="seq-ic">${icone('relogio', 16)}</span><div class="seq-tit"><h3>${titulo}</h3><small>${oque}</small></div>${chave('ch-' + k, ligado)}</div>
+      <div class="seq-linha"><span class="seq-chip modelo" id="lem-chip-h">★ ${esc(site.lembrete_horas ?? 3)}h antes</span><i class="seq-seta"></i><span class="seq-chip" id="lem-chip-m">${modeloAtual ? esc(modeloAtual) : 'sem modelo'}</span></div>
+      <div class="seq-rodape"><span class="seq-resumo">${quem} · 1 crédito por lembrete</span><button class="btn-sec mini" type="button" id="lem-editar" aria-expanded="false">Editar</button></div>
+      <div class="lem-edit oculto" id="lem-edit">
+        <div class="auto-campo">${campo}</div>
+        <div class="auto-bloco"><label class="auto-rot" for="${selId}">Mensagem que vai</label><select id="${selId}" data-atual="${esc(modeloAtual || '')}"><option value="">Carregando modelos…</option></select></div>
+        <div class="previa" id="pv-${k}"></div>
+      </div>
     </div>`;
   const campo = (id, rot, val, min, max, suf) => `<label for="${id}">${rot}</label><span class="auto-num"><input type="number" id="${id}" min="${min}" max="${max}" value="${esc(val)}"><span>${suf}</span></span>`;
   $('tela-modelos').innerHTML = `<div style="display:flex; flex-direction:column; gap:18px">
-    <section class="card" style="display:flex; flex-direction:column; gap:14px">
-      <div><h2 style="margin:0">Envio automático</h2><p style="margin:4px 0 0; color:var(--tx2)">A chavinha é a permissão: ligada, o Radar manda sozinho; desligada, vira só tarefa pra você mandar. Salva na hora.</p></div>
-      <div class="auto-grade">
-        ${cartao('lembrete', 'Lembrete de horário', site.auto_lembrete, 'Avisa o cliente antes do horário marcado.',
-          'Quem tem horário marcado no campo <b>Agendamento</b> da ficha do lead.',
-          'Antes do horário, no tempo que você escolher. Custa 1 crédito.',
-          campo('cr-horas', 'Mandar quantas horas antes', site.lembrete_horas ?? 3, 1, 48, 'horas'), 'au-lem-mod', site.lembrete_modelo)}
-        ${cartao('follow_up', 'Follow-up', site.auto_followup, 'Chama de volta quem começou a conversa e parou de responder.',
-          `Quem está em <b>${esc(e1)}</b> e parou de responder. Vale até 30 dias, e cada pessoa recebe no máximo 1 por semana.`,
-          'Todo dia, entre 9h e 20h. Marketing custa 10 créditos; utilidade, 1.',
-          campo('cr-fu', 'Mandar depois de quantos dias sem resposta', site.rotina_followup_dias ?? 2, 1, 60, 'dias'), 'au-fu-mod', site.followup_modelo)}
-        ${cartao('reativacao', 'Reativação', site.auto_reativacao, 'Chama de volta quem já foi cliente e sumiu.',
-          `Quem chegou em <b>${esc(eU)}</b> e parou de conversar.`,
-          'Todo dia, entre 9h e 20h. Marketing custa 10 créditos.',
-          campo('cr-re', 'Mandar depois de quantos dias sem conversa', site.rotina_reativacao_dias ?? 30, 7, 365, 'dias'), 'au-re-mod', site.reativacao_modelo)}
+    <section class="card" style="display:flex; flex-direction:column; gap:14px" id="seq-card">
+      <div><h2 style="margin:0">Mensagens automáticas</h2>
+      <p style="margin:4px 0 0; color:var(--tx2)">Ligada, o Radar manda sozinho. Param quando a pessoa responde, agenda ou pede pra sair.</p></div>
+      <div id="seq-fluxos" class="seq-fluxos">
+        <div class="seq-secao" id="seq-g-antes"></div>
+        <div class="seq-secao"><div class="seq-sec-cab"><h3>Pra quem agendou</h3><p>Lembra do horário pra diminuir falta. Vale pra quem tem horário no campo Agendamento da ficha do lead.</p></div>
+          <div class="seq-grade">${cartao('lembrete', 'Lembrete de horário', site.auto_lembrete, 'Avisa antes do horário marcado.',
+            'Quem tem horário marcado', '', campo('cr-horas', 'Mandar quantas horas antes', site.lembrete_horas ?? 3, 1, 48, 'horas'), 'au-lem-mod', site.lembrete_modelo)}</div>
+          <div id="au-status" style="font-size:13px; color:var(--tx2); min-height:0"></div></div>
+        <div class="seq-secao" id="seq-g-cliente"></div>
       </div>
-      <div id="au-status" style="font-size:13px; color:var(--tx2); min-height:18px"></div>
+      <details class="seq-regras"><summary><b>Regras gerais</b> <span id="seq-regras-res"></span></summary><div id="seq-geral" class="seq-geral"></div></details>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn" id="seq-salvar" type="button">Salvar sequências</button><span id="seq-status" style="font-size:13px; color:var(--tx2)"></span></div>
     </section>
 
     <section class="card" style="display:flex; flex-direction:column; gap:10px">
@@ -2484,19 +2540,18 @@ async function telaModelos() {
     const st = $('au-status'); st.style.color = 'var(--tx2)'; st.textContent = 'Salvando…';
     const [{ error: e1r }, { error: e2r }] = await Promise.all([
       sb.rpc('salvar_automacao', { p_site: estado.site, p_lembrete: $('ch-lembrete').checked, p_horas: Number($('cr-horas').value) || 3, p_lembrete_modelo: $('au-lem-mod').value,
-        p_followup: $('ch-follow_up').checked, p_followup_modelo: $('au-fu-mod').value, p_reativacao: $('ch-reativacao').checked, p_reativacao_modelo: $('au-re-mod').value }),
-      sb.rpc('salvar_rotina', { p_site: estado.site, p_followup: Number($('cr-fu').value), p_reativacao: Number($('cr-re').value) }),
+        p_followup: false, p_followup_modelo: site.followup_modelo || '', p_reativacao: false, p_reativacao_modelo: site.reativacao_modelo || '' }),
+      sb.rpc('salvar_rotina', { p_site: estado.site, p_followup: site.rotina_followup_dias ?? 2, p_reativacao: site.rotina_reativacao_dias ?? 30 }),
     ]);
     const erro = e1r || e2r;
     if (erro) { st.style.color = 'var(--alerta)'; st.textContent = erro.message; return false; }
     Object.assign(site, { auto_lembrete: $('ch-lembrete').checked, lembrete_horas: Number($('cr-horas').value) || 3, lembrete_modelo: $('au-lem-mod').value || null,
-      auto_followup: $('ch-follow_up').checked, followup_modelo: $('au-fu-mod').value || null, auto_reativacao: $('ch-reativacao').checked, reativacao_modelo: $('au-re-mod').value || null,
-      rotina_followup_dias: Number($('cr-fu').value), rotina_reativacao_dias: Number($('cr-re').value) });
+      auto_followup: false, auto_reativacao: false });
     st.style.color = 'var(--verde-claro)'; st.textContent = '✓ Salvo';
     setTimeout(() => { if ($('au-status')?.textContent === '✓ Salvo') $('au-status').textContent = ''; }, 3000);
     return true;
   };
-  [['lembrete', 'au-lem-mod'], ['follow_up', 'au-fu-mod'], ['reativacao', 'au-re-mod']].forEach(([k, sel]) => {
+  [['lembrete', 'au-lem-mod']].forEach(([k, sel]) => {
     const ch = $('ch-' + k);
     ch.addEventListener('change', async () => {
       if (ch.checked && !$(sel).value) { ch.checked = false; $('au-status').style.color = 'var(--alerta)'; $('au-status').textContent = 'Escolha a mensagem que vai antes de ligar.'; return; }
@@ -2507,7 +2562,11 @@ async function telaModelos() {
     ch.closest('.auto-card').classList.toggle('ligado', ch.checked);
     $(sel).addEventListener('change', () => { mostrarPrevia(k, $(sel).value); salvar(); });
   });
-  ['cr-horas', 'cr-fu', 'cr-re'].forEach((id) => $(id).addEventListener('change', salvar));
+  ['cr-horas'].forEach((id) => $(id).addEventListener('change', salvar));
+  $('lem-editar').addEventListener('click', () => { const ab = $('lem-edit').classList.toggle('oculto'); $('lem-editar').textContent = ab ? 'Editar' : 'Fechar'; $('lem-editar').setAttribute('aria-expanded', String(!ab)); $('lem-editar').closest('.seq-fluxo').classList.toggle('aberto', !ab); });
+  $('cr-horas').addEventListener('input', () => { $('lem-chip-h').textContent = `★ ${$('cr-horas').value || 0}h antes`; });
+  $('au-lem-mod').addEventListener('change', () => { $('lem-chip-m').textContent = $('au-lem-mod').value || 'sem modelo'; });
+  iniciarSequencias(site);
 
   const desenharExemplos = () => {
     const vars = [...new Set([...$('md-texto').value.matchAll(/\{\{(\d+)\}\}/g)].map((m) => Number(m[1])))].sort((a, b) => a - b);
@@ -2538,6 +2597,148 @@ async function telaModelos() {
   $('md-recarregar').addEventListener('click', listarModelos);
   listarModelos();
 }
+// ---------- Sequências automáticas (editor) ----------
+const FLUXOS = {
+  sem_resposta: { t: 'Chamou e sumiu', d: 'Mandou mensagem e não respondeu mais.', ic: 'm_conversas', ancora: 'depois que a conversa parou', grupo: 'antes' },
+  nao_agendou: { t: 'Respondeu e não agendou', d: 'Conversou, mas não chegou em agendar.', ic: 'm_tarefas', ancora: 'depois que a conversa parou', grupo: 'antes' },
+  reativacao: { t: 'Reativação', d: 'Já veio pelo menos 1 vez e está sem vir.', ic: 'm_funil', ancora: 'depois de completar os dias sem vir', grupo: 'cliente' },
+};
+const GRUPOS_SEQ = {
+  antes: { t: 'Pra quem chamou e não agendou', d: 'Recupera o lead que veio do anúncio ou do link e esfriou. Os primeiros passos saem nas 24h do WhatsApp (grátis); depois disso, só modelo aprovado.' },
+  cliente: { t: 'Pra quem já é cliente e sumiu', d: 'Traz de volta quem já cortou e passou do tempo. Conta da última ida (Registrar ida ou lista do mês). Não manda pra quem tem horário marcado.' },
+};
+const ROT_TIPO = { texto: 'Texto', botao: 'Botão', modelo: 'Modelo' };
+function tempoCurto(min) { if (!Number(min)) return 'na hora'; const [n, u] = esperaPartes(min); return `${n}${u === 'min' ? ' min' : u === 'horas' ? 'h' : n === 1 ? ' dia' : ' dias'}`; }
+const TIPOS_PASSO = {
+  texto: 'Texto livre · grátis (só até 24h da última mensagem dele)',
+  botao: 'Texto com botão "Quero agendar" · grátis (só até 24h)',
+  modelo: 'Modelo aprovado pela Meta · cobra crédito',
+};
+function esperaPartes(min) { min = Number(min) || 0; if (min && min % 1440 === 0) return [min / 1440, 'dias']; if (min && min % 60 === 0) return [min / 60, 'horas']; return [min, 'min']; }
+function iniciarSequencias(site) {
+  const base = JSON.parse(JSON.stringify(site.automacoes || {}));
+  ['sem_resposta', 'nao_agendou', 'reativacao'].forEach((f) => { base[f] = base[f] || { ligado: false, passos: [] }; base[f].passos = base[f].passos || []; });
+  if (base.reativacao.dias == null) base.reativacao.dias = 30;
+  if (base.limite_semana == null) base.limite_semana = 2;
+  if (base.pular_domingo == null) base.pular_domingo = true;
+  estado.seq = base;
+  $('seq-geral').innerHTML = `
+    <div class="seq-g"><label for="seq-limite">Máximo de modelos por pessoa, por semana</label><span class="auto-num"><input type="number" id="seq-limite" min="0" max="7" value="${esc(base.limite_semana)}"><span>por semana</span></span><small>Soma as 3 sequências. Texto livre e botão não contam (são grátis e só saem nas 24h).</small></div>
+    <div class="seq-g"><label class="seq-check"><input type="checkbox" id="seq-domingo" ${base.pular_domingo ? 'checked' : ''}> Não mandar modelo no domingo</label><small>Textos e modelos só saem em horário comercial: texto 8h–21h, modelo 9h–20h.</small></div>
+    <div class="seq-g seq-g-larga"><label for="seq-resp">Resposta quando a pessoa toca em "Quero agendar"</label><textarea id="seq-resp" rows="2">${esc(base.resposta_botao || '')}</textarea><small>Sai na hora e cria uma tarefa URGENTE "agendar" pra barbearia.</small></div>`;
+  const resRegras = () => { $('seq-regras-res').textContent = `· até ${estado.seq.limite_semana} ${estado.seq.limite_semana === 1 ? 'modelo' : 'modelos'} por semana por pessoa${estado.seq.pular_domingo ? ' · sem modelo no domingo' : ''}`; };
+  resRegras();
+  $('seq-limite').addEventListener('input', (e) => { estado.seq.limite_semana = Number(e.target.value) || 0; resRegras(); seqSujo(); });
+  $('seq-domingo').addEventListener('change', (e) => { estado.seq.pular_domingo = e.target.checked; resRegras(); seqSujo(); });
+  $('seq-resp').addEventListener('input', (e) => { estado.seq.resposta_botao = e.target.value; seqSujo(); });
+  $('seq-salvar').addEventListener('click', salvarSequencias);
+  desenharSequencias();
+}
+function seqSujo() { const st = $('seq-status'); if (st) { st.style.color = 'var(--tx2)'; st.textContent = 'Alterações não salvas'; } }
+function desenharSequencias() {
+  const cfg = estado.seq; if (!cfg || !$('seq-fluxos')) return;
+  const aprovados = (estado.modelosLista || []).filter((m) => m.status === 'APPROVED');
+  const info = estado.modelosInfo || {};
+  estado.seqAberto = estado.seqAberto || {};
+  const card = (f, F) => {
+    const fl = cfg[f]; const aberto = !!estado.seqAberto[f];
+    const linha = fl.passos.map((p) => `<span class="seq-chip ${p.tipo}${p.tipo === 'modelo' && !(p.modelos || []).length ? ' vazio' : ''}" title="${esc(ROT_TIPO[p.tipo])} · ${esc(tempoCurto(p.espera_min))}">${p.tipo === 'modelo' ? '★' : p.tipo === 'botao' ? '▣' : '✎'} ${esc(tempoCurto(p.espera_min))}</span>`).join('<i class="seq-seta"></i>');
+    return `<div class="seq-fluxo ${fl.ligado ? 'ligado' : ''} ${aberto ? 'aberto' : ''}" data-fluxo="${f}">
+      <div class="seq-topo"><span class="seq-ic">${icone(F.ic, 16)}</span><div class="seq-tit"><h3>${F.t}</h3><small>${F.d}</small></div>
+        <label class="chavinha" title="Liga ou desliga"><input type="checkbox" data-seq-liga="${f}" ${fl.ligado ? 'checked' : ''}><span></span><b>${fl.ligado ? 'Ligado' : 'Desligado'}</b></label></div>
+      ${f === 'reativacao' ? `<div class="seq-dias"><label for="seq-dias">Começa com</label><span class="auto-num"><input type="number" id="seq-dias" min="7" max="365" value="${esc(fl.dias)}"><span>dias sem vir</span></span></div>` : ''}
+      <div class="seq-linha">${linha || '<span class="seq-resumo">Sem passos</span>'}</div>
+      <div class="seq-rodape"><span class="seq-resumo">${resumoFluxo(f, fl)}</span><button class="btn-sec mini" type="button" data-seq-abrir="${f}" aria-expanded="${aberto}">${aberto ? 'Fechar' : 'Editar passos'}</button></div>
+      ${aberto ? `<ol class="seq-passos">${fl.passos.map((p, i) => passoHTML(f, p, i, fl.passos.length, aprovados, info, F.ancora)).join('')}</ol>
+        <button class="btn-sec mini" type="button" data-seq-add="${f}" style="align-self:flex-start">+ Adicionar passo</button>` : ''}
+    </div>`;
+  };
+  Object.entries(GRUPOS_SEQ).forEach(([g, G]) => { $('seq-g-' + g).innerHTML = `<div class="seq-sec-cab"><h3>${G.t}</h3><p>${G.d}</p></div>
+    <div class="seq-grade">${Object.entries(FLUXOS).filter(([, F]) => F.grupo === g).map(([f, F]) => card(f, F)).join('')}</div>`; });
+  ligarEventosSeq();
+}
+function passoHTML(f, p, i, total, aprovados, info, ancora) {
+  const [n, u] = esperaPartes(p.espera_min);
+  const livre = p.tipo !== 'modelo';
+  const foraJanela = livre && Number(p.espera_min) > 23 * 60;
+  const id = `${f}-${i}`;
+  const textos = (p.textos && p.textos.length ? p.textos : ['']);
+  const chave = `${f}-${i}`; const aberto = estado.seqPasso === chave;
+  const previa = p.tipo === 'modelo' ? ((p.modelos || []).length ? (p.modelos || []).join(', ') : 'nenhum modelo marcado') : (textos[0] || 'sem texto');
+  const nVers = p.tipo === 'modelo' ? (p.modelos || []).length : textos.filter((t) => String(t).trim()).length;
+  if (!aberto) return `<li class="seq-passo fechado" data-f="${f}" data-i="${i}"><button type="button" class="seq-p-cab" data-p-abrir="${chave}">
+    <span class="seq-num">${i + 1}</span><span class="seq-chip ${p.tipo}">${esc(tempoCurto(p.espera_min))}</span><b>${esc(ROT_TIPO[p.tipo])}</b>
+    <span class="seq-prev${p.tipo === 'modelo' && !(p.modelos || []).length ? ' falta' : ''}">${esc(String(previa).replace(/\{nome\}/g, 'João'))}</span>
+    ${nVers > 1 ? `<span class="seq-vers">${nVers} ${p.tipo === 'modelo' ? 'modelos' : 'versões'}</span>` : ''}${foraJanela ? '<span class="seq-vers falta">passa das 24h</span>' : ''}</button></li>`;
+  return `<li class="seq-passo" data-f="${f}" data-i="${i}">
+    <div class="seq-passo-cab"><button type="button" class="link-bt" data-p-abrir="" aria-label="Fechar passo">▾</button><b>Passo ${i + 1}</b>
+      <span class="seq-quando"><input type="number" min="0" aria-label="Tempo do passo ${i + 1}" data-p="n" value="${n}"><select aria-label="Unidade" data-p="u"><option value="min" ${u === 'min' ? 'selected' : ''}>min</option><option value="horas" ${u === 'horas' ? 'selected' : ''}>horas</option><option value="dias" ${u === 'dias' ? 'selected' : ''}>dias</option></select><span>${ancora}</span></span>
+      <span class="seq-acoes"><button class="btn-sec mini" type="button" data-p-mover="-1" ${i === 0 ? 'disabled' : ''} aria-label="Subir">↑</button><button class="btn-sec mini" type="button" data-p-mover="1" ${i === total - 1 ? 'disabled' : ''} aria-label="Descer">↓</button><button class="link-bt" type="button" data-p-tirar>Tirar</button></span></div>
+    <select data-p="tipo" aria-label="Tipo do passo ${i + 1}">${Object.entries(TIPOS_PASSO).map(([k, t]) => `<option value="${k}" ${p.tipo === k ? 'selected' : ''}>${t}</option>`).join('')}</select>
+    ${foraJanela ? `<div class="seq-aviso">Esse passo cai depois das 24h da última mensagem da pessoa. O WhatsApp não deixa mandar texto livre aí: ele vai ser pulado. Troque pra modelo aprovado.</div>` : ''}
+    ${livre ? `${p.tipo === 'botao' ? `<div><label for="bt-${id}">Texto do botão (até 20 letras)</label><input id="bt-${id}" type="text" maxlength="20" data-p="botao" value="${esc(p.botao || 'Quero agendar')}"></div>` : ''}
+      <div class="seq-versoes">${textos.map((t, v) => `<div class="seq-versao"><label for="tx-${id}-${v}">Versão ${v + 1}</label><textarea id="tx-${id}-${v}" rows="2" data-p="texto" data-v="${v}" placeholder="Use {nome} pro primeiro nome">${esc(t)}</textarea>${textos.length > 1 ? `<button class="link-bt" type="button" data-p-tirar-v="${v}">Tirar versão</button>` : ''}</div>`).join('')}</div>
+      <button class="link-bt" type="button" data-p-add-v>+ Outra versão (sorteada)</button>`
+    : `<div class="seq-modelos">${aprovados.length ? aprovados.map((m) => `<label class="seq-modelo"><input type="checkbox" data-p="modelo" value="${esc(m.nome)}" ${(p.modelos || []).includes(m.nome) ? 'checked' : ''}><span><b>${esc(m.nome)}</b> · ${m.categoria === 'MARKETING' ? '10 créditos' : '1 crédito'}${info[m.nome]?.descricao ? ' · ' + esc(info[m.nome].descricao) : ''}<small>${esc(String(m.texto || '').slice(0, 140))}${String(m.texto || '').length > 140 ? '…' : ''}</small></span></label>`).join('')
+        : '<div style="font-size:13px; color:var(--tx3)">Nenhum modelo aprovado ainda. Crie em "Criar modelo" logo abaixo e marque aqui quando a Meta aprovar.</div>'}
+      ${(p.modelos || []).filter((n) => !aprovados.some((m) => m.nome === n)).map((n) => `<div style="font-size:12px; color:var(--alerta)">"${esc(n)}" não está aprovado. Esse modelo não vai.</div>`).join('')}
+      <small style="color:var(--tx3)">Marque um ou mais. O Radar sorteia entre os marcados.${!(p.modelos || []).length ? ' <b style="color:var(--alerta)">Sem nenhum marcado, esse passo é pulado.</b>' : ''}</small></div>`}
+  </li>`;
+}
+function resumoFluxo(f, fl) {
+  if (!fl.passos.length) return 'Sem passos.';
+  const modelos = fl.passos.filter((p) => p.tipo === 'modelo').length; const gratis = fl.passos.length - modelos;
+  const ult = esperaPartes(fl.passos[fl.passos.length - 1].espera_min);
+  return `${fl.passos.length} ${fl.passos.length === 1 ? 'passo' : 'passos'} · ${gratis} grátis · ${modelos} ${modelos === 1 ? 'modelo' : 'modelos'} · até ${modelos * 10} créditos por pessoa`;
+}
+function ligarEventosSeq() {
+  const box = $('seq-fluxos');
+  box.querySelectorAll('[data-seq-liga]').forEach((ch) => ch.addEventListener('change', () => { estado.seq[ch.dataset.seqLiga].ligado = ch.checked; desenharSequencias(); seqSujo(); }));
+  if ($('seq-dias')) $('seq-dias').addEventListener('input', (e) => { estado.seq.reativacao.dias = Number(e.target.value) || 30; seqSujo(); });
+  box.querySelectorAll('[data-seq-abrir]').forEach((b) => b.addEventListener('click', () => { const f = b.dataset.seqAbrir; estado.seqAberto[f] = !estado.seqAberto[f]; estado.seqPasso = null; desenharSequencias(); }));
+  box.querySelectorAll('[data-p-abrir]').forEach((b) => b.addEventListener('click', () => { estado.seqPasso = b.dataset.pAbrir || null; desenharSequencias(); }));
+  box.querySelectorAll('[data-seq-add]').forEach((b) => b.addEventListener('click', () => {
+    const l = estado.seq[b.dataset.seqAdd].passos; const ult = l[l.length - 1];
+    l.push({ espera_min: (Number(ult?.espera_min) || 0) + 7 * 1440, tipo: 'modelo', modelos: [] }); estado.seqPasso = `${b.dataset.seqAdd}-${l.length - 1}`; desenharSequencias(); seqSujo();
+  }));
+  box.querySelectorAll('.seq-passo:not(.fechado)').forEach((li) => {
+    const f = li.dataset.f, i = Number(li.dataset.i); const p = estado.seq[f].passos[i];
+    const tempo = () => { const n = Number(li.querySelector('[data-p="n"]').value) || 0; const u = li.querySelector('[data-p="u"]').value; p.espera_min = Math.round(n * (u === 'dias' ? 1440 : u === 'horas' ? 60 : 1)); seqSujo(); };
+    li.querySelector('[data-p="n"]').addEventListener('input', tempo);
+    li.querySelector('[data-p="n"]').addEventListener('change', () => desenharSequencias());
+    li.querySelector('[data-p="u"]').addEventListener('change', () => { tempo(); desenharSequencias(); });
+    li.querySelector('[data-p="tipo"]').addEventListener('change', (e) => { p.tipo = e.target.value; if (p.tipo !== 'modelo' && !(p.textos || []).length) p.textos = ['']; if (p.tipo === 'modelo') p.modelos = p.modelos || []; desenharSequencias(); seqSujo(); });
+    li.querySelectorAll('[data-p="texto"]').forEach((t) => t.addEventListener('input', () => { p.textos = p.textos && p.textos.length ? p.textos : ['']; p.textos[Number(t.dataset.v)] = t.value; seqSujo(); }));
+    const bt = li.querySelector('[data-p="botao"]'); if (bt) bt.addEventListener('input', () => { p.botao = bt.value; seqSujo(); });
+    li.querySelectorAll('[data-p="modelo"]').forEach((c) => c.addEventListener('change', () => {
+      p.modelos = [...li.querySelectorAll('[data-p="modelo"]:checked')].map((x) => x.value); seqSujo();
+    }));
+    const addV = li.querySelector('[data-p-add-v]'); if (addV) addV.addEventListener('click', () => { p.textos = [...(p.textos || ['']), '']; desenharSequencias(); seqSujo(); });
+    li.querySelectorAll('[data-p-tirar-v]').forEach((b) => b.addEventListener('click', () => { p.textos.splice(Number(b.dataset.pTirarV), 1); desenharSequencias(); seqSujo(); }));
+    li.querySelector('[data-p-tirar]').addEventListener('click', () => { estado.seq[f].passos.splice(i, 1); estado.seqPasso = null; desenharSequencias(); seqSujo(); });
+    li.querySelectorAll('[data-p-mover]').forEach((b) => b.addEventListener('click', () => {
+      const l = estado.seq[f].passos; const j = i + Number(b.dataset.pMover); if (j < 0 || j >= l.length) return;
+      [l[i], l[j]] = [l[j], l[i]]; estado.seqPasso = `${f}-${j}`; desenharSequencias(); seqSujo();
+    }));
+  });
+}
+async function salvarSequencias() {
+  const st = $('seq-status'); const cfg = estado.seq;
+  for (const [f, F] of Object.entries(FLUXOS)) {
+    const fl = cfg[f];
+    fl.passos.forEach((p) => { if (p.tipo !== 'modelo') p.textos = (p.textos || []).map((t) => String(t || '').trim()).filter(Boolean); });
+    for (let i = 1; i < fl.passos.length; i++) if (Number(fl.passos[i].espera_min) <= Number(fl.passos[i - 1].espera_min)) {
+      st.style.color = 'var(--alerta)'; st.textContent = `${F.t}: o passo ${i + 1} tem que vir depois do passo ${i}. Aumente o tempo dele.`; return; }
+    const vazio = fl.passos.findIndex((p) => p.tipo !== 'modelo' && !p.textos.length);
+    if (vazio >= 0) { st.style.color = 'var(--alerta)'; st.textContent = `${F.t}: escreva o texto do passo ${vazio + 1}.`; return; }
+  }
+  st.style.color = 'var(--tx2)'; st.textContent = 'Salvando…';
+  const { error } = await sb.rpc('salvar_fluxos', { p_site: estado.site, p_cfg: cfg });
+  if (error) { st.style.color = 'var(--alerta)'; st.textContent = 'Não consegui salvar: ' + error.message; return; }
+  const s2 = estado.sites.find((x) => x.id === estado.site); if (s2) s2.automacoes = JSON.parse(JSON.stringify(cfg));
+  desenharSequencias();
+  st.style.color = 'var(--verde-claro)'; st.textContent = '✓ Sequências salvas';
+}
 function mostrarPrevia(k, nome) {
   const el = $('pv-' + k); if (!el) return;
   const m = (estado.modelosLista || []).find((x) => x.nome === nome);
@@ -2553,6 +2754,8 @@ async function listarModelos() {
   if (!r.ok) { alvo.innerHTML = `<span style="color:var(--alerta)">${esc(r.erro || 'Erro ao buscar.')}</span>`; return; }
   const info = Object.fromEntries((infos || []).map((i) => [i.nome, i]));
   estado.modelosLista = r.modelos;
+  estado.modelosInfo = info;
+  if ($('seq-fluxos')) desenharSequencias();
   // listas das automações
   const aprovados = r.modelos.filter((m) => m.status === 'APPROVED');
   [['au-lem-mod', 'lembrete'], ['au-fu-mod', 'follow_up'], ['au-re-mod', 'reativacao']].forEach(([id, fin]) => {
@@ -2639,7 +2842,7 @@ async function conectarWhatsapp(siteId) {
     const r = await chamarAdmin({ acao: 'conectar_whatsapp', site_id: siteId, code, waba_id: sessao?.waba_id, phone_number_id: sessao?.phone_number_id });
     if (!r.ok) { st.textContent = r.erro || 'Erro ao conectar.'; st.style.color = 'var(--alerta)'; return; }
     toast('WhatsApp conectado! As novas conversas vão chegar no Radar.');
-    const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo').eq('ativo', true).order('nome');
+    const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo, automacoes').eq('ativo', true).order('nome');
     estado.sites = sites || [];
     telaConfig();
   })(); }, {
@@ -3234,7 +3437,7 @@ async function salvarFunil(op = {}) {
   $('cf-funil-status').textContent = 'Salvando…'; $('cf-funil-status').style.color = 'var(--tx2)';
   const etapas = estado.funilEdit.map((e) => ({
     id: e.id, nome: e.nome, temperatura: e.temperatura, evento_meta: e.evento_meta || null,
-    valor_padrao: e.valor_padrao, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
+    valor_padrao: e.valor_padrao, tipo: e.tipo === 'retorno' ? 'retorno' : null, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
   }));
   const r = await chamarAdmin({ acao: 'salvar_funil', site_id: estado.site, etapas });
   if (!r.ok) { $('cf-funil-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-funil-status').style.color = 'var(--alerta)'; return false; }
@@ -3271,7 +3474,7 @@ async function salvarCliente() {
     wa_token: $('cf-watoken') ? $('cf-watoken').value.trim() : '',
   });
   if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--alerta)'; return false; }
-  const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo, automacoes').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   $('sel-site').innerHTML = estado.sites.map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
   estado.site = r.id; $('sel-site').value = r.id; estado.novoCliente = false;
@@ -3288,7 +3491,7 @@ async function salvarTudo() {
   const cr = { mensal: $('cr-mensal').value, adicionar: $('cr-add').value || 0, motivo: $('cr-motivo').value };
   const etapas = estado.funilEdit.map((e) => ({
     id: e.id, nome: e.nome, temperatura: e.temperatura, evento_meta: e.evento_meta || null,
-    valor_padrao: e.valor_padrao, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
+    valor_padrao: e.valor_padrao, tipo: e.tipo === 'retorno' ? 'retorno' : null, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
   }));
   const rCr = await chamarAdmin({ acao: 'creditos', site_id: site, ...cr });
   if (!rCr.ok) erros.push('Créditos: ' + (rCr.erro || 'erro'));
