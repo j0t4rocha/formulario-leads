@@ -368,6 +368,45 @@
   .selo, .pill, .tag { line-height: 1.4; }
   #tela-dashboard > .linha { margin-bottom: 16px; }
 
+
+  /* ===== Fase 3 · telas ===== */
+  .jornada { list-style: none; margin: 0; padding: 0; position: relative; }
+  .jornada::before { content: ''; position: absolute; left: 13px; top: 10px; bottom: 14px; width: 2px; background: linear-gradient(var(--verde-bd), var(--line2)); }
+  .jornada li { position: relative; display: flex; gap: 12px; padding-bottom: 16px; }
+  .jornada li:last-child { padding-bottom: 0; }
+  .jr-dot { width: 28px; height: 28px; border-radius: 999px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; position: relative; z-index: 1; box-shadow: 0 0 0 4px var(--solido); }
+  .jr-dot .ic { width: 14px; height: 14px; }
+  .jr-dot.msg { background: var(--solido-2); border: 1px solid var(--line); color: var(--tx2); }
+  .jr-dot.etapa { background: var(--verde-bg); border: 1px solid var(--verde-bd); color: var(--verde-claro); }
+  .jr-dot.ok { background: #10B981; color: #04130C; box-shadow: 0 0 0 4px var(--solido), 0 0 14px rgba(16,185,129,.45); }
+  .jr-dot.falta { background: var(--solido-2); border: 1px solid var(--tx3); color: var(--tx2); font-size: 12px; font-weight: 700; }
+  .jr-corpo { flex: 1; min-width: 0; padding-top: 3px; display: flex; flex-direction: column; gap: 3px; }
+  .jr-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .jr-cab b { font-size: 13.5px; font-weight: 600; }
+  .jr-hora { font-family: var(--mono); font-size: 11px; color: var(--tx3); white-space: nowrap; }
+  .jr-desc { font-size: 12.5px; color: var(--tx2); word-break: break-word; }
+  .jr-meta { display: inline-flex; align-items: center; gap: 5px; width: fit-content; margin-top: 3px; font-family: var(--mono); font-size: 11px; padding: 2px 8px; border-radius: 7px; background: var(--verde-bg); border: 1px solid var(--verde-bd); color: var(--verde-claro); }
+  .jr-meta .ic { width: 11px; height: 11px; }
+  .detalhe { padding: 20px; gap: 18px; }
+  .conv { gap: 18px; } .crm { gap: 18px; }
+  .ccard { padding: 13px; gap: 8px; }
+  .meta-bloco { display: flex; flex-direction: column; gap: 14px; }
+  .meta-cab { display: flex; align-items: center; gap: 12px; }
+  .meta-logo { width: 36px; height: 36px; border-radius: 10px; background: #0866FF; color: #fff; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .meta-status { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--solido-2); font-size: 13px; color: var(--tx2); }
+  .meta-status.ok { border-color: var(--verde-bd); background: var(--verde-bg); color: var(--tx); }
+  .meta-status .luz { width: 10px; height: 10px; border-radius: 999px; background: var(--tx3); flex-shrink: 0; }
+  .meta-status.ok .luz { background: #34D399; box-shadow: 0 0 10px #34D399; }
+  .campo-copia { display: flex; gap: 8px; }
+  .campo-copia input { flex: 1; min-width: 0; font-family: var(--mono); font-size: 13px; }
+  .bt-copiar { min-width: 44px; min-height: 44px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .ev-lista { display: flex; flex-direction: column; font-size: 13px; }
+  .ev-lista > div { display: grid; grid-template-columns: 110px 1fr auto; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line2); align-items: center; }
+  .ev-lista .nome-ev { font-family: var(--mono); color: var(--tx); font-size: 12px; }
+  .ev-lista .quem { color: var(--tx2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ev-lista .qd { font-family: var(--mono); font-size: 11px; color: var(--verde-claro); white-space: nowrap; }
+  .copiado { background: #10B981 !important; color: #04130C !important; border-color: #10B981 !important; }
+
   /* ===== tema claro (opcional) ===== */
   html[data-tema="claro"] {
     color-scheme: light;
@@ -508,6 +547,9 @@ const COR = {
 };
 // ícones genéricos (desenhos próprios, não são os logotipos oficiais)
 const IC = {
+  copiar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg>',
+  ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>',
+  seta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
   meta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >  <path d="M12 10.174c1.766 -2.784 3.315 -4.174 4.648 -4.174c2 0 3.263 2.213 4 5.217c.704 2.869 .5 6.783 -2 6.783c-1.114 0 -2.648 -1.565 -4.148 -3.652a27.627 27.627 0 0 1 -2.5 -4.174"/><path d="M12 10.174c-1.766 -2.784 -3.315 -4.174 -4.648 -4.174c-2 0 -3.263 2.213 -4 5.217c-.704 2.869 -.5 6.783 2 6.783c1.114 0 2.648 -1.565 4.148 -3.652c1 -1.391 1.833 -2.783 2.5 -4.174"/></svg>',
   google: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >  <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945"/></svg>',
   whatsapp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >  <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"/><path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1"/></svg>',
@@ -1160,9 +1202,12 @@ async function abrirConversa(id, semMarcar) {
   const c = estado.contatos.find((x) => x.id === id); if (!c) return;
 
   // só as últimas 50 mensagens
-  const [{ data: ult }, { data: hist }] = await Promise.all([
+  const [{ data: ult }, { data: hist }, { data: primEnt }, { data: primSai }, { data: vis }] = await Promise.all([
     sb.from('mensagens').select('*').eq('contato_id', id).order('id', { ascending: false }).limit(POR_PAGINA),
     sb.from('historico_etapas').select('*').eq('contato_id', id).order('criado_em', { ascending: false }),
+    sb.from('mensagens').select('texto, tipo, criado_em').eq('contato_id', id).eq('direcao', 'entrada').order('id', { ascending: true }).limit(1),
+    sb.from('mensagens').select('criado_em').eq('contato_id', id).eq('direcao', 'saida').order('id', { ascending: true }).limit(1),
+    sb.from('visitas').select('data, status, valor, servico, meta_enviado, criado_em').eq('contato_id', id).order('data', { ascending: true }),
   ]);
   if (estado.aberto !== id) return;
   const msgs = (ult || []).slice().reverse();
@@ -1235,12 +1280,60 @@ async function abrirConversa(id, semMarcar) {
         return `<button data-mover="${x.id}" aria-pressed="${sel}" style="color:${sel ? '#06120C' : k.c}; background:${sel ? k.c : k.bg}; border-color:${sel ? k.c : k.bd}; font-weight:${sel ? 700 : 500}">${esc(x.nome)}</button>`;
       }).join('')}
     </div></div>
-    <div><b style="display:block; margin-bottom:8px">Histórico</b><div class="hist">
-      ${(hist || []).map((h) => `<span>${quando(h.criado_em)} · ${esc(nomeEtapa(h.etapa_id))} <span style="color:var(--tx3)">(${esc(h.motivo || '')}${h.enviado_meta ? ' · enviado à Meta' : ''})</span></span>`).join('') || 'Sem histórico.'}
-    </div></div>`;
+    <div><b style="display:block; margin-bottom:10px">Jornada</b>${jornadaHTML(c, hist || [], primEnt?.[0], primSai?.[0], vis || [])}</div>`;
   document.querySelectorAll('[data-mover]').forEach((b) => b.addEventListener('click', () => moverEtapa(c.id, Number(b.dataset.mover))));
   $('ld-salvar').addEventListener('click', () => salvarLead(c.id));
   desenharVisitas(c.id);
+}
+
+// ---------- últimos eventos enviados à Meta (Configurações) ----------
+async function carregarEventosMeta(siteId) {
+  const box = $('cf-eventos'); if (!box) return;
+  const [{ data: hs }, { data: vs }] = await Promise.all([
+    sb.from('historico_etapas').select('criado_em, etapa_id, contato_id, contatos!inner(site_id, nome, telefone)').eq('contatos.site_id', siteId).eq('enviado_meta', true).order('criado_em', { ascending: false }).limit(6),
+    sb.from('visitas').select('criado_em, valor, nome, telefone').eq('site_id', siteId).eq('meta_enviado', true).order('criado_em', { ascending: false }).limit(6),
+  ]);
+  if ($('cf-eventos') !== box) return;
+  const lista = [
+    ...(hs || []).map((h) => { const e = estado.etapas.find((x) => x.id === h.etapa_id); return { t: h.criado_em, ev: e?.evento_meta || 'Evento', quem: h.contatos?.nome || telefoneBonito(h.contatos?.telefone || '') }; }),
+    ...(vs || []).map((v) => ({ t: v.criado_em, ev: 'Purchase', quem: `${v.nome || telefoneBonito(v.telefone || '')}${v.valor != null ? ' · ' + brl(v.valor) : ''}` })),
+  ].sort((a, b) => new Date(b.t) - new Date(a.t)).slice(0, 6);
+  box.innerHTML = lista.length
+    ? lista.map((x) => `<div><span class="nome-ev">${esc(x.ev)}</span><span class="quem">${esc(x.quem)}</span><span class="qd">${quando(x.t)}</span></div>`).join('')
+    : '<div style="display:block; color:var(--tx3)">Nenhum evento de etapa ou venda enviado ainda.</div>';
+}
+
+// ---------- jornada do lead (linha do tempo) ----------
+function jornadaHTML(c, hist, primEnt, primSai, vis) {
+  const ev = [];
+  const fmt = (iso) => new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(',', ' ·');
+  const g = grupoDe(c);
+  const meta = (t) => `<span class="jr-meta">${icone('ok', 12)} ${esc(t)}</span>`;
+  const deOnde = [c.anuncio_titulo, c.campanha].filter(Boolean).map(esc).join(' · ');
+  ev.push({ t: c.criado_em, tipo: 'origem', g, tit: `Chegou por ${g.nome}`, desc: deOnde || (c.lugar ? esc(c.lugar) : '') });
+  if (primEnt) ev.push({ t: primEnt.criado_em, tipo: 'msg', tit: 'Primeira mensagem', desc: primEnt.texto ? `“${esc(String(primEnt.texto).slice(0, 120))}”` : esc('[' + (primEnt.tipo || 'mídia') + ']') });
+  if (primEnt && primSai && new Date(primSai.criado_em) >= new Date(primEnt.criado_em)) {
+    const min = Math.round((new Date(primSai.criado_em) - new Date(primEnt.criado_em)) / 60000);
+    const txt = min < 60 ? `${min} min` : min < 1440 ? `${Math.floor(min / 60)}h ${min % 60}min` : `${Math.floor(min / 1440)} dia(s)`;
+    ev.push({ t: primSai.criado_em, tipo: 'msg', tit: `Respondido em ${txt}`, desc: '' });
+  }
+  hist.forEach((h) => { const e = estado.etapas.find((x) => x.id === h.etapa_id); ev.push({ t: h.criado_em, tipo: 'etapa', tit: `Etapa: ${esc(e?.nome ?? '—')}`, desc: esc(h.motivo || ''), extra: h.enviado_meta ? meta(`${e?.evento_meta || 'Evento'} enviado à Meta`) : '' }); });
+  if (c.lembrete_enviado_em) ev.push({ t: c.lembrete_enviado_em, tipo: 'msg', tit: 'Lembrete automático', desc: c.agendado_em ? `Horário ${fmt(c.agendado_em)}` : '' });
+  vis.forEach((v) => {
+    const t = (v.data ? v.data + 'T12:00:00' : v.criado_em);
+    if (v.status === 'veio') ev.push({ t, tipo: 'ok', dia: true, tit: `Veio${v.valor != null ? ' · ' + brl(v.valor) : ''}`, desc: esc(v.servico || ''), extra: v.meta_enviado ? meta('Purchase enviado à Meta') : '' });
+    else if (v.status === 'faltou') ev.push({ t, tipo: 'falta', dia: true, tit: 'Faltou', desc: esc(v.servico || '') });
+    else ev.push({ t, tipo: 'agenda', dia: true, tit: 'Horário agendado', desc: esc(v.servico || '') });
+  });
+  ev.sort((a, b) => new Date(a.t) - new Date(b.t));
+  const bola = (e) => {
+    if (e.tipo === 'origem') return `<span class="jr-dot" style="background:${e.g.fundo}; color:${e.g.cor}; ${e.g.borda ? 'border:1px solid var(--line);' : ''}">${icone(e.g.ic, 14)}</span>`;
+    if (e.tipo === 'ok') return `<span class="jr-dot ok">${icone('ok', 14)}</span>`;
+    if (e.tipo === 'msg') return `<span class="jr-dot msg">${icone('whatsapp', 13)}</span>`;
+    if (e.tipo === 'falta') return `<span class="jr-dot falta">✕</span>`;
+    return `<span class="jr-dot etapa">${icone('seta', 12)}</span>`;
+  };
+  return `<ol class="jornada">${ev.map((e) => `<li>${bola(e)}<div class="jr-corpo"><div class="jr-cab"><b>${e.tit}</b><span class="jr-hora">${e.dia ? new Date(e.t).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : fmt(e.t)}</span></div>${e.desc ? `<div class="jr-desc">${e.desc}</div>` : ''}${e.extra || ''}</div></li>`).join('')}</ol>`;
 }
 
 // ---------- histórico de idas ao estabelecimento ----------
@@ -2188,20 +2281,31 @@ async function telaConfig() {
         <div style="flex:1 1 260px"><label for="cf-nome">Nome do cliente</label><input id="cf-nome" type="text" value="${esc(site.nome)}" placeholder="Ex.: Barbearia Avante"></div>
         <div style="flex:1 1 220px"><label for="cf-id">ID (aparece no código do site)</label><input id="cf-id" type="text" value="${esc(site.id)}" ${novo ? '' : 'disabled'} placeholder="barbearia-avante"></div>
       </div>
-      <div class="linha">
+      ${novo ? `<div class="linha">
         <div style="flex:1 1 260px"><label for="cf-pixel">ID do pixel</label><input id="cf-pixel" type="text" inputmode="numeric" value="${esc(site.pixel_id)}" placeholder="Gerenciador de Eventos › pixel › Configurações"></div>
-        <div style="flex:1 1 260px"><label for="cf-token">Token da API de Conversões</label><input id="cf-token" type="password" autocomplete="off" placeholder="${novo ? 'Cole o token aqui' : 'Deixe vazio pra manter o atual'}"></div>
-      </div>
+        <div style="flex:1 1 260px"><label for="cf-token">Token da API de Conversões</label><input id="cf-token" type="password" autocomplete="off" placeholder="Cole o token aqui"></div>
+      </div>` : ''}
       <div class="linha">
         <div style="flex:1 1 260px"><label for="cf-dom">Site(s) do cliente, um por linha</label><textarea id="cf-dom" rows="2" style="width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="barbeariaavante.com.br">${esc(dominios)}</textarea></div>
         <div style="flex:1 1 260px"><label for="cf-wpp">ID do número do WhatsApp (phone_number_id)</label><input id="cf-wpp" type="text" inputmode="numeric" value="${esc(site.whatsapp_phone_number_id || '')}" placeholder="App na Meta › WhatsApp › Configuração da API"></div>
       </div>
       <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center">
         <button class="btn" id="cf-salvar">${novo ? 'Cadastrar cliente' : 'Salvar dados'}</button>
-        ${novo ? '<button class="btn-sec" id="cf-cancelar">Cancelar</button>' : '<button class="btn-sec" id="cf-testar">Testar conexão com a Meta</button>'}
+        ${novo ? '<button class="btn-sec" id="cf-cancelar">Cancelar</button>' : ''}
         <span id="cf-status" style="font-size:13px; color:var(--tx2)"></span>
       </div>
     </section>
+    ${novo ? '' : `
+    <section class="card vidro meta-bloco" data-aba="cliente">
+      <div class="meta-cab"><span class="meta-logo">${icone('meta', 20)}</span><div style="flex:1"><h2 style="margin:0">Meta · Pixel e API de Conversões</h2><div style="font-size:12px; color:var(--tx3)">Pra onde vão os eventos de lead e venda deste cliente</div></div></div>
+      <div class="linha">
+        <div style="flex:1 1 260px"><label for="cf-pixel">ID do pixel</label><div class="campo-copia"><input id="cf-pixel" type="text" inputmode="numeric" value="${esc(site.pixel_id)}" placeholder="Gerenciador de Eventos › pixel › Configurações"><button class="btn-sec bt-copiar" type="button" id="cf-copiar-pixel" aria-label="Copiar ID do pixel">${icone('copiar', 16)}</button></div></div>
+        <div style="flex:1 1 260px"><label for="cf-token">Token da API de Conversões</label><input id="cf-token" type="password" autocomplete="off" placeholder="Deixe vazio pra manter o atual"></div>
+      </div>
+      <div class="meta-status" id="cf-meta-status"><span class="luz"></span><span id="cf-meta-txt" style="flex:1">Clique em testar pra conferir a conexão.</span><button class="btn-sec" id="cf-testar" type="button">Testar conexão</button></div>
+      <div><b style="display:block; margin-bottom:4px; font-size:14px">Últimos eventos enviados</b><div class="ev-lista" id="cf-eventos"><div style="display:block; color:var(--tx3)">Carregando…</div></div></div>
+      <div style="font-size:12px; color:var(--tx3)">Pra salvar um pixel ou token novo, use o botão "Salvar dados" acima.</div>
+    </section>`}
 
     ${novo ? '' : `
     <section class="card" data-aba="whatsapp" style="display:flex; flex-direction:column; gap:12px">
@@ -2288,15 +2392,20 @@ async function telaConfig() {
   });
   mostrarCreditosConfig();
   $('cf-testar').addEventListener('click', async () => {
-    $('cf-status').textContent = 'Testando…';
+    const bt = $('cf-testar'); bt.disabled = true; $('cf-meta-txt').textContent = 'Testando…';
     const r = await chamarAdmin({ acao: 'testar_meta', site_id: site.id });
-    $('cf-status').textContent = r.mensagem || r.erro || '';
-    $('cf-status').style.color = r.ok ? 'var(--verde)' : 'var(--alerta)';
+    bt.disabled = false;
+    $('cf-meta-txt').textContent = r.mensagem || r.erro || '';
+    $('cf-meta-status').classList.toggle('ok', !!r.ok);
+    if (r.ok) toast('Conexão com a Meta testada · tudo certo');
   });
-  $('cf-copiar').addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText($('cf-codigo').textContent); $('cf-copiar').textContent = 'Copiado ✓'; }
-    catch (_) { toast('Selecione o código e copie com Ctrl + C.'); }
-  });
+  const copiar = async (bt, texto, msg) => {
+    try { await navigator.clipboard.writeText(texto); bt.classList.add('copiado'); toast(msg); setTimeout(() => bt.classList.remove('copiado'), 1800); }
+    catch (_) { toast('Não deu pra copiar. Selecione e use Ctrl + C.'); }
+  };
+  $('cf-copiar').addEventListener('click', () => copiar($('cf-copiar'), $('cf-codigo').textContent, 'Código copiado'));
+  $('cf-copiar-pixel').addEventListener('click', () => copiar($('cf-copiar-pixel'), $('cf-pixel').value.trim(), 'ID do pixel copiado'));
+  carregarEventosMeta(site.id);
   desenharFunil();
   $('cf-add-etapa').addEventListener('click', () => {
     estado.funilEdit.push({ id: null, nome: '', temperatura: 'morno', evento_meta: null, valor_padrao: null, palavras_txt: '' });
