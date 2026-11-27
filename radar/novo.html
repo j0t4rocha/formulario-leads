@@ -608,6 +608,8 @@
   html[data-tema="claro"] .bt-tema .bola { background: #0F1A13; }
   html:not([data-tema="claro"]) .bt-tema .bola { background: #FFFFFF; }
   @media (max-width: 700px) { main { padding: 20px 16px; } .funil-nome { width: 110px; } nav { max-width: none; } }
+  .mv-sug { display:flex; gap:8px; align-items:center; padding:10px 12px; border-radius:10px; background:rgba(16,185,129,.10); border:1px solid rgba(16,185,129,.35); font-size:13px; color:var(--tx); }
+  .selo.alerta-leve { background:rgba(245,158,11,.0); border:1px dashed var(--tx3); color:var(--tx2); }
 </style>
 </head>
 <body>
@@ -1745,7 +1747,7 @@ async function desenharVisitas(contatoId) {
     <div class="vis-lista">${vs.length ? vs.map((v) => { const [t, cor] = ST[v.status]; const pendente = v.status === 'agendado' && v.data <= hoje;
       return `<div class="vis-item"><span class="vis-data">${v.data.split('-').reverse().join('/')}</span>
         <span style="color:${cor}; font-weight:600">${t}${pendente ? ' · confirmar' : ''}</span>
-        <span style="color:var(--tx2)">${v.valor != null ? brl(v.valor) : ''}${v.servico ? ' · ' + esc(v.servico) : ''}</span>
+        <span style="color:var(--tx2)">${v.valor != null ? brl(v.valor) : (v.status === 'veio' ? '<span class="selo leve">sem valor · espera a lista</span>' : '')}${v.valor_origem === 'conversa' ? ' <span class="selo alerta-leve" title="Valor tirado da conversa. Confira na reunião de alinhamento.">da conversa · conferir</span>' : ''}${v.servico ? ' · ' + esc(v.servico) : ''}</span>
         <span class="vis-acoes">${v.status === 'agendado' ? `<button class="btn-sec mini" data-vis-veio="${v.id}">Veio</button><button class="btn-sec mini" data-vis-faltou="${v.id}">Faltou</button>` : ''}<button class="btn-sec mini" data-vis-del="${v.id}" aria-label="Apagar">✕</button></span></div>`; }).join('')
       : '<div style="font-size:13px; color:var(--tx3)">Nenhuma ida registrada ainda. Marque um agendamento acima, registre aqui ou importe a lista do mês em Resultados.</div>'}</div>
     <details style="margin-top:8px"><summary style="cursor:pointer; font-size:13px; color:var(--verde-claro)">+ Registrar ida</summary>
@@ -1931,14 +1933,36 @@ function dddPadrao() {
 }
 function dinheiro(v) { return (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
 // pergunta quanto o cliente gastou (opcional). Devolve número, null (em branco) ou undefined (cancelou)
-function pedirValor(nomeEtapa, padrao) {
+// valores em dinheiro citados na conversa (mesma regra do servidor)
+function precosNoTexto(texto) {
+  const re = /r\$\s*(\d{1,4}(?:[.,]\d{3})*(?:[.,]\d{1,2})?)|\b(\d{2,4}(?:[.,]\d{1,2})?)\s*(?:reais|real|conto|contos|pila)\b/gi;
+  const out = [];
+  for (const m of String(texto || '').matchAll(re)) { let t = m[1] ?? m[2]; if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.'); const n = Number(t); if (n >= 10 && n <= 5000) out.push(Math.round(n * 100) / 100); }
+  return out;
+}
+async function valorDaConversa(contatoId) {
+  try {
+    const desde = new Date(Date.now() - 45 * 864e5).toISOString();
+    const { data } = await sb.from('mensagens').select('texto').eq('contato_id', contatoId).not('texto', 'is', null).gte('criado_em', desde).order('criado_em', { ascending: false }).limit(80);
+    for (const m of data || []) {
+      const tot = String(m.texto).match(/total[^0-9r$]{0,15}(r\$\s*\d[\d.,]*|\d[\d.,]*\s*(?:reais|real))/i);
+      if (tot) { const p = precosNoTexto(tot[1]); if (p.length) return p[0]; }
+      const p = precosNoTexto(m.texto);
+      if (!p.length || new Set(p).size > 2) continue;
+      return p[p.length - 1];
+    }
+  } catch (_) { /* sem sugestão */ }
+  return null;
+}
+function pedirValor(nomeEtapa, padrao, sugestao) {
   return new Promise((ok) => {
     let dlg = $('modal-valor');
     if (!dlg) { dlg = document.createElement('dialog'); dlg.className = 'modal'; dlg.id = 'modal-valor'; dlg.setAttribute('aria-labelledby', 'mv-titulo'); document.body.appendChild(dlg); }
     dlg.innerHTML = `<form method="dialog" class="corpo" style="display:flex; flex-direction:column; gap:12px; max-width:420px">
       <h2 id="mv-titulo" style="margin:0">Quanto ele gastou?</h2>
       <p style="margin:0; color:var(--tx2); font-size:14px">Vai pra <b>${esc(nomeEtapa)}</b>. O valor vai pra Meta como venda. Não sabe agora? Deixe em branco: ${padrao ? `o Radar usa o valor padrão (${dinheiro(padrao)})` : 'o Radar espera a lista do mês trazer o valor'}.</p>
-      <div><label for="mv-valor">Valor (R$)</label><input id="mv-valor" type="text" inputmode="decimal" placeholder="ex.: 45,00" autocomplete="off"></div>
+      ${sugestao ? `<div class="mv-sug">${icone('whatsapp', 14)}<span>Achei <b>${dinheiro(sugestao)}</b> na conversa. Confira e confirme.</span></div>` : ''}
+      <div><label for="mv-valor">Valor (R$)</label><input id="mv-valor" type="text" inputmode="decimal" placeholder="ex.: 45,00" autocomplete="off" value="${sugestao ? String(sugestao).replace('.', ',') : ''}"></div>
       <div style="display:flex; gap:10px; justify-content:flex-end"><button class="btn-sec" type="button" id="mv-cancelar">Cancelar</button><button class="btn" type="submit" id="mv-ok">Confirmar</button></div>
     </form>`;
     let fim = false; const sair = (v) => { if (fim) return; fim = true; dlg.close(); ok(v); };
@@ -1959,7 +1983,7 @@ async function moverEtapa(contatoId, etapaId, op = {}) {
   const ordAtual = estado.etapas.find((x) => x.id === cAtual?.etapa_id)?.ordem ?? 0;
   let valor = op.valor;
   if (valor === undefined && alvoE?.evento_meta === 'Purchase' && alvoE.ordem > ordAtual) {
-    valor = await pedirValor(alvoE.nome, Number(alvoE.valor_padrao) || 0);
+    valor = await pedirValor(alvoE.nome, Number(alvoE.valor_padrao) || 0, await valorDaConversa(contatoId));
     if (valor === undefined) { if (op.local) telaCRM(); else desenhar(); return; }
   }
   const { data: { session } } = await sb.auth.getSession();
@@ -2703,7 +2727,7 @@ async function telaConfig() {
         <div style="flex:1 1 260px"><label for="cf-token">Token da API de Conversões</label><input id="cf-token" type="password" autocomplete="off" placeholder="Cole o token aqui"></div>
       </div>` : ''}
       <div class="linha">
-        <div style="flex:1 1 260px"><label for="cf-dom">Site(s) do cliente, um por linha</label><textarea id="cf-dom" rows="2" style="width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="barbeariaavante.com.br">${esc(dominios)}</textarea></div>
+        <div style="flex:1 1 260px"><label for="cf-dom">Site(s) do cliente, um por linha · opcional</label><textarea id="cf-dom" rows="2" style="width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="barbeariaavante.com.br">${esc(dominios)}</textarea></div>
       </div>
       <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center">
         <button class="btn" id="cf-salvar">${novo ? 'Cadastrar cliente' : 'Salvar dados'}</button>
@@ -2765,7 +2789,7 @@ async function telaConfig() {
 
     <section class="card" data-aba="cliente" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Código do site</h2>
-      <p style="margin:0; color:var(--tx2)">Cole uma vez no &lt;head&gt; do site do cliente (ou numa tag HTML personalizada do GTM). Ele cuida do pixel e do envio pelo servidor.</p>
+      <p style="margin:0; color:var(--tx2)"><b>Só se o cliente tiver site.</b> Sem site, o Radar funciona igual pelo WhatsApp, anúncios e links rastreáveis. Cole uma vez no &lt;head&gt; do site do cliente (ou numa tag HTML personalizada do GTM). Ele cuida do pixel e do envio pelo servidor.</p>
       <pre id="cf-codigo" class="codigo mono" style="margin:0; overflow-x:auto; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:14px; font-size:12px; line-height:1.6; white-space:pre">${esc(`<script src="${TRACKER_URL}"\n  data-site="${site.id}"\n  data-endpoint="${ENDPOINT_TRACK}"\n  data-pixel="${site.pixel_id}"\n  defer><\/script>`)}</pre>
       <div><button class="btn-sec" id="cf-copiar">Copiar código</button></div>
     </section>
