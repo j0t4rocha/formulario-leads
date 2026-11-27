@@ -1129,7 +1129,9 @@ async function abrirImportar() {
     const sel = (k, rot, obrig) => `<div style="flex:1 1 130px"><label for="mp-${k}">${rot}${obrig ? ' *' : ''}</label><select id="mp-${k}"><option value="-1">${obrig ? 'Escolha…' : 'Não tem'}</option>${cab.map((h, i) => `<option value="${i}" ${chute[k] === i ? 'selected' : ''}>${esc(h)}</option>`).join('')}</select></div>`;
     $('imp-mapa').innerHTML = `<div style="font-size:13px; color:var(--tx2); margin-bottom:6px">${dados.length} ${dados.length === 1 ? 'linha encontrada' : 'linhas encontradas'}. Confira qual coluna é cada coisa:</div>
       <div class="linha">${sel('telefone', 'Telefone', 1)}${sel('data', 'Data', 0)}${sel('valor', 'Valor', 0)}${sel('nome', 'Nome', 0)}${sel('servico', 'Serviço', 0)}</div>
-      <div id="imp-sem-data" class="linha" style="margin-top:6px"><div style="flex:0 1 220px"><label for="imp-data-unica">Sem coluna de data? Use este dia pra todos</label><input id="imp-data-unica" type="date" value="${hojeISO()}"></div></div>
+      <div id="imp-sem-data" class="linha" style="margin-top:6px"><div style="flex:0 1 220px"><label for="imp-data-unica">Sem coluna de data? Use este dia pra todos</label><input id="imp-data-unica" type="date" value="${hojeISO()}"></div>
+        <div style="flex:0 1 220px"><label for="imp-ddd">DDD pra número sem DDD</label><input id="imp-ddd" type="text" inputmode="numeric" maxlength="2" value="${dddPadrao()}" placeholder="ex.: 21"></div></div>
+      <div style="font-size:12px; color:var(--tx3); margin-top:6px">O Radar reconhece o número com ou sem 9, com ou sem +55, com espaço, traço ou parênteses. Se a mesma ida já estava marcada sem valor, a lista completa o valor.</div>
       <div style="overflow-x:auto; margin-top:8px"><table style="width:100%; border-collapse:collapse; font-size:12px">${[cab, ...dados.slice(0, 4)].map((l, i) => `<tr style="${i ? 'border-top:1px solid var(--line2)' : 'color:var(--tx3)'}">${l.map((x) => `<td style="padding:5px 6px; white-space:nowrap">${esc(String(x ?? ''))}</td>`).join('')}</tr>`).join('')}</table></div>`;
     $('imp-ok').disabled = false;
   };
@@ -1158,13 +1160,15 @@ async function abrirImportar() {
       valor: col('valor') >= 0 ? l[col('valor')] : null, nome: col('nome') >= 0 ? String(l[col('nome')] ?? '') : null, servico: col('servico') >= 0 ? String(l[col('servico')] ?? '') : null,
     }));
     $('imp-ok').disabled = true; $('imp-status').style.color = 'var(--tx2)'; $('imp-status').textContent = `Importando ${linhas.length} linhas…`;
-    const r = await chamarVisitas({ acao: 'importar', site_id: estado.site, linhas });
+    const r = await chamarVisitas({ acao: 'importar', site_id: estado.site, ddd: ($('imp-ddd')?.value || '').replace(/\D/g, ''), linhas });
     $('imp-ok').disabled = false;
     if (!r.ok) { $('imp-status').textContent = r.erro || 'Erro ao importar.'; $('imp-status').style.color = 'var(--alerta)'; return; }
     $('imp-mapa').innerHTML = `<div class="fid-grade">
       <div><b>${r.importadas}</b><span>idas registradas</span><small>de ${r.linhas} linhas</small></div>
       <div><b>${r.de_leads}</b><span>são de quem chamou no WhatsApp</span><small>${r.leads_atualizados} ${r.leads_atualizados === 1 ? 'conversa atualizada' : 'conversas atualizadas'} no funil</small></div>
       <div><b>${r.agendamentos_confirmados}</b><span>agendamentos confirmados</span><small>marcados como "veio"</small></div>
+      <div><b>${dinheiro(r.valor_total || 0)}</b><span>em valores na lista</span><small>${r.compras_enviadas || 0} ${(r.compras_enviadas || 0) === 1 ? 'venda enviada' : 'vendas enviadas'} pra Meta com valor</small></div>
+      <div><b>${r.valores_completados || 0}</b><span>valores completados</span><small>idas que estavam sem valor</small></div>
       <div><b>${r.repetidas + r.invalidas}</b><span>ignoradas</span><small>${r.repetidas} repetidas · ${r.invalidas} sem telefone/data</small></div></div>`;
     $('imp-status').style.color = 'var(--verde-claro)'; $('imp-status').textContent = '✓ Lista importada';
     await carregar();
@@ -1921,18 +1925,55 @@ function arrastavel(card) {
 }
 
 // ================= MOVER ETAPA =================
+function dddPadrao() {
+  const n = {}; (estado.contatos || []).forEach((c) => { let k = String(c.chave_tel || ''); if (!k) { k = String(c.telefone || '').replace(/\D/g, ''); if (k.length >= 12 && k.startsWith('55')) k = k.slice(2); } if (k.length >= 10) n[k.slice(0, 2)] = (n[k.slice(0, 2)] || 0) + 1; });
+  return Object.entries(n).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
+}
+function dinheiro(v) { return (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+// pergunta quanto o cliente gastou (opcional). Devolve número, null (em branco) ou undefined (cancelou)
+function pedirValor(nomeEtapa, padrao) {
+  return new Promise((ok) => {
+    let dlg = $('modal-valor');
+    if (!dlg) { dlg = document.createElement('dialog'); dlg.className = 'modal'; dlg.id = 'modal-valor'; dlg.setAttribute('aria-labelledby', 'mv-titulo'); document.body.appendChild(dlg); }
+    dlg.innerHTML = `<form method="dialog" class="corpo" style="display:flex; flex-direction:column; gap:12px; max-width:420px">
+      <h2 id="mv-titulo" style="margin:0">Quanto ele gastou?</h2>
+      <p style="margin:0; color:var(--tx2); font-size:14px">Vai pra <b>${esc(nomeEtapa)}</b>. O valor vai pra Meta como venda. Não sabe agora? Deixe em branco: ${padrao ? `o Radar usa o valor padrão (${dinheiro(padrao)})` : 'o Radar espera a lista do mês trazer o valor'}.</p>
+      <div><label for="mv-valor">Valor (R$)</label><input id="mv-valor" type="text" inputmode="decimal" placeholder="ex.: 45,00" autocomplete="off"></div>
+      <div style="display:flex; gap:10px; justify-content:flex-end"><button class="btn-sec" type="button" id="mv-cancelar">Cancelar</button><button class="btn" type="submit" id="mv-ok">Confirmar</button></div>
+    </form>`;
+    let fim = false; const sair = (v) => { if (fim) return; fim = true; dlg.close(); ok(v); };
+    $('mv-cancelar').addEventListener('click', () => sair(undefined));
+    dlg.addEventListener('cancel', (e) => { e.preventDefault(); sair(undefined); }, { once: true });
+    dlg.querySelector('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      let t = ($('mv-valor').value || '').replace(/[^\d,.]/g, ''); if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.');
+      const n = Number(t); sair(t && n > 0 ? Math.round(n * 100) / 100 : null);
+    });
+    dlg.showModal(); setTimeout(() => $('mv-valor')?.focus(), 30);
+  });
+}
+
 async function moverEtapa(contatoId, etapaId, op = {}) {
+  const alvoE = estado.etapas.find((x) => x.id === etapaId);
+  const cAtual = estado.contatos.find((x) => x.id === contatoId);
+  const ordAtual = estado.etapas.find((x) => x.id === cAtual?.etapa_id)?.ordem ?? 0;
+  let valor = op.valor;
+  if (valor === undefined && alvoE?.evento_meta === 'Purchase' && alvoE.ordem > ordAtual) {
+    valor = await pedirValor(alvoE.nome, Number(alvoE.valor_padrao) || 0);
+    if (valor === undefined) { if (op.local) telaCRM(); else desenhar(); return; }
+  }
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { location.reload(); return; }
   try {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/${FN_MOVER}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_KEY },
-      body: JSON.stringify({ contato_id: contatoId, etapa_id: etapaId }),
+      body: JSON.stringify({ contato_id: contatoId, etapa_id: etapaId, valor: valor ?? null }),
     });
     const j = await res.json().catch(() => ({}));
     if (!res.ok || !j.ok) { toast(j.erro || 'Não foi possível mudar a etapa.'); if (op.local) telaCRM(); return; }
-    toast(j.enviado_meta ? 'Etapa atualizada e evento enviado à Meta.' : 'Etapa atualizada.');
+    toast(j.enviado_meta ? (valor ? `Etapa atualizada e venda de ${dinheiro(valor)} enviada à Meta.` : 'Etapa atualizada e evento enviado à Meta.')
+      : j.aguardando_valor ? 'Etapa atualizada. A venda vai pra Meta quando a lista do mês trouxer o valor.' : 'Etapa atualizada.');
     if (op.local) {
       const c = estado.contatos.find((x) => x.id === contatoId); if (c) c.etapa_id = etapaId;
       const velho = document.querySelector(`#crm [data-card="${contatoId}"]`); const e = estado.etapas.find((x) => x.id === etapaId);
@@ -2855,7 +2896,7 @@ function desenharFunil() {
             <div style="margin-top:8px"><label for="et-ev-${i}">Evento</label><select id="et-ev-${i}" data-campo="evento_sel" data-i="${i}">${opcoesEvento(e.evento_meta)}</select></div>
             ${personalizado || e._personalizado ? `<div style="margin-top:8px"><label for="et-evp-${i}">Nome do evento personalizado (sem espaço)</label><input id="et-evp-${i}" type="text" data-campo="evento_meta" data-i="${i}" value="${esc(e.evento_meta || '')}" placeholder="Ex.: AgendouCorte"></div>` : ''}
           </details></div>
-        ${e.evento_meta === 'Purchase' || e.valor_padrao ? `<div style="max-width:220px"><label for="et-valor-${i}">Valor padrão da venda (R$)</label><input id="et-valor-${i}" type="text" inputmode="decimal" data-campo="valor_padrao" data-i="${i}" value="${e.valor_padrao ?? ''}" placeholder="ex.: 45"></div>` : ''}
+        ${e.evento_meta === 'Purchase' || e.valor_padrao ? `<div style="max-width:220px"><label for="et-valor-${i}">Valor padrão da venda (R$) · opcional</label><input id="et-valor-${i}" type="text" inputmode="decimal" data-campo="valor_padrao" data-i="${i}" value="${e.valor_padrao ?? ''}" placeholder="ex.: 45"></div>` : ''}
         <div><label for="et-pal-${i}">Palavras que levam o contato pra cá sozinho (separadas por vírgula)</label><input id="et-pal-${i}" type="text" data-campo="palavras_txt" data-i="${i}" value="${esc(e.palavras_txt || '')}" placeholder="agendado, confirmado, marcado"></div>
         <div class="fx-teste"><label for="et-teste-${i}">Teste uma mensagem</label><input id="et-teste-${i}" type="text" data-teste="${i}" placeholder="ex.: fechado, pode marcar sábado 10h"><div class="fx-res" id="et-res-${i}"></div></div>
         <div style="display:flex; justify-content:flex-end"><button class="link-bt" data-acao="remover" data-i="${i}" aria-label="Remover etapa ${i + 1}">Apagar etapa</button></div>
@@ -2954,7 +2995,7 @@ function semAcentoJs(t) { return String(t || '').normalize('NFD').replace(/[\u03
 function avisosFunil() {
   const l = estado.funilEdit || [];
   const av = [];
-  l.forEach((e) => { if (e.evento_meta === 'Purchase' && !e.valor_padrao) av.push(`<b>${esc(e.nome || 'Uma etapa')}</b> avisa “Comprou”, mas está sem valor padrão. As vendas vão chegar na Meta sem valor.`); });
+  l.forEach((e) => { if (e.evento_meta === 'Purchase' && !e.valor_padrao && e.tipo !== 'retorno') av.push(`<b>${esc(e.nome || 'Uma etapa')}</b> avisa “Comprou” sem valor padrão: o Radar pergunta o valor quando você mover alguém pra cá. Se ficar em branco, a venda espera a lista do mês trazer o valor.`); });
   const compras = l.filter((e) => e.evento_meta === 'Purchase' && e.tipo !== 'retorno');
   if (compras.length > 1) av.push(`${compras.map((e) => '<b>' + esc(e.nome) + '</b>').join(' e ')} avisam “Comprou”: a mesma venda pode contar em dobro na Meta.`);
   const box = $('cf-funil-avisos'); if (box) box.innerHTML = av.map((t) => `<div class="fx-aviso">${icone('ajuda', 16)}<span>${t}</span></div>`).join('');
