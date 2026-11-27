@@ -2608,7 +2608,7 @@ const GRUPOS_SEQ = {
   cliente: { t: 'Pra quem já é cliente e sumiu', d: 'Traz de volta quem já cortou e passou do tempo. Conta da última ida (Registrar ida ou lista do mês). Não manda pra quem tem horário marcado.' },
 };
 const ROT_TIPO = { texto: 'Texto', botao: 'Botão', modelo: 'Modelo' };
-function tempoCurto(min) { const [n, u] = esperaPartes(min); return `${n}${u === 'min' ? ' min' : u === 'horas' ? 'h' : n === 1 ? ' dia' : ' dias'}`; }
+function tempoCurto(min) { if (!Number(min)) return 'na hora'; const [n, u] = esperaPartes(min); return `${n}${u === 'min' ? ' min' : u === 'horas' ? 'h' : n === 1 ? ' dia' : ' dias'}`; }
 const TIPOS_PASSO = {
   texto: 'Texto livre · grátis (só até 24h da última mensagem dele)',
   botao: 'Texto com botão "Quero agendar" · grátis (só até 24h)',
