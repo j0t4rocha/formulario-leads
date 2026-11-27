@@ -626,7 +626,8 @@
   .seq-passo { display:flex; flex-direction:column; gap:8px; padding:12px; border:1px solid var(--line2); border-radius:12px; background:var(--campo); }
   .seq-passo-cab { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
   .seq-quando { display:flex; gap:6px; align-items:center; flex-wrap:wrap; font-size:13px; color:var(--tx2); }
-  .seq-quando input { width:72px; } .seq-quando select { width:auto; min-width:90px; }
+  .seq-quando { flex-wrap:nowrap; } .seq-quando > input { width:72px; flex:0 0 72px; } .seq-quando .sel { flex:0 0 110px; width:110px; } .seq-quando > span { white-space:nowrap; }
+  .seq-passo-cab > b { flex:0 0 auto; }
   .seq-acoes { margin-left:auto; display:flex; gap:6px; align-items:center; }
   .seq-versoes { display:flex; flex-direction:column; gap:8px; }
   .seq-versao label { font-size:12px; color:var(--tx3); }
