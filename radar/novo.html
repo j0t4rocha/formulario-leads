@@ -608,6 +608,12 @@
   html[data-tema="claro"] .bt-tema .bola { background: #0F1A13; }
   html:not([data-tema="claro"]) .bt-tema .bola { background: #FFFFFF; }
   @media (max-width: 700px) { main { padding: 20px 16px; } .funil-nome { width: 110px; } nav { max-width: none; } }
+  .sv-drop { display:flex; flex-direction:column; align-items:center; gap:4px; padding:22px 16px; border:1.5px dashed var(--campo-bd); border-radius:14px; background:var(--campo); cursor:pointer; text-align:center; color:var(--tx2); transition:border-color .15s, background .15s; }
+  .sv-drop:hover, .sv-drop.arrastando { border-color:var(--verde); background:rgba(16,185,129,.08); color:var(--tx); }
+  .sv-drop small { color:var(--tx3); font-size:12px; }
+  .sv-lista { display:flex; flex-direction:column; gap:6px; }
+  .sv-cab, .sv-linha { display:grid; grid-template-columns:minmax(0,1fr) 120px auto; gap:8px; align-items:center; }
+  .sv-cab { font-size:12px; color:var(--tx3); padding:0 2px; }
   .mv-sug { display:flex; gap:8px; align-items:center; padding:10px 12px; border-radius:10px; background:rgba(16,185,129,.10); border:1px solid rgba(16,185,129,.35); font-size:13px; color:var(--tx); }
   .selo.alerta-leve { background:rgba(245,158,11,.0); border:1px dashed var(--tx3); color:var(--tx2); }
 </style>
@@ -710,6 +716,7 @@ const COR = {
 };
 // ícones genéricos (desenhos próprios, não são os logotipos oficiais)
 const IC = {
+  upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m6 10 6-6 6 6"/><path d="M4 20h16"/></svg>',
   camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3"/></svg>',
   m_resultados: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 15v-4"/><path d="M12 15V7"/><path d="M17 15v-6"/></svg>',
   m_tarefas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l2 2 4-4"/><rect x="4" y="4" width="16" height="16" rx="3"/></svg>',
@@ -1747,7 +1754,7 @@ async function desenharVisitas(contatoId) {
     <div class="vis-lista">${vs.length ? vs.map((v) => { const [t, cor] = ST[v.status]; const pendente = v.status === 'agendado' && v.data <= hoje;
       return `<div class="vis-item"><span class="vis-data">${v.data.split('-').reverse().join('/')}</span>
         <span style="color:${cor}; font-weight:600">${t}${pendente ? ' · confirmar' : ''}</span>
-        <span style="color:var(--tx2)">${v.valor != null ? brl(v.valor) : (v.status === 'veio' ? '<span class="selo leve">sem valor · espera a lista</span>' : '')}${v.valor_origem === 'conversa' ? ' <span class="selo alerta-leve" title="Valor tirado da conversa. Confira na reunião de alinhamento.">da conversa · conferir</span>' : ''}${v.servico ? ' · ' + esc(v.servico) : ''}</span>
+        <span style="color:var(--tx2)">${v.valor != null ? brl(v.valor) : (v.status === 'veio' ? '<span class="selo leve">sem valor · espera a lista</span>' : '')}${v.valor_origem === 'conversa' ? ' <span class="selo alerta-leve" title="Valor tirado da conversa. Confira na reunião de alinhamento.">da conversa · conferir</span>' : v.valor_origem === 'servico' ? ' <span class="selo alerta-leve" title="Estimado pela tabela de serviços. Confira na reunião de alinhamento.">pela tabela · conferir</span>' : ''}${v.servico ? ' · ' + esc(v.servico) : ''}</span>
         <span class="vis-acoes">${v.status === 'agendado' ? `<button class="btn-sec mini" data-vis-veio="${v.id}">Veio</button><button class="btn-sec mini" data-vis-faltou="${v.id}">Faltou</button>` : ''}<button class="btn-sec mini" data-vis-del="${v.id}" aria-label="Apagar">✕</button></span></div>`; }).join('')
       : '<div style="font-size:13px; color:var(--tx3)">Nenhuma ida registrada ainda. Marque um agendamento acima, registre aqui ou importe a lista do mês em Resultados.</div>'}</div>
     <details style="margin-top:8px"><summary style="cursor:pointer; font-size:13px; color:var(--verde-claro)">+ Registrar ida</summary>
@@ -1940,6 +1947,73 @@ function precosNoTexto(texto) {
   for (const m of String(texto || '').matchAll(re)) { let t = m[1] ?? m[2]; if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.'); const n = Number(t); if (n >= 10 && n <= 5000) out.push(Math.round(n * 100) / 100); }
   return out;
 }
+const STOP_SV = new Set(['de', 'do', 'da', 'dos', 'das', 'com', 'mais', 'para', 'pra', 'um', 'uma', 'no', 'na', 'em', 'ou', 'kit', 'combo', 'quero', 'agendar', 'marcar', 'hoje', 'amanha', 'horario', 'fazer', 'queria', 'gostaria', 'tem', 'vaga', 'quanto', 'valor', 'preco', 'fica', 'por', 'favor', 'bom', 'boa', 'dia', 'tarde', 'noite']);
+function semAcentoSv(t) { return String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+function tokensSv(t) { return semAcentoSv(t).split(/[^a-z0-9]+/).filter((w) => w.length >= 3 && !STOP_SV.has(w) && !/^\d+$/.test(w)).map((w) => (w.length > 4 && w.endsWith('s') ? w.slice(0, -1) : w)); }
+// estima o valor pelos serviços citados num texto (tabela de serviços do cliente)
+function estimarServico(servicos, texto) {
+  const msg = new Set(tokensSv(texto));
+  if (!msg.size || !servicos || !servicos.length) return null;
+  const sv = servicos.map((s) => ({ nome: s.nome, valor: Number(s.valor) || 0, tk: [...new Set(tokensSv(s.nome))] })).filter((s) => s.tk.length && s.valor > 0);
+  const base = new Set(sv.map((s) => s.tk[0]));
+  const usados = new Set(); let total = 0; const itens = [];
+  const cheios = sv.filter((s) => s.tk.length >= 2 && s.tk.every((w) => msg.has(w))).sort((a, b) => b.tk.length - a.tk.length);
+  for (const s of cheios) {
+    if (s.tk.some((w) => usados.has(w))) continue;
+    const iguais = cheios.filter((x) => x.tk.length === s.tk.length && x.tk.every((w) => s.tk.includes(w)));
+    total += iguais.reduce((a, x) => a + x.valor, 0) / iguais.length; itens.push(s.nome);
+    s.tk.forEach((w) => usados.add(w));
+  }
+  for (const k of base) {
+    if (!msg.has(k) || usados.has(k)) continue;
+    const cand = sv.filter((s) => s.tk.includes(k) && s.tk.every((w) => w === k || !base.has(w)));
+    if (!cand.length) continue;
+    total += cand.reduce((a, x) => a + x.valor, 0) / cand.length;
+    itens.push(cand.length > 1 ? `${k} (média de ${cand.length})` : cand[0].nome);
+    usados.add(k);
+  }
+  return total > 0 ? { valor: Math.round(total * 100) / 100, itens } : null;
+}
+
+// lê a tabela de serviços de um texto (uma linha por serviço: "Corte social ..... R$ 40,00")
+function servicosDoTexto(txt) {
+  const out = [];
+  for (const l of String(txt || '').split(/\r?\n/)) {
+    const m = l.match(/^(.*?[a-zA-ZÀ-ú].*?)[\s.:;|\-–—_]*(?:r\$\s*)?(\d{1,5}(?:[.,]\d{3})*(?:[.,]\d{1,2})?)\s*(?:reais)?\s*$/i);
+    if (!m) continue;
+    const nome = m[1].replace(/r\$\s*$/i, '').replace(/[\s.:;|\-–—_]+$/, '').trim(); let v = m[2]; if (v.includes(',')) v = v.replace(/\./g, '').replace(',', '.');
+    const n = Number(v); if (nome && n > 0 && n <= 100000) out.push({ nome: nome.slice(0, 120), valor: Math.round(n * 100) / 100 });
+  }
+  return out;
+}
+function servicosDasLinhas(linhas) {
+  const out = [];
+  for (const l of linhas) {
+    const cel = l.map((x) => String(x ?? '').trim());
+    const nome = cel.find((x) => /[a-zA-ZÀ-ú]{2,}/.test(x) && !/^r\$/i.test(x));
+    let valor = null;
+    for (let i = cel.length - 1; i >= 0; i--) { const m = cel[i].replace(/r\$|\s|reais/gi, '').match(/^\d{1,5}(?:[.,]\d{3})*(?:[.,]\d{1,2})?$/); if (m) { let v = m[0]; if (v.includes(',')) v = v.replace(/\./g, '').replace(',', '.'); valor = Number(v); break; } }
+    if (nome && valor > 0 && valor <= 100000) out.push({ nome: nome.slice(0, 120), valor: Math.round(valor * 100) / 100 });
+  }
+  return out;
+}
+async function servicosDoSite(siteId) {
+  estado.cacheServicos = estado.cacheServicos || {};
+  if (!estado.cacheServicos[siteId]) { const { data } = await sb.from('servicos').select('nome, valor').eq('site_id', siteId).order('ordem'); estado.cacheServicos[siteId] = data || []; }
+  return estado.cacheServicos[siteId];
+}
+// sugestão de valor: 1º valor em R$ combinado na conversa; 2º serviços citados pelo cliente × tabela de serviços
+async function sugestaoValor(contatoId) {
+  const v = await valorDaConversa(contatoId);
+  if (v) return { valor: v, texto: `Achei <b>${dinheiro(v)}</b> na conversa.` };
+  try {
+    const sv = await servicosDoSite(estado.site); if (!sv.length) return null;
+    const desde = new Date(Date.now() - 45 * 864e5).toISOString();
+    const { data } = await sb.from('mensagens').select('texto, direcao').eq('contato_id', contatoId).eq('direcao', 'entrada').not('texto', 'is', null).gte('criado_em', desde).order('criado_em', { ascending: false }).limit(80);
+    for (const m of data || []) { const e = estimarServico(sv, m.texto); if (e) return { valor: e.valor, texto: `Ele pediu <b>${esc(e.itens.join(' + '))}</b>: pela tabela de serviços, <b>${dinheiro(e.valor)}</b>.` }; }
+  } catch (_) { /* sem sugestão */ }
+  return null;
+}
 async function valorDaConversa(contatoId) {
   try {
     const desde = new Date(Date.now() - 45 * 864e5).toISOString();
@@ -1961,8 +2035,8 @@ function pedirValor(nomeEtapa, padrao, sugestao) {
     dlg.innerHTML = `<form method="dialog" class="corpo" style="display:flex; flex-direction:column; gap:12px; max-width:420px">
       <h2 id="mv-titulo" style="margin:0">Quanto ele gastou?</h2>
       <p style="margin:0; color:var(--tx2); font-size:14px">Vai pra <b>${esc(nomeEtapa)}</b>. O valor vai pra Meta como venda. Não sabe agora? Deixe em branco: ${padrao ? `o Radar usa o valor padrão (${dinheiro(padrao)})` : 'o Radar espera a lista do mês trazer o valor'}.</p>
-      ${sugestao ? `<div class="mv-sug">${icone('whatsapp', 14)}<span>Achei <b>${dinheiro(sugestao)}</b> na conversa. Confira e confirme.</span></div>` : ''}
-      <div><label for="mv-valor">Valor (R$)</label><input id="mv-valor" type="text" inputmode="decimal" placeholder="ex.: 45,00" autocomplete="off" value="${sugestao ? String(sugestao).replace('.', ',') : ''}"></div>
+      ${sugestao ? `<div class="mv-sug">${icone('whatsapp', 14)}<span>${sugestao.texto} Confira e confirme.</span></div>` : ''}
+      <div><label for="mv-valor">Valor (R$)</label><input id="mv-valor" type="text" inputmode="decimal" placeholder="ex.: 45,00" autocomplete="off" value="${sugestao ? String(sugestao.valor).replace('.', ',') : ''}"></div>
       <div style="display:flex; gap:10px; justify-content:flex-end"><button class="btn-sec" type="button" id="mv-cancelar">Cancelar</button><button class="btn" type="submit" id="mv-ok">Confirmar</button></div>
     </form>`;
     let fim = false; const sair = (v) => { if (fim) return; fim = true; dlg.close(); ok(v); };
@@ -1983,7 +2057,7 @@ async function moverEtapa(contatoId, etapaId, op = {}) {
   const ordAtual = estado.etapas.find((x) => x.id === cAtual?.etapa_id)?.ordem ?? 0;
   let valor = op.valor;
   if (valor === undefined && alvoE?.evento_meta === 'Purchase' && alvoE.ordem > ordAtual) {
-    valor = await pedirValor(alvoE.nome, Number(alvoE.valor_padrao) || 0, await valorDaConversa(contatoId));
+    valor = await pedirValor(alvoE.nome, Number(alvoE.valor_padrao) || 0, await sugestaoValor(contatoId));
     if (valor === undefined) { if (op.local) telaCRM(); else desenhar(); return; }
   }
   const { data: { session } } = await sb.auth.getSession();
@@ -2692,6 +2766,89 @@ function slug(t) {
     .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
 }
 
+// ---------- Serviços e valores (tabela de preços do cliente) ----------
+function desenharServicos() {
+  const l = estado.servicosEdit || [];
+  $('sv-lista').innerHTML = l.length ? `<div class="sv-cab"><span>Serviço</span><span>Valor (R$)</span><span></span></div>` + l.map((s, i) => `<div class="sv-linha">
+      <input type="text" aria-label="Nome do serviço ${i + 1}" data-sv="nome" data-i="${i}" value="${esc(s.nome)}" placeholder="Ex.: Corte social">
+      <input type="text" inputmode="decimal" aria-label="Valor do serviço ${i + 1}" data-sv="valor" data-i="${i}" value="${s.valor === '' || s.valor == null ? '' : String(s.valor).replace('.', ',')}" placeholder="40,00">
+      <button class="btn-sec mini" type="button" data-sv-tirar="${i}" aria-label="Tirar ${esc(s.nome || 'serviço')}">Tirar</button></div>`).join('')
+    : '<div style="font-size:13px; color:var(--tx3)">Nenhum serviço ainda. Sem a tabela, o Radar usa só o valor citado na conversa, o valor padrão da etapa ou a lista do mês.</div>';
+  $('sv-lista').querySelectorAll('[data-sv]').forEach((el) => el.addEventListener('input', () => { estado.servicosEdit[Number(el.dataset.i)][el.dataset.sv] = el.value; $('sv-status').textContent = 'Alterações não salvas'; }));
+  $('sv-lista').querySelectorAll('[data-sv-tirar]').forEach((b) => b.addEventListener('click', () => { estado.servicosEdit.splice(Number(b.dataset.svTirar), 1); desenharServicos(); $('sv-status').textContent = 'Alterações não salvas'; }));
+}
+function usarServicosLidos(lista, origem) {
+  if (!lista.length) { $('sv-status').style.color = 'var(--alerta)'; $('sv-status').textContent = `Não achei serviços com valor ${origem}. Confira se cada linha tem o nome e o preço.`; return; }
+  const atual = (estado.servicosEdit || []).filter((s) => s.nome);
+  if (atual.length && !confirm(`Trocar os ${atual.length} serviços atuais pelos ${lista.length} ${origem}?`)) return;
+  estado.servicosEdit = lista; desenharServicos();
+  $('sv-status').style.color = 'var(--tx2)'; $('sv-status').textContent = `${lista.length} ${lista.length === 1 ? 'serviço lido' : 'serviços lidos'}. Confira e clique em Salvar.`;
+}
+function carregarPdfJs() {
+  if (window.pdfjsLib) return Promise.resolve();
+  return new Promise((ok, falha) => { const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    sc.onload = () => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; ok(); }; sc.onerror = falha; document.head.appendChild(sc); });
+}
+async function textoDoPdf(buf) {
+  await carregarPdfJs();
+  const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise; const linhas = [];
+  for (let p = 1; p <= Math.min(pdf.numPages, 10); p++) {
+    const tc = await (await pdf.getPage(p)).getTextContent(); const porY = new Map();
+    tc.items.forEach((it) => { const y = Math.round(it.transform[5] / 3); if (!porY.has(y)) porY.set(y, []); porY.get(y).push([it.transform[4], it.str]); });
+    [...porY.entries()].sort((a, b) => b[0] - a[0]).forEach(([, its]) => linhas.push(its.sort((a, b) => a[0] - b[0]).map((x) => x[1]).join(' ')));
+  }
+  return linhas.join('\n');
+}
+async function lerArquivoServicos(f) {
+  if (!f) return;
+  $('sv-status').style.color = 'var(--tx2)'; $('sv-status').textContent = 'Lendo…';
+  try {
+    if (/\.xlsx?$/i.test(f.name)) {
+      await carregarSheetJS();
+      const wb = XLSX.read(await f.arrayBuffer());
+      const linhas = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: false, defval: '' });
+      usarServicosLidos(servicosDasLinhas(linhas), 'do arquivo');
+    } else if (/\.pdf$/i.test(f.name) || f.type === 'application/pdf') {
+      usarServicosLidos(servicosDoTexto(await textoDoPdf(await f.arrayBuffer())), 'do PDF');
+    } else if (/^image\//.test(f.type)) {
+      $('sv-status').style.color = 'var(--alerta)'; $('sv-status').textContent = 'Foto da tabela ainda não dá pra ler. Mande em Excel, PDF ou cole o texto.';
+    } else {
+      const txt = await f.text(); const linhas = lerCSV(txt);
+      const l1 = servicosDasLinhas(linhas); usarServicosLidos(l1.length ? l1 : servicosDoTexto(txt), 'do arquivo');
+    }
+  } catch (_) { $('sv-status').style.color = 'var(--alerta)'; $('sv-status').textContent = 'Não consegui ler esse arquivo.'; }
+}
+async function iniciarServicos(siteId) {
+  const { data } = await sb.from('servicos').select('nome, valor').eq('site_id', siteId).order('ordem');
+  if (!$('sv-lista')) return;
+  estado.servicosEdit = (data || []).map((s) => ({ nome: s.nome, valor: Number(s.valor) }));
+  desenharServicos();
+  const drop = $('sv-drop');
+  ['dragenter', 'dragover'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add('arrastando'); }));
+  ['dragleave', 'drop'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove('arrastando'); }));
+  drop.addEventListener('drop', (e) => lerArquivoServicos(e.dataTransfer?.files?.[0]));
+  $('sv-arq').addEventListener('change', (e) => { const f = e.target.files[0]; e.target.value = ''; lerArquivoServicos(f); });
+  $('sv-ler').addEventListener('click', () => { const t = $('sv-txt').value; const l = servicosDasLinhas(lerCSV(t)); usarServicosLidos(l.length ? l : servicosDoTexto(t), 'da lista colada'); });
+  $('sv-add').addEventListener('click', () => { estado.servicosEdit.push({ nome: '', valor: '' }); desenharServicos(); const ins = $('sv-lista').querySelectorAll('[data-sv="nome"]'); ins[ins.length - 1]?.focus(); });
+  $('sv-salvar').addEventListener('click', () => salvarServicos(siteId));
+}
+async function salvarServicos(siteId) {
+  const itens = []; const ruins = [];
+  (estado.servicosEdit || []).forEach((s) => {
+    const nome = String(s.nome || '').trim(); let v = String(s.valor ?? '').replace(/r\$|\s/gi, ''); if (v.includes(',')) v = v.replace(/\./g, '').replace(',', '.');
+    if (!nome && !v) return; const n = Number(v);
+    if (!nome || !(n >= 0) || v === '') { ruins.push(nome || '(sem nome)'); return; }
+    itens.push({ nome, valor: (Math.round(n * 100) / 100).toFixed(2) });
+  });
+  if (ruins.length) { $('sv-status').style.color = 'var(--alerta)'; $('sv-status').textContent = `Confira nome e valor de: ${ruins.join(', ')}`; return false; }
+  $('sv-status').style.color = 'var(--tx2)'; $('sv-status').textContent = 'Salvando…';
+  const { data, error } = await sb.rpc('salvar_servicos', { p_site: siteId, p_itens: itens });
+  if (error) { $('sv-status').style.color = 'var(--alerta)'; $('sv-status').textContent = 'Não consegui salvar. Tente de novo.'; return false; }
+  if (estado.cacheServicos) delete estado.cacheServicos[siteId];
+  $('sv-status').style.color = 'var(--verde-claro)'; $('sv-status').textContent = `✓ ${data} ${data === 1 ? 'serviço salvo' : 'serviços salvos'}`;
+  return true;
+}
+
 async function telaConfig() {
   const novo = !!estado.novoCliente;
   const site = novo ? { id: '', nome: '', pixel_id: '', allowed_origins: [], whatsapp_phone_number_id: '' }
@@ -2736,6 +2893,17 @@ async function telaConfig() {
       </div>
     </section>
     ${novo ? '' : `
+    <section class="card" data-aba="cliente" style="display:flex; flex-direction:column; gap:12px">
+      <div><h2 style="margin:0">Serviços e valores</h2>
+      <p style="margin:4px 0 0; color:var(--tx2); font-size:14px">A tabela de preços do cliente. Quando o cliente dele disser "quero agendar um corte", o Radar usa a média dos cortes como valor da venda (se ninguém informar outro valor).</p></div>
+      <label class="sv-drop" id="sv-drop" for="sv-arq">${icone('upload', 22)}<span><b>Arraste a tabela aqui</b> ou clique pra escolher</span><small>Excel, CSV, PDF ou texto · um serviço por linha, com o valor</small>
+        <input type="file" id="sv-arq" class="oculto" accept=".csv,.txt,.xlsx,.xls,.pdf"></label>
+      <details><summary style="cursor:pointer; font-size:13px; color:var(--verde-claro)">Ou cole a lista</summary>
+        <textarea id="sv-txt" rows="4" style="width:100%; margin-top:8px; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:10px; font:inherit; color:var(--tx)" placeholder="Corte social 40&#10;Corte degradê R$ 45,00&#10;Barba 30"></textarea>
+        <button class="btn-sec" id="sv-ler" type="button" style="margin-top:6px">Usar essa lista</button></details>
+      <div id="sv-lista" class="sv-lista"></div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn-sec" id="sv-add" type="button">+ Adicionar serviço</button><button class="btn" id="sv-salvar" type="button">Salvar serviços</button><span id="sv-status" style="font-size:13px; color:var(--tx2)"></span></div>
+    </section>
     <section class="card vidro meta-bloco" data-aba="cliente">
       <div class="meta-cab"><span class="meta-logo">${icone('meta', 20)}</span><div style="flex:1"><h2 style="margin:0">Meta · Pixel e API de Conversões</h2><div style="font-size:12px; color:var(--tx3)">Pra onde vão os eventos de lead e venda deste cliente</div></div></div>
       <div class="linha">
@@ -2859,6 +3027,7 @@ async function telaConfig() {
   $('cf-logo-arq').addEventListener('change', async (ev) => { const f = ev.target.files[0]; ev.target.value = ''; const path = await enviarFoto(f, 'site', site.id); if (path) { trocarLogo(path); toast('Logo atualizada'); } });
   if ($('cf-logo-tirar')) $('cf-logo-tirar').addEventListener('click', async () => { const { error } = await sb.rpc('salvar_foto', { p_tipo: 'site', p_site: site.id, p_path: null }); if (!error) { trocarLogo(null); toast('Logo removida'); } });
   carregarEventosMeta(site.id);
+  if ($('sv-lista')) iniciarServicos(site.id);
   desenharFunil();
   $('cf-add-etapa').addEventListener('click', () => {
     estado.funilEdit.push({ id: null, nome: '', temperatura: 'morno', evento_meta: null, valor_padrao: null, palavras_txt: '' });
@@ -3127,6 +3296,7 @@ async function salvarTudo() {
   if (!rFu.ok) erros.push('Funil: ' + (rFu.erro || 'erro'));
   const okCliente = await salvarCliente();
   if (!okCliente) erros.push('Dados do cliente: veja a mensagem no bloco 1');
+  if ($('sv-lista') && /não salvas/.test($('sv-status').textContent)) { const okSv = await salvarServicos(site); if (!okSv) erros.push('Serviços: confira nome e valor'); }
   await atualizarCreditos();
   if (erros.length) { toast('Algumas partes não salvaram: ' + erros.join(' · ')); }
   else toast('Tudo salvo.');
