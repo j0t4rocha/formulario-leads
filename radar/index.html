@@ -7,12 +7,12 @@
 <title>Radar</title>
 <script>try { if (localStorage.getItem('radar-tema') === 'claro') document.documentElement.dataset.tema = 'claro'; } catch (_) {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Geist:wght@500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     color-scheme: dark;
-    --bg: #07080A; --card: rgba(20, 22, 26, 0.65); --card-solido: #121417; --side: rgba(12, 14, 16, 0.78);
+    --bg: #050607; --card: rgba(20, 22, 26, 0.65); --card-solido: #121417; --side: rgba(12, 14, 16, 0.78);
     --line: rgba(255, 255, 255, 0.09); --line2: rgba(255, 255, 255, 0.06);
     --tx: #F4F6F5; --tx2: #A6B0AA; --tx3: #85908A;
     --verde: #10B981; --verde-claro: #34D399; --verde-bg: rgba(16, 185, 129, 0.12); --verde-bd: rgba(16, 185, 129, 0.38);
@@ -27,14 +27,14 @@
   * { box-sizing: border-box; }
   html { background: var(--bg); }
   body {
-    margin: 0; color: var(--tx); font-family: 'DM Sans', system-ui, sans-serif; font-size: 14px; min-height: 100vh;
+    margin: 0; color: var(--tx); font-family: 'Geist', system-ui, sans-serif; font-size: 14px; min-height: 100vh;
     background:
       radial-gradient(900px 500px at 85% -10%, rgba(16, 185, 129, 0.10), transparent 60%),
       radial-gradient(700px 420px at -10% 110%, rgba(16, 185, 129, 0.07), transparent 60%),
       var(--bg);
     background-attachment: fixed;
   }
-  h1, h2, .num, .logo span { font-family: 'Geist', 'DM Sans', sans-serif; letter-spacing: -0.025em; }
+  h1, h2, .num, .logo span { font-family: 'Geist', system-ui, sans-serif; letter-spacing: -0.025em; }
   .num, table, .tab { font-variant-numeric: tabular-nums; }
   code, .mono { font-family: 'Geist Mono', ui-monospace, monospace; }
   button, input, select, textarea { font: inherit; }
@@ -302,6 +302,46 @@
   table th { color: var(--tx3); }
   table td, table th { border-color: var(--line2) !important; }
   #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(16, 18, 21, 0.96); border: 1px solid var(--verde-bd); color: var(--tx); padding: 12px 18px; border-radius: 12px; font-size: 13px; z-index: 50; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+
+
+  /* ===== Fase 1 · base visual nova ===== */
+  :root { --solido: #0D1012; --solido-2: #111417; --mono: 'Geist Mono', ui-monospace, monospace; }
+  html[data-tema="claro"] { --solido: #FFFFFF; --solido-2: #F7FAF8; }
+  html { -webkit-tap-highlight-color: transparent; scrollbar-color: rgba(255,255,255,.16) transparent; scrollbar-width: thin; }
+  html[data-tema="claro"] { scrollbar-color: rgba(15,26,19,.2) transparent; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.14); border-radius: 99px; border: 2px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-thumb:hover { background-color: rgba(52,211,153,.45); }
+  /* preenchimento automático do Chrome sem amarelo/azul */
+  input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, textarea:-webkit-autofill, select:-webkit-autofill {
+    -webkit-text-fill-color: var(--tx); caret-color: var(--tx);
+    -webkit-box-shadow: 0 0 0 1000px var(--solido) inset; box-shadow: 0 0 0 1000px var(--solido) inset;
+    transition: background-color 9999s ease-out 0s;
+  }
+  input[type=date]::-webkit-calendar-picker-indicator, input[type=time]::-webkit-calendar-picker-indicator, input[type=datetime-local]::-webkit-calendar-picker-indicator { filter: invert(72%) sepia(39%) saturate(530%) hue-rotate(104deg) brightness(95%); cursor: pointer; opacity: .9; }
+  html[data-tema="claro"] input::-webkit-calendar-picker-indicator { filter: none; }
+  input[type=checkbox], input[type=radio], input[type=range], progress { accent-color: #10B981; }
+  [draggable="true"] { -webkit-user-drag: element; }
+  /* números, códigos e valores */
+  .kpi .num, .num, .col-topo .num, .creditos .val, .fid-grade b, .vis-resumo b, .origem-tile b, .visao .item b, .etapa-funil span[style*="font-size:24px"] { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  code, .mono, pre, .codigo, input[type=number], .conv-item .nome small, .bolha small { font-variant-numeric: tabular-nums; }
+  code, .mono, pre, .codigo { font-family: var(--mono); }
+  /* vidro calibrado: sólido onde se lê muito, vidro nos destaques */
+  .card { background: var(--solido); backdrop-filter: none; -webkit-backdrop-filter: none; border-color: rgba(255,255,255,.07); box-shadow: none; }
+  #tela-dashboard > .card, #tela-dashboard .linha > .card, .detalhe, .vidro, .login-box {
+    background: var(--card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border-color: rgba(255,255,255,.08); box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 20px 60px rgba(0,0,0,.28);
+  }
+  .ccard { background: var(--solido-2); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  dialog.modal { background: rgba(14,16,19,.88); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 30px 80px rgba(0,0,0,.6); }
+  .topo { border-bottom: 1px solid rgba(255,255,255,.07); }
+  .topo h1 { font-weight: 700; letter-spacing: -0.025em; }
+  html[data-tema="claro"] .card, html[data-tema="claro"] .ccard { border-color: var(--line); }
+  html[data-tema="claro"] dialog.modal { background: rgba(255,255,255,.96); }
+  /* transições discretas */
+  .btn, .btn-sec, nav .menu button, .conv-item, .etapa-funil, .abas button, .chave button { transition: background-color .15s, border-color .15s, color .15s, box-shadow .15s, transform .15s; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
 
   /* ===== tema claro (opcional) ===== */
   html[data-tema="claro"] {
@@ -804,7 +844,7 @@ function telaDashboard() {
   const ev = etapaVenda();
   const iVenda = ev ? etapas.indexOf(ev) : -1;
   const iMeio = etapas.length > 2 ? 1 : -1;
-  const numCard = (n, rot) => `<div class="card" style="flex:1 1 150px; padding:16px"><div style="font-size:30px; font-weight:700; line-height:1.1">${n}</div><div style="font-size:14px; color:var(--tx2)">${esc(rot)}</div><div style="font-size:12px; color:var(--tx3)">${n} de ${total} · ${pct(n, total)}%</div></div>`;
+  const numCard = (n, rot) => `<div class="card" style="flex:1 1 150px; padding:16px"><div class="num" style="font-size:30px; font-weight:700; line-height:1.1">${n}</div><div style="font-size:14px; color:var(--tx2)">${esc(rot)}</div><div style="font-size:12px; color:var(--tx3)">${n} de ${total} · ${pct(n, total)}%</div></div>`;
 
   const linhasOrigem = GRUPOS.map((g) => ({ g, n: lista.filter((c) => grupoDe(c) === g).length }))
     .filter(({ g, n }) => n > 0 || g.sempre)
