@@ -3437,7 +3437,7 @@ async function salvarFunil(op = {}) {
   $('cf-funil-status').textContent = 'Salvando…'; $('cf-funil-status').style.color = 'var(--tx2)';
   const etapas = estado.funilEdit.map((e) => ({
     id: e.id, nome: e.nome, temperatura: e.temperatura, evento_meta: e.evento_meta || null,
-    valor_padrao: e.valor_padrao, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
+    valor_padrao: e.valor_padrao, tipo: e.tipo === 'retorno' ? 'retorno' : null, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
   }));
   const r = await chamarAdmin({ acao: 'salvar_funil', site_id: estado.site, etapas });
   if (!r.ok) { $('cf-funil-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-funil-status').style.color = 'var(--alerta)'; return false; }
@@ -3491,7 +3491,7 @@ async function salvarTudo() {
   const cr = { mensal: $('cr-mensal').value, adicionar: $('cr-add').value || 0, motivo: $('cr-motivo').value };
   const etapas = estado.funilEdit.map((e) => ({
     id: e.id, nome: e.nome, temperatura: e.temperatura, evento_meta: e.evento_meta || null,
-    valor_padrao: e.valor_padrao, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
+    valor_padrao: e.valor_padrao, tipo: e.tipo === 'retorno' ? 'retorno' : null, palavras_chave: String(e.palavras_txt || '').split(',').map((p) => p.trim()).filter(Boolean),
   }));
   const rCr = await chamarAdmin({ acao: 'creditos', site_id: site, ...cr });
   if (!rCr.ok) erros.push('Créditos: ' + (rCr.erro || 'erro'));
