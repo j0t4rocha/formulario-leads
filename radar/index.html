@@ -407,6 +407,64 @@
   .ev-lista .qd { font-family: var(--mono); font-size: 11px; color: var(--verde-claro); white-space: nowrap; }
   .copiado { background: #10B981 !important; color: #04130C !important; border-color: #10B981 !important; }
 
+
+  /* ===== Estrutura fiel ao protótipo ===== */
+  nav { gap: 18px; padding: 24px 14px 18px; position: sticky; top: 0; align-self: flex-start; min-height: 100vh; }
+  nav .menu { gap: 3px; }
+  nav .menu button { justify-content: flex-start; gap: 12px; min-height: 42px; padding: 0 14px; font-size: 14px; }
+  nav .menu button .mi { display: inline-flex; color: inherit; opacity: .9; }
+  nav .menu button .mt { flex: 1; }
+  nav .menu .grupo { margin: 14px 14px 4px; }
+  nav #saldo-creditos { margin-top: auto; background: var(--solido); border-color: rgba(255,255,255,.07); padding: 14px; gap: 8px; }
+  nav .rodape { margin-top: 0; border-top: 0; padding-top: 0; gap: 10px; }
+  .eu { display: flex; align-items: center; gap: 10px; padding: 0 6px; }
+  .eu-av { width: 34px; height: 34px; border-radius: 999px; background: var(--solido-2); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--verde-claro); flex-shrink: 0; }
+  .eu-txt { display: flex; flex-direction: column; min-width: 0; font-size: 13px; }
+  .eu-txt b { font-weight: 600; color: var(--tx); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .eu-txt span { font-size: 12px; color: var(--tx3); }
+  .rodape-bts { display: flex; gap: 8px; }
+  .rodape-bts .bt-tema { flex: 1; min-height: 38px; font-size: 13px; }
+  .bt-sair { width: 40px; min-height: 38px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+  main { gap: 18px; padding: 24px 28px 40px; }
+  .topo { background: var(--card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 16px 20px; align-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 20px 60px rgba(0,0,0,.28); }
+  .topo h1 { font-size: 26px; }
+  .topo p { font-size: 13px; }
+  .topo-acoes { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  #bloco-cliente { display: flex; gap: 6px; align-items: center; }
+  #bloco-cliente.oculto { display: none; }
+  #bloco-cliente .sel { width: auto; min-width: 200px; } #bloco-cliente .sel-bt { min-height: 40px; padding: 8px 12px; }
+  #bt-novo-cliente { width: 40px; min-height: 40px; padding: 0; font-size: 18px; }
+  .pilulas { display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); flex-wrap: wrap; }
+  .pilulas button { min-height: 34px; padding: 0 13px; border-radius: 9px; border: 1px solid transparent; background: transparent; color: var(--tx2); font: inherit; font-size: 13px; cursor: pointer; }
+  .pilulas button:hover { color: var(--tx); }
+  .pilulas button[aria-pressed="true"] { background: #10B981; color: #04130C; font-weight: 700; border-color: #10B981; }
+  #bt-atualizar { width: 40px; min-height: 40px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 16px; }
+  #tela-dashboard .kpis > .kpi-card { background: var(--card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-color: rgba(255,255,255,.08); box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 20px 60px rgba(0,0,0,.28); }
+  .kpi-card { display: flex; flex-direction: column; gap: 8px; padding: 18px 20px; }
+  .kpi-rot { font-size: 13px; color: var(--tx2); }
+  .kpi-num { font-size: 34px; font-weight: 600; line-height: 1; letter-spacing: -0.03em; }
+  .kpi-obs { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--tx3); }
+  .kpi-delta { font-size: 12px; color: var(--tx3); }
+  .tm-box { margin-top: auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 14px; border-radius: 12px; background: var(--solido); border: 1px solid rgba(255,255,255,.07); }
+  .tab-ult { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .tab-ult th { text-align: left; font-size: 12px; font-weight: 500; padding: 6px 10px; }
+  .tab-ult td { padding: 11px 10px; border-top: 1px solid var(--line2); }
+  .ul-linha { cursor: pointer; } .ul-linha:hover td { background: var(--verde-bg); }
+  .badge-nova { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: #10B981; color: #04130C; }
+  #tela-dashboard .card h2 { font-size: 17px; font-weight: 600; }
+  @media (max-width: 900px) { nav { position: static; min-height: 0; } }
+  @media (max-width: 700px) { .topo { padding: 14px; } .pilulas { width: 100%; } .pilulas button { flex: 1; padding: 0 8px; } #bloco-cliente { width: 100%; } #bloco-cliente .sel { flex: 1; min-width: 0; } }
+  html[data-tema="claro"] .topo { box-shadow: 0 1px 2px rgba(15,26,19,.05); }
+  html[data-tema="claro"] .pilulas { background: rgba(15,26,19,.04); border-color: var(--line); }
+
+
+  #tela-dashboard .filtros { padding: 12px 14px; gap: 10px; background: transparent; border: 1px solid rgba(255,255,255,.07); box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; align-items: center; }
+  #tela-dashboard .filtros > div { flex: 1 1 180px; }
+  #tela-dashboard .filtros label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  #tela-dashboard .filtros .sel-bt { min-height: 38px; padding: 8px 12px; font-size: 13px; }
+  #tela-dashboard .filtros::before { content: 'Filtrar'; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--tx3); flex: 0 0 auto; padding: 0 4px; }
+
   /* ===== tema claro (opcional) ===== */
   html[data-tema="claro"] {
     color-scheme: light;
@@ -467,49 +525,50 @@
 <div id="app" class="oculto">
   <nav aria-label="Menu principal">
     <div class="logo"><div class="logo-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6-6"/></svg></div><span>Radar</span></div>
-    <div id="bloco-cliente">
-      <label for="sel-site">Cliente</label>
-      <select id="sel-site"></select>
-      <button class="btn-sec" id="bt-novo-cliente" style="width:100%; margin-top:8px">+ Novo cliente</button>
-    </div>
-    <div id="saldo-creditos" class="creditos oculto" title="Créditos pra enviar mensagens pelo Radar"></div>
     <div class="menu">
       <div class="grupo">Visão geral</div>
-      <button data-tela="dashboard" class="ativo"><span>Resultados</span></button>
-      <button data-tela="rotina"><span>Tarefas</span><span class="badge oculto" id="badge-hoje"></span></button>
+      <button data-tela="dashboard" class="ativo"><span class="mi" data-ic="m_resultados"></span><span class="mt">Resultados</span></button>
+      <button data-tela="rotina"><span class="mi" data-ic="m_tarefas"></span><span class="mt">Tarefas</span><span class="badge oculto" id="badge-hoje"></span></button>
       <div class="grupo">Atendimento</div>
-      <button data-tela="conversas"><span>Conversas</span><span class="badge oculto" id="badge-conv" title="Esperando resposta"></span></button>
-      <button data-tela="crm"><span>Funil</span></button>
+      <button data-tela="conversas"><span class="mi" data-ic="m_conversas"></span><span class="mt">Conversas</span><span class="badge oculto" id="badge-conv" title="Esperando resposta"></span></button>
+      <button data-tela="crm"><span class="mi" data-ic="m_funil"></span><span class="mt">Funil</span></button>
       <div class="grupo">Ferramentas</div>
-      <button data-tela="links"><span>Links rastreáveis</span></button>
-      <button data-tela="modelos"><span>Mensagens</span></button>
-      <button data-tela="config" id="menu-config" class="oculto"><span>Configurações</span></button>
+      <button data-tela="links"><span class="mi" data-ic="m_links"></span><span class="mt">Links rastreáveis</span></button>
+      <button data-tela="modelos"><span class="mi" data-ic="m_mensagens"></span><span class="mt">Mensagens</span></button>
+      <button data-tela="config" id="menu-config" class="oculto"><span class="mi" data-ic="m_config"></span><span class="mt">Configurações</span></button>
     </div>
+    <div id="saldo-creditos" class="creditos oculto" title="Créditos pra enviar mensagens pelo Radar"></div>
     <div class="rodape">
-      <span id="quem"></span>
-      <button class="btn-sec bt-tema" id="bt-tema" type="button"><span class="bola" aria-hidden="true"></span><span id="bt-tema-txt">Tema claro</span></button>
-      <button class="btn-sec" id="bt-sair">Sair</button>
+      <div class="eu"><span class="eu-av" id="quem-av" aria-hidden="true">?</span><span class="eu-txt"><b id="quem-nome"></b><span id="quem"></span></span></div>
+      <div class="rodape-bts">
+        <button class="btn-sec bt-tema" id="bt-tema" type="button"><span class="bola" aria-hidden="true"></span><span id="bt-tema-txt">Tema claro</span></button>
+        <button class="btn-sec bt-sair" id="bt-sair" type="button" aria-label="Sair"></button>
+      </div>
     </div>
   </nav>
 
   <main>
     <div class="topo">
       <div><h1 id="titulo">Resultados</h1><p id="subtitulo"></p></div>
-      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
-        <select id="sel-periodo" aria-label="Período" style="width:auto">
+      <div class="topo-acoes">
+        <div id="bloco-cliente"><label for="sel-site" class="oculto">Cliente</label><select id="sel-site" style="width:auto"></select><button class="btn-sec" id="bt-novo-cliente" type="button" title="Cadastrar novo cliente" aria-label="Cadastrar novo cliente">+</button></div>
+        <div class="pilulas" id="pilulas-periodo" role="group" aria-label="Período">
+          <button type="button" data-per="hoje">Hoje</button><button type="button" data-per="7">7 dias</button><button type="button" data-per="30">30 dias</button><button type="button" data-per="mes">Mês</button><button type="button" data-per="custom">Personalizado</button>
+        </div>
+        <span class="oculto"><select id="sel-periodo" aria-label="Período" style="width:auto">
           <option value="7">Últimos 7 dias</option>
           <option value="30">Últimos 30 dias</option>
           <option value="90">Últimos 90 dias</option>
           <option value="hoje">Hoje</option>
           <option value="mes">Este mês</option>
           <option value="custom">Personalizado…</option>
-        </select>
+        </select></span>
         <span class="periodo-datas oculto" id="periodo-datas">
           <label for="per-de" class="oculto">De</label><input type="date" id="per-de">
           <span style="color:var(--tx3)">até</span>
           <label for="per-ate" class="oculto">Até</label><input type="date" id="per-ate">
         </span>
-        <button class="btn-sec" id="bt-atualizar">Atualizar</button>
+        <button class="btn-sec bt-ic" id="bt-atualizar" type="button" title="Atualizar" aria-label="Atualizar"></button>
       </div>
     </div>
 
@@ -547,6 +606,15 @@ const COR = {
 };
 // ícones genéricos (desenhos próprios, não são os logotipos oficiais)
 const IC = {
+  m_resultados: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 15v-4"/><path d="M12 15V7"/><path d="M17 15v-6"/></svg>',
+  m_tarefas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l2 2 4-4"/><rect x="4" y="4" width="16" height="16" rx="3"/></svg>',
+  m_conversas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l1.5-3.5A7.5 7.5 0 1 1 9 17.5z"/></svg>',
+  m_funil: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7v6l-4 2v-8z"/></svg>',
+  m_links: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>',
+  m_mensagens: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg>',
+  m_config: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>',
+  atualizar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>',
+  sair: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5"/><path d="M5 12h11"/></svg>',
   copiar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg>',
   ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>',
   seta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
@@ -624,7 +692,9 @@ async function iniciar() {
     await sb.auth.signOut(); return;
   }
   estado.perfil = perfil;
-  $('quem').textContent = `${perfil.nome} · ${perfil.papel === 'admin' ? 'Administrador' : 'Cliente'}`;
+  $('quem').textContent = perfil.papel === 'admin' ? 'Administrador' : 'Cliente';
+  $('quem-nome').textContent = perfil.nome || '';
+  $('quem-av').textContent = (perfil.nome || '?').trim().charAt(0).toUpperCase();
 
   const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo').eq('ativo', true).order('nome');
   estado.sites = sites || [];
@@ -745,7 +815,7 @@ function graficoSemana(base) {
   const usados = GRUPOS.map((g) => ({ g, n: porDia.reduce((a, x) => a + x.grupos.find((y) => y.g === g).n, 0) })).filter(({ g, n }) => n > 0 || g.sempre);
   const legenda = usados.map(({ g, n }) => `<span><i style="background:${COR_GRAF[g.k] || g.barra}"></i>${esc(g.nome)} <b>${n}</b></span>`).join('');
   const d = antes ? Math.round(((total - antes) / antes) * 100) : null;
-  return `<div class="card" style="flex:1 1 100%; min-width:0">
+  return `<div class="card" style="flex:2 1 560px; min-width:0">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; margin-bottom:14px">
       <div><h2 style="margin:0">Conversas da semana</h2><div style="font-size:13px; color:var(--tx3); margin-top:4px">Novas conversas por dia nos últimos 7 dias, separadas por origem</div></div>
       <div style="text-align:right"><div class="num" style="font-size:26px; font-weight:600">${total}</div><div style="font-size:12px; color:${d != null && d < 0 ? 'var(--tx2)' : 'var(--verde-claro)'}">${d == null ? (antes === 0 && total ? 'sem conversas na semana anterior' : '') : `${d >= 0 ? '+' : ''}${d}% vs semana anterior (${antes})`}</div></div>
@@ -753,6 +823,34 @@ function graficoSemana(base) {
     <div class="gs" style="height:${ALT + 60}px">${grade}${barras}</div>
     <div class="legenda gs-leg">${legenda}</div>
   </div>`;
+}
+function kpiCard(rot, num, obs, delta) {
+  return `<div class="card kpi-card"><span class="kpi-rot">${esc(rot)}</span><span class="kpi-num num">${typeof num === 'number' ? num.toLocaleString('pt-BR') : esc(String(num))}</span><span class="kpi-obs">${delta ? `<span class="kpi-delta">${delta}</span>` : ''}<span>${esc(obs)}</span></span></div>`;
+}
+function faturamento(lista, [de, ate]) {
+  const ids = new Set(lista.map((c) => c.id));
+  const d0 = de ? hojeISODe(de) : null, d1 = ate ? hojeISODe(ate) : hojeISODe(new Date());
+  const vs = (estado.visitas || []).filter((v) => v.status === 'veio' && ids.has(v.contato_id) && (!d0 || v.data >= d0) && v.data <= d1);
+  return { soma: vs.reduce((a, v) => a + (Number(v.valor) || 0), 0), n: vs.length };
+}
+function haQuanto(iso) {
+  const min = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (min < 1) return 'agora';
+  if (min < 60) return `há ${min} min`;
+  if (min < 1440) return `há ${Math.floor(min / 60)} h`;
+  return quando(iso);
+}
+function ultimasConversas(lista) {
+  const ult = [...lista].sort((a, b) => new Date(b.ultima_msg_em || b.atualizado_em) - new Date(a.ultima_msg_em || a.atualizado_em)).slice(0, 6);
+  const linhas = ult.map((c) => {
+    const e = etapaDe(c); const g = grupoDe(c);
+    return `<tr class="ul-linha" data-abrir-lead="${c.id}" tabindex="0" role="button">
+      <td><div style="display:flex; align-items:center; gap:10px">${logoGrupo(g, 28)}<span style="display:flex; flex-direction:column; min-width:0"><b style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${esc(c.nome || telefoneBonito(c.telefone))}</b><span class="mono" style="font-size:12px; color:var(--tx3)">${esc(telefoneBonito(c.telefone))}</span></span></div></td>
+      <td>${e ? `<span class="selo">${esc(e.nome)}</span>` : ''}</td>
+      <td style="color:var(--tx2); font-size:13px; white-space:nowrap">${haQuanto(c.ultima_msg_em || c.atualizado_em)}</td>
+      <td style="text-align:right">${c.ultima_direcao === 'entrada' ? '<span class="badge-nova">NOVA</span>' : ''}</td></tr>`;
+  }).join('');
+  return `<div class="card" style="flex:1.3 1 460px; min-width:0"><h2>Últimas conversas</h2>${ult.length ? `<div style="overflow-x:auto"><table class="tab-ult"><thead><tr><th>Contato</th><th>Etapa</th><th>Última mensagem</th><th></th></tr></thead><tbody>${linhas}</tbody></table></div>` : '<div class="vazio">Nenhuma conversa neste período.</div>'}</div>`;
 }
 function noPeriodo(lista) {
   const [de, ate] = intervaloPeriodo();
@@ -770,7 +868,8 @@ function desenhar() {
   ['dashboard', 'rotina', 'conversas', 'crm', 'links', 'modelos', 'config'].forEach((t) => $('tela-' + t).classList.toggle('oculto', t !== estado.tela));
   $('titulo').textContent = { dashboard: 'Resultados', rotina: 'Tarefas', conversas: 'Conversas', crm: 'Funil', links: 'Links rastreáveis', modelos: 'Mensagens', config: 'Configurações' }[estado.tela];
   const comPeriodo = estado.tela === 'dashboard';
-  $('sel-periodo').closest('.sel') ? $('sel-periodo').closest('.sel').classList.toggle('oculto', !comPeriodo) : $('sel-periodo').classList.toggle('oculto', !comPeriodo);
+  $('pilulas-periodo').classList.toggle('oculto', !comPeriodo);
+  document.querySelectorAll('[data-per]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.per === $('sel-periodo').value)));
   $('periodo-datas').classList.toggle('oculto', !comPeriodo || $('sel-periodo').value !== 'custom');
   atualizarBadges();
   if (estado.tela === 'dashboard') telaDashboard();
@@ -964,6 +1063,8 @@ function telaDashboard() {
   const pAnt = periodoAnterior();
   const listaAnt = pAnt ? comFiltro(noIntervalo(estado.contatos, pAnt[0], pAnt[1])) : null;
   const chegaramAnt = listaAnt ? estado.etapas.map((e) => listaAnt.filter((c) => (etapaDe(c)?.ordem ?? 0) >= e.ordem).length) : null;
+  const fat = faturamento(lista, intervaloPeriodo());
+  const fatAnt = pAnt && listaAnt ? faturamento(comFiltro(estado.contatos), pAnt) : null;
   const f = estado.filtro;
   const chegaram = etapas.map((e) => lista.filter((c) => (etapaDe(c)?.ordem ?? 0) >= e.ordem).length);
   const ev = etapaVenda();
@@ -1004,27 +1105,29 @@ function telaDashboard() {
       ${temFiltro ? '<div style="flex:0 0 auto"><button class="btn-sec" id="fl-limpar">Limpar filtros</button></div>' : ''}
     </div>
     <div style="font-size:13px; color:var(--tx3); margin:0 0 12px">Período: ${esc(textoPeriodo())}${temFiltro ? ` · mostrando ${total} de ${doPeriodo.length} conversas` : ''}</div>
-    <div class="linha">
-      <div class="card" style="flex:2 1 300px; padding:16px; display:flex; align-items:center; gap:14px">
-        <span style="width:48px; height:48px; border-radius:12px; background:#25D366; color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0">${icone('whatsapp', 28)}</span>
-        <div><div style="font-size:34px; font-weight:700; line-height:1.05">${total}</div><div style="font-size:14px; color:var(--tx2)">conversas novas no WhatsApp</div>${listaAnt ? `<div class="obs-delta">${deltaHTML(total, listaAnt.length)}</div>` : ''}</div>
-      </div>
-      ${iMeio >= 0 && iMeio !== iVenda ? numCard(chegaram[iMeio], etapas[iMeio].nome.toLowerCase(), iMeio) : ''}
-      ${iVenda > 0 ? numCard(chegaram[iVenda], ev.nome.toLowerCase(), iVenda) : ''}
+    <div class="kpis">
+      ${kpiCard('Conversas novas', total, `${total === 1 ? 'conversa' : 'conversas'} no WhatsApp`, listaAnt ? deltaHTML(total, listaAnt.length) : '')}
+      ${iMeio >= 0 && iMeio !== iVenda ? kpiCard(etapas[iMeio].nome, chegaram[iMeio], `${pct(chegaram[iMeio], total)}% das conversas (${chegaram[iMeio]} de ${total})`, chegaramAnt ? deltaHTML(chegaram[iMeio], chegaramAnt[iMeio]) : '') : ''}
+      ${iVenda > 0 ? kpiCard(ev.nome, chegaram[iVenda], iMeio >= 0 && iMeio !== iVenda ? `${pct(chegaram[iVenda], chegaram[iMeio])}% de quem ${etapas[iMeio].nome.toLowerCase()} (${chegaram[iVenda]} de ${chegaram[iMeio]})` : `${pct(chegaram[iVenda], total)}% das conversas`, chegaramAnt ? deltaHTML(chegaram[iVenda], chegaramAnt[iVenda]) : '') : ''}
+      ${kpiCard('Faturamento', brl(fat.soma).replace(',00', ''), `${fat.n} ${fat.n === 1 ? 'ida registrada' : 'idas registradas'}`, fatAnt ? deltaHTML(Math.round(fat.soma), Math.round(fatAnt.soma)) : '')}
     </div>
-    <div class="linha">${graficoSemana(comFiltro(estado.contatos))}</div>
     <div class="linha">
-      <div class="card" style="flex:1 1 340px"><h2>De onde vieram</h2>${linhasOrigem}</div>
-      <div class="card" style="flex:1 1 340px"><h2>Funil</h2>${etapas.length ? funil + '<div style="font-size:12px; color:var(--tx3); text-align:center; margin-top:10px">Clique numa etapa pra ver as conversas</div>' : '<div class="vazio">Nenhuma etapa configurada.</div>'}</div>
+      ${graficoSemana(comFiltro(estado.contatos))}
+      <div class="card" style="flex:1 1 300px; min-width:0; display:flex; flex-direction:column"><h2>De onde vieram</h2>${linhasOrigem}
+        <div class="tm-box">
+          <span style="color:var(--verde-claro)">${icone('relogio', 18)}</span>
+          <span style="flex:1; font-size:13px; color:var(--tx2)">Tempo médio de resposta</span>
+          <b id="tm-resp" class="num" style="font-size:16px">…</b>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--tx3); margin:0; width:100%"><input type="checkbox" id="tm-segunda" ${telaDashboard._segunda ? 'checked' : ''} style="width:auto; min-height:0"> Ignorar a saudação automática</label>
+        </div>
+      </div>
+    </div>
+    <div class="linha">
+      <div class="card" style="flex:1 1 400px"><h2>Funil</h2>${etapas.length ? funil + '<div style="font-size:12px; color:var(--tx3); text-align:center; margin-top:10px">Clique numa etapa pra ver as conversas</div>' : '<div class="vazio">Nenhuma etapa configurada.</div>'}</div>
+      ${ultimasConversas(lista)}
     </div>
     ${listaEtapa(lista)}
     ${cardFidelizados(lista)}
-    <div class="card" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; padding:14px 18px">
-      <span style="color:var(--tx2)">${icone('relogio', 22)}</span>
-      <span style="flex:1; font-size:15px">Tempo médio de resposta</span>
-      <b id="tm-resp" style="font-size:20px">…</b>
-      <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--tx3); margin:0; width:100%"><input type="checkbox" id="tm-segunda" ${telaDashboard._segunda ? 'checked' : ''} style="width:auto; min-height:0"> Ignorar a saudação automática (contar a partir da 2ª resposta)</label>
-    </div>
     <div class="linha">
       <div class="card" style="flex:2 1 460px; min-width:0" id="card-vendas"><div class="vazio">Carregando vendas…</div></div>
       <div class="card" style="flex:1 1 320px; min-width:0">
@@ -2750,6 +2853,9 @@ $('sel-periodo').addEventListener('change', () => {
   desenhar();
 });
 ['per-de', 'per-ate'].forEach((id) => $(id).addEventListener('change', desenhar));
+document.querySelectorAll('[data-per]').forEach((b) => b.addEventListener('click', () => { $('sel-periodo').value = b.dataset.per; $('sel-periodo').dispatchEvent(new Event('change')); }));
+document.querySelectorAll('[data-ic]').forEach((el) => { el.innerHTML = icone(el.dataset.ic, 18); });
+$('bt-atualizar').innerHTML = icone('atualizar', 18); $('bt-sair').innerHTML = icone('sair', 16);
 $('bt-atualizar').addEventListener('click', carregar);
 setInterval(() => { if (!document.hidden && estado.perfil && !['config', 'links', 'conversas', 'modelos', 'rotina'].includes(estado.tela)) carregar(); }, 30000);
 
