@@ -676,6 +676,7 @@
     <div class="logo"><div class="logo-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6-6"/></svg></div><span>Radar</span></div>
     <div><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required></div>
     <div><label for="senha">Senha</label><input id="senha" type="password" autocomplete="current-password" required></div>
+    <div id="captcha-login"></div>
     <button class="btn" type="submit" id="bt-entrar">Entrar</button>
     <div class="erro" id="erro-login" role="alert"></div>
   </form>
@@ -744,7 +745,7 @@
 <div id="toast" class="oculto" role="status"></div>
 <dialog class="modal" id="modal-envio" aria-labelledby="me-titulo"><div class="corpo" id="me-corpo"></div></dialog>
 
-<script src="config.js?v=1"></script>
+<script src="config.js?v=2"></script>
 <script>
 // A chave fica no arquivo config.js (assim este arquivo pode ser atualizado sem colar a chave de novo)
 const SUPABASE_URL = (window.RADAR && window.RADAR.SUPABASE_URL) || 'https://dwjozttehrdkhbjzkkia.supabase.co';
@@ -833,12 +834,48 @@ function telefoneBonito(t) {
 function pct(n, total) { return total ? Math.round((n / total) * 100) : 0; }
 
 // ================= LOGIN =================
+// Proteção do login: depois de 5 erros seguidos, espera 1 min (e dobra a cada nova rodada, até 15 min).
+// O Supabase também limita por IP no servidor; com TURNSTILE_SITEKEY no config.js, entra o "não sou robô" da Cloudflare.
+const LOGIN_MAX = 5;
+const loginEstado = () => { try { return JSON.parse(localStorage.getItem('radar_login') || '{}'); } catch (_) { return {}; } };
+const loginGuardar = (v) => { try { localStorage.setItem('radar_login', JSON.stringify(v)); } catch (_) { /* sem storage */ } };
+let loginTimer = null, captchaToken = null, captchaId = null;
+function loginBloqueio() {
+  const st = loginEstado(); const falta = (st.ate || 0) - Date.now();
+  clearInterval(loginTimer);
+  if (falta <= 0) { $('bt-entrar').disabled = false; if (/Muitas tentativas/.test($('erro-login').textContent)) $('erro-login').textContent = ''; return; }
+  $('bt-entrar').disabled = true;
+  const tick = () => { const s2 = Math.ceil(((loginEstado().ate || 0) - Date.now()) / 1000);
+    if (s2 <= 0) { clearInterval(loginTimer); $('bt-entrar').disabled = false; $('erro-login').textContent = 'Pode tentar de novo.'; return; }
+    $('erro-login').textContent = `Muitas tentativas erradas. Tente de novo em ${s2 >= 60 ? Math.ceil(s2 / 60) + ' min' : s2 + 's'}.`; };
+  tick(); loginTimer = setInterval(tick, 1000);
+}
+function carregarCaptcha() {
+  const chave = window.RADAR && window.RADAR.TURNSTILE_SITEKEY; if (!chave || captchaId !== null) return;
+  const sc = document.createElement('script'); sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'; sc.async = true;
+  sc.onload = () => { try { captchaId = window.turnstile.render('#captcha-login', { sitekey: chave, theme: 'dark', language: 'pt-br',
+    callback: (t) => { captchaToken = t; }, 'expired-callback': () => { captchaToken = null; } }); } catch (_) { /* sem captcha */ } };
+  document.head.appendChild(sc);
+}
+carregarCaptcha(); loginBloqueio();
 $('form-login').addEventListener('submit', async (e) => {
   e.preventDefault();
+  if ((loginEstado().ate || 0) > Date.now()) { loginBloqueio(); return; }
+  if (window.RADAR && window.RADAR.TURNSTILE_SITEKEY && !captchaToken) { $('erro-login').textContent = 'Confirme que você não é um robô.'; return; }
   $('bt-entrar').disabled = true; $('erro-login').textContent = '';
-  const { error } = await sb.auth.signInWithPassword({ email: $('email').value.trim(), password: $('senha').value });
+  const { error } = await sb.auth.signInWithPassword({ email: $('email').value.trim(), password: $('senha').value, options: captchaToken ? { captchaToken } : undefined });
   $('bt-entrar').disabled = false;
-  if (error) { $('erro-login').textContent = 'E-mail ou senha incorretos.'; return; }
+  if (captchaId !== null) { try { window.turnstile.reset(captchaId); } catch (_) { /* ok */ } captchaToken = null; }
+  if (error) {
+    if (error.status === 429 || /rate limit|too many/i.test(error.message || '')) { $('erro-login').textContent = 'Muitas tentativas. Espere alguns minutos e tente de novo.'; return; }
+    if (/captcha/i.test(error.message || '')) { $('erro-login').textContent = 'Confirme que você não é um robô e tente de novo.'; return; }
+    const st = loginEstado(); st.erros = (st.erros || 0) + 1;
+    if (st.erros >= LOGIN_MAX) { st.rodada = (st.rodada || 0) + 1; st.ate = Date.now() + Math.min(15, 2 ** (st.rodada - 1)) * 60e3; st.erros = 0; loginGuardar(st); loginBloqueio(); return; }
+    loginGuardar(st);
+    $('erro-login').textContent = `E-mail ou senha incorretos. ${LOGIN_MAX - st.erros === 1 ? 'Última tentativa antes de esperar.' : `Restam ${LOGIN_MAX - st.erros} tentativas.`}`;
+    return;
+  }
+  loginGuardar({});
   iniciar();
 });
 $('bt-sair').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
