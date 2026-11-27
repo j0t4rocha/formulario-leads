@@ -625,6 +625,8 @@
   .seq-grade { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:12px; }
   .seq-fluxo { display:flex; flex-direction:column; gap:10px; padding:14px; border:1px solid var(--line); border-radius:14px; background:var(--solido-2); }
   .seq-fluxo.ligado { border-color:var(--verde-bd); }
+  .lem-edit { display:flex; flex-direction:column; gap:10px; padding-top:6px; border-top:1px solid var(--line); }
+  .seq-fluxo.aberto .lem-edit { max-width:560px; }
   .seq-fluxo.aberto { grid-column:1 / -1; }
   .seq-topo { display:flex; gap:10px; align-items:flex-start; }
   .seq-ic { width:30px; height:30px; flex:0 0 30px; border-radius:9px; display:grid; place-items:center; background:rgba(16,185,129,.12); color:var(--verde-claro); }
@@ -2482,32 +2484,29 @@ async function telaModelos() {
   const e1 = estado.etapas[0]?.nome || 'primeira etapa'; const eU = estado.etapas[estado.etapas.length - 1]?.nome || 'última etapa';
   const chave = (id, ligado) => `<label class="chavinha" title="Liga ou desliga o envio automático"><input type="checkbox" id="${id}" ${ligado ? 'checked' : ''}><span></span><b>${ligado ? 'Ligado' : 'Desligado'}</b></label>`;
   const cartao = (k, titulo, ligado, oque, quem, quando, campo, selId, modeloAtual) => `
-    <div class="auto-card" data-auto="${k}">
-      <div class="auto-topo"><h3>${titulo}</h3>${chave('ch-' + k, ligado)}</div>
-      <p class="auto-desc">${oque}</p>
-      <div class="auto-bloco"><span class="auto-rot">Quem recebe</span><p class="l3">${quem}</p></div>
-      <div class="auto-bloco"><span class="auto-rot">Quando</span><p class="l2">${quando}</p></div>
-      <div class="auto-campo">${campo}</div>
-      <div class="auto-bloco"><label class="auto-rot" for="${selId}">Mensagem que vai</label><select id="${selId}" data-atual="${esc(modeloAtual || '')}"><option value="">Carregando modelos…</option></select></div>
-      <div class="previa" id="pv-${k}"></div>
+    <div class="auto-card seq-fluxo" data-auto="${k}">
+      <div class="seq-topo"><span class="seq-ic">${icone('relogio', 16)}</span><div class="seq-tit"><h3>${titulo}</h3><small>${oque}</small></div>${chave('ch-' + k, ligado)}</div>
+      <div class="seq-linha"><span class="seq-chip modelo" id="lem-chip-h">★ ${esc(site.lembrete_horas ?? 3)}h antes</span><i class="seq-seta"></i><span class="seq-chip" id="lem-chip-m">${modeloAtual ? esc(modeloAtual) : 'sem modelo'}</span></div>
+      <div class="seq-rodape"><span class="seq-resumo">${quem} · 1 crédito por lembrete</span><button class="btn-sec mini" type="button" id="lem-editar" aria-expanded="false">Editar</button></div>
+      <div class="lem-edit oculto" id="lem-edit">
+        <div class="auto-campo">${campo}</div>
+        <div class="auto-bloco"><label class="auto-rot" for="${selId}">Mensagem que vai</label><select id="${selId}" data-atual="${esc(modeloAtual || '')}"><option value="">Carregando modelos…</option></select></div>
+        <div class="previa" id="pv-${k}"></div>
+      </div>
     </div>`;
   const campo = (id, rot, val, min, max, suf) => `<label for="${id}">${rot}</label><span class="auto-num"><input type="number" id="${id}" min="${min}" max="${max}" value="${esc(val)}"><span>${suf}</span></span>`;
   $('tela-modelos').innerHTML = `<div style="display:flex; flex-direction:column; gap:18px">
-    <section class="card" style="display:flex; flex-direction:column; gap:14px">
-      <div><h2 style="margin:0">Envio automático</h2><p style="margin:4px 0 0; color:var(--tx2)">A chavinha é a permissão: ligada, o Radar manda sozinho; desligada, vira só tarefa pra você mandar. Salva na hora.</p></div>
-      <div class="auto-grade">
-        ${cartao('lembrete', 'Lembrete de horário', site.auto_lembrete, 'Avisa o cliente antes do horário marcado.',
-          'Quem tem horário marcado no campo <b>Agendamento</b> da ficha do lead.',
-          'Antes do horário, no tempo que você escolher. Custa 1 crédito.',
-          campo('cr-horas', 'Mandar quantas horas antes', site.lembrete_horas ?? 3, 1, 48, 'horas'), 'au-lem-mod', site.lembrete_modelo)}
-      </div>
-      <div id="au-status" style="font-size:13px; color:var(--tx2); min-height:18px"></div>
-    </section>
-
     <section class="card" style="display:flex; flex-direction:column; gap:14px" id="seq-card">
-      <div><h2 style="margin:0">Sequências automáticas</h2>
-      <p style="margin:4px 0 0; color:var(--tx2)">Mensagens em passos pra quem sumiu. Param sozinhas quando a pessoa responde, agenda ou pede pra sair.</p></div>
-      <div id="seq-fluxos" class="seq-fluxos"></div>
+      <div><h2 style="margin:0">Mensagens automáticas</h2>
+      <p style="margin:4px 0 0; color:var(--tx2)">Ligada, o Radar manda sozinho. Param quando a pessoa responde, agenda ou pede pra sair.</p></div>
+      <div id="seq-fluxos" class="seq-fluxos">
+        <div class="seq-secao" id="seq-g-antes"></div>
+        <div class="seq-secao"><div class="seq-sec-cab"><h3>Pra quem agendou</h3><p>Lembra do horário pra diminuir falta. Vale pra quem tem horário no campo Agendamento da ficha do lead.</p></div>
+          <div class="seq-grade">${cartao('lembrete', 'Lembrete de horário', site.auto_lembrete, 'Avisa antes do horário marcado.',
+            'Quem tem horário marcado', '', campo('cr-horas', 'Mandar quantas horas antes', site.lembrete_horas ?? 3, 1, 48, 'horas'), 'au-lem-mod', site.lembrete_modelo)}</div>
+          <div id="au-status" style="font-size:13px; color:var(--tx2); min-height:0"></div></div>
+        <div class="seq-secao" id="seq-g-cliente"></div>
+      </div>
       <details class="seq-regras"><summary><b>Regras gerais</b> <span id="seq-regras-res"></span></summary><div id="seq-geral" class="seq-geral"></div></details>
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn" id="seq-salvar" type="button">Salvar sequências</button><span id="seq-status" style="font-size:13px; color:var(--tx2)"></span></div>
     </section>
@@ -2564,6 +2563,9 @@ async function telaModelos() {
     $(sel).addEventListener('change', () => { mostrarPrevia(k, $(sel).value); salvar(); });
   });
   ['cr-horas'].forEach((id) => $(id).addEventListener('change', salvar));
+  $('lem-editar').addEventListener('click', () => { const ab = $('lem-edit').classList.toggle('oculto'); $('lem-editar').textContent = ab ? 'Editar' : 'Fechar'; $('lem-editar').setAttribute('aria-expanded', String(!ab)); $('lem-editar').closest('.seq-fluxo').classList.toggle('aberto', !ab); });
+  $('cr-horas').addEventListener('input', () => { $('lem-chip-h').textContent = `★ ${$('cr-horas').value || 0}h antes`; });
+  $('au-lem-mod').addEventListener('change', () => { $('lem-chip-m').textContent = $('au-lem-mod').value || 'sem modelo'; });
   iniciarSequencias(site);
 
   const desenharExemplos = () => {
@@ -2651,8 +2653,8 @@ function desenharSequencias() {
         <button class="btn-sec mini" type="button" data-seq-add="${f}" style="align-self:flex-start">+ Adicionar passo</button>` : ''}
     </div>`;
   };
-  $('seq-fluxos').innerHTML = Object.entries(GRUPOS_SEQ).map(([g, G]) => `<div class="seq-secao"><div class="seq-sec-cab"><h3>${G.t}</h3><p>${G.d}</p></div>
-    <div class="seq-grade">${Object.entries(FLUXOS).filter(([, F]) => F.grupo === g).map(([f, F]) => card(f, F)).join('')}</div></div>`).join('');
+  Object.entries(GRUPOS_SEQ).forEach(([g, G]) => { $('seq-g-' + g).innerHTML = `<div class="seq-sec-cab"><h3>${G.t}</h3><p>${G.d}</p></div>
+    <div class="seq-grade">${Object.entries(FLUXOS).filter(([, F]) => F.grupo === g).map(([f, F]) => card(f, F)).join('')}</div>`; });
   ligarEventosSeq();
 }
 function passoHTML(f, p, i, total, aprovados, info, ancora) {
