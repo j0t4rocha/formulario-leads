@@ -619,10 +619,34 @@
   .seq-g small, .seq-g .seq-check { font-size:12px; color:var(--tx3); } .seq-g .seq-check { font-size:14px; color:var(--tx); display:flex; gap:8px; align-items:center; }
   .seq-g textarea, .seq-versao textarea { width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:9px 11px; font:inherit; color:var(--tx); resize:vertical; }
   .seq-g-larga { grid-column:1 / -1; }
-  .seq-fluxos { display:flex; flex-direction:column; gap:14px; }
-  .seq-fluxo { display:flex; flex-direction:column; gap:10px; padding:16px; border:1px solid var(--line2); border-radius:16px; }
-  .seq-fluxo.ligado { border-color:var(--verde-bd); background:rgba(16,185,129,.04); }
+  .seq-fluxos { display:flex; flex-direction:column; gap:18px; }
+  .seq-secao { display:flex; flex-direction:column; gap:10px; }
+  .seq-sec-cab h3 { margin:0; font-size:15px; } .seq-sec-cab p { margin:2px 0 0; font-size:13px; color:var(--tx2); max-width:760px; }
+  .seq-grade { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:12px; }
+  .seq-fluxo { display:flex; flex-direction:column; gap:10px; padding:14px; border:1px solid var(--line); border-radius:14px; background:var(--solido-2); }
+  .seq-fluxo.ligado { border-color:var(--verde-bd); }
+  .seq-fluxo.aberto { grid-column:1 / -1; }
+  .seq-topo { display:flex; gap:10px; align-items:flex-start; }
+  .seq-ic { width:30px; height:30px; flex:0 0 30px; border-radius:9px; display:grid; place-items:center; background:rgba(16,185,129,.12); color:var(--verde-claro); }
+  .seq-tit { flex:1; min-width:0; } .seq-tit h3 { margin:0; font-size:15px; } .seq-tit small { display:block; font-size:12px; color:var(--tx2); margin-top:2px; }
+  .seq-linha { display:flex; flex-wrap:wrap; gap:4px; align-items:center; }
+  .seq-chip { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600; padding:3px 8px; border-radius:999px; border:1px solid var(--line2); color:var(--tx2); white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .seq-chip.texto, .seq-chip.botao { border-color:var(--verde-bd); color:var(--verde-claro); }
+  .seq-chip.vazio { border-style:dashed; color:var(--tx3); }
+  .seq-seta { width:8px; height:1px; background:var(--line2); display:inline-block; }
+  .seq-rodape { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+  .seq-regras { border:1px solid var(--line); border-radius:12px; padding:10px 14px; }
+  .seq-regras summary { cursor:pointer; font-size:14px; } .seq-regras summary span { color:var(--tx3); font-size:13px; }
+  .seq-regras[open] .seq-geral { margin-top:10px; }
+  .seq-passo.fechado { padding:0; }
+  .seq-p-cab { display:flex; gap:8px; align-items:center; width:100%; padding:9px 12px; background:none; border:0; color:var(--tx); font:inherit; font-size:13px; text-align:left; cursor:pointer; border-radius:12px; }
+  .seq-p-cab:hover { background:rgba(255,255,255,.03); }
+  .seq-num { width:20px; height:20px; flex:0 0 20px; border-radius:50%; display:grid; place-items:center; font-size:11px; font-weight:700; background:var(--line2); }
+  .seq-prev { flex:1; min-width:0; color:var(--tx2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .seq-prev.falta, .seq-vers.falta { color:var(--alerta); }
+  .seq-vers { font-size:11px; color:var(--tx3); white-space:nowrap; }
   .seq-passos { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .seq-passos { gap:6px; }
   .seq-passo { display:flex; flex-direction:column; gap:8px; padding:12px; border:1px solid var(--line2); border-radius:12px; background:var(--campo); }
   .seq-passo-cab { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
   .seq-quando { display:flex; gap:6px; align-items:center; flex-wrap:wrap; font-size:13px; color:var(--tx2); }
@@ -2482,9 +2506,9 @@ async function telaModelos() {
 
     <section class="card" style="display:flex; flex-direction:column; gap:14px" id="seq-card">
       <div><h2 style="margin:0">Sequências automáticas</h2>
-      <p style="margin:4px 0 0; color:var(--tx2)">Mensagens em passos pra quem sumiu. Cada passo pode ter várias versões: o Radar sorteia e nunca repete a última que a pessoa recebeu. A sequência para sozinha quando a pessoa responde, agenda ou pede pra sair.</p></div>
-      <div id="seq-geral" class="seq-geral"></div>
+      <p style="margin:4px 0 0; color:var(--tx2)">Mensagens em passos pra quem sumiu. Param sozinhas quando a pessoa responde, agenda ou pede pra sair.</p></div>
       <div id="seq-fluxos" class="seq-fluxos"></div>
+      <details class="seq-regras"><summary><b>Regras gerais</b> <span id="seq-regras-res"></span></summary><div id="seq-geral" class="seq-geral"></div></details>
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn" id="seq-salvar" type="button">Salvar sequências</button><span id="seq-status" style="font-size:13px; color:var(--tx2)"></span></div>
     </section>
 
@@ -2573,10 +2597,16 @@ async function telaModelos() {
 }
 // ---------- Sequências automáticas (editor) ----------
 const FLUXOS = {
-  sem_resposta: { t: 'Chamou e sumiu', d: 'Quem mandou mensagem, a barbearia respondeu (ou ainda não) e a pessoa não respondeu mais.', ancora: 'depois que a conversa parou' },
-  nao_agendou: { t: 'Respondeu e não agendou', d: 'Quem já conversou mais de uma vez, mas não chegou em agendar. Só segue quando a última palavra foi da barbearia.', ancora: 'depois que a conversa parou' },
-  reativacao: { t: 'Reativação', d: 'Quem já veio pelo menos 1 vez (Compareceu ou Retornou) e está sem vir. Conta da última ida (Registrar ida ou lista do mês).', ancora: 'depois de completar os dias sem vir' },
+  sem_resposta: { t: 'Chamou e sumiu', d: 'Mandou mensagem e não respondeu mais.', ic: 'm_conversas', ancora: 'depois que a conversa parou', grupo: 'antes' },
+  nao_agendou: { t: 'Respondeu e não agendou', d: 'Conversou, mas não chegou em agendar.', ic: 'm_tarefas', ancora: 'depois que a conversa parou', grupo: 'antes' },
+  reativacao: { t: 'Reativação', d: 'Já veio pelo menos 1 vez e está sem vir.', ic: 'm_funil', ancora: 'depois de completar os dias sem vir', grupo: 'cliente' },
 };
+const GRUPOS_SEQ = {
+  antes: { t: 'Pra quem chamou e não agendou', d: 'Recupera o lead que veio do anúncio ou do link e esfriou. Os primeiros passos saem nas 24h do WhatsApp (grátis); depois disso, só modelo aprovado.' },
+  cliente: { t: 'Pra quem já é cliente e sumiu', d: 'Traz de volta quem já cortou e passou do tempo. Conta da última ida (Registrar ida ou lista do mês). Não manda pra quem tem horário marcado.' },
+};
+const ROT_TIPO = { texto: 'Texto', botao: 'Botão', modelo: 'Modelo' };
+function tempoCurto(min) { const [n, u] = esperaPartes(min); return `${n}${u === 'min' ? ' min' : u === 'horas' ? 'h' : n === 1 ? ' dia' : ' dias'}`; }
 const TIPOS_PASSO = {
   texto: 'Texto livre · grátis (só até 24h da última mensagem dele)',
   botao: 'Texto com botão "Quero agendar" · grátis (só até 24h)',
@@ -2594,8 +2624,10 @@ function iniciarSequencias(site) {
     <div class="seq-g"><label for="seq-limite">Máximo de modelos por pessoa, por semana</label><span class="auto-num"><input type="number" id="seq-limite" min="0" max="7" value="${esc(base.limite_semana)}"><span>por semana</span></span><small>Soma as 3 sequências. Texto livre e botão não contam (são grátis e só saem nas 24h).</small></div>
     <div class="seq-g"><label class="seq-check"><input type="checkbox" id="seq-domingo" ${base.pular_domingo ? 'checked' : ''}> Não mandar modelo no domingo</label><small>Textos e modelos só saem em horário comercial: texto 8h–21h, modelo 9h–20h.</small></div>
     <div class="seq-g seq-g-larga"><label for="seq-resp">Resposta quando a pessoa toca em "Quero agendar"</label><textarea id="seq-resp" rows="2">${esc(base.resposta_botao || '')}</textarea><small>Sai na hora e cria uma tarefa URGENTE "agendar" pra barbearia.</small></div>`;
-  $('seq-limite').addEventListener('input', (e) => { estado.seq.limite_semana = Number(e.target.value) || 0; seqSujo(); });
-  $('seq-domingo').addEventListener('change', (e) => { estado.seq.pular_domingo = e.target.checked; seqSujo(); });
+  const resRegras = () => { $('seq-regras-res').textContent = `· até ${estado.seq.limite_semana} ${estado.seq.limite_semana === 1 ? 'modelo' : 'modelos'} por semana por pessoa${estado.seq.pular_domingo ? ' · sem modelo no domingo' : ''}`; };
+  resRegras();
+  $('seq-limite').addEventListener('input', (e) => { estado.seq.limite_semana = Number(e.target.value) || 0; resRegras(); seqSujo(); });
+  $('seq-domingo').addEventListener('change', (e) => { estado.seq.pular_domingo = e.target.checked; resRegras(); seqSujo(); });
   $('seq-resp').addEventListener('input', (e) => { estado.seq.resposta_botao = e.target.value; seqSujo(); });
   $('seq-salvar').addEventListener('click', salvarSequencias);
   desenharSequencias();
@@ -2605,17 +2637,22 @@ function desenharSequencias() {
   const cfg = estado.seq; if (!cfg || !$('seq-fluxos')) return;
   const aprovados = (estado.modelosLista || []).filter((m) => m.status === 'APPROVED');
   const info = estado.modelosInfo || {};
-  $('seq-fluxos').innerHTML = Object.entries(FLUXOS).map(([f, F]) => {
-    const fl = cfg[f];
-    return `<div class="seq-fluxo ${fl.ligado ? 'ligado' : ''}" data-fluxo="${f}">
-      <div class="auto-topo"><h3>${F.t}</h3><label class="chavinha"><input type="checkbox" data-seq-liga="${f}" ${fl.ligado ? 'checked' : ''}><span></span><b>${fl.ligado ? 'Ligado' : 'Desligado'}</b></label></div>
-      <p class="auto-desc">${F.d}</p>
-      ${f === 'reativacao' ? `<div class="seq-dias"><label for="seq-dias">Começa depois de quantos dias sem vir</label><span class="auto-num"><input type="number" id="seq-dias" min="7" max="365" value="${esc(fl.dias)}"><span>dias</span></span></div>` : ''}
-      <ol class="seq-passos">${fl.passos.map((p, i) => passoHTML(f, p, i, fl.passos.length, aprovados, info, F.ancora)).join('')}</ol>
-      <button class="btn-sec mini" type="button" data-seq-add="${f}">+ Adicionar passo</button>
-      <div class="seq-resumo">${resumoFluxo(f, fl)}</div>
+  estado.seqAberto = estado.seqAberto || {};
+  const card = (f, F) => {
+    const fl = cfg[f]; const aberto = !!estado.seqAberto[f];
+    const linha = fl.passos.map((p) => `<span class="seq-chip ${p.tipo}${p.tipo === 'modelo' && !(p.modelos || []).length ? ' vazio' : ''}" title="${esc(ROT_TIPO[p.tipo])} · ${esc(tempoCurto(p.espera_min))}">${p.tipo === 'modelo' ? '★' : p.tipo === 'botao' ? '▣' : '✎'} ${esc(tempoCurto(p.espera_min))}</span>`).join('<i class="seq-seta"></i>');
+    return `<div class="seq-fluxo ${fl.ligado ? 'ligado' : ''} ${aberto ? 'aberto' : ''}" data-fluxo="${f}">
+      <div class="seq-topo"><span class="seq-ic">${icone(F.ic, 16)}</span><div class="seq-tit"><h3>${F.t}</h3><small>${F.d}</small></div>
+        <label class="chavinha" title="Liga ou desliga"><input type="checkbox" data-seq-liga="${f}" ${fl.ligado ? 'checked' : ''}><span></span><b>${fl.ligado ? 'Ligado' : 'Desligado'}</b></label></div>
+      ${f === 'reativacao' ? `<div class="seq-dias"><label for="seq-dias">Começa com</label><span class="auto-num"><input type="number" id="seq-dias" min="7" max="365" value="${esc(fl.dias)}"><span>dias sem vir</span></span></div>` : ''}
+      <div class="seq-linha">${linha || '<span class="seq-resumo">Sem passos</span>'}</div>
+      <div class="seq-rodape"><span class="seq-resumo">${resumoFluxo(f, fl)}</span><button class="btn-sec mini" type="button" data-seq-abrir="${f}" aria-expanded="${aberto}">${aberto ? 'Fechar' : 'Editar passos'}</button></div>
+      ${aberto ? `<ol class="seq-passos">${fl.passos.map((p, i) => passoHTML(f, p, i, fl.passos.length, aprovados, info, F.ancora)).join('')}</ol>
+        <button class="btn-sec mini" type="button" data-seq-add="${f}" style="align-self:flex-start">+ Adicionar passo</button>` : ''}
     </div>`;
-  }).join('');
+  };
+  $('seq-fluxos').innerHTML = Object.entries(GRUPOS_SEQ).map(([g, G]) => `<div class="seq-secao"><div class="seq-sec-cab"><h3>${G.t}</h3><p>${G.d}</p></div>
+    <div class="seq-grade">${Object.entries(FLUXOS).filter(([, F]) => F.grupo === g).map(([f, F]) => card(f, F)).join('')}</div></div>`).join('');
   ligarEventosSeq();
 }
 function passoHTML(f, p, i, total, aprovados, info, ancora) {
@@ -2624,8 +2661,15 @@ function passoHTML(f, p, i, total, aprovados, info, ancora) {
   const foraJanela = livre && Number(p.espera_min) > 23 * 60;
   const id = `${f}-${i}`;
   const textos = (p.textos && p.textos.length ? p.textos : ['']);
+  const chave = `${f}-${i}`; const aberto = estado.seqPasso === chave;
+  const previa = p.tipo === 'modelo' ? ((p.modelos || []).length ? (p.modelos || []).join(', ') : 'nenhum modelo marcado') : (textos[0] || 'sem texto');
+  const nVers = p.tipo === 'modelo' ? (p.modelos || []).length : textos.filter((t) => String(t).trim()).length;
+  if (!aberto) return `<li class="seq-passo fechado" data-f="${f}" data-i="${i}"><button type="button" class="seq-p-cab" data-p-abrir="${chave}">
+    <span class="seq-num">${i + 1}</span><span class="seq-chip ${p.tipo}">${esc(tempoCurto(p.espera_min))}</span><b>${esc(ROT_TIPO[p.tipo])}</b>
+    <span class="seq-prev${p.tipo === 'modelo' && !(p.modelos || []).length ? ' falta' : ''}">${esc(String(previa).replace(/\{nome\}/g, 'João'))}</span>
+    ${nVers > 1 ? `<span class="seq-vers">${nVers} ${p.tipo === 'modelo' ? 'modelos' : 'versões'}</span>` : ''}${foraJanela ? '<span class="seq-vers falta">passa das 24h</span>' : ''}</button></li>`;
   return `<li class="seq-passo" data-f="${f}" data-i="${i}">
-    <div class="seq-passo-cab"><b>Passo ${i + 1}</b>
+    <div class="seq-passo-cab"><button type="button" class="link-bt" data-p-abrir="" aria-label="Fechar passo">▾</button><b>Passo ${i + 1}</b>
       <span class="seq-quando"><input type="number" min="0" aria-label="Tempo do passo ${i + 1}" data-p="n" value="${n}"><select aria-label="Unidade" data-p="u"><option value="min" ${u === 'min' ? 'selected' : ''}>min</option><option value="horas" ${u === 'horas' ? 'selected' : ''}>horas</option><option value="dias" ${u === 'dias' ? 'selected' : ''}>dias</option></select><span>${ancora}</span></span>
       <span class="seq-acoes"><button class="btn-sec mini" type="button" data-p-mover="-1" ${i === 0 ? 'disabled' : ''} aria-label="Subir">↑</button><button class="btn-sec mini" type="button" data-p-mover="1" ${i === total - 1 ? 'disabled' : ''} aria-label="Descer">↓</button><button class="link-bt" type="button" data-p-tirar>Tirar</button></span></div>
     <select data-p="tipo" aria-label="Tipo do passo ${i + 1}">${Object.entries(TIPOS_PASSO).map(([k, t]) => `<option value="${k}" ${p.tipo === k ? 'selected' : ''}>${t}</option>`).join('')}</select>
@@ -2643,17 +2687,19 @@ function resumoFluxo(f, fl) {
   if (!fl.passos.length) return 'Sem passos.';
   const modelos = fl.passos.filter((p) => p.tipo === 'modelo').length; const gratis = fl.passos.length - modelos;
   const ult = esperaPartes(fl.passos[fl.passos.length - 1].espera_min);
-  return `${fl.passos.length} ${fl.passos.length === 1 ? 'passo' : 'passos'}: ${gratis} grátis + ${modelos} ${modelos === 1 ? 'modelo' : 'modelos'} (até ${modelos * 10} créditos por pessoa). O último sai ${ult[0]} ${ult[1]} ${FLUXOS[f].ancora}.`;
+  return `${fl.passos.length} ${fl.passos.length === 1 ? 'passo' : 'passos'} · ${gratis} grátis · ${modelos} ${modelos === 1 ? 'modelo' : 'modelos'} · até ${modelos * 10} créditos por pessoa`;
 }
 function ligarEventosSeq() {
   const box = $('seq-fluxos');
   box.querySelectorAll('[data-seq-liga]').forEach((ch) => ch.addEventListener('change', () => { estado.seq[ch.dataset.seqLiga].ligado = ch.checked; desenharSequencias(); seqSujo(); }));
   if ($('seq-dias')) $('seq-dias').addEventListener('input', (e) => { estado.seq.reativacao.dias = Number(e.target.value) || 30; seqSujo(); });
+  box.querySelectorAll('[data-seq-abrir]').forEach((b) => b.addEventListener('click', () => { const f = b.dataset.seqAbrir; estado.seqAberto[f] = !estado.seqAberto[f]; estado.seqPasso = null; desenharSequencias(); }));
+  box.querySelectorAll('[data-p-abrir]').forEach((b) => b.addEventListener('click', () => { estado.seqPasso = b.dataset.pAbrir || null; desenharSequencias(); }));
   box.querySelectorAll('[data-seq-add]').forEach((b) => b.addEventListener('click', () => {
     const l = estado.seq[b.dataset.seqAdd].passos; const ult = l[l.length - 1];
-    l.push({ espera_min: (Number(ult?.espera_min) || 0) + 7 * 1440, tipo: 'modelo', modelos: [] }); desenharSequencias(); seqSujo();
+    l.push({ espera_min: (Number(ult?.espera_min) || 0) + 7 * 1440, tipo: 'modelo', modelos: [] }); estado.seqPasso = `${b.dataset.seqAdd}-${l.length - 1}`; desenharSequencias(); seqSujo();
   }));
-  box.querySelectorAll('.seq-passo').forEach((li) => {
+  box.querySelectorAll('.seq-passo:not(.fechado)').forEach((li) => {
     const f = li.dataset.f, i = Number(li.dataset.i); const p = estado.seq[f].passos[i];
     const tempo = () => { const n = Number(li.querySelector('[data-p="n"]').value) || 0; const u = li.querySelector('[data-p="u"]').value; p.espera_min = Math.round(n * (u === 'dias' ? 1440 : u === 'horas' ? 60 : 1)); seqSujo(); };
     li.querySelector('[data-p="n"]').addEventListener('input', tempo);
@@ -2667,10 +2713,10 @@ function ligarEventosSeq() {
     }));
     const addV = li.querySelector('[data-p-add-v]'); if (addV) addV.addEventListener('click', () => { p.textos = [...(p.textos || ['']), '']; desenharSequencias(); seqSujo(); });
     li.querySelectorAll('[data-p-tirar-v]').forEach((b) => b.addEventListener('click', () => { p.textos.splice(Number(b.dataset.pTirarV), 1); desenharSequencias(); seqSujo(); }));
-    li.querySelector('[data-p-tirar]').addEventListener('click', () => { estado.seq[f].passos.splice(i, 1); desenharSequencias(); seqSujo(); });
+    li.querySelector('[data-p-tirar]').addEventListener('click', () => { estado.seq[f].passos.splice(i, 1); estado.seqPasso = null; desenharSequencias(); seqSujo(); });
     li.querySelectorAll('[data-p-mover]').forEach((b) => b.addEventListener('click', () => {
       const l = estado.seq[f].passos; const j = i + Number(b.dataset.pMover); if (j < 0 || j >= l.length) return;
-      [l[i], l[j]] = [l[j], l[i]]; desenharSequencias(); seqSujo();
+      [l[i], l[j]] = [l[j], l[i]]; estado.seqPasso = `${f}-${j}`; desenharSequencias(); seqSujo();
     }));
   });
 }
