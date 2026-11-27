@@ -465,6 +465,108 @@
   #tela-dashboard .filtros .sel-bt { min-height: 38px; padding: 8px 12px; font-size: 13px; }
   #tela-dashboard .filtros::before { content: 'Filtrar'; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--tx3); flex: 0 0 auto; padding: 0 4px; }
 
+
+  /* ===== Conversas nova ===== */
+  .cv-filtros { padding: 10px 12px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .cv-barra { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .cv-bt-filtros { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; font-weight: 600; }
+  .cv-bt-filtros[aria-expanded="true"] { border-color: var(--verde-bd); background: var(--verde-bg); color: var(--verde-claro); }
+  .cv-barra #busca { flex: 1 1 240px; max-width: 420px; min-height: 40px; padding: 8px 12px; }
+  .cv-conta { margin-left: auto; font-size: 13px; color: var(--tx3); } .cv-conta b { color: var(--tx); font-weight: 600; }
+  .cv-painel { display: flex; flex-direction: column; gap: 12px; padding: 12px 4px 2px; border-top: 1px solid var(--line2); }
+  .cv-per { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .cv-rot, .dt-rot, .jr-rot { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--tx3); font-weight: 600; }
+  .cv-sels { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+  .cv-sels label { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--tx3); margin-bottom: 5px; }
+  .cv-sels .sel-bt { min-height: 40px; padding: 8px 12px; font-size: 13px; }
+  .link-bt { background: none; border: 0; color: var(--tx2); font: inherit; font-size: 13px; cursor: pointer; text-decoration: underline; }
+  .conv-lista { flex: 1.3 1 340px; max-width: 460px; padding: 12px; gap: 8px; max-height: 78vh; }
+  .conv > .chat { flex: 2 1 360px; } .conv > .detalhe { flex: 1 1 260px; }
+  .cv-abas { width: 100%; } .cv-abas button { flex: 1; }
+  .conv-item { align-items: center; gap: 12px; padding: 12px 10px; border-radius: 12px; border-bottom: 1px solid var(--line2); }
+  .conv-item.ativo { box-shadow: none; background: var(--verde-bg); border: 1px solid var(--verde-bd); }
+  .ci-logo { position: relative; flex-shrink: 0; display: inline-flex; }
+  .ci-mini { position: absolute; right: -6px; bottom: -6px; border-radius: 9px; box-shadow: 0 0 0 2px var(--solido); display: inline-flex; }
+  .ci-tel { font-family: var(--mono); font-weight: 500; font-size: 14.5px; color: var(--tx); white-space: nowrap; }
+  .ci-sub { font-size: 12px; color: var(--tx2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ci-sub span { color: var(--tx3); }
+  .ci-base { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 11px; }
+  .eti-base { font-weight: 600; padding: 1px 7px; border-radius: 6px; background: var(--solido-2); border: 1px solid var(--line); color: var(--tx2); }
+  .ci-base .volta { color: var(--verde-claro); }
+  .ci-linha { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ci-etapa { font-size: 11px; color: var(--tx3); }
+  .tag-st { font-size: 11px; padding: 2px 8px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
+  .tag-st.cheia { background: #10B981; color: #04130C; font-weight: 700; }
+  .tag-st.contorno { border: 1px solid var(--verde-bd); color: var(--verde-claro); font-weight: 600; }
+  .tag-st.ok { color: var(--tx3); padding: 0; }
+  .ci-espera { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; flex-shrink: 0; }
+  .ci-espera small { font-size: 10px; color: var(--tx3); }
+  .ci-espera b { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--verde-claro); font-variant-numeric: tabular-nums; }
+  .ci-espera.forte b { color: var(--tx); padding: 1px 7px; border-radius: 7px; background: var(--alerta-bg); border: 1px solid var(--alerta-bd); }
+  .ci-hora { font-family: var(--mono); font-size: 11px; color: var(--tx3); flex-shrink: 0; }
+  .chat-topo { justify-content: flex-start; gap: 12px; flex-wrap: nowrap; }
+  .marcador-toque { align-self: center; display: flex; align-items: center; gap: 8px; margin: 6px 0; padding: 8px 12px; border-radius: 12px; background: rgba(8,102,255,.10); border: 1px solid rgba(8,102,255,.35); font-size: 12px; color: var(--tx2); }
+  .marcador-toque b { color: var(--tx); font-weight: 600; }
+  .detalhe { max-width: 320px; gap: 14px; }
+  .origem-box { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: var(--solido); border: 1px solid var(--line); }
+  .origem-box.meta, .origem-box.volta { background: rgba(8,102,255,.10); border-color: rgba(8,102,255,.35); }
+  .origem-box span { display: flex; flex-direction: column; min-width: 0; } .origem-box b { font-weight: 600; } .origem-box small { font-size: 12px; color: var(--tx2); }
+  .fat-box { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 14px; background: linear-gradient(160deg, rgba(16,185,129,.18), rgba(16,185,129,.04)); border: 1px solid var(--verde-bd); }
+  .fat-box small { font-size: 12px; color: var(--tx2); } .fat-box b { font-size: 28px; font-weight: 600; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .ver-hist { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--verde-bg); border-color: var(--verde-bd); color: var(--verde-claro); font-weight: 600; }
+  dialog.modal-lead { width: min(880px, 96vw); max-height: 92vh; overflow: auto; }
+  .ml-topo { display: flex; align-items: center; gap: 14px; padding: 18px 22px; border-bottom: 1px solid var(--line); }
+  .ml-corpo { display: flex; flex-wrap: wrap; gap: 18px; padding: 18px 22px 22px; }
+  .ml-col { flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+  .ml-nums { display: flex; gap: 10px; } .ml-nums > div { flex: 1; padding: 12px; border-radius: 12px; background: var(--solido); border: 1px solid var(--line); display: flex; flex-direction: column; }
+  .ml-nums small { font-size: 12px; color: var(--tx3); } .ml-nums b { font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .jr-rot { margin-bottom: 10px; }
+  .jr-meio { display: flex; align-items: center; gap: 10px; margin: 4px 0 16px; font-size: 12px; color: var(--tx3); }
+  .jr-meio span { flex: 1; border-top: 1px dashed var(--line); }
+  @media (max-width: 700px) { .conv-lista { max-width: none; } .detalhe { max-width: none; } }
+
+
+  /* ===== Configurações nova ===== */
+  #tela-config .abas { border-bottom: 0; padding: 4px; gap: 4px; border-radius: 14px; background: var(--solido); border: 1px solid var(--line); width: fit-content; }
+  #tela-config .abas button { border-radius: 10px; min-height: 38px; padding: 0 16px; font-size: 14px; }
+  #tela-config .abas button[aria-selected="true"] { font-weight: 600; }
+  .logo-up { display: flex; align-items: center; gap: 16px; padding: 14px; border-radius: 14px; background: var(--solido-2); border: 1px dashed var(--verde-bd); }
+  .logo-av { width: 72px; height: 72px; border-radius: 999px; flex-shrink: 0; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; color: var(--verde-claro); background: radial-gradient(circle at 30% 30%, #2A3A32, #0B1410); border: 2px solid var(--verde-bd); }
+  html[data-tema="claro"] .logo-av { background: radial-gradient(circle at 30% 30%, #E3F7EE, #C9E9D8); }
+  .topo-tit { display: flex; align-items: center; gap: 14px; } #topo-logo { width: 46px; height: 46px; border-width: 1px; }
+  .eu-av { position: relative; padding: 0; cursor: pointer; overflow: visible; font: inherit; font-weight: 700; color: var(--verde-claro); }
+  .eu-av img { border-radius: 999px; }
+  .eu-cam { position: absolute; right: -4px; bottom: -4px; width: 17px; height: 17px; border-radius: 999px; background: #10B981; color: #04130C; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px var(--solido); }
+  .wa-topo { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .wa-logo { width: 52px; height: 52px; border-radius: 14px; background: #25D366; color: #fff; display: flex; align-items: center; justify-content: center; }
+  .wa-st { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--tx2); }
+  .wa-st span { width: 8px; height: 8px; border-radius: 999px; background: var(--tx3); }
+  .wa-st.ok { background: var(--verde-bg); border-color: var(--verde-bd); color: var(--verde-claro); } .wa-st.ok span { background: #34D399; box-shadow: 0 0 8px #34D399; }
+  .wa-infos { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+  .wa-infos > div { padding: 12px 14px; border-radius: 12px; background: var(--solido); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 2px; }
+  .wa-infos small { font-size: 12px; color: var(--tx3); } .wa-infos b { font-size: 14px; font-weight: 500; }
+  .wa-avancado { border-top: 1px solid var(--line2); padding-top: 12px; } .wa-avancado summary, .fx-mais { cursor: pointer; font-size: 13px; color: var(--tx2); }
+  .fx-grade { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; } #cf-funil { flex: 2 1 480px; min-width: 0; }
+  .fx-previa { flex: 1 1 280px; min-width: 0; padding: 18px; }
+  .fx-card { border-radius: 12px; background: var(--solido-2); border: 1px solid var(--line); padding: 0; display: flex; flex-direction: column; }
+  .fx-card.aberto { border-color: var(--verde-bd); box-shadow: 0 0 0 3px rgba(52,211,153,.10); }
+  .fx-cab { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
+  .fx-bola { width: 12px; height: 12px; border-radius: 999px; flex-shrink: 0; }
+  .fx-abrir { all: unset; cursor: pointer; flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .fx-abrir:focus-visible { outline: 2px solid var(--verde-claro); outline-offset: 4px; border-radius: 6px; }
+  .fx-abrir b { font-weight: 600; } .fx-resumo { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fx-qtd { font-size: 12px; color: var(--tx3); white-space: nowrap; }
+  .fx-corpo { display: none; flex-direction: column; gap: 14px; padding: 4px 14px 14px; border-top: 1px solid var(--line2); }
+  .fx-card.aberto .fx-corpo { display: flex; padding-top: 14px; }
+  .fx-perg { font-size: 13px; font-weight: 600; color: var(--tx2); margin-bottom: 8px; }
+  .fx-evs { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+  .fx-ev { min-height: 56px; border-radius: 12px; border: 1px solid var(--line); background: var(--solido); color: var(--tx2); font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+  .fx-ev b { font-size: 14px; font-weight: 600; } .fx-ev small { font-family: var(--mono); font-size: 11px; color: var(--tx3); }
+  .fx-ev[aria-pressed="true"] { border: 1.5px solid #34D399; background: var(--verde-bg); color: var(--tx); }
+  .fx-teste { padding: 12px; border-radius: 12px; border: 1px dashed var(--line); background: var(--solido); }
+  .fx-res { font-size: 13px; color: var(--tx2); margin-top: 8px; display: flex; align-items: center; gap: 6px; } .fx-res:empty { display: none; } .fx-res.ok { color: var(--verde-claro); }
+  .fx-aviso { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: var(--alerta-bg); border: 1px solid var(--alerta-bd); font-size: 13px; margin-bottom: 8px; }
+  #cf-funil.ordenando .fx-cab .btn-sec, #cf-funil.ordenando .fx-resumo, #cf-funil.ordenando .fx-qtd { display: none; }
+
   /* ===== tema claro (opcional) ===== */
   html[data-tema="claro"] {
     color-scheme: light;
@@ -506,6 +608,14 @@
   html[data-tema="claro"] .bt-tema .bola { background: #0F1A13; }
   html:not([data-tema="claro"]) .bt-tema .bola { background: #FFFFFF; }
   @media (max-width: 700px) { main { padding: 20px 16px; } .funil-nome { width: 110px; } nav { max-width: none; } }
+  .sv-drop { display:flex; flex-direction:column; align-items:center; gap:4px; padding:22px 16px; border:1.5px dashed var(--campo-bd); border-radius:14px; background:var(--campo); cursor:pointer; text-align:center; color:var(--tx2); transition:border-color .15s, background .15s; }
+  .sv-drop:hover, .sv-drop.arrastando { border-color:var(--verde); background:rgba(16,185,129,.08); color:var(--tx); }
+  .sv-drop small { color:var(--tx3); font-size:12px; }
+  .sv-lista { display:flex; flex-direction:column; gap:6px; }
+  .sv-cab, .sv-linha { display:grid; grid-template-columns:minmax(0,1fr) 120px auto; gap:8px; align-items:center; }
+  .sv-cab { font-size:12px; color:var(--tx3); padding:0 2px; }
+  .mv-sug { display:flex; gap:8px; align-items:center; padding:10px 12px; border-radius:10px; background:rgba(16,185,129,.10); border:1px solid rgba(16,185,129,.35); font-size:13px; color:var(--tx); }
+  .selo.alerta-leve { background:rgba(245,158,11,.0); border:1px dashed var(--tx3); color:var(--tx2); }
 </style>
 </head>
 <body>
@@ -539,7 +649,7 @@
     </div>
     <div id="saldo-creditos" class="creditos oculto" title="Créditos pra enviar mensagens pelo Radar"></div>
     <div class="rodape">
-      <div class="eu"><span class="eu-av" id="quem-av" aria-hidden="true">?</span><span class="eu-txt"><b id="quem-nome"></b><span id="quem"></span></span></div>
+      <div class="eu"><button type="button" class="eu-av" id="quem-av" title="Trocar minha foto" aria-label="Trocar minha foto">?</button><input type="file" id="quem-arq" class="oculto" accept="image/jpeg,image/png,image/webp"><span class="eu-txt"><b id="quem-nome"></b><span id="quem"></span></span></div>
       <div class="rodape-bts">
         <button class="btn-sec bt-tema" id="bt-tema" type="button"><span class="bola" aria-hidden="true"></span><span id="bt-tema-txt">Tema claro</span></button>
         <button class="btn-sec bt-sair" id="bt-sair" type="button" aria-label="Sair"></button>
@@ -549,7 +659,7 @@
 
   <main>
     <div class="topo">
-      <div><h1 id="titulo">Resultados</h1><p id="subtitulo"></p></div>
+      <div class="topo-tit"><span class="logo-av" id="topo-logo" aria-hidden="true"></span><div><h1 id="titulo">Resultados</h1><p id="subtitulo"></p></div></div>
       <div class="topo-acoes">
         <div id="bloco-cliente"><label for="sel-site" class="oculto">Cliente</label><select id="sel-site" style="width:auto"></select><button class="btn-sec" id="bt-novo-cliente" type="button" title="Cadastrar novo cliente" aria-label="Cadastrar novo cliente">+</button></div>
         <div class="pilulas" id="pilulas-periodo" role="group" aria-label="Período">
@@ -606,6 +716,8 @@ const COR = {
 };
 // ícones genéricos (desenhos próprios, não são os logotipos oficiais)
 const IC = {
+  upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m6 10 6-6 6 6"/><path d="M4 20h16"/></svg>',
+  camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3"/></svg>',
   m_resultados: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 15v-4"/><path d="M12 15V7"/><path d="M17 15v-6"/></svg>',
   m_tarefas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l2 2 4-4"/><rect x="4" y="4" width="16" height="16" rx="3"/></svg>',
   m_conversas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l1.5-3.5A7.5 7.5 0 1 1 9 17.5z"/></svg>',
@@ -694,9 +806,9 @@ async function iniciar() {
   estado.perfil = perfil;
   $('quem').textContent = perfil.papel === 'admin' ? 'Administrador' : 'Cliente';
   $('quem-nome').textContent = perfil.nome || '';
-  $('quem-av').textContent = (perfil.nome || '?').trim().charAt(0).toUpperCase();
+  $('quem-av').innerHTML = fotoHTML(perfil.foto_path, perfil.nome, 34) + '<span class="eu-cam" aria-hidden="true">' + icone('camera', 10) + '</span>';
 
-  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   const sel = $('sel-site');
   sel.innerHTML = (sites || []).map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
@@ -709,12 +821,46 @@ async function iniciar() {
   await carregar();
 }
 
+// ================= FOTOS (logo do cliente e foto do usuário) =================
+function fotoURL(path) { return `${SUPABASE_URL}/storage/v1/object/public/fotos/${path}`; }
+function iniciais(nome) { const p = String(nome || '?').trim().split(/\s+/).filter((x) => !/^(de|da|do|dos|das|e)$/i.test(x)); return ((p[0] || '?').charAt(0) + (p.length > 1 ? p[p.length - 1].charAt(0) : '')).toUpperCase(); }
+function fotoHTML(path, nome, tam) {
+  return path ? `<img src="${esc(fotoURL(path))}" alt="" width="${tam}" height="${tam}" style="width:100%; height:100%; object-fit:cover; border-radius:inherit">`
+    : `<span style="font-size:${Math.round(tam * 0.36)}px">${esc(iniciais(nome))}</span>`;
+}
+async function quadradaJPG(f) {
+  const img = await createImageBitmap(f);
+  const lado = Math.min(img.width, img.height); const t = Math.min(512, lado);
+  const cv = document.createElement('canvas'); cv.width = t; cv.height = t;
+  cv.getContext('2d').drawImage(img, (img.width - lado) / 2, (img.height - lado) / 2, lado, lado, 0, 0, t, t);
+  return await new Promise((ok) => cv.toBlob(ok, 'image/jpeg', 0.88));
+}
+async function enviarFoto(f, tipo, siteId) {
+  if (!f) return null;
+  if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { toast('Use uma imagem JPG, PNG ou WEBP.'); return null; }
+  let blob; try { blob = await quadradaJPG(f); } catch (_) { toast('Não consegui ler essa imagem.'); return null; }
+  const { data: { session } } = await sb.auth.getSession();
+  const path = tipo === 'site' ? `site/${siteId}/logo-${Date.now()}.jpg` : `u/${session.user.id}/foto-${Date.now()}.jpg`;
+  const up = await sb.storage.from('fotos').upload(path, blob, { contentType: 'image/jpeg', upsert: false });
+  if (up.error) { toast('Não salvou a imagem: ' + up.error.message); return null; }
+  const { error } = await sb.rpc('salvar_foto', { p_tipo: tipo, p_site: siteId || null, p_path: path });
+  if (error) { toast('Não salvou a imagem: ' + error.message); return null; }
+  return path;
+}
+function mostrarLogoTopo() {
+  const el = $('topo-logo'); if (!el) return;
+  const site = (estado.sites || []).find((x) => x.id === estado.site);
+  el.innerHTML = site ? fotoHTML(site.logo_path, site.nome, 44) : '';
+  el.classList.toggle('oculto', !site);
+}
+
 // ================= DADOS =================
 async function carregar() {
   if (estado.novoCliente) { desenhar(); return; }
   if (!estado.site) { $('tela-dashboard').innerHTML = '<div class="card vazio">Nenhum cliente cadastrado ainda.</div>'; return; }
   const nomeSite = $('sel-site').selectedOptions[0]?.textContent ?? '';
   $('subtitulo').textContent = nomeSite;
+  mostrarLogoTopo();
 
   const [{ data: etapas }, { data: contatos }] = await Promise.all([
     sb.from('etapas').select('*').eq('site_id', estado.site).order('ordem'),
@@ -724,6 +870,8 @@ async function carregar() {
   estado.contatos = contatos || [];
   const { data: links } = await sb.from('links').select('*').eq('site_id', estado.site).order('criado_em', { ascending: false });
   estado.links = links || [];
+  const { data: tq } = await sb.from('toques').select('*').eq('site_id', estado.site).order('criado_em', { ascending: false }).limit(5000);
+  estado.toques = tq || [];
   const { data: vsT } = await sb.from('visitas').select('id, contato_id, data, valor, status').eq('site_id', estado.site).not('contato_id', 'is', null).limit(10000);
   estado.visitas = vsT || [];
   const { data: tAbertas } = await sb.from('tarefas').select('id').eq('site_id', estado.site).eq('status', 'aberta').lte('vence_em', hojeISO()).limit(500);
@@ -990,7 +1138,9 @@ async function abrirImportar() {
     const sel = (k, rot, obrig) => `<div style="flex:1 1 130px"><label for="mp-${k}">${rot}${obrig ? ' *' : ''}</label><select id="mp-${k}"><option value="-1">${obrig ? 'Escolha…' : 'Não tem'}</option>${cab.map((h, i) => `<option value="${i}" ${chute[k] === i ? 'selected' : ''}>${esc(h)}</option>`).join('')}</select></div>`;
     $('imp-mapa').innerHTML = `<div style="font-size:13px; color:var(--tx2); margin-bottom:6px">${dados.length} ${dados.length === 1 ? 'linha encontrada' : 'linhas encontradas'}. Confira qual coluna é cada coisa:</div>
       <div class="linha">${sel('telefone', 'Telefone', 1)}${sel('data', 'Data', 0)}${sel('valor', 'Valor', 0)}${sel('nome', 'Nome', 0)}${sel('servico', 'Serviço', 0)}</div>
-      <div id="imp-sem-data" class="linha" style="margin-top:6px"><div style="flex:0 1 220px"><label for="imp-data-unica">Sem coluna de data? Use este dia pra todos</label><input id="imp-data-unica" type="date" value="${hojeISO()}"></div></div>
+      <div id="imp-sem-data" class="linha" style="margin-top:6px"><div style="flex:0 1 220px"><label for="imp-data-unica">Sem coluna de data? Use este dia pra todos</label><input id="imp-data-unica" type="date" value="${hojeISO()}"></div>
+        <div style="flex:0 1 220px"><label for="imp-ddd">DDD pra número sem DDD</label><input id="imp-ddd" type="text" inputmode="numeric" maxlength="2" value="${dddPadrao()}" placeholder="ex.: 21"></div></div>
+      <div style="font-size:12px; color:var(--tx3); margin-top:6px">O Radar reconhece o número com ou sem 9, com ou sem +55, com espaço, traço ou parênteses. Se a mesma ida já estava marcada sem valor, a lista completa o valor.</div>
       <div style="overflow-x:auto; margin-top:8px"><table style="width:100%; border-collapse:collapse; font-size:12px">${[cab, ...dados.slice(0, 4)].map((l, i) => `<tr style="${i ? 'border-top:1px solid var(--line2)' : 'color:var(--tx3)'}">${l.map((x) => `<td style="padding:5px 6px; white-space:nowrap">${esc(String(x ?? ''))}</td>`).join('')}</tr>`).join('')}</table></div>`;
     $('imp-ok').disabled = false;
   };
@@ -1019,13 +1169,15 @@ async function abrirImportar() {
       valor: col('valor') >= 0 ? l[col('valor')] : null, nome: col('nome') >= 0 ? String(l[col('nome')] ?? '') : null, servico: col('servico') >= 0 ? String(l[col('servico')] ?? '') : null,
     }));
     $('imp-ok').disabled = true; $('imp-status').style.color = 'var(--tx2)'; $('imp-status').textContent = `Importando ${linhas.length} linhas…`;
-    const r = await chamarVisitas({ acao: 'importar', site_id: estado.site, linhas });
+    const r = await chamarVisitas({ acao: 'importar', site_id: estado.site, ddd: ($('imp-ddd')?.value || '').replace(/\D/g, ''), linhas });
     $('imp-ok').disabled = false;
     if (!r.ok) { $('imp-status').textContent = r.erro || 'Erro ao importar.'; $('imp-status').style.color = 'var(--alerta)'; return; }
     $('imp-mapa').innerHTML = `<div class="fid-grade">
       <div><b>${r.importadas}</b><span>idas registradas</span><small>de ${r.linhas} linhas</small></div>
       <div><b>${r.de_leads}</b><span>são de quem chamou no WhatsApp</span><small>${r.leads_atualizados} ${r.leads_atualizados === 1 ? 'conversa atualizada' : 'conversas atualizadas'} no funil</small></div>
       <div><b>${r.agendamentos_confirmados}</b><span>agendamentos confirmados</span><small>marcados como "veio"</small></div>
+      <div><b>${dinheiro(r.valor_total || 0)}</b><span>em valores na lista</span><small>${r.compras_enviadas || 0} ${(r.compras_enviadas || 0) === 1 ? 'venda enviada' : 'vendas enviadas'} pra Meta com valor</small></div>
+      <div><b>${r.valores_completados || 0}</b><span>valores completados</span><small>idas que estavam sem valor</small></div>
       <div><b>${r.repetidas + r.invalidas}</b><span>ignoradas</span><small>${r.repetidas} repetidas · ${r.invalidas} sem telefone/data</small></div></div>`;
     $('imp-status').style.color = 'var(--verde-claro)'; $('imp-status').textContent = '✓ Lista importada';
     await carregar();
@@ -1221,13 +1373,27 @@ async function carregarVendas() {
 
 // ================= CONVERSAS =================
 function itemConversa(c) {
-  const e = etapaDe(c); const cor = COR[e?.temperatura] || COR.frio; const o = ORIGEM[c.origem] || ORIGEM.organico;
-  const nome = c.nome || telefoneBonito(c.telefone);
+  const g = grupoDe(c); const tb = toqueBase(c);
+  const tel = telefoneBonito(c.telefone);
+  const nome = c.nome || '';
+  const origemTxt = [g.k === 'organico' && tb ? 'cliente da base' : g.nome, c.campanha].filter(Boolean).join(' · ');
+  let tag = '';
+  if (esperando(c)) tag = c.primeira_resposta_em ? '<span class="tag-st contorno">Sem resposta</span>' : '<span class="tag-st cheia">Sem primeira resposta</span>';
+  else if (c.primeira_resposta_em) tag = `<span class="tag-st ok">${icone('ok', 11)} Respondida</span>`;
+  const desde = c.aguardando_desde || c.ultima_msg_em || c.atualizado_em;
+  const min = (Date.now() - new Date(desde)) / 60000;
+  const tempo = esperando(c)
+    ? `<span class="ci-espera${min >= 60 ? ' forte' : ''}"><small>esperando</small><b>${duracaoCurta(Date.now() - new Date(desde))}</b></span>`
+    : `<span class="ci-hora">${quando(c.ultima_msg_em || c.atualizado_em)}</span>`;
   return `<button class="conv-item ${estado.aberto === c.id ? 'ativo' : ''}" data-contato="${c.id}">
-    <span class="av">${esc(nome.charAt(0).toUpperCase())}</span>
-    <span class="meio"><span class="nome">${esc(nome)}<small>${quando(c.atualizado_em)}</small></span>
-    <span class="orig"><span class="bol" style="background:${cor.c}"></span>${esc(e?.nome ?? 'Sem etapa')} · ${icone(o.ic, 13)} ${o.nome}${c.lugar ? ' · ' + esc(c.lugar) : ''}</span></span>
-    ${esperando(c) ? '<span class="badge" title="Esperando resposta" style="align-self:center">!</span>' : ''}
+    <span class="ci-logo">${logoGrupo(g, 40)}${tb ? `<span class="ci-mini">${logoGrupo(grupoToque(tb), 20)}</span>` : ''}</span>
+    <span class="meio">
+      <b class="ci-tel">${esc(tel)}</b>
+      <span class="ci-sub">${nome ? esc(nome) + ' · ' : ''}<span>${esc(origemTxt)}</span></span>
+      ${tb ? `<span class="ci-base"><span class="eti-base">Da base</span><span class="volta">voltou por ${esc(descToque(tb))}</span></span>` : ''}
+      <span class="ci-linha">${etapaDe(c) ? `<span class="ci-etapa">${esc(etapaDe(c).nome)}</span>` : ''}${tag}</span>
+    </span>
+    ${tempo}
   </button>`;
 }
 function esperando(c) { return c.ultima_direcao === 'entrada'; }
@@ -1237,23 +1403,69 @@ function atualizarBadges() {
   const h = $('badge-hoje'); if (h) { const t = estado.tarefasAbertas || 0; h.textContent = t; h.classList.toggle('oculto', !t); }
 }
 
+function filtroConv() { return telaConversas._f || (telaConversas._f = { per: 'tudo', de: '', ate: '', origem: '', link: '', camp: '', criativo: '', etapa: '' }); }
+function noPeriodoConv(c, f) {
+  if (f.per === 'tudo') return true;
+  const t = new Date(c.ultima_msg_em || c.atualizado_em || c.criado_em).getTime();
+  const agora = new Date(); const ini0 = (d) => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x.getTime(); };
+  if (f.per === 'hoje') return t >= ini0(agora);
+  if (f.per === 'mes') return t >= new Date(agora.getFullYear(), agora.getMonth(), 1).getTime();
+  if (f.per === 'custom') return (!f.de || t >= new Date(f.de + 'T00:00:00').getTime()) && (!f.ate || t <= new Date(f.ate + 'T23:59:59').getTime());
+  return t >= Date.now() - Number(f.per) * 864e5;
+}
 function listaConversas(base) {
-  const filtro = (telaConversas._busca || '').toLowerCase();
+  const busca = (telaConversas._busca || '').toLowerCase();
   const aba = telaConversas._aba || 'todas';
-  return base.filter((c) => (aba !== 'sem' || esperando(c)) && (!filtro || (c.nome || '').toLowerCase().includes(filtro) || c.telefone.includes(filtro)));
+  const f = filtroConv();
+  return base.filter((c) => {
+    if (aba === 'sem' && !esperando(c)) return false;
+    if (busca && !((c.nome || '').toLowerCase().includes(busca) || c.telefone.includes(busca.replace(/\D/g, '') || busca))) return false;
+    if (!noPeriodoConv(c, f)) return false;
+    const tqs = toquesDe(c);
+    if (f.origem && grupoDe(c).k !== f.origem && !tqs.some((t) => grupoToque(t).k === f.origem)) return false;
+    if (f.link && c.link_id !== Number(f.link) && !tqs.some((t) => t.link_id === Number(f.link))) return false;
+    if (f.camp && (c.campanha || '') !== f.camp) return false;
+    if (f.criativo && (c.anuncio_titulo || '') !== f.criativo && !tqs.some((t) => (t.anuncio_titulo || '') === f.criativo)) return false;
+    if (f.etapa && c.etapa_id !== Number(f.etapa)) return false;
+    return true;
+  }).sort((a, b) => (esperando(b) - esperando(a)) || (new Date(b.ultima_msg_em || b.atualizado_em) - new Date(a.ultima_msg_em || a.atualizado_em)));
 }
 function telaConversas() {
   const lista = listaConversas(estado.contatos);
   const aba = telaConversas._aba || 'todas';
   const nSem = estado.contatos.filter(esperando).length;
-  $('tela-conversas').innerHTML = `<div class="conv">
-    <div class="card conv-lista">
-      <div class="abas" role="tablist" style="padding:10px 10px 8px">
-        <button role="tab" data-aba-conv="sem" aria-selected="${aba === 'sem'}">Sem resposta (${nSem})</button>
-        <button role="tab" data-aba-conv="todas" aria-selected="${aba === 'todas'}">Todas (${estado.contatos.length})</button>
+  const f = filtroConv(); const aberto = !!telaConversas._filtros;
+  const ativos = ['origem', 'link', 'camp', 'criativo', 'etapa'].filter((k) => f[k]).length + (f.per !== 'tudo' ? 1 : 0);
+  const criativos = [...new Set([...estado.contatos.map((c) => c.anuncio_titulo), ...(estado.toques || []).map((t) => t.anuncio_titulo)].filter(Boolean))].sort();
+  const opc = (vals, atual, todos) => `<option value="">${todos}</option>` + vals.map(([v, t]) => `<option value="${esc(v)}" ${String(v) === String(atual) ? 'selected' : ''}>${esc(t)}</option>`).join('');
+  const pers = [['tudo', 'Tudo'], ['hoje', 'Hoje'], ['7', '7 dias'], ['30', '30 dias'], ['mes', 'Mês'], ['custom', 'Personalizado']];
+  $('tela-conversas').innerHTML = `
+    <div class="card vidro cv-filtros">
+      <div class="cv-barra">
+        <button class="btn-sec cv-bt-filtros" id="cv-bt-filtros" type="button" aria-expanded="${aberto}">${icone('m_funil', 16)} Filtros${ativos ? ` <span class="badge">${ativos}</span>` : ''}</button>
+        <label for="busca" class="oculto">Buscar</label><input id="busca" type="text" placeholder="Buscar nome ou telefone" value="${esc(telaConversas._busca || '')}">
+        <span class="cv-conta">Mostrando <b>${lista.length === estado.contatos.length ? 'todas as ' + lista.length : lista.length + ' de ' + estado.contatos.length}</b> conversas</span>
       </div>
-      <div class="busca"><label for="busca">Buscar</label><input id="busca" type="text" placeholder="Nome ou telefone" value="${esc(telaConversas._busca || '')}"></div>
-      <div class="itens">${lista.length ? lista.map(itemConversa).join('') : `<div class="vazio" style="padding:16px">${aba === 'sem' ? 'Ninguém esperando resposta.' : 'Nenhuma conversa ainda.'}</div>`}</div>
+      ${aberto ? `<div class="cv-painel">
+        <div class="cv-per"><span class="cv-rot">Período</span><div class="pilulas">${pers.map(([k, t]) => `<button type="button" data-cv-per="${k}" aria-pressed="${f.per === k}">${t}</button>`).join('')}</div>
+          ${f.per === 'custom' ? `<span class="periodo-datas"><label for="cv-de" class="oculto">De</label><input type="date" id="cv-de" value="${esc(f.de)}"><span style="color:var(--tx3)">até</span><label for="cv-ate" class="oculto">Até</label><input type="date" id="cv-ate" value="${esc(f.ate)}"></span>` : ''}</div>
+        <div class="cv-sels">
+          <div><label for="cv-origem">Origem</label><select id="cv-origem">${opc(GRUPOS.map((g) => [g.k, g.nome]), f.origem, 'Todas as origens')}</select></div>
+          <div><label for="cv-link">Link rastreável</label><select id="cv-link">${opc((estado.links || []).map((l) => [l.id, l.nome]), f.link, 'Todos os links')}</select></div>
+          <div><label for="cv-camp">Campanha</label><select id="cv-camp">${opc(valoresDe('campanha').map((v) => [v, v]), f.camp, 'Todas as campanhas')}</select></div>
+          <div><label for="cv-criativo">Criativo</label><select id="cv-criativo">${opc(criativos.map((v) => [v, v]), f.criativo, 'Todos os criativos')}</select></div>
+          <div><label for="cv-etapa">Etapa</label><select id="cv-etapa">${opc(estado.etapas.map((e) => [e.id, e.nome]), f.etapa, 'Todas as etapas')}</select></div>
+        </div>
+        <div style="display:flex; justify-content:flex-end"><button class="link-bt" id="cv-limpar" type="button">Limpar filtros</button></div>
+      </div>` : ''}
+    </div>
+    <div class="conv">
+    <div class="card conv-lista">
+      <div class="pilulas cv-abas" role="tablist">
+        <button role="tab" data-aba-conv="todas" aria-pressed="${aba === 'todas'}" aria-selected="${aba === 'todas'}">Todas · ${estado.contatos.length}</button>
+        <button role="tab" data-aba-conv="sem" aria-pressed="${aba === 'sem'}" aria-selected="${aba === 'sem'}">Sem resposta · ${nSem}</button>
+      </div>
+      <div class="itens">${lista.length ? lista.map(itemConversa).join('') : `<div class="vazio" style="padding:16px">${aba === 'sem' ? 'Ninguém esperando resposta.' : 'Nenhuma conversa com esses filtros.'}</div>`}</div>
     </div>
     <div class="card chat" id="chat"><div class="vazio" style="padding:24px">Escolha uma conversa à esquerda.</div></div>
     <aside class="card detalhe oculto" id="detalhe" aria-label="Detalhes do lead"></aside>
@@ -1262,12 +1474,26 @@ function telaConversas() {
     telaConversas._busca = e.target.value;
     const pos = e.target.selectionStart; telaConversas(); $('busca').focus(); $('busca').setSelectionRange(pos, pos);
   });
+  $('cv-bt-filtros').addEventListener('click', () => { telaConversas._filtros = !telaConversas._filtros; telaConversas(); });
+  document.querySelectorAll('[data-cv-per]').forEach((b) => b.addEventListener('click', () => { f.per = b.dataset.cvPer; telaConversas(); }));
+  [['cv-origem', 'origem'], ['cv-link', 'link'], ['cv-camp', 'camp'], ['cv-criativo', 'criativo'], ['cv-etapa', 'etapa'], ['cv-de', 'de'], ['cv-ate', 'ate']].forEach(([id, k]) => { if ($(id)) $(id).addEventListener('change', (e) => { f[k] = e.target.value; telaConversas(); }); });
+  if ($('cv-limpar')) $('cv-limpar').addEventListener('click', () => { telaConversas._f = null; telaConversas(); });
   document.querySelectorAll('[data-aba-conv]').forEach((b) => b.addEventListener('click', () => { telaConversas._aba = b.dataset.abaConv; telaConversas(); }));
   document.querySelectorAll('[data-contato]').forEach((b) => b.addEventListener('click', () => abrirConversa(Number(b.dataset.contato))));
   if (estado.aberto) abrirConversa(estado.aberto, true);
 }
 
 const POR_PAGINA = 50;
+function comMarcadores(msgs, c) {
+  const tqs = toquesDe(c).slice().reverse().filter((t) => Math.abs(new Date(t.criado_em) - new Date(c.criado_em)) >= 120000);
+  let i = 0; let out = '';
+  const marca = (t) => `<div class="marcador-toque">${logoGrupo(grupoToque(t), 18)}<span>${new Date(t.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} · ${t.da_base ? 'cliente da base voltou' : 'voltou'} por <b>${esc(descToque(t))}</b></span></div>`;
+  for (const m of msgs) {
+    while (i < tqs.length && new Date(tqs[i].criado_em) <= new Date(m.criado_em)) { if (msgs[0] && new Date(tqs[i].criado_em) >= new Date(msgs[0].criado_em)) out += marca(tqs[i]); i++; }
+    out += bolhaHTML(m);
+  }
+  return out;
+}
 function bolhaHTML(m) {
   const quando = new Date(m.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
   const rotulo = m.direcao === 'entrada' ? 'Recebido · grátis'
@@ -1318,13 +1544,16 @@ async function abrirConversa(id, semMarcar) {
 
   const e = etapaDe(c); const cor = COR[e?.temperatura] || COR.frio; const o = ORIGEM[c.origem] || ORIGEM.organico;
 
+  const gC = grupoDe(c); const tbC = toqueBase(c);
+  const esperaC = esperando(c) ? `<span class="ci-espera${(Date.now() - new Date(c.aguardando_desde || c.ultima_msg_em)) >= 3600000 ? ' forte' : ''}"><small>esperando há</small><b>${duracaoCurta(Date.now() - new Date(c.aguardando_desde || c.ultima_msg_em))}</b></span>` : '';
   $('chat').innerHTML = `<div class="chat-topo">
-      <div><b>${esc(c.nome || telefoneBonito(c.telefone))}</b><div style="font-size:12px; color:var(--tx3)">${esc(telefoneBonito(c.telefone))}</div></div>
-      <span class="pill" style="color:${cor.c}; background:${cor.bg}; border-color:${cor.bd}">Etapa: ${esc(e?.nome ?? '—')}</span>
+      <span class="ci-logo">${logoGrupo(gC, 38)}${tbC ? `<span class="ci-mini">${logoGrupo(grupoToque(tbC), 20)}</span>` : ''}</span>
+      <div style="flex:1; min-width:0"><b class="ci-tel" style="font-size:15px">${esc(telefoneBonito(c.telefone))}</b><div style="font-size:12px; color:var(--tx3)">${c.nome ? esc(c.nome) + ' · ' : ''}${tbC ? 'cliente da base · voltou por ' + esc(descToque(tbC)) : 'veio por ' + esc(gC.nome)}</div></div>
+      ${esperaC}
     </div>
     <div class="chat-msgs" id="msgs">
       <div id="msgs-mais" style="text-align:center">${estado.chat.temMais ? '<button class="btn-sec" id="bt-mais">Carregar mensagens anteriores</button>' : ''}</div>
-      <div id="msgs-lista" style="display:flex; flex-direction:column; gap:10px">${msgs.map(bolhaHTML).join('') || '<div class="vazio" id="msgs-vazio">Sem mensagens.</div>'}</div>
+      <div id="msgs-lista" style="display:flex; flex-direction:column; gap:10px">${comMarcadores(msgs, c) || '<div class="vazio" id="msgs-vazio">Sem mensagens.</div>'}</div>
     </div>
     <div id="anexo-box"></div>
     <form class="responder" id="form-responder">
@@ -1350,43 +1579,71 @@ async function abrirConversa(id, semMarcar) {
 
   const nomeEtapa = (eid) => estado.etapas.find((x) => x.id === eid)?.nome ?? '—';
   $('detalhe').classList.remove('oculto');
+  estado.lead = { c, hist: hist || [], primEnt: primEnt?.[0], primSai: primSai?.[0], vis: vis || [] };
+  const veioL = (vis || []).filter((v) => v.status === 'veio');
+  const totalL = veioL.reduce((a, v) => a + (Number(v.valor) || 0), 0);
+  const ultimaIda = veioL.length ? veioL[veioL.length - 1].data.split('-').reverse().slice(0, 2).join('/') : null;
+  const depoisToque = tbC ? veioL.filter((v) => v.data >= String(tbC.criado_em).slice(0, 10)).reduce((a, v) => a + (Number(v.valor) || 0), 0) : null;
+  const primeiraIda = (vis || []).find((v) => v.status === 'veio');
+  const linha = (k, v) => v ? `<div class="dl"><span>${k}</span><span>${v}</span></div>` : '';
+  const fmtD = (iso) => new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(',', ' ·');
   $('detalhe').innerHTML = `
-    <div><h2 style="margin:0 0 4px">Origem do lead</h2><span style="font-size:12px; color:var(--tx3)">Como essa pessoa chegou</span></div>
-    <div style="display:flex; align-items:center; gap:10px; background:var(--verde-bg); border:1px solid var(--verde-bd); border-radius:10px; padding:12px; color:var(--verde-claro)">
-      ${icone(o.ic, 20)}<b>${o.nome}</b>${c.lugar ? `<span style="margin-left:auto">${lugarHTML(c.lugar)}</span>` : ''}</div>
-    <details id="ld-editar" ${c.origem === 'organico' && !c.campanha ? 'open' : ''}>
-      <summary style="cursor:pointer; font-size:13px; color:var(--verde-claro)">Editar origem, campanha e agendamento</summary>
-      <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px">
+    <div class="dt-rot">De onde veio</div>
+    ${tbC ? `<div class="origem-box">${logoGrupo(gC, 34)}<span><b>${gC.k === 'organico' ? 'Cliente da base' : esc(gC.nome)}</b><small>${primeiraIda && primeiraIda.data < String(c.criado_em).slice(0, 10) ? 'cliente desde ' + primeiraIda.data.split('-').reverse().slice(1).join('/') : 'primeiro contato ' + fmtD(c.criado_em)}</small></span></div>
+      <div class="origem-box volta">${logoGrupo(grupoToque(tbC), 30)}<span><b>Voltou pelo tráfego</b><small>${esc(descToque(tbC))} · ${fmtD(tbC.criado_em)}</small></span></div>`
+    : `<div class="origem-box ${gC.k === 'anuncio_meta' ? 'meta' : ''}">${logoGrupo(gC, 34)}<span><b>${esc(gC.nome)}</b><small>${c.lugar ? esc(c.lugar) : 'origem do primeiro contato'}</small></span></div>`}
+    <div>${linha('Campanha', c.campanha ? esc(c.campanha) : '')}${linha('Anúncio', c.anuncio_titulo ? esc(c.anuncio_titulo) : '')}${linha('Link', c.link_id ? esc((estado.links || []).find((l) => l.id === c.link_id)?.nome ?? 'Link rastreável') : '')}${linha('Chegou em', `<span class="mono">${fmtD(c.criado_em)}</span>`)}</div>
+    <div class="fat-box"><small>Total faturado</small><b>${brl(totalL).replace(',00', '')}</b><small>${veioL.length} ${veioL.length === 1 ? 'ida' : 'idas'}${ultimaIda ? ' · última em ' + ultimaIda : ''}${depoisToque != null ? ` · <span style="color:var(--verde-claro); font-weight:600">${brl(depoisToque).replace(',00', '')} depois do retorno</span>` : ''}</small></div>
+    <div><label for="ld-etapa">Etapa</label><select id="ld-etapa">${estado.etapas.map((x) => `<option value="${x.id}" ${x.id === c.etapa_id ? 'selected' : ''}>${esc(x.nome)}</option>`).join('')}</select></div>
+    ${c.agendado_em ? `<div class="dl"><span>Próximo horário</span><span class="mono">${fmtD(c.agendado_em)}</span></div>` : ''}
+    <button class="btn-sec" id="ld-ida" type="button">+ Registrar ida</button>
+    <button class="btn-sec ver-hist" id="ld-hist" type="button">${icone('ajuda', 16)} Ver histórico completo</button>`;
+  $('ld-etapa').addEventListener('change', (ev2) => moverEtapa(c.id, Number(ev2.target.value)));
+  $('ld-hist').addEventListener('click', () => abrirModalLead('origem'));
+  $('ld-ida').addEventListener('click', () => abrirModalLead('idas'));
+}
+
+// ---------- pop-up: detalhes do lead ----------
+function abrirModalLead(aba = 'origem') {
+  const L = estado.lead; if (!L) return;
+  const { c } = L;
+  let dlg = $('modal-lead');
+  if (!dlg) { dlg = document.createElement('dialog'); dlg.className = 'modal modal-lead'; dlg.id = 'modal-lead'; dlg.setAttribute('aria-labelledby', 'ml-titulo'); document.body.appendChild(dlg); dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); }); }
+  const g = grupoDe(c); const tb = toqueBase(c); const e = etapaDe(c);
+  const ev = eventosJornada(c, L.hist.slice().reverse(), L.primEnt, L.primSai, L.vis);
+  const veio = L.vis.filter((v) => v.status === 'veio'); const faltas = L.vis.filter((v) => v.status === 'faltou').length;
+  const total = veio.reduce((a, v) => a + (Number(v.valor) || 0), 0);
+  const dl = (k, v) => v ? `<div class="dl"><span>${k}</span><span>${v}</span></div>` : '';
+  const abas = [['origem', 'Origem e jornada'], ['idas', 'Idas e valores'], ['editar', 'Editar']];
+  dlg.innerHTML = `<div class="ml-topo">${logoGrupo(g, 42)}<div style="flex:1; min-width:0"><h2 id="ml-titulo" class="mono" style="margin:0; font-size:18px">${esc(telefoneBonito(c.telefone))}</h2><span style="font-size:13px; color:var(--tx2)">${esc(c.nome || '')}</span></div>${e ? `<span class="selo">${esc(e.nome)}</span>` : ''}<button class="btn-sec bt-ic" id="ml-fechar" type="button" aria-label="Fechar">✕</button></div>
+    <div style="padding:14px 22px 0"><div class="pilulas">${abas.map(([k, t]) => `<button type="button" data-ml-aba="${k}" aria-pressed="${aba === k}">${t}</button>`).join('')}</div></div>
+    <div class="ml-corpo">
+    ${aba === 'origem' ? `<div class="ml-col">
+        <div class="origem-box ${g.k === 'anuncio_meta' ? 'meta' : ''}">${logoGrupo(g, 34)}<span><b>${g.k === 'anuncio_meta' ? 'Veio por anúncio da Meta' : esc(g.nome)}</b><small>${c.lugar ? esc(c.lugar) : 'origem do primeiro contato'}</small></span></div>
+        ${tb ? `<div class="origem-box volta">${logoGrupo(grupoToque(tb), 30)}<span><b>Voltou pelo tráfego</b><small>${esc(descToque(tb))} · ${new Date(tb.criado_em).toLocaleDateString('pt-BR')}</small></span></div>` : ''}
+        <div>${dl('Campanha', c.campanha ? esc(c.campanha) : '')}${dl('Anúncio', c.anuncio_titulo ? esc(c.anuncio_titulo) : '')}${dl('Lugar', c.lugar ? esc(c.lugar) : '')}${dl('Link', c.link_id ? esc((estado.links || []).find((l) => l.id === c.link_id)?.nome ?? 'Link rastreável') : '')}${dl('Código de rastreio', c.ref_code ? `<span class="mono">${esc(c.ref_code)}</span>` : '')}${dl('ID do anúncio', c.anuncio_id ? `<span class="mono">${esc(c.anuncio_id)}</span>` : '')}</div>
+        ${c.anuncio_url ? `<a class="btn-sec" href="${esc(c.anuncio_url)}" target="_blank" rel="noopener" style="text-align:center; text-decoration:none">Abrir anúncio ↗</a>` : ''}
+        <div class="ml-nums"><div><small>Faturado</small><b>${brl(total).replace(',00', '')}</b></div><div><small>Idas</small><b>${veio.length}</b></div><div><small>Faltas</small><b>${faltas}</b></div></div>
+      </div>
+      <div class="ml-col"><h3 style="margin:0 0 12px; font-size:15px">Jornada</h3><div id="ml-jornada">${jornadaHTML(ev, false)}</div></div>`
+    : aba === 'idas' ? `<div class="ml-col" style="flex-basis:100%"><div id="visitas-box"></div></div>`
+    : `<div class="ml-col" style="flex-basis:100%; display:flex; flex-direction:column; gap:10px">
         <div><label for="ld-origem">De onde veio</label><select id="ld-origem">${Object.entries(ORIGEM).map(([k, x]) => `<option value="${k}" ${k === c.origem ? 'selected' : ''}>${x.nome}</option>`).join('')}</select></div>
         <div><label for="ld-campanha">Campanha</label><input id="ld-campanha" type="text" list="dl-campanhas" value="${esc(c.campanha || '')}" placeholder="Ex.: Corte + barba novembro"></div>
         <div><label for="ld-lugar">Lugar</label><input id="ld-lugar" type="text" list="dl-lugares" value="${esc(c.lugar || '')}" placeholder="Ex.: Instagram, Facebook, Google, bio, panfleto"></div>
         <div><label for="ld-agenda">Agendamento</label><input id="ld-agenda" type="datetime-local" value="${c.agendado_em ? paraLocal(c.agendado_em) : ''}"></div>
         <datalist id="dl-campanhas">${valoresDe('campanha').map((v) => `<option value="${esc(v)}">`).join('')}</datalist>
         <datalist id="dl-lugares">${[...new Set(['Instagram', 'Facebook', 'Google', 'Bio do Instagram', 'Indicação', ...valoresDe('lugar')])].map((v) => `<option value="${esc(v)}">`).join('')}</datalist>
-        <div style="display:flex; gap:10px; align-items:center"><button class="btn-sec" id="ld-salvar" type="button">Salvar detalhes</button><span id="ld-status" style="font-size:12px; color:var(--tx2)"></span></div>
-      </div>
-    </details>
-    <div>
-      ${c.campanha ? `<div class="dl"><span>Campanha</span><span>${esc(c.campanha)}</span></div>` : ''}
-      ${c.agendado_em ? `<div class="dl"><span>Agendado</span><span>${new Date(c.agendado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</span></div>` : ''}
-      ${c.anuncio_titulo ? `<div class="dl"><span>Anúncio</span><span>${esc(c.anuncio_titulo)}</span></div>` : ''}
-      ${c.anuncio_id ? `<div class="dl"><span>ID do anúncio</span><span>${esc(c.anuncio_id)}</span></div>` : ''}
-      ${c.anuncio_url ? `<div class="dl"><span>Link</span><span><a href="${esc(c.anuncio_url)}" target="_blank" rel="noopener">abrir</a></span></div>` : ''}
-      ${c.link_id ? `<div class="dl"><span>Link</span><span>${esc((estado.links || []).find((l) => l.id === c.link_id)?.nome ?? 'Link rastreável')}</span></div>` : ''}
-      ${c.ref_code ? `<div class="dl"><span>Código</span><span>${esc(c.ref_code)}</span></div>` : ''}
-      <div class="dl"><span>Primeiro contato</span><span>${new Date(c.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</span></div>
-    </div>
-    <div id="visitas-box"></div>
-    <div><b style="display:block; margin-bottom:8px">Etapa no funil</b><div class="etapas-bt">
-      ${estado.etapas.map((x) => {
-        const k = COR[x.temperatura] || COR.frio; const sel = x.id === c.etapa_id;
-        return `<button data-mover="${x.id}" aria-pressed="${sel}" style="color:${sel ? '#06120C' : k.c}; background:${sel ? k.c : k.bg}; border-color:${sel ? k.c : k.bd}; font-weight:${sel ? 700 : 500}">${esc(x.nome)}</button>`;
-      }).join('')}
-    </div></div>
-    <div><b style="display:block; margin-bottom:10px">Jornada</b>${jornadaHTML(c, hist || [], primEnt?.[0], primSai?.[0], vis || [])}</div>`;
-  document.querySelectorAll('[data-mover]').forEach((b) => b.addEventListener('click', () => moverEtapa(c.id, Number(b.dataset.mover))));
-  $('ld-salvar').addEventListener('click', () => salvarLead(c.id));
-  desenharVisitas(c.id);
+        <div style="display:flex; gap:10px; align-items:center"><button class="btn" id="ld-salvar" type="button">Salvar detalhes</button><span id="ld-status" style="font-size:12px; color:var(--tx2)"></span></div>
+      </div>`}
+    </div>`;
+  $('ml-fechar').addEventListener('click', () => dlg.close());
+  dlg.querySelectorAll('[data-ml-aba]').forEach((b) => b.addEventListener('click', () => abrirModalLead(b.dataset.mlAba)));
+  const ligarJornada = () => dlg.querySelectorAll('[data-jornada]').forEach((b) => b.addEventListener('click', () => { $('ml-jornada').innerHTML = jornadaHTML(ev, b.dataset.jornada === 'tudo'); ligarJornada(); }));
+  ligarJornada();
+  if ($('ld-salvar')) $('ld-salvar').addEventListener('click', () => salvarLead(c.id));
+  if (aba === 'idas') desenharVisitas(c.id);
+  if (!dlg.open) dlg.showModal();
 }
 
 // ---------- últimos eventos enviados à Meta (Configurações) ----------
@@ -1407,28 +1664,30 @@ async function carregarEventosMeta(siteId) {
 }
 
 // ---------- jornada do lead (linha do tempo) ----------
-function jornadaHTML(c, hist, primEnt, primSai, vis) {
+function eventosJornada(c, hist, primEnt, primSai, vis) {
   const ev = [];
-  const fmt = (iso) => new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(',', ' ·');
   const g = grupoDe(c);
   const meta = (t) => `<span class="jr-meta">${icone('ok', 12)} ${esc(t)}</span>`;
   const deOnde = [c.anuncio_titulo, c.campanha].filter(Boolean).map(esc).join(' · ');
   ev.push({ t: c.criado_em, tipo: 'origem', g, tit: `Chegou por ${g.nome}`, desc: deOnde || (c.lugar ? esc(c.lugar) : '') });
   if (primEnt) ev.push({ t: primEnt.criado_em, tipo: 'msg', tit: 'Primeira mensagem', desc: primEnt.texto ? `“${esc(String(primEnt.texto).slice(0, 120))}”` : esc('[' + (primEnt.tipo || 'mídia') + ']') });
   if (primEnt && primSai && new Date(primSai.criado_em) >= new Date(primEnt.criado_em)) {
-    const min = Math.round((new Date(primSai.criado_em) - new Date(primEnt.criado_em)) / 60000);
-    const txt = min < 60 ? `${min} min` : min < 1440 ? `${Math.floor(min / 60)}h ${min % 60}min` : `${Math.floor(min / 1440)} dia(s)`;
-    ev.push({ t: primSai.criado_em, tipo: 'msg', tit: `Respondido em ${txt}`, desc: '' });
+    ev.push({ t: primSai.criado_em, tipo: 'msg', tit: `Respondido em ${duracaoCurta(new Date(primSai.criado_em) - new Date(primEnt.criado_em))}`, desc: '' });
   }
-  hist.forEach((h) => { const e = estado.etapas.find((x) => x.id === h.etapa_id); ev.push({ t: h.criado_em, tipo: 'etapa', tit: `Etapa: ${esc(e?.nome ?? '—')}`, desc: esc(h.motivo || ''), extra: h.enviado_meta ? meta(`${e?.evento_meta || 'Evento'} enviado à Meta`) : '' }); });
-  if (c.lembrete_enviado_em) ev.push({ t: c.lembrete_enviado_em, tipo: 'msg', tit: 'Lembrete automático', desc: c.agendado_em ? `Horário ${fmt(c.agendado_em)}` : '' });
+  toquesDe(c).forEach((t) => { if (Math.abs(new Date(t.criado_em) - new Date(c.criado_em)) < 120000) return; ev.push({ t: t.criado_em, tipo: 'origem', g: grupoToque(t), tit: `Voltou por ${descToque(t)}`, desc: t.da_base ? 'Já era cliente da base' : '' }); });
+  hist.filter((h) => h.motivo !== 'novo contato').forEach((h) => { const e = estado.etapas.find((x) => x.id === h.etapa_id); ev.push({ t: h.criado_em, tipo: 'etapa', tit: `Etapa: ${esc(e?.nome ?? '—')}`, desc: esc(h.motivo || ''), extra: h.enviado_meta ? meta(`${e?.evento_meta || 'Evento'} enviado à Meta`) : '' }); });
+  if (c.lembrete_enviado_em) ev.push({ t: c.lembrete_enviado_em, tipo: 'msg', tit: 'Lembrete automático', desc: '' });
   vis.forEach((v) => {
     const t = (v.data ? v.data + 'T12:00:00' : v.criado_em);
     if (v.status === 'veio') ev.push({ t, tipo: 'ok', dia: true, tit: `Veio${v.valor != null ? ' · ' + brl(v.valor) : ''}`, desc: esc(v.servico || ''), extra: v.meta_enviado ? meta('Purchase enviado à Meta') : '' });
     else if (v.status === 'faltou') ev.push({ t, tipo: 'falta', dia: true, tit: 'Faltou', desc: esc(v.servico || '') });
     else ev.push({ t, tipo: 'agenda', dia: true, tit: 'Horário agendado', desc: esc(v.servico || '') });
   });
-  ev.sort((a, b) => new Date(a.t) - new Date(b.t));
+  const ordem = { origem: 0, msg: 1 };
+  return ev.sort((a, b) => (new Date(a.t) - new Date(b.t)) || ((ordem[a.tipo] ?? 2) - (ordem[b.tipo] ?? 2)));
+}
+function jornadaLista(ev) {
+  const fmt = (iso) => new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(',', ' ·');
   const bola = (e) => {
     if (e.tipo === 'origem') return `<span class="jr-dot" style="background:${e.g.fundo}; color:${e.g.cor}; ${e.g.borda ? 'border:1px solid var(--line);' : ''}">${icone(e.g.ic, 14)}</span>`;
     if (e.tipo === 'ok') return `<span class="jr-dot ok">${icone('ok', 14)}</span>`;
@@ -1437,6 +1696,29 @@ function jornadaHTML(c, hist, primEnt, primSai, vis) {
     return `<span class="jr-dot etapa">${icone('seta', 12)}</span>`;
   };
   return `<ol class="jornada">${ev.map((e) => `<li>${bola(e)}<div class="jr-corpo"><div class="jr-cab"><b>${e.tit}</b><span class="jr-hora">${e.dia ? new Date(e.t).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : fmt(e.t)}</span></div>${e.desc ? `<div class="jr-desc">${e.desc}</div>` : ''}${e.extra || ''}</div></li>`).join('')}</ol>`;
+}
+function jornadaHTML(ev, tudo) {
+  if (tudo || ev.length <= 8) return jornadaLista(ev) + (ev.length > 8 ? '<button class="btn-sec" data-jornada="resumo" type="button" style="width:100%; margin-top:12px">Mostrar resumo</button>' : '');
+  const inicio = ev.slice(0, 3), fim = ev.slice(-4), meio = ev.length - 7;
+  return `<div class="jr-rot">Como chegou</div>${jornadaLista(inicio)}
+    <div class="jr-meio"><span></span>${meio} ${meio === 1 ? 'evento' : 'eventos'} no meio<span></span></div>
+    <div class="jr-rot">Mais recentes</div>${jornadaLista(fim)}
+    <button class="btn-sec" data-jornada="tudo" type="button" style="width:100%; margin-top:12px">Ver jornada completa · ${ev.length} eventos</button>`;
+}
+function duracaoCurta(ms) {
+  const min = Math.max(0, Math.round(ms / 60000));
+  if (min < 60) return `${min} min`;
+  if (min < 1440) return `${Math.floor(min / 60)}h ${String(min % 60).padStart(2, '0')}min`;
+  const d = Math.floor(min / 1440); return `${d} ${d === 1 ? 'dia' : 'dias'}`;
+}
+// ---------- toques (chegou ou voltou por anúncio/link) ----------
+function toquesDe(c) { return (estado.toques || []).filter((t) => t.contato_id === c.id).sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em)); }
+function toqueBase(c) { return toquesDe(c).find((t) => t.da_base) || null; }
+function grupoToque(t) { return GRUPOS.find((g) => g.k === (t.tipo === 'anuncio' ? 'anuncio_meta' : t.tipo === 'link' ? 'link' : 'site')) || GRUPOS[0]; }
+function descToque(t) {
+  if (t.tipo === 'anuncio') return t.anuncio_titulo ? `anúncio “${t.anuncio_titulo}”` : 'anúncio da Meta';
+  if (t.tipo === 'link') return `link ${(estado.links || []).find((l) => l.id === t.link_id)?.nome ? '“' + (estado.links || []).find((l) => l.id === t.link_id).nome + '”' : 'rastreável'}`;
+  return 'site';
 }
 
 // ---------- histórico de idas ao estabelecimento ----------
@@ -1472,7 +1754,7 @@ async function desenharVisitas(contatoId) {
     <div class="vis-lista">${vs.length ? vs.map((v) => { const [t, cor] = ST[v.status]; const pendente = v.status === 'agendado' && v.data <= hoje;
       return `<div class="vis-item"><span class="vis-data">${v.data.split('-').reverse().join('/')}</span>
         <span style="color:${cor}; font-weight:600">${t}${pendente ? ' · confirmar' : ''}</span>
-        <span style="color:var(--tx2)">${v.valor != null ? brl(v.valor) : ''}${v.servico ? ' · ' + esc(v.servico) : ''}</span>
+        <span style="color:var(--tx2)">${v.valor != null ? brl(v.valor) : (v.status === 'veio' ? '<span class="selo leve">sem valor · espera a lista</span>' : '')}${v.valor_origem === 'conversa' ? ' <span class="selo alerta-leve" title="Valor tirado da conversa. Confira na reunião de alinhamento.">da conversa · conferir</span>' : v.valor_origem === 'servico' ? ' <span class="selo alerta-leve" title="Estimado pela tabela de serviços. Confira na reunião de alinhamento.">pela tabela · conferir</span>' : ''}${v.servico ? ' · ' + esc(v.servico) : ''}</span>
         <span class="vis-acoes">${v.status === 'agendado' ? `<button class="btn-sec mini" data-vis-veio="${v.id}">Veio</button><button class="btn-sec mini" data-vis-faltou="${v.id}">Faltou</button>` : ''}<button class="btn-sec mini" data-vis-del="${v.id}" aria-label="Apagar">✕</button></span></div>`; }).join('')
       : '<div style="font-size:13px; color:var(--tx3)">Nenhuma ida registrada ainda. Marque um agendamento acima, registre aqui ou importe a lista do mês em Resultados.</div>'}</div>
     <details style="margin-top:8px"><summary style="cursor:pointer; font-size:13px; color:var(--verde-claro)">+ Registrar ida</summary>
@@ -1509,7 +1791,8 @@ async function salvarLead(id) {
   toast('Detalhes do lead salvos.');
   const it = document.querySelector(`.conv-item[data-contato="${id}"]`); if (it && c) it.outerHTML = itemConversa(c);
   const novo = document.querySelector(`.conv-item[data-contato="${id}"]`); if (novo) novo.addEventListener('click', () => abrirConversa(id));
-  abrirConversa(id, true);
+  await abrirConversa(id, true);
+  if ($('modal-lead')?.open) abrirModalLead('editar');
 }
 
 async function carregarAnteriores() {
@@ -1651,18 +1934,144 @@ function arrastavel(card) {
 }
 
 // ================= MOVER ETAPA =================
+function dddPadrao() {
+  const n = {}; (estado.contatos || []).forEach((c) => { let k = String(c.chave_tel || ''); if (!k) { k = String(c.telefone || '').replace(/\D/g, ''); if (k.length >= 12 && k.startsWith('55')) k = k.slice(2); } if (k.length >= 10) n[k.slice(0, 2)] = (n[k.slice(0, 2)] || 0) + 1; });
+  return Object.entries(n).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
+}
+function dinheiro(v) { return (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+// pergunta quanto o cliente gastou (opcional). Devolve número, null (em branco) ou undefined (cancelou)
+// valores em dinheiro citados na conversa (mesma regra do servidor)
+function precosNoTexto(texto) {
+  const re = /r\$\s*(\d{1,4}(?:[.,]\d{3})*(?:[.,]\d{1,2})?)|\b(\d{2,4}(?:[.,]\d{1,2})?)\s*(?:reais|real|conto|contos|pila)\b/gi;
+  const out = [];
+  for (const m of String(texto || '').matchAll(re)) { let t = m[1] ?? m[2]; if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.'); const n = Number(t); if (n >= 10 && n <= 5000) out.push(Math.round(n * 100) / 100); }
+  return out;
+}
+const STOP_SV = new Set(['de', 'do', 'da', 'dos', 'das', 'com', 'mais', 'para', 'pra', 'um', 'uma', 'no', 'na', 'em', 'ou', 'kit', 'combo', 'quero', 'agendar', 'marcar', 'hoje', 'amanha', 'horario', 'fazer', 'queria', 'gostaria', 'tem', 'vaga', 'quanto', 'valor', 'preco', 'fica', 'por', 'favor', 'bom', 'boa', 'dia', 'tarde', 'noite']);
+function semAcentoSv(t) { return String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+function tokensSv(t) { return semAcentoSv(t).split(/[^a-z0-9]+/).filter((w) => w.length >= 3 && !STOP_SV.has(w) && !/^\d+$/.test(w)).map((w) => (w.length > 4 && w.endsWith('s') ? w.slice(0, -1) : w)); }
+// estima o valor pelos serviços citados num texto (tabela de serviços do cliente)
+function estimarServico(servicos, texto) {
+  const msg = new Set(tokensSv(texto));
+  if (!msg.size || !servicos || !servicos.length) return null;
+  const sv = servicos.map((s) => ({ nome: s.nome, valor: Number(s.valor) || 0, tk: [...new Set(tokensSv(s.nome))] })).filter((s) => s.tk.length && s.valor > 0);
+  const base = new Set(sv.map((s) => s.tk[0]));
+  const usados = new Set(); let total = 0; const itens = [];
+  const cheios = sv.filter((s) => s.tk.length >= 2 && s.tk.every((w) => msg.has(w))).sort((a, b) => b.tk.length - a.tk.length);
+  for (const s of cheios) {
+    if (s.tk.some((w) => usados.has(w))) continue;
+    const iguais = cheios.filter((x) => x.tk.length === s.tk.length && x.tk.every((w) => s.tk.includes(w)));
+    total += iguais.reduce((a, x) => a + x.valor, 0) / iguais.length; itens.push(s.nome);
+    s.tk.forEach((w) => usados.add(w));
+  }
+  for (const k of base) {
+    if (!msg.has(k) || usados.has(k)) continue;
+    const cand = sv.filter((s) => s.tk.includes(k) && s.tk.every((w) => w === k || !base.has(w)));
+    if (!cand.length) continue;
+    total += cand.reduce((a, x) => a + x.valor, 0) / cand.length;
+    itens.push(cand.length > 1 ? `${k} (média de ${cand.length})` : cand[0].nome);
+    usados.add(k);
+  }
+  return total > 0 ? { valor: Math.round(total * 100) / 100, itens } : null;
+}
+
+// lê a tabela de serviços de um texto (uma linha por serviço: "Corte social ..... R$ 40,00")
+function servicosDoTexto(txt) {
+  const out = [];
+  for (const l of String(txt || '').split(/\r?\n/)) {
+    const m = l.match(/^(.*?[a-zA-ZÀ-ú].*?)[\s.:;|\-–—_]*(?:r\$\s*)?(\d{1,5}(?:[.,]\d{3})*(?:[.,]\d{1,2})?)\s*(?:reais)?\s*$/i);
+    if (!m) continue;
+    const nome = m[1].replace(/r\$\s*$/i, '').replace(/[\s.:;|\-–—_]+$/, '').trim(); let v = m[2]; if (v.includes(',')) v = v.replace(/\./g, '').replace(',', '.');
+    const n = Number(v); if (nome && n > 0 && n <= 100000) out.push({ nome: nome.slice(0, 120), valor: Math.round(n * 100) / 100 });
+  }
+  return out;
+}
+function servicosDasLinhas(linhas) {
+  const out = [];
+  for (const l of linhas) {
+    const cel = l.map((x) => String(x ?? '').trim());
+    const nome = cel.find((x) => /[a-zA-ZÀ-ú]{2,}/.test(x) && !/^r\$/i.test(x));
+    let valor = null;
+    for (let i = cel.length - 1; i >= 0; i--) { const m = cel[i].replace(/r\$|\s|reais/gi, '').match(/^\d{1,5}(?:[.,]\d{3})*(?:[.,]\d{1,2})?$/); if (m) { let v = m[0]; if (v.includes(',')) v = v.replace(/\./g, '').replace(',', '.'); valor = Number(v); break; } }
+    if (nome && valor > 0 && valor <= 100000) out.push({ nome: nome.slice(0, 120), valor: Math.round(valor * 100) / 100 });
+  }
+  return out;
+}
+async function servicosDoSite(siteId) {
+  estado.cacheServicos = estado.cacheServicos || {};
+  if (!estado.cacheServicos[siteId]) { const { data } = await sb.from('servicos').select('nome, valor').eq('site_id', siteId).order('ordem'); estado.cacheServicos[siteId] = data || []; }
+  return estado.cacheServicos[siteId];
+}
+// sugestão de valor: 1º valor em R$ combinado na conversa; 2º serviços citados pelo cliente × tabela de serviços
+async function sugestaoValor(contatoId) {
+  const v = await valorDaConversa(contatoId);
+  if (v) return { valor: v, texto: `Achei <b>${dinheiro(v)}</b> na conversa.` };
+  try {
+    const sv = await servicosDoSite(estado.site); if (!sv.length) return null;
+    const desde = new Date(Date.now() - 45 * 864e5).toISOString();
+    const { data } = await sb.from('mensagens').select('texto, direcao').eq('contato_id', contatoId).eq('direcao', 'entrada').not('texto', 'is', null).gte('criado_em', desde).order('criado_em', { ascending: false }).limit(80);
+    for (const m of data || []) { const e = estimarServico(sv, m.texto); if (e) return { valor: e.valor, texto: `Ele pediu <b>${esc(e.itens.join(' + '))}</b>: pela tabela de serviços, <b>${dinheiro(e.valor)}</b>.` }; }
+  } catch (_) { /* sem sugestão */ }
+  return null;
+}
+async function valorDaConversa(contatoId) {
+  try {
+    const desde = new Date(Date.now() - 45 * 864e5).toISOString();
+    const { data } = await sb.from('mensagens').select('texto').eq('contato_id', contatoId).not('texto', 'is', null).gte('criado_em', desde).order('criado_em', { ascending: false }).limit(80);
+    for (const m of data || []) {
+      const tot = String(m.texto).match(/total[^0-9r$]{0,15}(r\$\s*\d[\d.,]*|\d[\d.,]*\s*(?:reais|real))/i);
+      if (tot) { const p = precosNoTexto(tot[1]); if (p.length) return p[0]; }
+      const p = precosNoTexto(m.texto);
+      if (!p.length || new Set(p).size > 2) continue;
+      return p[p.length - 1];
+    }
+  } catch (_) { /* sem sugestão */ }
+  return null;
+}
+function pedirValor(nomeEtapa, padrao, sugestao) {
+  return new Promise((ok) => {
+    let dlg = $('modal-valor');
+    if (!dlg) { dlg = document.createElement('dialog'); dlg.className = 'modal'; dlg.id = 'modal-valor'; dlg.setAttribute('aria-labelledby', 'mv-titulo'); document.body.appendChild(dlg); }
+    dlg.innerHTML = `<form method="dialog" class="corpo" style="display:flex; flex-direction:column; gap:12px; max-width:420px">
+      <h2 id="mv-titulo" style="margin:0">Quanto ele gastou?</h2>
+      <p style="margin:0; color:var(--tx2); font-size:14px">Vai pra <b>${esc(nomeEtapa)}</b>. O valor vai pra Meta como venda. Não sabe agora? Deixe em branco: ${padrao ? `o Radar usa o valor padrão (${dinheiro(padrao)})` : 'o Radar espera a lista do mês trazer o valor'}.</p>
+      ${sugestao ? `<div class="mv-sug">${icone('whatsapp', 14)}<span>${sugestao.texto} Confira e confirme.</span></div>` : ''}
+      <div><label for="mv-valor">Valor (R$)</label><input id="mv-valor" type="text" inputmode="decimal" placeholder="ex.: 45,00" autocomplete="off" value="${sugestao ? String(sugestao.valor).replace('.', ',') : ''}"></div>
+      <div style="display:flex; gap:10px; justify-content:flex-end"><button class="btn-sec" type="button" id="mv-cancelar">Cancelar</button><button class="btn" type="submit" id="mv-ok">Confirmar</button></div>
+    </form>`;
+    let fim = false; const sair = (v) => { if (fim) return; fim = true; dlg.close(); ok(v); };
+    $('mv-cancelar').addEventListener('click', () => sair(undefined));
+    dlg.addEventListener('cancel', (e) => { e.preventDefault(); sair(undefined); }, { once: true });
+    dlg.querySelector('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      let t = ($('mv-valor').value || '').replace(/[^\d,.]/g, ''); if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.');
+      const n = Number(t); sair(t && n > 0 ? Math.round(n * 100) / 100 : null);
+    });
+    dlg.showModal(); setTimeout(() => $('mv-valor')?.focus(), 30);
+  });
+}
+
 async function moverEtapa(contatoId, etapaId, op = {}) {
+  const alvoE = estado.etapas.find((x) => x.id === etapaId);
+  const cAtual = estado.contatos.find((x) => x.id === contatoId);
+  const ordAtual = estado.etapas.find((x) => x.id === cAtual?.etapa_id)?.ordem ?? 0;
+  let valor = op.valor;
+  if (valor === undefined && alvoE?.evento_meta === 'Purchase' && alvoE.ordem > ordAtual) {
+    valor = await pedirValor(alvoE.nome, Number(alvoE.valor_padrao) || 0, await sugestaoValor(contatoId));
+    if (valor === undefined) { if (op.local) telaCRM(); else desenhar(); return; }
+  }
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { location.reload(); return; }
   try {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/${FN_MOVER}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_KEY },
-      body: JSON.stringify({ contato_id: contatoId, etapa_id: etapaId }),
+      body: JSON.stringify({ contato_id: contatoId, etapa_id: etapaId, valor: valor ?? null }),
     });
     const j = await res.json().catch(() => ({}));
     if (!res.ok || !j.ok) { toast(j.erro || 'Não foi possível mudar a etapa.'); if (op.local) telaCRM(); return; }
-    toast(j.enviado_meta ? 'Etapa atualizada e evento enviado à Meta.' : 'Etapa atualizada.');
+    toast(j.enviado_meta ? (valor ? `Etapa atualizada e venda de ${dinheiro(valor)} enviada à Meta.` : 'Etapa atualizada e evento enviado à Meta.')
+      : j.aguardando_valor ? 'Etapa atualizada. A venda vai pra Meta quando a lista do mês trouxer o valor.' : 'Etapa atualizada.');
     if (op.local) {
       const c = estado.contatos.find((x) => x.id === contatoId); if (c) c.etapa_id = etapaId;
       const velho = document.querySelector(`#crm [data-card="${contatoId}"]`); const e = estado.etapas.find((x) => x.id === etapaId);
@@ -2230,7 +2639,7 @@ async function conectarWhatsapp(siteId) {
     const r = await chamarAdmin({ acao: 'conectar_whatsapp', site_id: siteId, code, waba_id: sessao?.waba_id, phone_number_id: sessao?.phone_number_id });
     if (!r.ok) { st.textContent = r.erro || 'Erro ao conectar.'; st.style.color = 'var(--alerta)'; return; }
     toast('WhatsApp conectado! As novas conversas vão chegar no Radar.');
-    const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo').eq('ativo', true).order('nome');
+    const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo').eq('ativo', true).order('nome');
     estado.sites = sites || [];
     telaConfig();
   })(); }, {
@@ -2357,6 +2766,89 @@ function slug(t) {
     .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
 }
 
+// ---------- Serviços e valores (tabela de preços do cliente) ----------
+function desenharServicos() {
+  const l = estado.servicosEdit || [];
+  $('sv-lista').innerHTML = l.length ? `<div class="sv-cab"><span>Serviço</span><span>Valor (R$)</span><span></span></div>` + l.map((s, i) => `<div class="sv-linha">
+      <input type="text" aria-label="Nome do serviço ${i + 1}" data-sv="nome" data-i="${i}" value="${esc(s.nome)}" placeholder="Ex.: Corte social">
+      <input type="text" inputmode="decimal" aria-label="Valor do serviço ${i + 1}" data-sv="valor" data-i="${i}" value="${s.valor === '' || s.valor == null ? '' : String(s.valor).replace('.', ',')}" placeholder="40,00">
+      <button class="btn-sec mini" type="button" data-sv-tirar="${i}" aria-label="Tirar ${esc(s.nome || 'serviço')}">Tirar</button></div>`).join('')
+    : '<div style="font-size:13px; color:var(--tx3)">Nenhum serviço ainda. Sem a tabela, o Radar usa só o valor citado na conversa, o valor padrão da etapa ou a lista do mês.</div>';
+  $('sv-lista').querySelectorAll('[data-sv]').forEach((el) => el.addEventListener('input', () => { estado.servicosEdit[Number(el.dataset.i)][el.dataset.sv] = el.value; $('sv-status').textContent = 'Alterações não salvas'; }));
+  $('sv-lista').querySelectorAll('[data-sv-tirar]').forEach((b) => b.addEventListener('click', () => { estado.servicosEdit.splice(Number(b.dataset.svTirar), 1); desenharServicos(); $('sv-status').textContent = 'Alterações não salvas'; }));
+}
+function usarServicosLidos(lista, origem) {
+  if (!lista.length) { $('sv-status').style.color = 'var(--alerta)'; $('sv-status').textContent = `Não achei serviços com valor ${origem}. Confira se cada linha tem o nome e o preço.`; return; }
+  const atual = (estado.servicosEdit || []).filter((s) => s.nome);
+  if (atual.length && !confirm(`Trocar os ${atual.length} serviços atuais pelos ${lista.length} ${origem}?`)) return;
+  estado.servicosEdit = lista; desenharServicos();
+  $('sv-status').style.color = 'var(--tx2)'; $('sv-status').textContent = `${lista.length} ${lista.length === 1 ? 'serviço lido' : 'serviços lidos'}. Confira e clique em Salvar.`;
+}
+function carregarPdfJs() {
+  if (window.pdfjsLib) return Promise.resolve();
+  return new Promise((ok, falha) => { const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    sc.onload = () => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; ok(); }; sc.onerror = falha; document.head.appendChild(sc); });
+}
+async function textoDoPdf(buf) {
+  await carregarPdfJs();
+  const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise; const linhas = [];
+  for (let p = 1; p <= Math.min(pdf.numPages, 10); p++) {
+    const tc = await (await pdf.getPage(p)).getTextContent(); const porY = new Map();
+    tc.items.forEach((it) => { const y = Math.round(it.transform[5] / 3); if (!porY.has(y)) porY.set(y, []); porY.get(y).push([it.transform[4], it.str]); });
+    [...porY.entries()].sort((a, b) => b[0] - a[0]).forEach(([, its]) => linhas.push(its.sort((a, b) => a[0] - b[0]).map((x) => x[1]).join(' ')));
+  }
+  return linhas.join('\n');
+}
+async function lerArquivoServicos(f) {
+  if (!f) return;
+  $('sv-status').style.color = 'var(--tx2)'; $('sv-status').textContent = 'Lendo…';
+  try {
+    if (/\.xlsx?$/i.test(f.name)) {
+      await carregarSheetJS();
+      const wb = XLSX.read(await f.arrayBuffer());
+      const linhas = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: false, defval: '' });
+      usarServicosLidos(servicosDasLinhas(linhas), 'do arquivo');
+    } else if (/\.pdf$/i.test(f.name) || f.type === 'application/pdf') {
+      usarServicosLidos(servicosDoTexto(await textoDoPdf(await f.arrayBuffer())), 'do PDF');
+    } else if (/^image\//.test(f.type)) {
+      $('sv-status').style.color = 'var(--alerta)'; $('sv-status').textContent = 'Foto da tabela ainda não dá pra ler. Mande em Excel, PDF ou cole o texto.';
+    } else {
+      const txt = await f.text(); const linhas = lerCSV(txt);
+      const l1 = servicosDasLinhas(linhas); usarServicosLidos(l1.length ? l1 : servicosDoTexto(txt), 'do arquivo');
+    }
+  } catch (_) { $('sv-status').style.color = 'var(--alerta)'; $('sv-status').textContent = 'Não consegui ler esse arquivo.'; }
+}
+async function iniciarServicos(siteId) {
+  const { data } = await sb.from('servicos').select('nome, valor').eq('site_id', siteId).order('ordem');
+  if (!$('sv-lista')) return;
+  estado.servicosEdit = (data || []).map((s) => ({ nome: s.nome, valor: Number(s.valor) }));
+  desenharServicos();
+  const drop = $('sv-drop');
+  ['dragenter', 'dragover'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add('arrastando'); }));
+  ['dragleave', 'drop'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove('arrastando'); }));
+  drop.addEventListener('drop', (e) => lerArquivoServicos(e.dataTransfer?.files?.[0]));
+  $('sv-arq').addEventListener('change', (e) => { const f = e.target.files[0]; e.target.value = ''; lerArquivoServicos(f); });
+  $('sv-ler').addEventListener('click', () => { const t = $('sv-txt').value; const l = servicosDasLinhas(lerCSV(t)); usarServicosLidos(l.length ? l : servicosDoTexto(t), 'da lista colada'); });
+  $('sv-add').addEventListener('click', () => { estado.servicosEdit.push({ nome: '', valor: '' }); desenharServicos(); const ins = $('sv-lista').querySelectorAll('[data-sv="nome"]'); ins[ins.length - 1]?.focus(); });
+  $('sv-salvar').addEventListener('click', () => salvarServicos(siteId));
+}
+async function salvarServicos(siteId) {
+  const itens = []; const ruins = [];
+  (estado.servicosEdit || []).forEach((s) => {
+    const nome = String(s.nome || '').trim(); let v = String(s.valor ?? '').replace(/r\$|\s/gi, ''); if (v.includes(',')) v = v.replace(/\./g, '').replace(',', '.');
+    if (!nome && !v) return; const n = Number(v);
+    if (!nome || !(n >= 0) || v === '') { ruins.push(nome || '(sem nome)'); return; }
+    itens.push({ nome, valor: (Math.round(n * 100) / 100).toFixed(2) });
+  });
+  if (ruins.length) { $('sv-status').style.color = 'var(--alerta)'; $('sv-status').textContent = `Confira nome e valor de: ${ruins.join(', ')}`; return false; }
+  $('sv-status').style.color = 'var(--tx2)'; $('sv-status').textContent = 'Salvando…';
+  const { data, error } = await sb.rpc('salvar_servicos', { p_site: siteId, p_itens: itens });
+  if (error) { $('sv-status').style.color = 'var(--alerta)'; $('sv-status').textContent = 'Não consegui salvar. Tente de novo.'; return false; }
+  if (estado.cacheServicos) delete estado.cacheServicos[siteId];
+  $('sv-status').style.color = 'var(--verde-claro)'; $('sv-status').textContent = `✓ ${data} ${data === 1 ? 'serviço salvo' : 'serviços salvos'}`;
+  return true;
+}
+
 async function telaConfig() {
   const novo = !!estado.novoCliente;
   const site = novo ? { id: '', nome: '', pixel_id: '', allowed_origins: [], whatsapp_phone_number_id: '' }
@@ -2380,6 +2872,9 @@ async function telaConfig() {
     </div>`}
     <section class="card" data-aba="cliente" style="display:flex; flex-direction:column; gap:14px">
       <h2 style="margin:0">${novo ? 'Novo cliente' : 'Dados do cliente'}</h2>
+      ${novo ? '' : `<div class="logo-up"><span class="logo-av" id="cf-logo-prev">${fotoHTML(site.logo_path, site.nome, 72)}</span>
+        <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:6px"><b>Logo ou foto do cliente</b><span style="font-size:12px; color:var(--tx3)">Aparece no topo do painel, na escolha de cliente e no login do dono. JPG, PNG ou WEBP, até 2 MB.</span>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center"><input type="file" id="cf-logo-arq" class="oculto" accept="image/jpeg,image/png,image/webp"><button class="btn-sec" id="cf-logo-bt" type="button">Trocar imagem</button>${site.logo_path ? '<button class="link-bt" id="cf-logo-tirar" type="button">Tirar</button>' : ''}</div></div></div>`}
       <div class="linha">
         <div style="flex:1 1 260px"><label for="cf-nome">Nome do cliente</label><input id="cf-nome" type="text" value="${esc(site.nome)}" placeholder="Ex.: Barbearia Avante"></div>
         <div style="flex:1 1 220px"><label for="cf-id">ID (aparece no código do site)</label><input id="cf-id" type="text" value="${esc(site.id)}" ${novo ? '' : 'disabled'} placeholder="barbearia-avante"></div>
@@ -2389,8 +2884,7 @@ async function telaConfig() {
         <div style="flex:1 1 260px"><label for="cf-token">Token da API de Conversões</label><input id="cf-token" type="password" autocomplete="off" placeholder="Cole o token aqui"></div>
       </div>` : ''}
       <div class="linha">
-        <div style="flex:1 1 260px"><label for="cf-dom">Site(s) do cliente, um por linha</label><textarea id="cf-dom" rows="2" style="width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="barbeariaavante.com.br">${esc(dominios)}</textarea></div>
-        <div style="flex:1 1 260px"><label for="cf-wpp">ID do número do WhatsApp (phone_number_id)</label><input id="cf-wpp" type="text" inputmode="numeric" value="${esc(site.whatsapp_phone_number_id || '')}" placeholder="App na Meta › WhatsApp › Configuração da API"></div>
+        <div style="flex:1 1 260px"><label for="cf-dom">Site(s) do cliente, um por linha · opcional</label><textarea id="cf-dom" rows="2" style="width:100%; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:11px 13px; font:inherit; color:var(--tx)" placeholder="barbeariaavante.com.br">${esc(dominios)}</textarea></div>
       </div>
       <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center">
         <button class="btn" id="cf-salvar">${novo ? 'Cadastrar cliente' : 'Salvar dados'}</button>
@@ -2399,6 +2893,17 @@ async function telaConfig() {
       </div>
     </section>
     ${novo ? '' : `
+    <section class="card" data-aba="cliente" style="display:flex; flex-direction:column; gap:12px">
+      <div><h2 style="margin:0">Serviços e valores</h2>
+      <p style="margin:4px 0 0; color:var(--tx2); font-size:14px">A tabela de preços do cliente. Quando o cliente dele disser "quero agendar um corte", o Radar usa a média dos cortes como valor da venda (se ninguém informar outro valor).</p></div>
+      <label class="sv-drop" id="sv-drop" for="sv-arq">${icone('upload', 22)}<span><b>Arraste a tabela aqui</b> ou clique pra escolher</span><small>Excel, CSV, PDF ou texto · um serviço por linha, com o valor</small>
+        <input type="file" id="sv-arq" class="oculto" accept=".csv,.txt,.xlsx,.xls,.pdf"></label>
+      <details><summary style="cursor:pointer; font-size:13px; color:var(--verde-claro)">Ou cole a lista</summary>
+        <textarea id="sv-txt" rows="4" style="width:100%; margin-top:8px; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:10px; font:inherit; color:var(--tx)" placeholder="Corte social 40&#10;Corte degradê R$ 45,00&#10;Barba 30"></textarea>
+        <button class="btn-sec" id="sv-ler" type="button" style="margin-top:6px">Usar essa lista</button></details>
+      <div id="sv-lista" class="sv-lista"></div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap"><button class="btn-sec" id="sv-add" type="button">+ Adicionar serviço</button><button class="btn" id="sv-salvar" type="button">Salvar serviços</button><span id="sv-status" style="font-size:13px; color:var(--tx2)"></span></div>
+    </section>
     <section class="card vidro meta-bloco" data-aba="cliente">
       <div class="meta-cab"><span class="meta-logo">${icone('meta', 20)}</span><div style="flex:1"><h2 style="margin:0">Meta · Pixel e API de Conversões</h2><div style="font-size:12px; color:var(--tx3)">Pra onde vão os eventos de lead e venda deste cliente</div></div></div>
       <div class="linha">
@@ -2411,22 +2916,30 @@ async function telaConfig() {
     </section>`}
 
     ${novo ? '' : `
-    <section class="card" data-aba="whatsapp" style="display:flex; flex-direction:column; gap:12px">
-      <h2 style="margin:0">WhatsApp do cliente</h2>
-      <p style="margin:0; color:var(--tx2)">Conecta o número que o cliente já usa no app WhatsApp Business. Ele continua usando o app no celular normalmente, e as conversas passam a chegar no Radar.</p>
-      <div style="font-size:13px; color:var(--tx2)">${site.whatsapp_conectado_em
-        ? `<b style="color:var(--verde)">Conectado</b> em ${new Date(site.whatsapp_conectado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}`
-        : (site.whatsapp_phone_number_id ? 'Ligado a um número de teste.' : 'Nenhum número conectado.')}</div>
-      <div class="linha">
-        <div style="flex:1 1 220px"><label for="cf-waba">ID da conta do WhatsApp (WABA)</label><input id="cf-waba" type="text" inputmode="numeric" value="${esc(site.whatsapp_waba_id || '')}" placeholder="App na Meta › WhatsApp › Configuração da API"></div>
-        <div style="flex:1 1 260px"><label for="cf-watoken">Chave do WhatsApp (token)</label><input id="cf-watoken" type="password" autocomplete="off" placeholder="Deixe vazio pra manter a atual"></div>
+    <section class="card vidro" data-aba="whatsapp" style="display:flex; flex-direction:column; gap:16px">
+      <div class="wa-topo"><span class="wa-logo">${icone('whatsapp', 28)}</span>
+        <div style="flex:1; min-width:200px"><h2 style="margin:0">WhatsApp da barbearia</h2><span class="mono" style="font-size:13px; color:var(--tx2)">${site.whatsapp_phone_number_id ? 'ID do número ' + esc(site.whatsapp_phone_number_id) : 'Nenhum número conectado'}</span></div>
+        ${site.whatsapp_conectado_em ? '<span class="wa-st ok"><span></span>Conectado</span>' : site.whatsapp_phone_number_id ? '<span class="wa-st"><span></span>Número de teste</span>' : '<span class="wa-st"><span></span>Desconectado</span>'}</div>
+      <div class="wa-infos">
+        <div><small>Conectado em</small><b class="mono">${site.whatsapp_conectado_em ? new Date(site.whatsapp_conectado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'}</b></div>
+        <div><small>Última mensagem recebida</small><b class="mono">${(() => { const u = (estado.contatos || []).map((c) => c.ultima_direcao === 'entrada' ? c.ultima_msg_em : null).filter(Boolean).sort().pop(); return u ? quando(u) : '—'; })()}</b></div>
+        <div><small>Celular da barbearia</small><b>Continua funcionando</b></div>
       </div>
+      <p style="margin:0; font-size:13px; color:var(--tx2)">As conversas chegam no Radar e no celular ao mesmo tempo. Responder pelo celular não gasta crédito.</p>
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
-        <button class="btn-sec" id="wa-salvar">Salvar dados do WhatsApp</button>
-        <button class="btn" id="wa-conectar">Conectar WhatsApp</button>
+        <button class="btn" id="wa-conectar">${site.whatsapp_conectado_em ? 'Reconectar WhatsApp' : 'Conectar WhatsApp'}</button>
         <span id="wa-status" style="font-size:13px; color:var(--tx2)"></span>
       </div>
-      <p style="margin:0; font-size:12px; color:var(--tx3)">Abre a janela da Meta: entre com o Facebook, escolha "conectar o app WhatsApp Business", digite o número e escaneie o QR code que chega no celular.</p>
+      <p style="margin:0; font-size:12px; color:var(--tx3)">Abre a janela da Meta: o dono entra com o Facebook, escolhe "conectar o app WhatsApp Business", digita o número e escaneia o QR code que chega no celular.</p>
+      <details class="wa-avancado"><summary>Avançado · dados técnicos da conexão</summary>
+        <div class="linha" style="margin-top:12px">
+          <div style="flex:1 1 220px"><label for="cf-waba">ID da conta do WhatsApp (WABA)</label><input id="cf-waba" type="text" inputmode="numeric" value="${esc(site.whatsapp_waba_id || '')}" placeholder="App na Meta › WhatsApp › Configuração da API"></div>
+          <div style="flex:1 1 260px"><label for="cf-wpp">ID do número do WhatsApp (phone_number_id)</label><input id="cf-wpp" type="text" inputmode="numeric" value="${esc(site.whatsapp_phone_number_id || '')}" placeholder="App na Meta › WhatsApp › Configuração da API"></div>
+          <div style="flex:1 1 220px"><label for="cf-watoken">Chave do WhatsApp (token)</label><input id="cf-watoken" type="password" autocomplete="off" placeholder="Guardada no cofre · deixe vazio"></div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; margin-top:10px"><button class="btn-sec" id="wa-salvar">Salvar dados técnicos</button></div>
+        <p style="margin:8px 0 0; font-size:12px; color:var(--tx3)">Só use se a conexão automática falhar. Ao conectar pelo botão, tudo isso é preenchido sozinho.</p>
+      </details>
     </section>
 
     <section class="card" data-aba="rotina" style="display:flex; flex-direction:column; gap:12px">
@@ -2444,15 +2957,16 @@ async function telaConfig() {
 
     <section class="card" data-aba="cliente" style="display:flex; flex-direction:column; gap:12px">
       <h2 style="margin:0">Código do site</h2>
-      <p style="margin:0; color:var(--tx2)">Cole uma vez no &lt;head&gt; do site do cliente (ou numa tag HTML personalizada do GTM). Ele cuida do pixel e do envio pelo servidor.</p>
+      <p style="margin:0; color:var(--tx2)"><b>Só se o cliente tiver site.</b> Sem site, o Radar funciona igual pelo WhatsApp, anúncios e links rastreáveis. Cole uma vez no &lt;head&gt; do site do cliente (ou numa tag HTML personalizada do GTM). Ele cuida do pixel e do envio pelo servidor.</p>
       <pre id="cf-codigo" class="codigo mono" style="margin:0; overflow-x:auto; background:var(--campo); border:1px solid var(--campo-bd); border-radius:10px; padding:14px; font-size:12px; line-height:1.6; white-space:pre">${esc(`<script src="${TRACKER_URL}"\n  data-site="${site.id}"\n  data-endpoint="${ENDPOINT_TRACK}"\n  data-pixel="${site.pixel_id}"\n  defer><\/script>`)}</pre>
       <div><button class="btn-sec" id="cf-copiar">Copiar código</button></div>
     </section>
 
     <section class="card" data-aba="funil" style="display:flex; flex-direction:column; gap:12px">
-      <h2 style="margin:0">Funil do cliente</h2>
-      <p style="margin:0; color:var(--tx2)">Cada etapa pode mandar um evento pra Meta quando o contato chega nela. Palavras-chave separadas por vírgula fazem o contato avançar sozinho.</p>
-      <div id="cf-funil" style="display:flex; flex-direction:column; gap:10px"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap"><h2 style="margin:0">Etapas do funil</h2><button class="btn-sec" id="cf-funil-padrao" type="button">Usar funil padrão</button></div>
+      <p style="margin:0; color:var(--tx2)">Clique numa etapa pra editar. Arraste pelos pontinhos pra mudar a ordem.</p>
+      <div id="cf-funil-avisos"></div>
+      <div class="fx-grade"><div id="cf-funil" style="display:flex; flex-direction:column; gap:10px"></div><aside class="card vidro fx-previa" id="cf-funil-previa"></aside></div>
       <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center">
         <button class="btn-sec" id="cf-add-etapa">+ Adicionar etapa</button>
         <button class="btn" id="cf-salvar-funil">Salvar funil</button>
@@ -2508,13 +3022,30 @@ async function telaConfig() {
   };
   $('cf-copiar').addEventListener('click', () => copiar($('cf-copiar'), $('cf-codigo').textContent, 'Código copiado'));
   $('cf-copiar-pixel').addEventListener('click', () => copiar($('cf-copiar-pixel'), $('cf-pixel').value.trim(), 'ID do pixel copiado'));
+  const trocarLogo = (path) => { const s2 = estado.sites.find((x) => x.id === site.id); if (s2) s2.logo_path = path; site.logo_path = path; $('cf-logo-prev').innerHTML = fotoHTML(path, site.nome, 72); mostrarLogoTopo(); };
+  $('cf-logo-bt').addEventListener('click', () => $('cf-logo-arq').click());
+  $('cf-logo-arq').addEventListener('change', async (ev) => { const f = ev.target.files[0]; ev.target.value = ''; const path = await enviarFoto(f, 'site', site.id); if (path) { trocarLogo(path); toast('Logo atualizada'); } });
+  if ($('cf-logo-tirar')) $('cf-logo-tirar').addEventListener('click', async () => { const { error } = await sb.rpc('salvar_foto', { p_tipo: 'site', p_site: site.id, p_path: null }); if (!error) { trocarLogo(null); toast('Logo removida'); } });
   carregarEventosMeta(site.id);
+  if ($('sv-lista')) iniciarServicos(site.id);
   desenharFunil();
   $('cf-add-etapa').addEventListener('click', () => {
     estado.funilEdit.push({ id: null, nome: '', temperatura: 'morno', evento_meta: null, valor_padrao: null, palavras_txt: '' });
     desenharFunil();
   });
   $('cf-salvar-funil').addEventListener('click', salvarFunil);
+  $('cf-funil-padrao').addEventListener('click', () => {
+    if (!confirm('Trocar as etapas pelo funil padrão (Iniciou contato › Agendou › Compareceu › Retornou)? Quem estiver numa etapa que sumir volta pra primeira. Depois é só salvar.')) return;
+    const atual = estado.funilEdit || [];
+    const id = (n) => atual.find((e) => semAcentoJs(e.nome) === semAcentoJs(n))?.id ?? null;
+    estado.funilEdit = [
+      { id: id('Iniciou contato'), nome: 'Iniciou contato', temperatura: 'frio', evento_meta: null, valor_padrao: null, palavras_txt: '' },
+      { id: id('Agendou'), nome: 'Agendou', temperatura: 'morno', evento_meta: 'Lead', valor_padrao: null, palavras_txt: 'agendado, marcado, confirmado' },
+      { id: id('Compareceu'), nome: 'Compareceu', temperatura: 'quente', evento_meta: 'Purchase', valor_padrao: atual.find((e) => e.evento_meta === 'Purchase')?.valor_padrao ?? null, palavras_txt: '' },
+      { id: id('Retornou'), nome: 'Retornou', temperatura: 'quente', evento_meta: 'Purchase', valor_padrao: null, palavras_txt: '', tipo: 'retorno' },
+    ];
+    desenharFunil(); toast('Funil padrão aplicado. Clique em Salvar funil.');
+  });
   $('us-criar').addEventListener('click', criarUsuario);
   listarUsuarios(site.id);
 }
@@ -2531,28 +3062,53 @@ function desenharFunil() {
     const cor = COR[e.temperatura] || COR.frio;
     const personalizado = e.evento_meta && !codigos.has(e.evento_meta);
     if (!e._k) e._k = 'k' + Math.random().toString(36).slice(2, 8);
-    return `<div class="etapa-ed" data-pos="${i}" data-k="${e._k}" style="border:1px solid ${cor.bd}; background:${cor.bg}; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:10px">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">
-        <b style="color:${cor.c}; display:flex; align-items:center; gap:8px"><span class="arrastar" data-alca="${i}" title="Arraste pra mudar a ordem" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg></span>Etapa ${i + 1}</b>
-        <div style="display:flex; gap:6px">
-          <button class="btn-sec" data-acao="subir" data-i="${i}" ${i === 0 ? 'disabled' : ''} aria-label="Subir etapa ${i + 1}">↑</button>
-          <button class="btn-sec" data-acao="descer" data-i="${i}" ${i === estado.funilEdit.length - 1 ? 'disabled' : ''} aria-label="Descer etapa ${i + 1}">↓</button>
-          <button class="btn-sec" data-acao="remover" data-i="${i}" aria-label="Remover etapa ${i + 1}">Remover</button>
+    const nAqui = (estado.contatos || []).filter((c) => e.id && c.etapa_id === e.id).length;
+    const pals = String(e.palavras_txt || '').split(',').map((x) => x.trim()).filter(Boolean);
+    const EVB = [['', 'Não avisar', '—'], ['Lead', 'Virou interessado', 'Lead'], ['Schedule', 'Agendou', 'Schedule'], ['Purchase', 'Comprou', 'Purchase']];
+    const nomeEv = (EVB.find(([k]) => k && k === e.evento_meta) || [])[1] || e.evento_meta;
+    const resumo = `${e.evento_meta ? `<span class="selo">Meta: ${esc(nomeEv)}</span>` : '<span class="selo leve">Não avisa a Meta</span>'}${e.valor_padrao ? `<span class="selo leve">R$ ${esc(String(e.valor_padrao))}</span>` : ''}${pals.slice(0, 2).map((p) => `<span class="selo leve">${esc(p)}</span>`).join('')}${pals.length > 2 ? `<span class="selo leve">+${pals.length - 2}</span>` : ''}`;
+    return `<div class="etapa-ed fx-card${e._aberto ? ' aberto' : ''}" data-pos="${i}" data-k="${e._k}">
+      <div class="fx-cab">
+        <span class="arrastar" data-alca="${i}" title="Arraste pra mudar a ordem" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg></span>
+        <span class="fx-bola" style="background:${cor.c}"></span>
+        <button type="button" class="fx-abrir" data-acao="abrir" data-i="${i}" aria-expanded="${!!e._aberto}"><b>${esc(e.nome || 'Nova etapa')}</b><span class="fx-resumo">${resumo}</span></button>
+        <span class="fx-qtd">${nAqui} aqui</span>
+        <button class="btn-sec mini" data-acao="subir" data-i="${i}" ${i === 0 ? 'disabled' : ''} aria-label="Subir etapa ${i + 1}">↑</button>
+        <button class="btn-sec mini" data-acao="descer" data-i="${i}" ${i === estado.funilEdit.length - 1 ? 'disabled' : ''} aria-label="Descer etapa ${i + 1}">↓</button>
+      </div>
+      <div class="fx-corpo">
+        <div class="linha" style="gap:10px">
+          <div style="flex:2 1 180px"><label for="et-nome-${i}">Nome</label><input id="et-nome-${i}" type="text" data-campo="nome" data-i="${i}" value="${esc(e.nome)}" placeholder="Ex.: Agendou"></div>
+          <div style="flex:1 1 120px"><label for="et-temp-${i}">Cor</label><select id="et-temp-${i}" data-campo="temperatura" data-i="${i}">
+            ${[['frio', 'Verde-escuro'], ['morno', 'Verde'], ['quente', 'Verde-claro']].map(([t, n]) => `<option value="${t}" ${e.temperatura === t ? 'selected' : ''}>${n}</option>`).join('')}
+          </select></div>
         </div>
+        <div><div class="fx-perg">Quando o contato chegar aqui, avisar a Meta que…</div>
+          <div class="fx-evs">${EVB.map(([k, t, cod]) => `<button type="button" class="fx-ev" data-ev="${k}" data-i="${i}" aria-pressed="${(e.evento_meta || '') === k}"><b>${t}</b><small>${cod}</small></button>`).join('')}</div>
+          <details style="margin-top:8px"${personalizado || e._personalizado || (e.evento_meta && !EVB.some(([k]) => k === e.evento_meta)) ? ' open' : ''}><summary class="fx-mais">Outro evento da Meta</summary>
+            <div style="margin-top:8px"><label for="et-ev-${i}">Evento</label><select id="et-ev-${i}" data-campo="evento_sel" data-i="${i}">${opcoesEvento(e.evento_meta)}</select></div>
+            ${personalizado || e._personalizado ? `<div style="margin-top:8px"><label for="et-evp-${i}">Nome do evento personalizado (sem espaço)</label><input id="et-evp-${i}" type="text" data-campo="evento_meta" data-i="${i}" value="${esc(e.evento_meta || '')}" placeholder="Ex.: AgendouCorte"></div>` : ''}
+          </details></div>
+        ${e.evento_meta === 'Purchase' || e.valor_padrao ? `<div style="max-width:220px"><label for="et-valor-${i}">Valor padrão da venda (R$) · opcional</label><input id="et-valor-${i}" type="text" inputmode="decimal" data-campo="valor_padrao" data-i="${i}" value="${e.valor_padrao ?? ''}" placeholder="ex.: 45"></div>` : ''}
+        <div><label for="et-pal-${i}">Palavras que levam o contato pra cá sozinho (separadas por vírgula)</label><input id="et-pal-${i}" type="text" data-campo="palavras_txt" data-i="${i}" value="${esc(e.palavras_txt || '')}" placeholder="agendado, confirmado, marcado"></div>
+        <div class="fx-teste"><label for="et-teste-${i}">Teste uma mensagem</label><input id="et-teste-${i}" type="text" data-teste="${i}" placeholder="ex.: fechado, pode marcar sábado 10h"><div class="fx-res" id="et-res-${i}"></div></div>
+        <div style="display:flex; justify-content:flex-end"><button class="link-bt" data-acao="remover" data-i="${i}" aria-label="Remover etapa ${i + 1}">Apagar etapa</button></div>
       </div>
-      <div class="linha" style="gap:10px">
-        <div style="flex:2 1 180px"><label for="et-nome-${i}">Nome</label><input id="et-nome-${i}" type="text" data-campo="nome" data-i="${i}" value="${esc(e.nome)}" placeholder="Ex.: Agendou"></div>
-        <div style="flex:1 1 120px"><label for="et-temp-${i}">Temperatura</label><select id="et-temp-${i}" data-campo="temperatura" data-i="${i}">
-          ${['frio', 'morno', 'quente'].map((t) => `<option value="${t}" ${e.temperatura === t ? 'selected' : ''}>${t[0].toUpperCase() + t.slice(1)}</option>`).join('')}
-        </select></div>
-        <div style="flex:2 1 220px"><label for="et-ev-${i}">Evento enviado à Meta</label><select id="et-ev-${i}" data-campo="evento_sel" data-i="${i}">${opcoesEvento(e.evento_meta)}</select></div>
-        <div style="flex:1 1 110px"><label for="et-valor-${i}">Valor (R$)</label><input id="et-valor-${i}" type="text" inputmode="decimal" data-campo="valor_padrao" data-i="${i}" value="${e.valor_padrao ?? ''}" placeholder="opcional"></div>
-      </div>
-      ${personalizado || e._personalizado ? `<div><label for="et-evp-${i}">Nome do evento personalizado (sem espaço)</label><input id="et-evp-${i}" type="text" data-campo="evento_meta" data-i="${i}" value="${esc(e.evento_meta || '')}" placeholder="Ex.: AgendouCorte"></div>` : ''}
-      <div><label for="et-pal-${i}">Palavras-chave (separadas por vírgula)</label><input id="et-pal-${i}" type="text" data-campo="palavras_txt" data-i="${i}" value="${esc(e.palavras_txt || '')}" placeholder="agendado, confirmado, marcado"></div>
     </div>`;
   }).join('');
+  avisosFunil();
 
+  document.querySelectorAll('#cf-funil .fx-ev').forEach((b) => b.addEventListener('click', () => {
+    const e = estado.funilEdit[Number(b.dataset.i)]; e.evento_meta = b.dataset.ev || null; e._personalizado = false; desenharFunil();
+  }));
+  document.querySelectorAll('#cf-funil [data-teste]').forEach((inp) => inp.addEventListener('input', () => {
+    const t = semAcentoJs(inp.value); const out = $('et-res-' + inp.dataset.teste);
+    if (!t.trim()) { out.textContent = ''; return; }
+    let achou = null, palavra = '';
+    estado.funilEdit.forEach((e) => String(e.palavras_txt || '').split(',').map((x) => x.trim()).filter(Boolean).forEach((p) => { if (new RegExp(`\\b${semAcentoJs(p).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(t)) { achou = e; palavra = p; } }));
+    out.innerHTML = achou ? `${icone('ok', 13)} Essa mensagem levaria o contato para <b>${esc(achou.nome)}</b> (achou “${esc(palavra)}”)` : 'Nenhuma palavra-chave encontrada: o contato fica onde está.';
+    out.classList.toggle('ok', !!achou);
+  }));
   document.querySelectorAll('#cf-funil [data-campo]').forEach((el) => {
     const ev = el.tagName === 'SELECT' ? 'change' : 'input';
     el.addEventListener(ev, () => {
@@ -2612,6 +3168,7 @@ function desenharFunil() {
   });
   document.querySelectorAll('#cf-funil [data-acao]').forEach((b) => b.addEventListener('click', () => {
     const i = Number(b.dataset.i); const l = estado.funilEdit;
+    if (b.dataset.acao === 'abrir') { l[i]._aberto = !l[i]._aberto; desenharFunil(); return; }
     if (b.dataset.acao === 'subir' || b.dataset.acao === 'descer') {
       const j = b.dataset.acao === 'subir' ? i - 1 : i + 1; if (j < 0 || j >= l.length) return;
       const nos = [...document.querySelectorAll('#cf-funil .etapa-ed')];
@@ -2627,6 +3184,24 @@ function desenharFunil() {
   }));
 }
 
+function semAcentoJs(t) { return String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+function avisosFunil() {
+  const l = estado.funilEdit || [];
+  const av = [];
+  l.forEach((e) => { if (e.evento_meta === 'Purchase' && !e.valor_padrao && e.tipo !== 'retorno') av.push(`<b>${esc(e.nome || 'Uma etapa')}</b> avisa “Comprou” sem valor padrão: o Radar pergunta o valor quando você mover alguém pra cá. Se ficar em branco, a venda espera a lista do mês trazer o valor.`); });
+  const compras = l.filter((e) => e.evento_meta === 'Purchase' && e.tipo !== 'retorno');
+  if (compras.length > 1) av.push(`${compras.map((e) => '<b>' + esc(e.nome) + '</b>').join(' e ')} avisam “Comprou”: a mesma venda pode contar em dobro na Meta.`);
+  const box = $('cf-funil-avisos'); if (box) box.innerHTML = av.map((t) => `<div class="fx-aviso">${icone('ajuda', 16)}<span>${t}</span></div>`).join('');
+  const pv = $('cf-funil-previa');
+  if (pv) {
+    const n = l.length; const tons = ['#10B981', '#34D399', '#6EE7B7', '#A7F3D0', '#D1FAE5'];
+    const qtd = l.map((e) => (estado.contatos || []).filter((c) => { const et = estado.etapas.find((x) => x.id === c.etapa_id); const pos = l.findIndex((y) => y.id && y.id === et?.id); return pos >= l.indexOf(e); }).length);
+    pv.innerHTML = `<h3 style="margin:0 0 4px; font-size:15px">Prévia no Resultados</h3><div style="font-size:12px; color:var(--tx3); margin-bottom:10px">atualiza enquanto você edita</div>` + l.map((e, i) => {
+      const larg = n > 1 ? 100 - (i * 44) / (n - 1) : 100;
+      return `${i ? `<div style="text-align:center; font-size:12px; color:var(--tx3); padding:5px 0">↓ ${qtd[i]} de ${qtd[i - 1]}</div>` : ''}<div style="display:flex; justify-content:center"><div class="etapa-funil" style="width:${larg}%; background:${tons[Math.min(i, tons.length - 1)]}; cursor:default"><span style="font-size:14px; font-weight:600">${esc(e.nome || '…')}</span><span style="font-size:20px; font-weight:600">${qtd[i]}</span></div></div>`;
+    }).join('');
+  }
+}
 // nova ordem: redesenha e salva sozinho, avisando na tela
 // uma gravação por vez; se mexer de novo enquanto grava, grava a última ordem logo depois
 let _arrastandoFunil = false;
@@ -2691,12 +3266,12 @@ async function salvarCliente() {
     acao: 'salvar_cliente', novo,
     id: $('cf-id').value.trim(), nome: $('cf-nome').value.trim(),
     pixel_id: $('cf-pixel').value.trim(), token: $('cf-token').value.trim(),
-    origens: $('cf-dom').value.split('\n'), whatsapp_phone_number_id: $('cf-wpp').value.trim(),
+    origens: $('cf-dom').value.split('\n'), whatsapp_phone_number_id: ($('cf-wpp')?.value || '').trim(),
     whatsapp_waba_id: $('cf-waba') ? $('cf-waba').value.trim() : undefined,
     wa_token: $('cf-watoken') ? $('cf-watoken').value.trim() : '',
   });
   if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--alerta)'; return false; }
-  const { data: sites } = await sb.from('sites').select('id, nome, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   $('sel-site').innerHTML = estado.sites.map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
   estado.site = r.id; $('sel-site').value = r.id; estado.novoCliente = false;
@@ -2721,6 +3296,7 @@ async function salvarTudo() {
   if (!rFu.ok) erros.push('Funil: ' + (rFu.erro || 'erro'));
   const okCliente = await salvarCliente();
   if (!okCliente) erros.push('Dados do cliente: veja a mensagem no bloco 1');
+  if ($('sv-lista') && /não salvas/.test($('sv-status').textContent)) { const okSv = await salvarServicos(site); if (!okSv) erros.push('Serviços: confira nome e valor'); }
   await atualizarCreditos();
   if (erros.length) { toast('Algumas partes não salvaram: ' + erros.join(' · ')); }
   else toast('Tudo salvo.');
@@ -2856,6 +3432,11 @@ $('sel-periodo').addEventListener('change', () => {
 document.querySelectorAll('[data-per]').forEach((b) => b.addEventListener('click', () => { $('sel-periodo').value = b.dataset.per; $('sel-periodo').dispatchEvent(new Event('change')); }));
 document.querySelectorAll('[data-ic]').forEach((el) => { el.innerHTML = icone(el.dataset.ic, 18); });
 $('bt-atualizar').innerHTML = icone('atualizar', 18); $('bt-sair').innerHTML = icone('sair', 16);
+$('quem-av').addEventListener('click', () => $('quem-arq').click());
+$('quem-arq').addEventListener('change', async (ev) => {
+  const f = ev.target.files[0]; ev.target.value = ''; const path = await enviarFoto(f, 'perfil');
+  if (path && estado.perfil) { estado.perfil.foto_path = path; $('quem-av').innerHTML = fotoHTML(path, estado.perfil.nome, 34) + '<span class="eu-cam" aria-hidden="true">' + icone('camera', 10) + '</span>'; toast('Sua foto foi atualizada'); }
+});
 $('bt-atualizar').addEventListener('click', carregar);
 setInterval(() => { if (!document.hidden && estado.perfil && !['config', 'links', 'conversas', 'modelos', 'rotina'].includes(estado.tela)) carregar(); }, 30000);
 
