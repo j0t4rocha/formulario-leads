@@ -458,6 +458,13 @@
   html[data-tema="claro"] .topo { box-shadow: 0 1px 2px rgba(15,26,19,.05); }
   html[data-tema="claro"] .pilulas { background: rgba(15,26,19,.04); border-color: var(--line); }
 
+
+  #tela-dashboard .filtros { padding: 12px 14px; gap: 10px; background: transparent; border: 1px solid rgba(255,255,255,.07); box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; align-items: center; }
+  #tela-dashboard .filtros > div { flex: 1 1 180px; }
+  #tela-dashboard .filtros label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  #tela-dashboard .filtros .sel-bt { min-height: 38px; padding: 8px 12px; font-size: 13px; }
+  #tela-dashboard .filtros::before { content: 'Filtrar'; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--tx3); flex: 0 0 auto; padding: 0 4px; }
+
   /* ===== tema claro (opcional) ===== */
   html[data-tema="claro"] {
     color-scheme: light;
@@ -808,7 +815,7 @@ function graficoSemana(base) {
   const usados = GRUPOS.map((g) => ({ g, n: porDia.reduce((a, x) => a + x.grupos.find((y) => y.g === g).n, 0) })).filter(({ g, n }) => n > 0 || g.sempre);
   const legenda = usados.map(({ g, n }) => `<span><i style="background:${COR_GRAF[g.k] || g.barra}"></i>${esc(g.nome)} <b>${n}</b></span>`).join('');
   const d = antes ? Math.round(((total - antes) / antes) * 100) : null;
-  return `<div class="card" style="flex:1 1 100%; min-width:0">
+  return `<div class="card" style="flex:2 1 560px; min-width:0">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; margin-bottom:14px">
       <div><h2 style="margin:0">Conversas da semana</h2><div style="font-size:13px; color:var(--tx3); margin-top:4px">Novas conversas por dia nos últimos 7 dias, separadas por origem</div></div>
       <div style="text-align:right"><div class="num" style="font-size:26px; font-weight:600">${total}</div><div style="font-size:12px; color:${d != null && d < 0 ? 'var(--tx2)' : 'var(--verde-claro)'}">${d == null ? (antes === 0 && total ? 'sem conversas na semana anterior' : '') : `${d >= 0 ? '+' : ''}${d}% vs semana anterior (${antes})`}</div></div>
