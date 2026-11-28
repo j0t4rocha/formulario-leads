@@ -664,6 +664,21 @@
   .seq-resumo { font-size:12px; color:var(--tx3); }
   .seq-dias { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:13px; }
   .pausado-box { display:flex; gap:8px; align-items:center; padding:10px 12px; border-radius:12px; border:1px dashed var(--line2); font-size:13px; color:var(--tx2); }
+  .wa-hist { display:flex; gap:10px; align-items:flex-start; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:var(--solido); }
+  .wa-hist-ic { width:28px; height:28px; flex:0 0 28px; border-radius:8px; display:grid; place-items:center; background:rgba(16,185,129,.12); color:var(--verde-claro); }
+  .bolha.historico { opacity:.75; }
+  .q-cab, .q-linha { display:grid; grid-template-columns:minmax(180px, 1.6fr) 90px 1fr 1fr; gap:12px; align-items:center; }
+  .q-cab { font-size:12px; color:var(--tx3); padding:12px 0 6px; border-bottom:1px solid var(--line2); }
+  .q-linha { padding:10px 0; border-bottom:1px solid var(--line2); }
+  .q-linha.sub { padding:6px 0 6px 20px; } .q-linha.sub .q-fonte span { font-size:13px; color:var(--tx2); }
+  .q-fonte { display:flex; align-items:center; gap:10px; min-width:0; } .q-fonte > div { min-width:0; } .q-fonte span { font-size:15px; }
+  .q-fonte small { display:block; font-size:11px; color:var(--tx3); margin-top:2px; }
+  .q-sub-ic { width:22px; height:22px; display:inline-grid; place-items:center; color:var(--tx3); }
+  .q-num b { font-size:17px; font-variant-numeric:tabular-nums; }
+  .q-taxa { display:flex; flex-direction:column; } .q-taxa small { font-size:12px; color:var(--tx3); }
+  .q-reat { color:var(--verde-claro); font-weight:600; }
+  .q-big { font-size:17px; font-variant-numeric:tabular-nums; }
+  @media (max-width:720px) { .q-cab { display:none; } .q-linha { grid-template-columns:1fr 1fr; } .q-fonte { grid-column:1 / -1; } .q-num { display:none; } }
   .mv-sug { display:flex; gap:8px; align-items:center; padding:10px 12px; border-radius:10px; background:rgba(16,185,129,.10); border:1px solid rgba(16,185,129,.35); font-size:13px; color:var(--tx); }
   .selo.alerta-leve { background:rgba(245,158,11,.0); border:1px dashed var(--tx3); color:var(--tx2); }
 </style>
@@ -895,7 +910,7 @@ async function iniciar() {
   $('quem-nome').textContent = perfil.nome || '';
   $('quem-av').innerHTML = fotoHTML(perfil.foto_path, perfil.nome, 34) + '<span class="eu-cam" aria-hidden="true">' + icone('camera', 10) + '</span>';
 
-  const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo, automacoes').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo, automacoes, historico_status, historico_progresso, historico_msgs, historico_pedido_em, historico_erro').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   const sel = $('sel-site');
   sel.innerHTML = (sites || []).map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
@@ -1142,6 +1157,73 @@ function duracao(ms) {
 const isoDia = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
 // clientes novos que vieram e voltaram (lista do mês / idas registradas)
+// Qualidade por fonte: de cada 10 pessoas NOVAS que chamaram, quantas viraram clientes e quantas voltaram.
+// Quem já era cliente (ida registrada antes de chamar) fica fora da conta e aparece à parte.
+const DIAS_RETENCAO = 45;
+const DIAS_REATIVADO = 60; // sumido há mais de 2 meses (sem conversa e sem ida) e voltou pela fonte = reativado
+function deDez(a, b) { return b ? Math.round((a / b) * 10) : 0; }
+function cardQualidade(lista) {
+  const porC = {};
+  (estado.visitas || []).forEach((v) => { if (v.status === 'veio') (porC[v.contato_id] = porC[v.contato_id] || []).push(v.data); });
+  const limite = new Date(Date.now() - DIAS_RETENCAO * 864e5).toISOString().slice(0, 10);
+  const [de, ate] = intervaloPeriodo();
+  const conta = (grupo) => {
+    let novos = 0, base = 0, clientes = 0, comTempo = 0, voltaram = 0, esperando = 0;
+    grupo.forEach((c) => {
+      const desde = String(c.criado_em).slice(0, 10); const idas = (porC[c.id] || []).slice().sort();
+      if (c.importado || idas.some((d) => d < desde)) { base++; return; }
+      novos++;
+      const depois = idas.filter((d) => d >= desde);
+      if (!depois.length) return;
+      clientes++;
+      if (depois[0] <= limite) { comTempo++; if (depois.length >= 2) voltaram++; } else esperando++;
+    });
+    return { novos, base, clientes, comTempo, voltaram, esperando };
+  };
+  // quem já era da base e voltou por essa fonte no período (toques).
+  // Prova de que já era cliente: conversa antes da mensagem do anúncio/link, ou ida registrada antes.
+  // Se a última conversa/ida foi há mais de DIAS_REATIVADO dias, conta como cliente REATIVADO pela fonte.
+  const tipoGrupo = { anuncio: 'anuncio_meta', link: 'link', site: 'site' };
+  const voltasBase = {}, reativados = {};
+  const contados = new Set();
+  (estado.toques || []).slice().sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em)).forEach((t) => { const tt = new Date(t.criado_em).getTime();
+    if (!t.da_base || (de && tt < de.getTime()) || (ate && tt > ate.getTime())) return;
+    const k = tipoGrupo[t.tipo]; if (!k) return;
+    const chave = k + ':' + t.contato_id; if (contados.has(chave)) return; contados.add(chave);
+    const refs = [t.ultima_msg_antes ? new Date(t.ultima_msg_antes).getTime() : 0, t.ultima_ida_antes ? new Date(t.ultima_ida_antes + 'T12:00:00-03:00').getTime() : 0];
+    const ult = Math.max(...refs);
+    if (ult && (tt - ult) / 864e5 >= DIAS_REATIVADO) reativados[k] = (reativados[k] || 0) + 1;
+    else voltasBase[k] = (voltasBase[k] || 0) + 1;
+  });
+  const linha = (logo, nome, r, extraBase, sub, reat = 0) => {
+    const conv = r.novos ? `<b class="q-big">${deDez(r.clientes, r.novos)} de 10</b><small>${r.clientes} de ${r.novos} · ${pct(r.clientes, r.novos)}%</small>` : '<small>sem conversas novas</small>';
+    const ret = r.comTempo ? `<b class="q-big">${deDez(r.voltaram, r.comTempo)} de 10</b><small>${r.voltaram} de ${r.comTempo} · ${pct(r.voltaram, r.comTempo)}%</small>`
+      : r.clientes ? `<small>ainda sem tempo</small>` : '<small>—</small>';
+    const notas = [r.esperando ? `${r.esperando} ${r.esperando === 1 ? 'cliente ainda não completou' : 'clientes ainda não completaram'} ${DIAS_RETENCAO} dias` : '', r.base ? `${r.base} já ${r.base === 1 ? 'era cliente' : 'eram clientes'} (fora da conta)` : '', reat ? `<b class="q-reat">+${reat} ${reat === 1 ? 'cliente reativado' : 'clientes reativados'}</b> (sumidos há ${DIAS_REATIVADO}+ dias)` : '', extraBase ? `+${extraBase} da base ${extraBase === 1 ? 'chamou' : 'chamaram'} de novo por aqui` : ''].filter(Boolean);
+    return `<div class="q-linha${sub ? ' sub' : ''}"><div class="q-fonte">${logo}<div><span>${esc(nome)}</span>${notas.length ? `<small>${notas.join(' · ')}</small>` : ''}</div></div>
+      <div class="q-num"><b>${r.novos}</b></div><div class="q-taxa">${conv}</div><div class="q-taxa">${ret}</div></div>`;
+  };
+  const linhas = GRUPOS.map((g) => {
+    const doGrupo = lista.filter((c) => grupoDe(c) === g); const r = conta(doGrupo);
+    if (!doGrupo.length && !g.sempre && !voltasBase[g.k] && !reativados[g.k]) return '';
+    let html = linha(logoGrupo(g, 28), g.nome, r, voltasBase[g.k] || 0, false, reativados[g.k] || 0);
+    if (g.k === 'link') {
+      const porLink = {}; doGrupo.forEach((c) => { const k = c.link_id || 0; (porLink[k] = porLink[k] || []).push(c); });
+      const chaves = Object.keys(porLink);
+      if (chaves.length > 1 || (chaves.length === 1 && chaves[0] !== '0')) html += chaves.map((k) => linha(`<span class="q-sub-ic">${icone('link', 13)}</span>`, (estado.links || []).find((l) => String(l.id) === k)?.nome || 'Link sem nome', conta(porLink[k]), 0, true)).join('');
+    }
+    return html;
+  }).join('');
+  const tot = conta(lista);
+  const totReat = Object.values(reativados).reduce((a, n) => a + n, 0);
+  return `<div class="card q-card" style="margin-bottom:16px">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap"><h2 style="margin:0">Qualidade por fonte</h2>
+      <span style="font-size:13px; color:var(--tx2)">No geral: <b>${deDez(tot.clientes, tot.novos)} de 10</b> viraram clientes (${tot.clientes} de ${tot.novos})${tot.comTempo ? ` · <b>${deDez(tot.voltaram, tot.comTempo)} de 10</b> voltaram (${tot.voltaram} de ${tot.comTempo})` : ''}${totReat ? ` · <b class="q-reat">${totReat} ${totReat === 1 ? 'cliente reativado' : 'clientes reativados'}</b>` : ''}</span></div>
+    <div class="q-cab"><span>Fonte</span><span>Conversas novas</span><span>Viraram clientes</span><span>Voltaram</span></div>
+    ${linhas}
+    <div style="font-size:12px; color:var(--tx3); margin-top:10px">Conta só quem chamou pela 1ª vez no período e não era cliente antes. "Viraram clientes": tiveram pelo menos 1 ida registrada depois de chamar. "Voltaram": tiveram 2 idas ou mais; só entra na conta quem fez a 1ª ida há ${DIAS_RETENCAO} dias ou mais. Depende das idas registradas (funil, "Registrar ida" ou lista do mês). "Reativado": já era cliente (tinha conversa ou ida antes), estava sumido há ${DIAS_REATIVADO} dias ou mais e voltou a chamar pelo anúncio, link ou site.</div>
+  </div>`;
+}
 function cardFidelizados(lista) {
   const porC = {};
   (estado.visitas || []).forEach((v) => { (porC[v.contato_id] = porC[v.contato_id] || []).push(v); });
@@ -1295,12 +1377,12 @@ function listaEtapa(lista) {
   </div>`;
 }
 function telaDashboard() {
-  const doPeriodo = noPeriodo(estado.contatos);
+  const doPeriodo = noPeriodo(estado.contatos.filter((c) => !c.importado));
   const lista = comFiltro(doPeriodo);
   const total = lista.length;
   const etapas = estado.etapas;
   const pAnt = periodoAnterior();
-  const listaAnt = pAnt ? comFiltro(noIntervalo(estado.contatos, pAnt[0], pAnt[1])) : null;
+  const listaAnt = pAnt ? comFiltro(noIntervalo(estado.contatos.filter((c) => !c.importado), pAnt[0], pAnt[1])) : null;
   const chegaramAnt = listaAnt ? estado.etapas.map((e) => listaAnt.filter((c) => (etapaDe(c)?.ordem ?? 0) >= e.ordem).length) : null;
   const fat = faturamento(lista, intervaloPeriodo());
   const fatAnt = pAnt && listaAnt ? faturamento(comFiltro(estado.contatos), pAnt) : null;
@@ -1351,7 +1433,7 @@ function telaDashboard() {
       ${kpiCard('Faturamento', brl(fat.soma).replace(',00', ''), `${fat.n} ${fat.n === 1 ? 'ida registrada' : 'idas registradas'}`, fatAnt ? deltaHTML(Math.round(fat.soma), Math.round(fatAnt.soma)) : '')}
     </div>
     <div class="linha">
-      ${graficoSemana(comFiltro(estado.contatos))}
+      ${graficoSemana(comFiltro(estado.contatos.filter((c) => !c.importado)))}
       <div class="card" style="flex:1 1 300px; min-width:0; display:flex; flex-direction:column"><h2>De onde vieram</h2>${linhasOrigem}
         <div class="tm-box">
           <span style="color:var(--verde-claro)">${icone('relogio', 18)}</span>
@@ -1366,6 +1448,7 @@ function telaDashboard() {
       ${ultimasConversas(lista)}
     </div>
     ${listaEtapa(lista)}
+    ${cardQualidade(comFiltro(noPeriodo(estado.contatos)))}
     ${cardFidelizados(lista)}
     <div class="linha">
       <div class="card" style="flex:2 1 460px; min-width:0" id="card-vendas"><div class="vazio">Carregando vendas…</div></div>
@@ -1477,7 +1560,7 @@ function itemConversa(c) {
     <span class="meio">
       <b class="ci-tel">${esc(tel)}</b>
       <span class="ci-sub">${nome ? esc(nome) + ' · ' : ''}<span>${esc(origemTxt)}</span></span>
-      ${tb ? `<span class="ci-base"><span class="eti-base">Da base</span><span class="volta">voltou por ${esc(descToque(tb))}</span></span>` : ''}
+      ${tb ? `<span class="ci-base"><span class="eti-base">${toqueReativou(tb) ? 'Reativado' : 'Da base'}</span><span class="volta">voltou por ${esc(descToque(tb))}</span></span>` : ''}
       <span class="ci-linha">${etapaDe(c) ? `<span class="ci-etapa">${esc(etapaDe(c).nome)}</span>` : ''}${tag}</span>
     </span>
     ${tempo}
@@ -1583,14 +1666,15 @@ function comMarcadores(msgs, c) {
 }
 function bolhaHTML(m) {
   const quando = new Date(m.criado_em).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-  const rotulo = m.direcao === 'entrada' ? 'Recebido · grátis'
+  const rotulo = m.historico ? 'Histórico (antes do Radar)' : m.direcao === 'entrada' ? 'Recebido · grátis'
+    : m.historico ? 'Histórico (antes do Radar)'
     : m.automatico ? `<b>Automático</b> · ${m.tipo === 'template' ? 'modelo' : 'grátis'}`
     : m.tipo === 'template' ? '<b>Modelo enviado pelo Radar</b>'
     : m.tipo === 'celular' ? 'Respondido pelo celular · grátis'
     : '<b>Enviado pelo Radar</b> · 1 crédito';
   const midia = m.midia_path ? `<div class="midia" data-path="${esc(m.midia_path)}" data-mime="${esc(m.midia_mime || '')}" data-nome="${esc(m.midia_nome || '')}"><span style="font-size:12px; color:var(--tx3)">Carregando ${rotuloMidia(m)}…</span></div>` : '';
   const txt = m.texto ? esc(m.texto) : (m.midia_path ? '' : esc('[' + rotuloMidia(m) + ']'));
-  return `<div class="bolha ${m.direcao}" data-msg="${m.id}">${midia}${txt}<small>${quando} · ${rotulo}</small></div>`;
+  return `<div class="bolha ${m.direcao}${m.historico ? ' historico' : ''}" data-msg="${m.id}">${midia}${txt}<small>${quando} · ${rotulo}</small></div>`;
 }
 function rotuloMidia(m) { return { image: 'foto', video: 'vídeo', audio: 'áudio', document: 'arquivo', sticker: 'figurinha' }[m.tipo] || m.tipo || 'mídia'; }
 const _urlMidia = {};
@@ -1809,6 +1893,12 @@ function duracaoCurta(ms) {
 // ---------- toques (chegou ou voltou por anúncio/link) ----------
 function toquesDe(c) { return (estado.toques || []).filter((t) => t.contato_id === c.id).sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em)); }
 function toqueBase(c) { return toquesDe(c).find((t) => t.da_base) || null; }
+// já era cliente, estava sumido há DIAS_REATIVADO+ dias (sem conversa nem ida) e voltou por essa fonte
+function toqueReativou(t) {
+  if (!t) return false; const tt = new Date(t.criado_em).getTime();
+  const ult = Math.max(t.ultima_msg_antes ? new Date(t.ultima_msg_antes).getTime() : 0, t.ultima_ida_antes ? new Date(t.ultima_ida_antes + 'T12:00:00-03:00').getTime() : 0);
+  return !!ult && (tt - ult) / 864e5 >= DIAS_REATIVADO;
+}
 function grupoToque(t) { return GRUPOS.find((g) => g.k === (t.tipo === 'anuncio' ? 'anuncio_meta' : t.tipo === 'link' ? 'link' : 'site')) || GRUPOS[0]; }
 function descToque(t) {
   if (t.tipo === 'anuncio') return t.anuncio_titulo ? `anúncio “${t.anuncio_titulo}”` : 'anúncio da Meta';
@@ -2878,8 +2968,9 @@ async function conectarWhatsapp(siteId) {
     st.textContent = 'Finalizando a conexão…';
     const r = await chamarAdmin({ acao: 'conectar_whatsapp', site_id: siteId, code, waba_id: sessao?.waba_id, phone_number_id: sessao?.phone_number_id });
     if (!r.ok) { st.textContent = r.erro || 'Erro ao conectar.'; st.style.color = 'var(--alerta)'; return; }
-    toast('WhatsApp conectado! As novas conversas vão chegar no Radar.');
-    const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo, automacoes').eq('ativo', true).order('nome');
+    toast('WhatsApp conectado! Puxando as conversas dos últimos 3 meses…');
+    pedirHistorico(siteId).then((h) => { if (!h.ok) toast('Conectado, mas o histórico não veio: ' + (h.erro || h.history?.erro || 'a Meta recusou')); });
+    const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo, automacoes, historico_status, historico_progresso, historico_msgs, historico_pedido_em, historico_erro').eq('ativo', true).order('nome');
     estado.sites = sites || [];
     telaConfig();
   })(); }, {
@@ -3089,6 +3180,29 @@ async function salvarServicos(siteId) {
   return true;
 }
 
+// Histórico de conversas (últimos 3 meses) puxado do app WhatsApp Business na hora de conectar
+function historicoHTML(site) {
+  const st = site.historico_status; const n = Number(site.historico_msgs) || 0;
+  const prazo = site.whatsapp_conectado_em && Date.now() - new Date(site.whatsapp_conectado_em).getTime() < 23.5 * 3600e3;
+  const txt = st === 'completo' ? `<b>Pronto.</b> ${n.toLocaleString('pt-BR')} mensagens dos últimos 3 meses já estão nas conversas.`
+    : st === 'recebendo' ? `<b>Importando… ${Number(site.historico_progresso) || 0}%</b> · ${n.toLocaleString('pt-BR')} mensagens até agora.`
+    : st === 'pedido' ? '<b>Pedido enviado.</b> Esperando o dono liberar no celular e a Meta mandar as conversas. Pode levar alguns minutos.'
+    : st === 'recusado' ? 'O dono <b>não liberou</b> o histórico no celular. Pra puxar, ele precisa desconectar e conectar de novo, aceitando compartilhar as conversas.'
+    : st === 'erro' ? `Não deu pra puxar o histórico: ${esc(site.historico_erro || 'erro da Meta')}.`
+    : prazo ? 'Ainda não puxado. Dá pra puxar até 24h depois de conectar.' : 'Só dá pra puxar o histórico nas primeiras 24h depois de conectar o número.';
+  return `<div class="wa-hist"><span class="wa-hist-ic">${icone('relogio', 16)}</span><div style="flex:1; min-width:0"><b style="font-size:14px">Conversas antigas (últimos 3 meses)</b><div id="wa-hist-txt" style="font-size:13px; color:var(--tx2); margin-top:2px">${txt}</div>
+    <div style="font-size:12px; color:var(--tx3); margin-top:4px">Entram só pra consulta e pra saber quem já era cliente: não disparam mensagem automática nem contam como conversa nova.</div></div>
+    ${prazo && (!st || st === 'erro') ? '<button class="btn-sec mini" type="button" id="wa-hist-bt">Puxar histórico</button>' : ''}</div>`;
+}
+async function pedirHistorico(siteId) {
+  const { data: { session } } = await sb.auth.getSession(); if (!session) return { erro: 'Faça login de novo.' };
+  try {
+    const r = await fetch(`${SUPABASE_URL}/functions/v1/radar-historico`, { method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_KEY }, body: JSON.stringify({ acao: 'pedir', site_id: siteId }) });
+    return await r.json().catch(() => ({ erro: 'Resposta inválida.' }));
+  } catch (_) { return { erro: 'Sem conexão.' }; }
+}
+
 async function telaConfig() {
   const novo = !!estado.novoCliente;
   const site = novo ? { id: '', nome: '', pixel_id: '', allowed_origins: [], whatsapp_phone_number_id: '' }
@@ -3166,6 +3280,7 @@ async function telaConfig() {
         <div><small>Celular da barbearia</small><b>Continua funcionando</b></div>
       </div>
       <p style="margin:0; font-size:13px; color:var(--tx2)">As conversas chegam no Radar e no celular ao mesmo tempo. Responder pelo celular não gasta crédito.</p>
+      ${site.whatsapp_phone_number_id ? historicoHTML(site) : ''}
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
         <button class="btn" id="wa-conectar">${site.whatsapp_conectado_em ? 'Reconectar WhatsApp' : 'Conectar WhatsApp'}</button>
         <span id="wa-status" style="font-size:13px; color:var(--tx2)"></span>
@@ -3267,6 +3382,12 @@ async function telaConfig() {
   $('cf-logo-arq').addEventListener('change', async (ev) => { const f = ev.target.files[0]; ev.target.value = ''; const path = await enviarFoto(f, 'site', site.id); if (path) { trocarLogo(path); toast('Logo atualizada'); } });
   if ($('cf-logo-tirar')) $('cf-logo-tirar').addEventListener('click', async () => { const { error } = await sb.rpc('salvar_foto', { p_tipo: 'site', p_site: site.id, p_path: null }); if (!error) { trocarLogo(null); toast('Logo removida'); } });
   carregarEventosMeta(site.id);
+  if ($('wa-hist-bt')) $('wa-hist-bt').addEventListener('click', async () => {
+    $('wa-hist-bt').disabled = true; $('wa-hist-txt').textContent = 'Pedindo pra Meta…';
+    const r = await pedirHistorico(site.id);
+    if (!r.ok) { $('wa-hist-bt').disabled = false; $('wa-hist-txt').textContent = r.erro || r.history?.erro || 'A Meta recusou o pedido.'; return; }
+    site.historico_status = 'pedido'; $('wa-hist-txt').innerHTML = '<b>Pedido enviado.</b> Esperando o dono liberar no celular e a Meta mandar as conversas.'; $('wa-hist-bt').remove();
+  });
   if ($('sv-lista')) iniciarServicos(site.id);
   desenharFunil();
   $('cf-add-etapa').addEventListener('click', () => {
@@ -3511,7 +3632,7 @@ async function salvarCliente() {
     wa_token: $('cf-watoken') ? $('cf-watoken').value.trim() : '',
   });
   if (!r.ok) { $('cf-status').textContent = r.erro || 'Erro ao salvar.'; $('cf-status').style.color = 'var(--alerta)'; return false; }
-  const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo, automacoes').eq('ativo', true).order('nome');
+  const { data: sites } = await sb.from('sites').select('id, nome, logo_path, pixel_id, allowed_origins, whatsapp_phone_number_id, whatsapp_waba_id, whatsapp_conectado_em, creditos_mensal, rotina_followup_dias, rotina_reativacao_dias, auto_lembrete, lembrete_horas, lembrete_modelo, auto_followup, followup_modelo, auto_reativacao, reativacao_modelo, automacoes, historico_status, historico_progresso, historico_msgs, historico_pedido_em, historico_erro').eq('ativo', true).order('nome');
   estado.sites = sites || [];
   $('sel-site').innerHTML = estado.sites.map((s) => `<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
   estado.site = r.id; $('sel-site').value = r.id; estado.novoCliente = false;
