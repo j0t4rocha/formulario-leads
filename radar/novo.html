@@ -664,6 +664,17 @@
   .seq-resumo { font-size:12px; color:var(--tx3); }
   .seq-dias { display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:13px; }
   .pausado-box { display:flex; gap:8px; align-items:center; padding:10px 12px; border-radius:12px; border:1px dashed var(--line2); font-size:13px; color:var(--tx2); }
+  .q-cab, .q-linha { display:grid; grid-template-columns:minmax(180px, 1.6fr) 90px 1fr 1fr; gap:12px; align-items:center; }
+  .q-cab { font-size:12px; color:var(--tx3); padding:12px 0 6px; border-bottom:1px solid var(--line2); }
+  .q-linha { padding:10px 0; border-bottom:1px solid var(--line2); }
+  .q-linha.sub { padding:6px 0 6px 20px; } .q-linha.sub .q-fonte span { font-size:13px; color:var(--tx2); }
+  .q-fonte { display:flex; align-items:center; gap:10px; min-width:0; } .q-fonte > div { min-width:0; } .q-fonte span { font-size:15px; }
+  .q-fonte small { display:block; font-size:11px; color:var(--tx3); margin-top:2px; }
+  .q-sub-ic { width:22px; height:22px; display:inline-grid; place-items:center; color:var(--tx3); }
+  .q-num b { font-size:17px; font-variant-numeric:tabular-nums; }
+  .q-taxa { display:flex; flex-direction:column; } .q-taxa small { font-size:12px; color:var(--tx3); }
+  .q-big { font-size:17px; font-variant-numeric:tabular-nums; }
+  @media (max-width:720px) { .q-cab { display:none; } .q-linha { grid-template-columns:1fr 1fr; } .q-fonte { grid-column:1 / -1; } .q-num { display:none; } }
   .mv-sug { display:flex; gap:8px; align-items:center; padding:10px 12px; border-radius:10px; background:rgba(16,185,129,.10); border:1px solid rgba(16,185,129,.35); font-size:13px; color:var(--tx); }
   .selo.alerta-leve { background:rgba(245,158,11,.0); border:1px dashed var(--tx3); color:var(--tx2); }
 </style>
@@ -1142,6 +1153,61 @@ function duracao(ms) {
 const isoDia = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
 // clientes novos que vieram e voltaram (lista do mês / idas registradas)
+// Qualidade por fonte: de cada 10 pessoas NOVAS que chamaram, quantas viraram clientes e quantas voltaram.
+// Quem já era cliente (ida registrada antes de chamar) fica fora da conta e aparece à parte.
+const DIAS_RETENCAO = 45;
+function deDez(a, b) { return b ? Math.round((a / b) * 10) : 0; }
+function cardQualidade(lista) {
+  const porC = {};
+  (estado.visitas || []).forEach((v) => { if (v.status === 'veio') (porC[v.contato_id] = porC[v.contato_id] || []).push(v.data); });
+  const limite = new Date(Date.now() - DIAS_RETENCAO * 864e5).toISOString().slice(0, 10);
+  const [de, ate] = intervaloPeriodo();
+  const conta = (grupo) => {
+    let novos = 0, base = 0, clientes = 0, comTempo = 0, voltaram = 0, esperando = 0;
+    grupo.forEach((c) => {
+      const desde = String(c.criado_em).slice(0, 10); const idas = (porC[c.id] || []).slice().sort();
+      if (idas.some((d) => d < desde)) { base++; return; }
+      novos++;
+      const depois = idas.filter((d) => d >= desde);
+      if (!depois.length) return;
+      clientes++;
+      if (depois[0] <= limite) { comTempo++; if (depois.length >= 2) voltaram++; } else esperando++;
+    });
+    return { novos, base, clientes, comTempo, voltaram, esperando };
+  };
+  // quem já era da base e voltou por essa fonte no período (toques)
+  const tipoGrupo = { anuncio: 'anuncio_meta', link: 'link', site: 'site' };
+  const voltasBase = {};
+  (estado.toques || []).forEach((t) => { const tt = new Date(t.criado_em).getTime();
+    if (t.da_base && (!de || tt >= de.getTime()) && (!ate || tt <= ate.getTime())) { const k = tipoGrupo[t.tipo]; if (k) voltasBase[k] = (voltasBase[k] || 0) + 1; } });
+  const linha = (logo, nome, r, extraBase, sub) => {
+    const conv = r.novos ? `<b class="q-big">${deDez(r.clientes, r.novos)} de 10</b><small>${r.clientes} de ${r.novos} · ${pct(r.clientes, r.novos)}%</small>` : '<small>sem conversas novas</small>';
+    const ret = r.comTempo ? `<b class="q-big">${deDez(r.voltaram, r.comTempo)} de 10</b><small>${r.voltaram} de ${r.comTempo} · ${pct(r.voltaram, r.comTempo)}%</small>`
+      : r.clientes ? `<small>ainda sem tempo</small>` : '<small>—</small>';
+    const notas = [r.esperando ? `${r.esperando} ${r.esperando === 1 ? 'cliente ainda não completou' : 'clientes ainda não completaram'} ${DIAS_RETENCAO} dias` : '', r.base ? `${r.base} já ${r.base === 1 ? 'era cliente' : 'eram clientes'} (fora da conta)` : '', extraBase ? `+${extraBase} da base ${extraBase === 1 ? 'voltou' : 'voltaram'} por aqui` : ''].filter(Boolean);
+    return `<div class="q-linha${sub ? ' sub' : ''}"><div class="q-fonte">${logo}<div><span>${esc(nome)}</span>${notas.length ? `<small>${notas.join(' · ')}</small>` : ''}</div></div>
+      <div class="q-num"><b>${r.novos}</b></div><div class="q-taxa">${conv}</div><div class="q-taxa">${ret}</div></div>`;
+  };
+  const linhas = GRUPOS.map((g) => {
+    const doGrupo = lista.filter((c) => grupoDe(c) === g); const r = conta(doGrupo);
+    if (!doGrupo.length && !g.sempre && !voltasBase[g.k]) return '';
+    let html = linha(logoGrupo(g, 28), g.nome, r, voltasBase[g.k] || 0, false);
+    if (g.k === 'link') {
+      const porLink = {}; doGrupo.forEach((c) => { const k = c.link_id || 0; (porLink[k] = porLink[k] || []).push(c); });
+      const chaves = Object.keys(porLink);
+      if (chaves.length > 1 || (chaves.length === 1 && chaves[0] !== '0')) html += chaves.map((k) => linha(`<span class="q-sub-ic">${icone('link', 13)}</span>`, (estado.links || []).find((l) => String(l.id) === k)?.nome || 'Link sem nome', conta(porLink[k]), 0, true)).join('');
+    }
+    return html;
+  }).join('');
+  const tot = conta(lista);
+  return `<div class="card q-card" style="margin-bottom:16px">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap"><h2 style="margin:0">Qualidade por fonte</h2>
+      <span style="font-size:13px; color:var(--tx2)">No geral: <b>${deDez(tot.clientes, tot.novos)} de 10</b> viraram clientes (${tot.clientes} de ${tot.novos})${tot.comTempo ? ` · <b>${deDez(tot.voltaram, tot.comTempo)} de 10</b> voltaram (${tot.voltaram} de ${tot.comTempo})` : ''}</span></div>
+    <div class="q-cab"><span>Fonte</span><span>Conversas novas</span><span>Viraram clientes</span><span>Voltaram</span></div>
+    ${linhas}
+    <div style="font-size:12px; color:var(--tx3); margin-top:10px">Conta só quem chamou pela 1ª vez no período e não era cliente antes. "Viraram clientes": tiveram pelo menos 1 ida registrada depois de chamar. "Voltaram": tiveram 2 idas ou mais; só entra na conta quem fez a 1ª ida há ${DIAS_RETENCAO} dias ou mais. Depende das idas registradas (funil, "Registrar ida" ou lista do mês).</div>
+  </div>`;
+}
 function cardFidelizados(lista) {
   const porC = {};
   (estado.visitas || []).forEach((v) => { (porC[v.contato_id] = porC[v.contato_id] || []).push(v); });
@@ -1366,6 +1432,7 @@ function telaDashboard() {
       ${ultimasConversas(lista)}
     </div>
     ${listaEtapa(lista)}
+    ${cardQualidade(lista)}
     ${cardFidelizados(lista)}
     <div class="linha">
       <div class="card" style="flex:2 1 460px; min-width:0" id="card-vendas"><div class="vazio">Carregando vendas…</div></div>
