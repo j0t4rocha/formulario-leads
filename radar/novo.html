@@ -673,6 +673,7 @@
   .q-sub-ic { width:22px; height:22px; display:inline-grid; place-items:center; color:var(--tx3); }
   .q-num b { font-size:17px; font-variant-numeric:tabular-nums; }
   .q-taxa { display:flex; flex-direction:column; } .q-taxa small { font-size:12px; color:var(--tx3); }
+  .q-reat { color:var(--verde-claro); font-weight:600; }
   .q-big { font-size:17px; font-variant-numeric:tabular-nums; }
   @media (max-width:720px) { .q-cab { display:none; } .q-linha { grid-template-columns:1fr 1fr; } .q-fonte { grid-column:1 / -1; } .q-num { display:none; } }
   .mv-sug { display:flex; gap:8px; align-items:center; padding:10px 12px; border-radius:10px; background:rgba(16,185,129,.10); border:1px solid rgba(16,185,129,.35); font-size:13px; color:var(--tx); }
@@ -1156,6 +1157,7 @@ const isoDia = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2,
 // Qualidade por fonte: de cada 10 pessoas NOVAS que chamaram, quantas viraram clientes e quantas voltaram.
 // Quem já era cliente (ida registrada antes de chamar) fica fora da conta e aparece à parte.
 const DIAS_RETENCAO = 45;
+const DIAS_REATIVADO = 60; // sumido há mais de 2 meses (sem conversa e sem ida) e voltou pela fonte = reativado
 function deDez(a, b) { return b ? Math.round((a / b) * 10) : 0; }
 function cardQualidade(lista) {
   const porC = {};
@@ -1175,23 +1177,33 @@ function cardQualidade(lista) {
     });
     return { novos, base, clientes, comTempo, voltaram, esperando };
   };
-  // quem já era da base e voltou por essa fonte no período (toques)
+  // quem já era da base e voltou por essa fonte no período (toques).
+  // Prova de que já era cliente: conversa antes da mensagem do anúncio/link, ou ida registrada antes.
+  // Se a última conversa/ida foi há mais de DIAS_REATIVADO dias, conta como cliente REATIVADO pela fonte.
   const tipoGrupo = { anuncio: 'anuncio_meta', link: 'link', site: 'site' };
-  const voltasBase = {};
-  (estado.toques || []).forEach((t) => { const tt = new Date(t.criado_em).getTime();
-    if (t.da_base && (!de || tt >= de.getTime()) && (!ate || tt <= ate.getTime())) { const k = tipoGrupo[t.tipo]; if (k) voltasBase[k] = (voltasBase[k] || 0) + 1; } });
-  const linha = (logo, nome, r, extraBase, sub) => {
+  const voltasBase = {}, reativados = {};
+  const contados = new Set();
+  (estado.toques || []).slice().sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em)).forEach((t) => { const tt = new Date(t.criado_em).getTime();
+    if (!t.da_base || (de && tt < de.getTime()) || (ate && tt > ate.getTime())) return;
+    const k = tipoGrupo[t.tipo]; if (!k) return;
+    const chave = k + ':' + t.contato_id; if (contados.has(chave)) return; contados.add(chave);
+    const refs = [t.ultima_msg_antes ? new Date(t.ultima_msg_antes).getTime() : 0, t.ultima_ida_antes ? new Date(t.ultima_ida_antes + 'T12:00:00-03:00').getTime() : 0];
+    const ult = Math.max(...refs);
+    if (ult && (tt - ult) / 864e5 >= DIAS_REATIVADO) reativados[k] = (reativados[k] || 0) + 1;
+    else voltasBase[k] = (voltasBase[k] || 0) + 1;
+  });
+  const linha = (logo, nome, r, extraBase, sub, reat = 0) => {
     const conv = r.novos ? `<b class="q-big">${deDez(r.clientes, r.novos)} de 10</b><small>${r.clientes} de ${r.novos} · ${pct(r.clientes, r.novos)}%</small>` : '<small>sem conversas novas</small>';
     const ret = r.comTempo ? `<b class="q-big">${deDez(r.voltaram, r.comTempo)} de 10</b><small>${r.voltaram} de ${r.comTempo} · ${pct(r.voltaram, r.comTempo)}%</small>`
       : r.clientes ? `<small>ainda sem tempo</small>` : '<small>—</small>';
-    const notas = [r.esperando ? `${r.esperando} ${r.esperando === 1 ? 'cliente ainda não completou' : 'clientes ainda não completaram'} ${DIAS_RETENCAO} dias` : '', r.base ? `${r.base} já ${r.base === 1 ? 'era cliente' : 'eram clientes'} (fora da conta)` : '', extraBase ? `+${extraBase} da base ${extraBase === 1 ? 'voltou' : 'voltaram'} por aqui` : ''].filter(Boolean);
+    const notas = [r.esperando ? `${r.esperando} ${r.esperando === 1 ? 'cliente ainda não completou' : 'clientes ainda não completaram'} ${DIAS_RETENCAO} dias` : '', r.base ? `${r.base} já ${r.base === 1 ? 'era cliente' : 'eram clientes'} (fora da conta)` : '', reat ? `<b class="q-reat">+${reat} ${reat === 1 ? 'cliente reativado' : 'clientes reativados'}</b> (sumidos há ${DIAS_REATIVADO}+ dias)` : '', extraBase ? `+${extraBase} da base ${extraBase === 1 ? 'chamou' : 'chamaram'} de novo por aqui` : ''].filter(Boolean);
     return `<div class="q-linha${sub ? ' sub' : ''}"><div class="q-fonte">${logo}<div><span>${esc(nome)}</span>${notas.length ? `<small>${notas.join(' · ')}</small>` : ''}</div></div>
       <div class="q-num"><b>${r.novos}</b></div><div class="q-taxa">${conv}</div><div class="q-taxa">${ret}</div></div>`;
   };
   const linhas = GRUPOS.map((g) => {
     const doGrupo = lista.filter((c) => grupoDe(c) === g); const r = conta(doGrupo);
-    if (!doGrupo.length && !g.sempre && !voltasBase[g.k]) return '';
-    let html = linha(logoGrupo(g, 28), g.nome, r, voltasBase[g.k] || 0, false);
+    if (!doGrupo.length && !g.sempre && !voltasBase[g.k] && !reativados[g.k]) return '';
+    let html = linha(logoGrupo(g, 28), g.nome, r, voltasBase[g.k] || 0, false, reativados[g.k] || 0);
     if (g.k === 'link') {
       const porLink = {}; doGrupo.forEach((c) => { const k = c.link_id || 0; (porLink[k] = porLink[k] || []).push(c); });
       const chaves = Object.keys(porLink);
@@ -1200,12 +1212,13 @@ function cardQualidade(lista) {
     return html;
   }).join('');
   const tot = conta(lista);
+  const totReat = Object.values(reativados).reduce((a, n) => a + n, 0);
   return `<div class="card q-card" style="margin-bottom:16px">
     <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap"><h2 style="margin:0">Qualidade por fonte</h2>
-      <span style="font-size:13px; color:var(--tx2)">No geral: <b>${deDez(tot.clientes, tot.novos)} de 10</b> viraram clientes (${tot.clientes} de ${tot.novos})${tot.comTempo ? ` · <b>${deDez(tot.voltaram, tot.comTempo)} de 10</b> voltaram (${tot.voltaram} de ${tot.comTempo})` : ''}</span></div>
+      <span style="font-size:13px; color:var(--tx2)">No geral: <b>${deDez(tot.clientes, tot.novos)} de 10</b> viraram clientes (${tot.clientes} de ${tot.novos})${tot.comTempo ? ` · <b>${deDez(tot.voltaram, tot.comTempo)} de 10</b> voltaram (${tot.voltaram} de ${tot.comTempo})` : ''}${totReat ? ` · <b class="q-reat">${totReat} ${totReat === 1 ? 'cliente reativado' : 'clientes reativados'}</b>` : ''}</span></div>
     <div class="q-cab"><span>Fonte</span><span>Conversas novas</span><span>Viraram clientes</span><span>Voltaram</span></div>
     ${linhas}
-    <div style="font-size:12px; color:var(--tx3); margin-top:10px">Conta só quem chamou pela 1ª vez no período e não era cliente antes. "Viraram clientes": tiveram pelo menos 1 ida registrada depois de chamar. "Voltaram": tiveram 2 idas ou mais; só entra na conta quem fez a 1ª ida há ${DIAS_RETENCAO} dias ou mais. Depende das idas registradas (funil, "Registrar ida" ou lista do mês).</div>
+    <div style="font-size:12px; color:var(--tx3); margin-top:10px">Conta só quem chamou pela 1ª vez no período e não era cliente antes. "Viraram clientes": tiveram pelo menos 1 ida registrada depois de chamar. "Voltaram": tiveram 2 idas ou mais; só entra na conta quem fez a 1ª ida há ${DIAS_RETENCAO} dias ou mais. Depende das idas registradas (funil, "Registrar ida" ou lista do mês). "Reativado": já era cliente (tinha conversa ou ida antes), estava sumido há ${DIAS_REATIVADO} dias ou mais e voltou a chamar pelo anúncio, link ou site.</div>
   </div>`;
 }
 function cardFidelizados(lista) {
@@ -1544,7 +1557,7 @@ function itemConversa(c) {
     <span class="meio">
       <b class="ci-tel">${esc(tel)}</b>
       <span class="ci-sub">${nome ? esc(nome) + ' · ' : ''}<span>${esc(origemTxt)}</span></span>
-      ${tb ? `<span class="ci-base"><span class="eti-base">Da base</span><span class="volta">voltou por ${esc(descToque(tb))}</span></span>` : ''}
+      ${tb ? `<span class="ci-base"><span class="eti-base">${toqueReativou(tb) ? 'Reativado' : 'Da base'}</span><span class="volta">voltou por ${esc(descToque(tb))}</span></span>` : ''}
       <span class="ci-linha">${etapaDe(c) ? `<span class="ci-etapa">${esc(etapaDe(c).nome)}</span>` : ''}${tag}</span>
     </span>
     ${tempo}
@@ -1876,6 +1889,12 @@ function duracaoCurta(ms) {
 // ---------- toques (chegou ou voltou por anúncio/link) ----------
 function toquesDe(c) { return (estado.toques || []).filter((t) => t.contato_id === c.id).sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em)); }
 function toqueBase(c) { return toquesDe(c).find((t) => t.da_base) || null; }
+// já era cliente, estava sumido há DIAS_REATIVADO+ dias (sem conversa nem ida) e voltou por essa fonte
+function toqueReativou(t) {
+  if (!t) return false; const tt = new Date(t.criado_em).getTime();
+  const ult = Math.max(t.ultima_msg_antes ? new Date(t.ultima_msg_antes).getTime() : 0, t.ultima_ida_antes ? new Date(t.ultima_ida_antes + 'T12:00:00-03:00').getTime() : 0);
+  return !!ult && (tt - ult) / 864e5 >= DIAS_REATIVADO;
+}
 function grupoToque(t) { return GRUPOS.find((g) => g.k === (t.tipo === 'anuncio' ? 'anuncio_meta' : t.tipo === 'link' ? 'link' : 'site')) || GRUPOS[0]; }
 function descToque(t) {
   if (t.tipo === 'anuncio') return t.anuncio_titulo ? `anúncio “${t.anuncio_titulo}”` : 'anúncio da Meta';
